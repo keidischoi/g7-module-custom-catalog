@@ -1,4 +1,4 @@
-/*! custom-catalog 0.1.14 — 관리자 제원 입력 */
+/*! custom-catalog 0.1.15 — 관리자 제원 입력 */
 (function () {
   "use strict";
   function boot() {
@@ -12,8 +12,15 @@
   var token = "";
   try { token = localStorage.getItem("auth_token") || localStorage.getItem("token") || ""; } catch (e) {}
   function headers() { var h = { Accept: "application/json", "Content-Type": "application/json" }; if (token) h.Authorization = "Bearer " + String(token).replace(/^"+|"+$/g, ""); return h; }
-  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return {"&":"&","<":"<",">":">",'"':"""}[c]; }); }
-  function field(name, label, value) { return '<label style="display:grid;gap:4px;font-size:13px">' + label + '<input name="' + name + '" value="' + esc(value || "") + '" style="height:36px;border:1px solid #cbd5e1;border-radius:8px;padding:0 8px"></label>'; }
+  function esc(s) {
+  return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) {
+    if (c === "&") return "&amp;";
+    if (c === "<") return "&lt;";
+    if (c === ">") return "&gt;";
+    return "&quot;";
+  });
+}
+function field(name, label, value) { return '<label style="display:grid;gap:4px;font-size:13px">' + label + '<input name="' + name + '" value="' + esc(value || "") + '" style="height:36px;border:1px solid #cbd5e1;border-radius:8px;padding:0 8px"></label>'; }
   function form(kind) {
     var eq = kind === "equipment";
     return '<form data-kind="' + kind + '" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin:8px 0 16px">' +
