@@ -1,4 +1,4 @@
-/*! custom-catalog 0.1.36 */
+/*! custom-catalog 0.1.38 */
 (function () {
   "use strict";
   function boot() {
@@ -11,22 +11,115 @@
   }
   
   function renderDetail(root, key) {
-    root.innerHTML = "<div class=\"cct\"><p class=\"cct-note\">불러오는 중</p></div>";
-    function show(row) {
+    root.innerHTML = "<div class=\"cct\"><p>불러오는 중</p></div>";
+    var token = "";
+    try { token = localStorage.getItem("auth_token") || localStorage.getItem("token") || ""; } catch (e) {}
+    function authHeaders(json) {
+      var h = { Accept: "application/json" };
+      if (json) h["Content-Type"] = "application/json";
+      if (token) h.Authorization = "Bearer " + String(token).replace(/^"+|"+$/g, "");
+      return h;
+    }
+    function esc(s) {
+      return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) {
+        if (c === "&") return "&";
+        if (c === "<") return "<";
+        if (c === ">") return ">";
+        return """;
+      });
+    }
+    function show(row, can) {
       if (!row) { root.innerHTML = "<div class=\"cct\"><p>없습니다.</p><p><a href=\"/catalog\">목록</a></p></div>"; return; }
       var title = ((row.brand || "") + " " + (row.model || row.name || "")).trim();
-      var size = [row.build_x_mm, row.build_y_mm, row.build_z_mm].filter(Boolean).join(" × ");
-      var rows = [["제조사", row.brand], ["모델", row.model || row.name], ["종류", row.kind], ["재료", row.material], ["출력 크기", size ? size + " mm" : ""], ["노즐", row.nozzle], ["색", row.color], ["주의", row.caution], ["메모", row.note]];
-      var spec = rows.filter(function (r) { return r[1]; }).map(function (r) { return "<div><dt>" + r[0] + "</dt><dd>" + String(r[1]) + "</dd></div>"; }).join("");
-      var photo = row.image_url ? "<img class=\"cct-hero\" alt=\"" + title + "\" src=\"" + row.image_url + "\">" : "<div class=\"cct-hero cct-ph\">사진 준비 중</div>";
-      root.innerHTML = "<style>.cct{max-width:980px;margin:0 auto;padding:28px 16px 72px;color:#0f172a}.cct a{color:#0f766e;font-weight:700;text-decoration:none}.cct-hero{width:100%;height:360px;object-fit:contain;background:linear-gradient(180deg,#f8fafc,#e2e8f0);border-radius:24px}.cct-ph{display:flex;align-items:center;justify-content:center;color:#64748b}.cct h1{font-size:32px;margin:18px 0 6px}.cct-badge{display:inline-block;background:#ccfbf1;color:#0f766e;border-radius:999px;padding:4px 10px;font-weight:700}.cct-spec{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:18px}.cct-spec div{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:12px}.cct-spec dt{color:#64748b;font-size:12px}.cct-spec dd{margin:4px 0 0;font-weight:700}.cct-actions{display:flex;gap:8px;margin-top:16px}.cct-actions button,.cct-actions a{height:40px;border:0;border-radius:12px;background:#0f766e;color:#fff;padding:0 14px;display:inline-flex;align-items:center}</style><div class=\"cct\"><p><a href=\"/catalog\">← 목록</a></p>" + photo + "<h1>" + title + "</h1><span class=\"cct-badge\">" + (row.kind || "장비") + "</span><dl class=\"cct-spec\">" + spec + "</dl><div class=\"cct-actions\"><button type=\"button\" id=\"cct-print\">PDF 출력</button>" + (row.sds_url ? "<a href=\"" + row.sds_url + "\" target=\"_blank\" rel=\"noopener\">MSDS</a>" : "") + "</div></div>";
-      var btn = document.getElementById("cct-print");
-      if (btn) btn.onclick = function () { window.print(); };
+      var type = row.name && !row.model ? "material" : "equipment";
+      var photos = row.photos && row.photos.length ? row.photos : (row.image_url ? [{id:0, url:row.image_url}] : []);
+      var main = photos.length ? "<img class=\"cct-hero\" id=\"cct-main\" alt=\"" + esc(title) + "\" src=\"" + esc(photos[0].url) + "\">" : "<div class=\"cct-hero cct-ph\">사진 준비 중</div>";
+      var thumbs = photos.map(function (ph, i) {
+        return "<button type=\"button\" class=\"cct-mini\" data-src=\"" + esc(ph.url) + "\"><img alt=\"\" src=\"" + esc(ph.url) + "\">" + (can && ph.id ? "<span data-del-photo=\"" + ph.id + "\">삭제</span>" : "") + "</button>";
+      }).join("");
+      var upload = can ? "<form class=\"cct-upload\"><input type=\"file\" accept=\"image/*\" multiple name=\"photos\"><button>사진 올리기</button><small>1장 이상, 여러 장 가능. 긴 변 720px로 저장</small></form>" : "";
+      var labels = {brand:"제조사", model:"모델", name:"이름", kind:"종류", material:"재료", build_x_mm:"가로 mm", build_y_mm:"세로 mm", build_z_mm:"높이 mm", min_layer_um:"최소 층 µm", nozzle:"노즐", color:"색", diameter:"직경 mm", nozzle_min:"노즐 최저 °C", nozzle_max:"노즐 최고 °C", bed_min:"베드 최저 °C", bed_max:"베드 최고 °C", dry_temp:"건조 °C", dry_hours:"건조 시간", chamber:"챔버", weight_g:"무게 g", traits:"특성", caution:"주의", storage_note:"보관", note:"메모", homepage_url:"제조사 페이지"};
+      var spec = "";
+      Object.keys(labels).forEach(function (k) {
+        if (row[k] === null || row[k] === undefined || row[k] === "") return;
+        var val = row[k];
+        if (k === "homepage_url") val = "<a href=\"" + esc(val) + "\" target=\"_blank\" rel=\"noopener\">열기</a>";
+        else val = esc(val);
+        spec += "<div><dt>" + labels[k] + "</dt><dd>" + val + "</dd></div>";
+      });
+      var facts = row.facts || {};
+      if (typeof facts === "string") { try { facts = JSON.parse(facts); } catch (e) { facts = {}; } }
+      Object.keys(facts).forEach(function (k) {
+        spec += "<div><dt>" + esc(k) + "</dt><dd>" + esc(facts[k]) + "</dd></div>";
+      });
+      var summary = row.summary ? "<p class=\"cct-sum\">" + esc(row.summary) + "</p>" : "";
+      var wiki = row.wiki_url ? "<a href=\"" + esc(row.wiki_url) + "\" target=\"_blank\" rel=\"noopener\">위키에서 더 보기</a>" : "";
+      var tools = can ? "<button type=\"button\" id=\"cct-edit\">수정</button><button type=\"button\" id=\"cct-del\">삭제</button>" : "";
+      root.innerHTML = "<style>.cct{max-width:980px;margin:0 auto;padding:28px 16px 72px;color:#0f172a}.cct a{color:#0f766e;font-weight:700;text-decoration:none}.cct-hero{width:100%;height:360px;object-fit:contain;background:linear-gradient(180deg,#f8fafc,#e2e8f0);border-radius:24px}.cct-ph{display:flex;align-items:center;justify-content:center;color:#64748b}.cct h1{font-size:32px;margin:18px 0 6px}.cct-badge{display:inline-block;background:#ccfbf1;color:#0f766e;border-radius:999px;padding:4px 10px;font-weight:700}.cct-spec{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:18px}.cct-spec div{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:12px}.cct-spec dt{color:#64748b;font-size:12px}.cct-spec dd{margin:4px 0 0;font-weight:700}.cct-actions{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}.cct-actions button,.cct-actions a{height:40px;border:0;border-radius:12px;background:#0f766e;color:#fff;padding:0 14px;display:inline-flex;align-items:center}.cct-minis{display:flex;gap:8px;overflow:auto;margin-top:10px}.cct-mini{position:relative;border:0;padding:0;background:#f8fafc;border-radius:12px}.cct-mini img{width:92px;height:72px;object-fit:contain;border-radius:12px}.cct-mini span{position:absolute;right:4px;top:4px;background:#0f172a;color:#fff;border-radius:999px;font-size:11px;padding:2px 6px}.cct-upload{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px}.cct-sum{line-height:1.6;color:#334155}.cct-form{display:grid;gap:8px;margin-top:16px}.cct-form input,.cct-form textarea{border:1px solid #e2e8f0;border-radius:10px;padding:8px}.cct-form textarea{min-height:90px}</style><div class=\"cct\"><p><a href=\"/catalog\">← 목록</a></p>" + main + "<div class=\"cct-minis\">" + thumbs + "</div>" + upload + "<h1>" + esc(title) + "</h1><span class=\"cct-badge\">" + esc(row.kind || "장비") + "</span>" + summary + "<dl class=\"cct-spec\">" + spec + "</dl><div class=\"cct-actions\">" + tools + "<button type=\"button\" id=\"cct-print\">PDF 출력</button>" + (row.sds_url ? "<a href=\"" + esc(row.sds_url) + "\" target=\"_blank\" rel=\"noopener\">MSDS</a>" : "") + wiki + "</div><div id=\"cct-form\"></div></div>";
+      var mainImg = document.getElementById("cct-main");
+      [].forEach.call(root.querySelectorAll(".cct-mini"), function (b) {
+        b.onclick = function (ev) {
+          if (ev.target.getAttribute("data-del-photo")) return;
+          if (mainImg) mainImg.src = b.getAttribute("data-src");
+        };
+      });
+      [].forEach.call(root.querySelectorAll("[data-del-photo]"), function (b) {
+        b.onclick = function (ev) {
+          ev.stopPropagation();
+          if (!confirm("이 사진을 삭제할까요?")) return;
+          fetch("/api/modules/custom-catalog/admin/photos/" + b.getAttribute("data-del-photo") + "/delete", {method:"POST", headers:authHeaders(true), credentials:"same-origin", body:"{}"}).then(function () { load(); });
+        };
+      });
+      var form = root.querySelector(".cct-upload");
+      if (form) form.onsubmit = function (ev) {
+        ev.preventDefault();
+        var input = form.querySelector("input");
+        if (!input.files || !input.files.length) return;
+        var body = new FormData();
+        body.append("key", row.key);
+        body.append("type", type);
+        [].forEach.call(input.files, function (f) { body.append("photos[]", f); });
+        var h = authHeaders(false);
+        fetch("/api/modules/custom-catalog/admin/photos", {method:"POST", headers:h, credentials:"same-origin", body:body}).then(function (r) { return r.json(); }).then(function (j) {
+          if (!j.success) alert(j.message || "올리지 못했습니다.");
+          load();
+        });
+      };
+      var edit = document.getElementById("cct-edit");
+      if (edit) edit.onclick = function () {
+        var box = document.getElementById("cct-form");
+        box.innerHTML = "<form class=\"cct-form\"><input name=\"brand\" value=\"" + esc(row.brand || "") + "\" placeholder=\"제조사\"><input name=\"model\" value=\"" + esc(row.model || row.name || "") + "\" placeholder=\"모델\"><input name=\"build_x_mm\" value=\"" + esc(row.build_x_mm || "") + "\" placeholder=\"가로 mm\"><input name=\"build_y_mm\" value=\"" + esc(row.build_y_mm || "") + "\" placeholder=\"세로 mm\"><input name=\"build_z_mm\" value=\"" + esc(row.build_z_mm || "") + "\" placeholder=\"높이 mm\"><input name=\"nozzle\" value=\"" + esc(row.nozzle || "") + "\" placeholder=\"노즐\"><input name=\"wiki_url\" value=\"" + esc(row.wiki_url || "") + "\" placeholder=\"위키 주소\"><textarea name=\"summary\" placeholder=\"설명\">" + esc(row.summary || "") + "</textarea><textarea name=\"note\" placeholder=\"메모\">" + esc(row.note || "") + "</textarea><button>저장</button></form>";
+        box.querySelector("form").onsubmit = function (ev) {
+          ev.preventDefault();
+          var fd = new FormData(ev.target);
+          var payload = {key: row.key, kind: row.kind || "fdm"};
+          fd.forEach(function (v, k) { payload[k] = v; });
+          if (type === "material") payload.name = payload.model;
+          fetch("/api/modules/custom-catalog/admin/" + (type === "material" ? "materials" : "equipment"), {method:"POST", headers:authHeaders(true), credentials:"same-origin", body:JSON.stringify(payload)}).then(function (r) { return r.json(); }).then(function (j) {
+            if (!j.success) alert(j.message || "저장하지 못했습니다.");
+            else load();
+          });
+        };
+      };
+      var del = document.getElementById("cct-del");
+      if (del) del.onclick = function () {
+        if (!confirm("이 항목을 삭제할까요?")) return;
+        fetch("/api/modules/custom-catalog/admin/" + (type === "material" ? "materials" : "equipment") + "/" + row.key + "/delete", {method:"POST", headers:authHeaders(true), credentials:"same-origin", body:"{}"}).then(function () { location.assign("/catalog"); });
+      };
+      var print = document.getElementById("cct-print");
+      if (print) print.onclick = function () { window.print(); };
     }
-    fetch("/api/modules/custom-catalog/equipment/" + encodeURIComponent(key), {credentials:"same-origin"}).then(function (r) { return r.json(); }).then(function (j) {
-      if (j && j.data) return show(j.data);
-      return fetch("/api/modules/custom-catalog/materials/" + encodeURIComponent(key), {credentials:"same-origin"}).then(function (r) { return r.json(); }).then(function (m) { show(m && m.data); });
-    }).catch(function () { show(null); });
+    function load() {
+      Promise.all([
+        fetch("/api/modules/custom-catalog/equipment/" + encodeURIComponent(key)).then(function (r) { return r.json(); }).catch(function () { return {}; }),
+        fetch("/api/modules/custom-catalog/materials/" + encodeURIComponent(key)).then(function (r) { return r.json(); }).catch(function () { return {}; }),
+        fetch("/api/modules/custom-catalog/me", {headers: authHeaders(true), credentials:"same-origin"}).then(function (r) { return r.json(); }).catch(function () { return {}; })
+      ]).then(function (xs) {
+        var row = (xs[0] && xs[0].success && xs[0].data) || (xs[1] && xs[1].success && xs[1].data) || null;
+        show(row, !!(xs[2] && xs[2].data && xs[2].data.can_edit));
+      });
+    }
+    load();
   }
 
   function start(root) {

@@ -56,10 +56,26 @@ class CatalogController extends Controller
             return response()->json(['success' => false, 'message' => '표가 없습니다.'], 404);
         }
         $row = DB::table($table)->where('key', $key)->where('status', 'active')->first();
+        if (! $row) {
+            return response()->json(['success' => false, 'message' => '없습니다.'], 404);
+        }
+        $type = $table === 'cat_materials' ? 'material' : 'equipment';
+        $photos = [];
+        if (Schema::hasTable('cat_photos')) {
+            $photos = DB::table('cat_photos')->where('item_type', $type)->where('item_key', $key)->orderBy('sort')->orderBy('id')->get(['id', 'url', 'sort']);
+        }
+        if ($photos === [] && ! empty($row->image_url)) {
+            $photos = [(object) ['id' => 0, 'url' => $row->image_url, 'sort' => 0]];
+        }
+        $row->photos = $photos;
+        if (empty($row->image_url) && count($photos)) {
+            $row->image_url = $photos[0]->url;
+        }
+        if (isset($row->facts) && is_string($row->facts)) {
+            $row->facts = json_decode($row->facts, true);
+        }
 
-        return $row
-            ? response()->json(['success' => true, 'data' => $row])
-            : response()->json(['success' => false, 'message' => '없습니다.'], 404);
+        return response()->json(['success' => true, 'data' => $row]);
     }
 
     /** @param  list<string>  $cols */

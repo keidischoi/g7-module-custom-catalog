@@ -60,13 +60,13 @@ class AdminController extends Controller
     public function saveEquipment(Request $request): JsonResponse
     {
         if (! $this->allowed($request)) return $this->deny();
-        return $this->save('cat_equipment', $request, ['kind', 'brand', 'model', 'build_x_mm', 'build_y_mm', 'build_z_mm', 'min_layer_um', 'multicolor', 'enclosed', 'nozzle', 'homepage_url', 'note']);
+        return $this->save('cat_equipment', $request, ['kind', 'brand', 'model', 'build_x_mm', 'build_y_mm', 'build_z_mm', 'min_layer_um', 'multicolor', 'enclosed', 'nozzle', 'homepage_url', 'note', 'wiki_url', 'summary']);
     }
 
     public function saveMaterial(Request $request): JsonResponse
     {
         if (! $this->allowed($request)) return $this->deny();
-        return $this->save('cat_materials', $request, ['kind', 'brand', 'name', 'material', 'color', 'color_hex', 'diameter', 'nozzle_min', 'nozzle_max', 'bed_min', 'bed_max', 'dry_temp', 'dry_hours', 'chamber', 'weight_g', 'traits', 'sds_url', 'storage_note', 'caution']);
+        return $this->save('cat_materials', $request, ['kind', 'brand', 'name', 'material', 'color', 'color_hex', 'diameter', 'nozzle_min', 'nozzle_max', 'bed_min', 'bed_max', 'dry_temp', 'dry_hours', 'chamber', 'weight_g', 'traits', 'sds_url', 'storage_note', 'caution', 'wiki_url', 'summary']);
     }
 
     public function remove(Request $request, string $table, string $key): JsonResponse
@@ -198,3 +198,106 @@ class AdminController extends Controller
 
         return response()->json(['success' => true, 'data' => CatalogSettings::save($request->all())]);
     }
+
+    public function uploadPhotos(Request $request): JsonResponse
+    {
+        if (! $this->allowed($request)) {
+            return $this->deny();
+        }
+        $type = $request->input('type') === 'material' ? 'material' : 'equipment';
+        $key = substr(preg_replace('/[^a-z0-9_-]/', '', strtolower((string) $request->input('key'))), 0, 80);
+        $table = $type === 'material' ? 'cat_materials' : 'cat_equipment';
+        if ($key === '' || ! Schema::hasTable($table) || ! DB::table($table)->where('key', $key)->exists()) {
+            return response()->json(['success' => false, 'message' => '항목이 없습니다.'], 404);
+        }
+        $files = $request->file('photos', []);
+        if (! is_array($files)) {
+            $files = [$files];
+        }
+        $files = array_values(array_filter($files));
+        if ($files === []) {
+            return response()->json(['success' => false, 'message' => '사진을 선택하세요.'], 422);
+        }
+        if (! Schema::hasTable('cat_photos')) {
+            return response()->json(['success' => false, 'message' => '사진 표가 없습니다. migrate를 실행하세요.'], 422);
+        }
+        $have = (int) DB::table('cat_photos')->where('item_type', $type)->where('item_key', $key)->count();
+        $sort = (int) DB::table('cat_photos')->where('item_type', $type)->where('item_key', $key)->max('sort');
+        $saved = [];
+        foreach (array_slice($files, 0, max(0, 12 - $have)) as $file) {
+            if (! $file->isValid() || $file->getSize() > 4_000_000) {
+                continue;
+            }
+            $raw = (string) file_get_contents($file->getRealPath());
+            $jpeg = $this->fitJpeg($raw);
+            if ($jpeg === null) {
+                continue;
+            }
+            $name = $key.'-'.substr(md5($jpeg.microtime(true)), 0, 10).'.jpg';
+            $dest = 'modules/custom-catalog/images/'.$name;
+            \Illuminate\Support\Facades\Storage::disk('local')->put($dest, $jpeg);
+            $url = '/api/modules/custom-catalog/images/'.$name;
+            $sort++;
+            $id = DB::table('cat_photos')->insertGetId([
+                'item_type' => $type, 'item_key' => $key, 'url' => $url, 'sort' => $sort,
+                'created_at' => now(), 'updated_at' => now(),
+            ]);
+            $saved[] = ['id' => $id, 'url' => $url];
+        }
+        if ($saved !== [] && Schema::hasColumn($table, 'image_url')) {
+            $first = DB::table('cat_photos')->where('item_type', $type)->where('item_key', $key)->orderBy('sort')->value('url');
+            DB::table($table)->where('key', $key)->update(['image_url' => $first, 'updated_at' => now()]);
+        }
+
+        return response()->json(['success' => true, 'data' => ['photos' => $saved]]);
+    }
+
+    public function deletePhoto(Request $request, int $id): JsonResponse
+    {
+        if (! $this->allowed($request)) {
+            return $this->deny();
+        }
+        if (! Schema::hasTable('cat_photos')) {
+            return response()->json(['success' => false], 404);
+        }
+        $photo = DB::table('cat_photos')->where('id', $id)->first();
+        if (! $photo) {
+            return response()->json(['success' => false, 'message' => '없습니다.'], 404);
+        }
+        DB::table('cat_photos')->where('id', $id)->delete();
+        $table = $photo->item_type === 'material' ? 'cat_materials' : 'cat_equipment';
+        $next = DB::table('cat_photos')->where('item_type', $photo->item_type)->where('item_key', $photo->item_key)->orderBy('sort')->value('url');
+        if (Schema::hasColumn($table, 'image_url')) {
+            DB::table($table)->where('key', $photo->item_key)->update(['image_url' => $next, 'updated_at' => now()]);
+        }
+
+        return response()->json(['success' => true]);
+    }
+
+    private function fitJpeg(string $raw): ?string
+    {
+        if (! function_exists('imagecreatefromstring')) {
+            return strlen($raw) <= 80000 && str_starts_with($raw, "\xFF\xD8") ? $raw : null;
+        }
+        $im = @imagecreatefromstring($raw);
+        if (! $im) {
+            return null;
+        }
+        $w = imagesx($im);
+        $h = imagesy($im);
+        $scale = 720 / max($w, $h, 1);
+        if ($scale < 1) {
+            $nw = max(1, (int) ($w * $scale));
+            $nh = max(1, (int) ($h * $scale));
+            $next = imagecreatetruecolor($nw, $nh);
+            imagecopyresampled($next, $im, 0, 0, 0, 0, $nw, $nh, $w, $h);
+            imagedestroy($im);
+            $im = $next;
+        }
+        ob_start();
+        imagejpeg($im, null, 70);
+        imagedestroy($im);
+
+        return (string) ob_get_clean();
+    }
+}
