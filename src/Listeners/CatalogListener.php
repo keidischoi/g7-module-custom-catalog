@@ -72,24 +72,56 @@ class CatalogListener implements HookListenerInterface
                 $skip = max(0, $skip - $n);
                 $total += $n;
             }
-            $items = [];
-            foreach ($all as $c) {
-                $title = trim($c['brand'].' '.$c['title']);
-                $excerpt = implode(' · ', $c['chips']);
-                $items[] = [
-                    'id' => $c['key'], 'category' => 'catalog',
-                    'title' => $title, 'title_highlighted' => self::mark($title, $q),
-                    'excerpt' => $excerpt, 'excerpt_highlighted' => self::mark($excerpt, $q),
-                    'url' => '/catalog/'.$c['key'], 'thumbnail' => $c['image'], 'has_thumbnail' => $c['image'] !== '',
-                    'badge' => $c['kind_label'], 'date' => '', 'tags' => [],
-                ];
-            }
+            $items = array_map(static fn ($c) => self::row($c, $q, 'catalog'), $all);
             $last = max(1, (int) ceil($total / $perPage));
 
             return ['total' => $total, 'items' => $items, 'last_page' => $last, 'has_more_pages' => $page < $last];
         } catch (\Throwable) {
             return $empty;
         }
+    }
+
+    /**
+     * 0.2.9 한 표만 — 홈 디자인 통합 검색의 「3D 장비」(equipment) · 「필라멘트 · 레진」(materials) 탭이 이것을 부름.
+     * 종류 이름(「필라멘트」 · 「레진 프린터」)으로도 찾고, 사진 · 제목 · 주소를 카탈로그 화면과 같게.
+     *
+     * @return array{total: int, items: list<array<string, mixed>>, last_page: int, has_more_pages: bool}
+     */
+    public static function searchType(string $type, string $q, int $page, int $perPage, string $sort = 'relevance', string $category = ''): array
+    {
+        $empty = ['total' => 0, 'items' => [], 'last_page' => 1, 'has_more_pages' => false];
+        try {
+            $q = trim(mb_substr(ltrim($q, '#'), 0, 60));
+            if ($q === '' || ! in_array($type, ['equipment', 'materials'], true)) {
+                return $empty;
+            }
+            $perPage = max(1, min(50, $perPage));
+            $page = max(1, $page);
+            $r = (new CatalogService())->list(['type' => $type, 'q' => $q, 'per' => $perPage, 'page' => $page, 'sort' => $sort === 'latest' ? 'new' : ($sort === 'oldest' ? 'name' : '')]);
+            if ($page > $r['pages']) {
+                return ['total' => $r['total'], 'items' => [], 'last_page' => $r['pages'], 'has_more_pages' => false];
+            }
+            $cat = $category !== '' ? $category : ($type === 'materials' ? 'filament' : 'catalog');
+
+            return ['total' => $r['total'], 'items' => array_map(static fn ($c) => self::row($c, $q, $cat), $r['items']), 'last_page' => $r['pages'], 'has_more_pages' => $page < $r['pages']];
+        } catch (\Throwable) {
+            return $empty;
+        }
+    }
+
+    /** 검색 결과 한 줄 (홈 디자인 통합 검색 모양) @param array<string, mixed> $c 카드 */
+    private static function row(array $c, string $q, string $category): array
+    {
+        $title = trim($c['brand'].' '.$c['title']);
+        $excerpt = implode(' · ', $c['chips']);
+
+        return [
+            'id' => $c['key'], 'category' => $category,
+            'title' => $title, 'title_highlighted' => self::mark($title, $q),
+            'excerpt' => $excerpt, 'excerpt_highlighted' => self::mark($excerpt, $q),
+            'url' => '/catalog/'.$c['key'], 'thumbnail' => $c['image'], 'image_url' => $c['image'], 'has_thumbnail' => $c['image'] !== '',
+            'badge' => $c['kind_label'], 'date' => '', 'tags' => [],
+        ];
     }
 
     private static function mark(string $text, string $q): string

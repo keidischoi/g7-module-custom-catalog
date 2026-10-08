@@ -45,8 +45,13 @@ final class CatalogService
         }
         $q = trim((string) ($p['q'] ?? ''));
         if ($q !== '') {
+            // 「필라멘트」 · 「레진 프린터」 · 「Elegoo 레진」 처럼 종류 이름이 들어 있으면 그 종류로 거르고, 남은 낱말로 찾음
+            [$byWord, $words] = self::kindWords($type, $q);
+            if ($byWord !== null) {
+                $base->whereIn('kind', $byWord ?: ['-']);
+            }
             $cols = $type === 'materials' ? ['brand', 'name', 'material', 'key'] : ['brand', 'model', 'key'];
-            foreach (array_slice(preg_split('/\s+/u', $q) ?: [], 0, 5) as $word) {
+            foreach (array_slice($words, 0, 5) as $word) {
                 $like = '%'.addcslashes($word, '%_\\').'%';
                 $base->where(function ($w) use ($cols, $like) {
                     foreach ($cols as $c) {
@@ -85,6 +90,55 @@ final class CatalogService
         $rows = $base->offset(($page - 1) * $per)->limit($per)->get();
 
         return ['items' => $rows->map(fn ($r) => $this->card($type, $r))->all(), 'total' => $total, 'page' => $page, 'pages' => $pages, 'brands' => $brands];
+    }
+
+    /** 검색에서 종류로 읽는 다른 이름 (띄어쓰기 · 「·」 없이 소문자) */
+    private const KIND_ALIASES = [
+        'equipment' => ['프린터' => ['fdm', 'sla', 'dlp', 'sls', 'mjf', 'metal'], '3d프린터' => ['fdm', 'sla', 'dlp', 'sls', 'mjf', 'metal'], 'fdm' => ['fdm'],
+            'fdm프린터' => ['fdm'], '레진프린터' => ['sla', 'dlp'], '광경화프린터' => ['sla', 'dlp'], 'sla' => ['sla'], 'dlp' => ['dlp'], 'lcd' => ['dlp'], 'msla' => ['dlp'],
+            'sls' => ['sls'], 'mjf' => ['mjf'], 'cnc' => ['cnc'], '레이저' => ['laser'], '스캐너' => ['scanner'], '건조기' => ['dryer'], '세척경화기' => ['wash_cure']],
+        'materials' => ['필라멘트' => ['fdm'], '레진' => ['resin'], '수지' => ['resin'], '분말' => ['powder'], '파우더' => ['powder'], '금속분말' => ['powder']],
+    ];
+
+    /**
+     * 검색어에서 종류 이름을 골라냄 — 낱말 1~4개를 이어 붙인 것이 탭 이름 · 종류 이름 · 다른 이름과 같으면 종류로.
+     *
+     * @return array{0: list<string>|null, 1: list<string>}  [종류들(없으면 null), 남은 낱말]
+     */
+    public static function kindWords(string $type, string $q): array
+    {
+        $n = static fn (string $s): string => mb_strtolower(preg_replace('/[\s·・\-_]+/u', '', $s) ?? $s);
+        $map = [];
+        foreach (Fields::TABS as $t) {
+            if ($t[3] === $type) {
+                $map[$n($t[1])] = $t[4];
+            }
+        }
+        foreach ($type === 'materials' ? Fields::MATERIAL_KINDS : Fields::EQUIPMENT_KINDS as $k => $v) {
+            $map[$n($v[0])] = array_values(array_unique(array_merge($map[$n($v[0])] ?? [], [$k])));
+        }
+        $map += self::KIND_ALIASES[$type];
+        $words = array_values(array_filter(preg_split('/\s+/u', trim($q)) ?: [], static fn ($w) => $w !== '' && $w !== '·'));
+        $kinds = null;
+        $rest = [];
+        for ($i = 0; $i < count($words);) {
+            $hit = 0;
+            for ($len = min(4, count($words) - $i); $len >= 1; $len--) {
+                $key = $n(implode('', array_slice($words, $i, $len)));
+                if (isset($map[$key])) {
+                    $kinds = $kinds === null ? $map[$key] : array_values(array_intersect($kinds, $map[$key]));
+                    $hit = $len;
+                    break;
+                }
+            }
+            if ($hit) {
+                $i += $hit;
+            } else {
+                $rest[] = $words[$i++];
+            }
+        }
+
+        return [$kinds, $rest];
     }
 
     /** 탭마다 몇 개 @return array<string, int> */
