@@ -364,6 +364,13 @@ namespace {
     t($LG::of('Kingroon') === $u, '다른 설정을 저장해도 로고는 그대로');
     $LG::clear('Kingroon');
     t($LG::of('Kingroon') === '' && $LG::of('Bambu Lab') === $bu, '로고 지우기');
+    $svc->save('equipment', ['kind' => 'fdm', 'brand' => 'QIDI', 'title' => 'Q2']);
+    $svc->save('equipment', ['kind' => 'fdm', 'brand' => 'QIDI Tech', 'title' => 'Plus4']);
+    $q1 = $LG::set('QIDI Tech', jpeg(300, 300, 2));
+    $mp = $LG::map();
+    t($LG::of('QIDI') === $q1 && $mp['qidi'] === $q1 && $mp['qiditech'] === $q1, '0.2.5 로고 하나를 바꾸면 같은 회사(조금 다르게 적은 이름 포함)의 모든 항목에');
+    $q2 = $LG::set('QIDI', jpeg(300, 300, 4));
+    t($q2 !== $q1 && $LG::of('QIDI Tech') === $q2 && count(array_filter(array_keys((array) Settings::get('logos')), static fn ($k) => str_starts_with((string) $k, 'qidi'))) === 1, '다시 바꾸면 예전 것은 치우고 하나만');
 
     echo "■ 다른 모듈과 잇기\n";
     $book = Catalog::equipmentBook();

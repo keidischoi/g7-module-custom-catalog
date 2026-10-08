@@ -1,4 +1,4 @@
-/*! custom-catalog 0.2.4 — 관리자 (항목 · 제안함 · 자동 수집 · AI 연결 · 설정) */
+/*! custom-catalog 0.2.5 — 관리자 (항목 · 제안함 · 자동 수집 · AI 연결 · 설정) */
 (function () {
   'use strict';
   if (window.__cctAdmin) { try { window.__cctAdmin(); } catch (e) {} return; }
@@ -6,7 +6,7 @@
   function C() { return window.CCT; }
   function need(cb) {
     if (window.CCT) return cb();
-    if (!document.getElementById('cct-app-js')) { var s = document.createElement('script'); s.id = 'cct-app-js'; s.src = '/api/modules/custom-catalog/assets/catalog-app.js?v=0.2.4'; document.head.appendChild(s); }
+    if (!document.getElementById('cct-app-js')) { var s = document.createElement('script'); s.id = 'cct-app-js'; s.src = '/api/modules/custom-catalog/assets/catalog-app.js?v=0.2.5'; document.head.appendChild(s); }
     var n = 0, t = setInterval(function () { if (window.CCT || ++n > 100) { clearInterval(t); if (window.CCT) cb(); } }, 60);
   }
   function page() {
@@ -251,7 +251,7 @@
         '<div class="cct-row"><div><b>한 번에 보이는 개수</b><small>목록에서 「더 보기」 전까지</small></div><span class="cct-num"><input class="cct-in" type="number" min="8" max="96" data-n="per_page" value="' + S.per_page + '"> 개</span></div>' +
         '<div class="cct-row"><div><b>사진 크기</b><small>올리거나 가져온 사진은 이 크기(긴 변)로 줄여 JPEG 로 저장해요. 목록에는 더 작은 사진(480px)을 따로 만들어 써요</small></div><span class="cct-num"><input class="cct-in" type="number" min="480" max="2400" step="20" data-n="photo_px" value="' + S.photo_px + '"> px</span></div>' +
         '<div class="cct-row"><div><b>사진 품질</b><small>낮을수록 파일이 작아요 (권장 78 ~ 85)</small></div><span class="cct-num"><input class="cct-in" type="number" min="50" max="95" data-n="photo_quality" value="' + S.photo_quality + '"></span></div></div>' +
-        '<div class="cct-panel"><h3>🏷️ 제조사 로고</h3><p>카드 · 상세 · 제조사 칩에 보이는 로고예요. 로고가 없는 제조사는 머리글자 배지로 보여요. 🌐 는 그 제조사 홈페이지의 아이콘(회사가 쓰는 정식 마크)을 받아 오고, 📁 는 직접 올려요 — 글자까지 들어간 정식 로고를 쓰려면 제조사 홈페이지의 보도 자료(Press · Media kit)에서 받아 여기에 올리면 돼요 (옆으로 긴 로고도 그대로 보여요). 로고는 각 회사의 상표예요.</p>' +
+        '<div class="cct-panel"><h3>🏷️ 제조사 로고</h3><p>카드 · 상세 · 제조사 칩에 보이는 로고예요. 로고가 없는 제조사는 머리글자 배지로 보여요. 제조사 하나를 바꾸면 그 제조사의 모든 항목이 같이 바뀌어요 (항목 상세 화면의 「🏷️ 로고 바꾸기」로도 돼요). 🌐 는 그 제조사 홈페이지의 아이콘(회사가 쓰는 정식 마크)을 받아 오고, 📁 는 직접 올려요 — 글자까지 들어간 정식 로고를 쓰려면 제조사 홈페이지의 보도 자료(Press · Media kit)에서 받아 여기에 올리면 돼요 (옆으로 긴 로고도 그대로 보여요). 로고는 각 회사의 상표예요.</p>' +
         '<div class="cct-bar"><button type="button" class="cct-btn cct-btn--s" data-logo-all>🌐 없는 로고 모두 홈페이지에서 가져오기</button><span class="cct-out" style="margin:0" data-logo-out></span></div><div class="cct-lg" data-logos><div class="cct-skel" style="height:60px"></div></div></div>' +
         '<div class="cct-panel"><h3>🗂️ 보이는 탭</h3><p>끄면 사이트 카탈로그 화면에서 그 탭이 안 보여요 (자료는 그대로).</p>' + M0.map(function (t) {
           return '<div class="cct-row"><div><b>' + t[2] + ' ' + esc(t[1]) + '</b></div>' + sw(S.tabs_off.indexOf(t[0]) < 0, 'data-tab="' + t[0] + '"') + '</div>'; }).join('') + '</div>' +
@@ -276,7 +276,7 @@
         Array.prototype.forEach.call(box.querySelectorAll('[data-logo-up]'), function (inp) { inp.onchange = function () {
           if (!inp.files.length) return;
           var fd = new FormData(); fd.append('brand', items[+inp.getAttribute('data-logo-up')].brand); fd.append('logo', inp.files[0]);
-          api('POST', '/admin/logos', fd).then(function (r) { C().toast('로고를 넣었어요.'); C().meta(true); drawLogos(r.items); }).catch(function (e) { C().toast(e.message); });
+          api('POST', '/admin/logos', fd).then(function (r) { C().toast(api.last || '로고를 바꿨어요.'); C().meta(true); drawLogos(r.items); }).catch(function (e) { C().toast(e.message); });
         }; });
         Array.prototype.forEach.call(box.querySelectorAll('[data-logo-web]'), function (b) { b.onclick = function () {
           b.disabled = true; b.textContent = '⏳';

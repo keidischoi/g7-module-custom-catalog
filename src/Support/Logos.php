@@ -25,14 +25,39 @@ final class Logos
     {
         $n = CatalogService::norm($brand);
         $own ??= (array) Settings::get('logos');
+        if ($n === '') {
+            return '';
+        }
+        if (! empty($own[$n])) {
+            return (string) $own[$n];
+        }
+        // 0.2.5 같은 회사를 조금 다르게 적은 것도 같은 로고 — 「QIDI」 ↔ 「QIDI Tech」 · 「Prusa」 ↔ 「Prusa Research」 (앞부분이 같고 4자 이상)
+        foreach ($own as $k => $url) {
+            $k = (string) $k;
+            if ($url !== '' && mb_strlen($k) >= 4 && mb_strlen($n) >= 4 && (str_starts_with($n, $k) || str_starts_with($k, $n))) {
+                return (string) $url;
+            }
+        }
 
-        return $n !== '' && ! empty($own[$n]) ? (string) $own[$n] : '';
+        return '';
     }
 
     /** @return array<string, string> 정리한 이름 → 주소 */
     public static function map(): array
     {
-        return array_map('strval', (array) Settings::get('logos'));
+        $own = (array) Settings::get('logos');
+        if (! $own) {
+            return [];
+        }
+        $out = [];
+        foreach (self::brands() as $b) {   // 카탈로그에 있는 제조사마다 (조금 다르게 적은 이름도 같은 로고)
+            $url = self::of($b, $own);
+            if ($url !== '') {
+                $out[CatalogService::norm($b)] = $url;
+            }
+        }
+
+        return $out + array_map('strval', $own);
     }
 
     /** @return list<string> 카탈로그에 있는 제조사 */
@@ -105,6 +130,7 @@ final class Logos
         }
         $name = 'logo-'.substr(md5($n), 0, 10).'-'.substr(md5($jpg), 0, 6).'.jpg';
         PhotoService::store($name, $jpg);
+        self::clear($brand);   // 같은 회사의 예전 로고(다르게 적은 이름 포함)는 치움 — 하나만 남게
         $own = (array) Settings::get('logos');
         $own[$n] = '/api/modules/custom-catalog/images/'.$name;
         Settings::save(['logos' => $own]);
@@ -158,11 +184,17 @@ final class Logos
         throw new \InvalidArgumentException('홈페이지('.parse_url($home, PHP_URL_HOST).')에서 쓸 만한 아이콘을 찾지 못했어요 — 로고를 직접 올려 주세요.');
     }
 
-    /** 로고 지우기 */
+    /** 로고 지우기 (조금 다르게 적은 같은 회사 이름으로 넣은 것도) */
     public static function clear(string $brand): void
     {
         $own = (array) Settings::get('logos');
-        unset($own[CatalogService::norm($brand)]);
+        $n = CatalogService::norm($brand);
+        foreach (array_keys($own) as $k) {
+            $k = (string) $k;
+            if ($k === $n || (mb_strlen($k) >= 4 && mb_strlen($n) >= 4 && (str_starts_with($n, $k) || str_starts_with($k, $n)))) {
+                unset($own[$k]);
+            }
+        }
         Settings::save(['logos' => $own]);
     }
 }

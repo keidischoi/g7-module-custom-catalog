@@ -1,8 +1,8 @@
-/*! custom-catalog 0.2.4 — 3D 카탈로그 (목록 · 상세 · 편집) */
+/*! custom-catalog 0.2.5 — 3D 카탈로그 (목록 · 상세 · 편집) */
 (function () {
   'use strict';
   if (window.CCT) { try { window.CCT.tick(); } catch (e) {} return; }
-  var VERSION = '0.2.4', API = '/api/modules/custom-catalog', BASE = '/catalog';
+  var VERSION = '0.2.5', API = '/api/modules/custom-catalog', BASE = '/catalog';
 
   /* ───────── 도구 ───────── */
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
@@ -211,7 +211,7 @@
         (can ? '<div class="cct-photo-tools"><label class="cct-btn cct-btn--s">📁 사진 올리기<input type="file" accept="image/*" multiple hidden data-up></label><input class="cct-in" style="height:32px" type="text" placeholder="또는 사진 주소 (https://…)" data-url>' +
           '<button type="button" class="cct-btn cct-btn--s" data-url-add>주소로 넣기</button><button type="button" class="cct-btn cct-btn--s" data-ph-main hidden>⭐ 대표로</button><button type="button" class="cct-btn cct-btn--s cct-btn--d" data-ph-del hidden>🗑 이 사진 지우기</button></div>' : '') + '</div>' +
         '<div class="cct-info"><span class="cct-info__kind">' + kindIcon(d.type, d.kind) + ' ' + esc(d.kind_label) + '</span>' + (d.status !== 'active' ? ' <span class="cct-info__kind" style="color:var(--warn)">🗄️ 보관함</span>' : '') +
-        '<div class="cct-info__brand">' + logoImg(d.brand, 'cct-logo--lg') + esc(d.brand) + '</div><h1>' + esc(d.title) + '</h1>' +
+        '<div class="cct-info__brand">' + logoImg(d.brand, 'cct-logo--lg') + esc(d.brand) + (can ? ' <button type="button" class="cct-btn cct-btn--s" data-logo-edit title="이 제조사의 로고 바꾸기">🏷️ 로고 바꾸기</button>' : '') + '</div><h1>' + esc(d.title) + '</h1>' +
         (d.summary ? '<p class="cct-info__sum">' + esc(d.summary) + '</p>' : '') + (d.note ? '<p class="cct-info__sum" style="font-size:14px">※ ' + esc(d.note) + '</p>' : '') +
         (keys.length ? '<div class="cct-keys">' + keys.map(function (k) { return '<div class="cct-key"><small>' + esc(k.label) + '</small><b>' + esc(k.value) + '</b></div>'; }).join('') + '</div>' : '') +
         (by.materials ? '<div class="cct-mats"><small>' + (d.kind === 'fdm' ? '🧵 쓸 수 있는 필라멘트' : d.kind === 'sla' || d.kind === 'dlp' ? '🧪 쓸 수 있는 레진' : '🧩 쓸 수 있는 재료') + '</small><div class="cct-tags">' +
@@ -271,6 +271,7 @@
       q('[data-ph-main]').onclick = function () { api('POST', '/admin/photos/' + ph[cur].id + '/main').then(function () { toast('대표 사진으로 정했어요.'); reload(); }).catch(function (e) { toast(e.message); }); };
       q('[data-ph-del]').onclick = function () { if (!confirm('이 사진을 지울까요?')) return; api('POST', '/admin/photos/' + ph[cur].id + '/delete').then(function () { toast('사진을 지웠어요.'); reload(); }).catch(function (e) { toast(e.message); }); };
       q('[data-ed]').onclick = function () { openEditor({ key: key, detail: d }, reload); };
+      q('[data-logo-edit]').onclick = function () { logoEditor(d.brand, function () { meta(true).then(reload); }); };
       var del = q('[data-del]'); if (del) del.onclick = function () { if (!confirm('「' + d.brand + ' ' + d.title + '」 을(를) 지울까요?\n보관함으로 옮겨지고, 나중에 되살릴 수 있어요.')) return; api('POST', '/admin/items/' + key + '/delete').then(function () { toast(api.last); meta(true); go(BASE + (tab ? '?tab=' + tab.key : '')); }).catch(function (e) { toast(e.message); }); };
       var rs = q('[data-restore]'); if (rs) rs.onclick = function () { api('POST', '/admin/items/' + key + '/restore').then(function () { toast('되살렸어요.'); meta(true); reload(); }).catch(function (e) { toast(e.message); }); };
       var hd = q('[data-hard]'); if (hd) hd.onclick = function () { if (!confirm('아주 지우면 되살릴 수 없어요. 사진도 함께 지워져요. 지울까요?')) return; api('POST', '/admin/items/' + key + '/delete', { hard: 1 }).then(function () { toast('아주 지웠어요.'); go(BASE + '?status=archived' + (tab ? '&tab=' + tab.key : '')); }).catch(function (e) { toast(e.message); }); };
@@ -278,6 +279,34 @@
       root.innerHTML = '<div class="cct"><div class="cct-empty"><b>🧐</b>' + esc(e.message) + '<br><br><a class="cct-btn" data-go href="' + BASE + '">카탈로그 목록으로</a></div></div>';
       bindCards(root.querySelector('.cct'), function () {});
     });
+  }
+
+  /* ───────── 로고 바꾸기 — 제조사 하나의 로고를 바꾸면 그 제조사의 모든 항목이 같이 바뀜 ───────── */
+  function logoEditor(brand, done) {
+    css();
+    var m = document.createElement('div'); m.className = 'cct cct-modal'; document.body.appendChild(m);
+    var changed = false, close = function () { m.remove(); if (changed && done) done(); };
+    var draw = function (msg) {
+      var u = logoOf(brand);
+      m.innerHTML = '<div class="cct-modal__box" style="width:min(460px,100%)"><div class="cct-modal__head"><h3>🏷️ ' + esc(brand) + ' 로고</h3><button type="button" class="cct-x" data-close aria-label="닫기">✕</button></div>' +
+        '<div class="cct-modal__body"><div class="cct-logobox">' + (u ? '<img alt="" src="' + esc(u) + '">' : logoImg(brand, 'cct-logo--lg')) + '</div>' +
+        '<p class="cct-note" style="margin:12px 0">여기서 바꾸면 <b>' + esc(brand) + '</b> 의 모든 장비 · 재료에 같이 적용돼요. 이름을 조금 다르게 적은 같은 회사(예: QIDI · QIDI Tech)도 같이 바뀌어요.</p>' +
+        '<div class="cct-bar"><label class="cct-btn cct-btn--p">📁 로고 올리기<input type="file" accept="image/*" hidden data-up></label><button type="button" class="cct-btn" data-web>🌐 홈페이지에서 가져오기</button>' +
+        (u ? '<button type="button" class="cct-btn cct-btn--d" data-del>지우기</button>' : '') + '</div><p class="cct-msg" style="margin-top:10px;color:var(--mute)" data-msg>' + esc(msg || '') + '</p></div>' +
+        '<div class="cct-modal__foot"><span style="flex:1"></span><button type="button" class="cct-btn" data-close>닫기</button></div></div>';
+      var q = function (s) { return m.querySelector(s); }, say = function (t) { q('[data-msg]').textContent = t; };
+      Array.prototype.forEach.call(m.querySelectorAll('[data-close]'), function (b) { b.onclick = close; });
+      var after = function (text) { changed = true; return meta(true).then(function () { draw(text); }); };
+      q('[data-up]').onchange = function () {
+        if (!this.files.length) return;
+        var fd = new FormData(); fd.append('brand', brand); fd.append('logo', this.files[0]); say('⏳ 올리는 중…');
+        api('POST', '/admin/logos', fd).then(function () { return after('✅ 바꿨어요.'); }).catch(function (e) { say('❌ ' + e.message); });
+      };
+      q('[data-web]').onclick = function () { say('⏳ 홈페이지에서 찾는 중…');
+        api('POST', '/admin/logos/fetch', { brand: brand }).then(function () { return after('✅ 홈페이지에서 가져왔어요.'); }).catch(function (e) { say('❌ ' + e.message); }); };
+      var del = q('[data-del]'); if (del) del.onclick = function () { api('POST', '/admin/logos/delete', { brand: brand }).then(function () { return after('지웠어요 — 머리글자 배지로 보여요.'); }).catch(function (e) { say('❌ ' + e.message); }); };
+    };
+    meta().then(function () { draw(''); });
   }
 
   /* ───────── 편집 창 ───────── */
@@ -376,7 +405,7 @@
     Promise.all([meta(), icons()]).then(function () { if (root.__cct !== url) return; if (m) detailPage(root, m[1]); else listPage(root); try { window.scrollTo(0, 0); } catch (e) {} })
       .catch(function (e) { root.innerHTML = '<div class="cct"><div class="cct-empty"><b>⚠️</b>카탈로그를 열지 못했어요.<br>' + esc(e.message) + '</div></div>'; });
   }
-  window.CCT = { version: VERSION, api: api, esc: esc, toast: toast, css: css, meta: meta, getMeta: function () { return META; }, openEditor: openEditor, cardHtml: cardHtml, logoOf: logoOf, logoImg: logoImg, art: art, icons: icons, tick: tick, go: go, hue: hue, kindIcon: kindIcon };
+  window.CCT = { version: VERSION, api: api, esc: esc, toast: toast, css: css, meta: meta, getMeta: function () { return META; }, openEditor: openEditor, logoEditor: logoEditor, cardHtml: cardHtml, logoOf: logoOf, logoImg: logoImg, art: art, icons: icons, tick: tick, go: go, hue: hue, kindIcon: kindIcon };
   window.addEventListener('popstate', function () { setTimeout(tick, 0); });
   try { new MutationObserver(function () { var r = document.getElementById('cct_root'); if (r && (r.__cct !== location.pathname + location.search || !r.firstChild)) tick(); }).observe(document.body, { childList: true, subtree: true }); } catch (e) {}
   setInterval(tick, 800);
