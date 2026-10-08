@@ -1,4 +1,4 @@
-/*! custom-catalog 0.1.29 — 설정 */
+/*! custom-catalog 0.1.30 — 설정 */
 (function () {
   "use strict";
   function boot() {
