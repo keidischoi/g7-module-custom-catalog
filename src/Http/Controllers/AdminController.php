@@ -185,7 +185,7 @@ class AdminController extends Controller
             return self::fail($e->getMessage());
         }
 
-        return self::ok(['items' => \Modules\Custom\Catalog\Support\Logos::adminList()], '로고를 넣었어요.');
+        return self::ok(['items' => \Modules\Custom\Catalog\Support\Logos::adminList()], '「'.$brand.'」 로고를 바꿨어요 — 이 제조사의 모든 항목에 적용돼요.');
     }
 
     /** 제조사 홈페이지의 아이콘을 받아 로고로 */

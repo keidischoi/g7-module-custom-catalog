@@ -71,6 +71,10 @@ html.dark .cct-pic,.dark .cct-pic{background:linear-gradient(160deg,#f8fafc,#dbe
 .cct-logo--lg{height:32px;min-width:32px;max-width:150px;margin-right:8px;border-radius:8px;vertical-align:-10px}
 .cct-logo--mono{width:18px}.cct-logo--lg.cct-logo--mono{width:32px}
 .cct-chip .cct-logo{margin-right:0}
+.cct-logobox{display:flex;align-items:center;justify-content:center;min-height:120px;padding:18px;border:1px dashed var(--line);border-radius:16px;background:#fff}
+.cct-logobox img{max-width:100%;max-height:120px;object-fit:contain}
+.cct-logobox .cct-logo{height:72px;min-width:72px;width:72px;font-size:34px;margin:0;border-radius:16px}
+.cct-info__brand .cct-btn{margin-left:8px;vertical-align:2px}
 .cct-lg{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
 .cct-lg__i{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:14px;background:var(--bg)}
 .cct-lg__i .cct-logo{flex:none;height:46px;min-width:46px;max-width:96px;margin:0;border-radius:10px;font-size:20px;vertical-align:0}
