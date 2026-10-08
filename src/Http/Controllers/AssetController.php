@@ -14,7 +14,13 @@ class AssetController extends Controller
         if (! is_file($path)) {
             abort(404);
         }
-        $type = str_ends_with($name, '.js') ? 'application/javascript; charset=UTF-8' : 'text/plain; charset=UTF-8';
+        $type = match (true) {
+            str_ends_with($name, '.js') => 'application/javascript; charset=UTF-8',
+            str_ends_with($name, '.jpg'), str_ends_with($name, '.jpeg') => 'image/jpeg',
+            str_ends_with($name, '.png') => 'image/png',
+            str_ends_with($name, '.webp') => 'image/webp',
+            default => 'text/plain; charset=UTF-8',
+        };
 
         return response((string) file_get_contents($path), 200, ['Content-Type' => $type, 'Cache-Control' => 'no-cache']);
     }

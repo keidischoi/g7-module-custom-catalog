@@ -1,4 +1,4 @@
-/*! custom-catalog 0.1.35 */
+/*! custom-catalog 0.1.36 */
 (function () {
   "use strict";
   function boot() {
@@ -11,14 +11,17 @@
   }
   
   function renderDetail(root, key) {
-    root.innerHTML = "<style>.cct{max-width:860px;margin:0 auto;padding:24px;color:#0f172a}.cct a{color:#0f766e}.cct-photo{width:100%;max-height:360px;object-fit:contain;background:#f8fafc;border-radius:16px}.cct-spec{display:grid;grid-template-columns:160px 1fr;gap:8px 12px}.cct-spec dt{color:#64748b}</style><div class=\"cct\"><p>불러오는 중</p></div>";
+    root.innerHTML = "<div class=\"cct\"><p class=\"cct-note\">불러오는 중</p></div>";
     function show(row) {
       if (!row) { root.innerHTML = "<div class=\"cct\"><p>없습니다.</p><p><a href=\"/catalog\">목록</a></p></div>"; return; }
-      var title = (row.brand || "") + " " + (row.model || row.name || "");
-      var rows = [["제조사", row.brand], ["모델", row.model || row.name], ["종류", row.kind], ["재료", row.material], ["크기", [row.build_x_mm, row.build_y_mm, row.build_z_mm].filter(Boolean).join(" x ")], ["노즐", row.nozzle], ["주의", row.caution], ["메모", row.note]];
-      var spec = rows.filter(function (r) { return r[1]; }).map(function (r) { return "<dt>" + r[0] + "</dt><dd>" + String(r[1]) + "</dd>"; }).join("");
-      root.innerHTML = "<div class=\"cct\"><p><a href=\"/catalog\">목록</a></p>" + (row.image_url ? "<img class=\"cct-photo\" alt=\"\" src=\"" + row.image_url + "\">" : "") + "<h1>" + title + "</h1><dl class=\"cct-spec\">" + spec + "</dl><p><button type=\"button\" id=\"cct-print\">PDF 출력</button> " + (row.sds_url ? "<a href=\"" + row.sds_url + "\" target=\"_blank\" rel=\"noopener\">MSDS</a>" : "") + "</p></div>";
-      document.getElementById("cct-print").onclick = function () { window.print(); };
+      var title = ((row.brand || "") + " " + (row.model || row.name || "")).trim();
+      var size = [row.build_x_mm, row.build_y_mm, row.build_z_mm].filter(Boolean).join(" × ");
+      var rows = [["제조사", row.brand], ["모델", row.model || row.name], ["종류", row.kind], ["재료", row.material], ["출력 크기", size ? size + " mm" : ""], ["노즐", row.nozzle], ["색", row.color], ["주의", row.caution], ["메모", row.note]];
+      var spec = rows.filter(function (r) { return r[1]; }).map(function (r) { return "<div><dt>" + r[0] + "</dt><dd>" + String(r[1]) + "</dd></div>"; }).join("");
+      var photo = row.image_url ? "<img class=\"cct-hero\" alt=\"" + title + "\" src=\"" + row.image_url + "\">" : "<div class=\"cct-hero cct-ph\">사진 준비 중</div>";
+      root.innerHTML = "<style>.cct{max-width:980px;margin:0 auto;padding:28px 16px 72px;color:#0f172a}.cct a{color:#0f766e;font-weight:700;text-decoration:none}.cct-hero{width:100%;height:360px;object-fit:contain;background:linear-gradient(180deg,#f8fafc,#e2e8f0);border-radius:24px}.cct-ph{display:flex;align-items:center;justify-content:center;color:#64748b}.cct h1{font-size:32px;margin:18px 0 6px}.cct-badge{display:inline-block;background:#ccfbf1;color:#0f766e;border-radius:999px;padding:4px 10px;font-weight:700}.cct-spec{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:18px}.cct-spec div{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:12px}.cct-spec dt{color:#64748b;font-size:12px}.cct-spec dd{margin:4px 0 0;font-weight:700}.cct-actions{display:flex;gap:8px;margin-top:16px}.cct-actions button,.cct-actions a{height:40px;border:0;border-radius:12px;background:#0f766e;color:#fff;padding:0 14px;display:inline-flex;align-items:center}</style><div class=\"cct\"><p><a href=\"/catalog\">← 목록</a></p>" + photo + "<h1>" + title + "</h1><span class=\"cct-badge\">" + (row.kind || "장비") + "</span><dl class=\"cct-spec\">" + spec + "</dl><div class=\"cct-actions\"><button type=\"button\" id=\"cct-print\">PDF 출력</button>" + (row.sds_url ? "<a href=\"" + row.sds_url + "\" target=\"_blank\" rel=\"noopener\">MSDS</a>" : "") + "</div></div>";
+      var btn = document.getElementById("cct-print");
+      if (btn) btn.onclick = function () { window.print(); };
     }
     fetch("/api/modules/custom-catalog/equipment/" + encodeURIComponent(key), {credentials:"same-origin"}).then(function (r) { return r.json(); }).then(function (j) {
       if (j && j.data) return show(j.data);
