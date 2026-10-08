@@ -1,4 +1,4 @@
-/*! custom-catalog 0.1.11 — /catalog 장비 · 필라멘트 검색 */
+/*! custom-catalog 0.1.12 — /catalog 장비 · 필라멘트 검색 */
 (function () {
   "use strict";
   function boot() {
@@ -29,8 +29,8 @@
     ".cct-card b{display:block;font-size:15px}.cct-card .sub{color:var(--mute);font-size:12.5px;margin-top:2px}.cct-card .meta{margin-top:8px;font-size:13px}" +
     ".cct h2{margin:18px 0 8px;font-size:18px}.cct-empty{color:var(--mute);background:var(--soft);border-radius:14px;padding:14px}";
   function esc(s) {
-    return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) {
-      return {"&": "&", "<": "<", ">": ">", '"': """}[c];
+    return String(s == null ? "" : s).replace(/[&<>\"]/g, function (c) {
+      return {"&":"&","<":"<",">":">","\"":"""}[c];
     });
   }
   function card(title, sub, lines) {
