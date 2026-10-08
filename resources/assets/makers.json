@@ -1,0 +1,107 @@
+[
+  {
+    "match": "bambu",
+    "name": "Bambu Lab",
+    "homepage": "https://bambulab.com",
+    "note": "선전 기반 FDM 프린터. AMS로 다색.",
+    "logo": "/api/modules/custom-catalog/assets/logo-bambu.jpg"
+  },
+  {
+    "match": "prusa",
+    "name": "Prusa",
+    "homepage": "https://www.prusa3d.com",
+    "note": "체코 Prusa Research. 오픈소스 FDM.",
+    "logo": "/api/modules/custom-catalog/assets/logo-prusa.jpg"
+  },
+  {
+    "match": "creality",
+    "name": "Creality",
+    "homepage": "https://www.creality.com",
+    "note": "데스크톱 FDM · 레진 · 스캐너.",
+    "logo": "/api/modules/custom-catalog/assets/logo-creality.jpg"
+  },
+  {
+    "match": "anycubic",
+    "name": "Anycubic",
+    "homepage": "https://www.anycubic.com",
+    "note": "FDM Kobra, 레진 Photon.",
+    "logo": "/api/modules/custom-catalog/assets/logo-anycubic.jpg"
+  },
+  {
+    "match": "elegoo",
+    "name": "Elegoo",
+    "homepage": "https://www.elegoo.com",
+    "note": "Neptune FDM, Saturn 레진.",
+    "logo": "/api/modules/custom-catalog/assets/logo-elegoo.jpg"
+  },
+  {
+    "match": "flashforge",
+    "name": "Flashforge",
+    "homepage": "https://www.flashforge.com",
+    "note": "Adventurer, Guider 계열.",
+    "logo": "/api/modules/custom-catalog/assets/logo-flashforge.jpg"
+  },
+  {
+    "match": "qidi",
+    "name": "QIDI",
+    "homepage": "https://qidi3d.com",
+    "note": "밀폐형 고속 FDM.",
+    "logo": "/api/modules/custom-catalog/assets/logo-qidi.jpg"
+  },
+  {
+    "match": "esun",
+    "name": "eSUN",
+    "homepage": "https://www.esun3d.com",
+    "note": "PLA, PETG, ABS, TPU 필라멘트.",
+    "logo": "/api/modules/custom-catalog/assets/logo-esun.jpg"
+  },
+  {
+    "match": "polymaker",
+    "name": "Polymaker",
+    "homepage": "https://polymaker.com",
+    "note": "PolyLite, PolyTerra 필라멘트.",
+    "logo": "/api/modules/custom-catalog/assets/logo-polymaker.jpg"
+  },
+  {
+    "match": "sunlu",
+    "name": "SUNLU",
+    "homepage": "https://www.sunlu.com",
+    "note": "필라멘트와 건조기.",
+    "logo": "/api/modules/custom-catalog/assets/logo-sunlu.jpg"
+  },
+  {
+    "match": "formlabs",
+    "name": "Formlabs",
+    "homepage": "https://formlabs.com",
+    "note": "산업용 SLA 레진 프린터.",
+    "logo": "/api/modules/custom-catalog/assets/logo-formlabs.jpg"
+  },
+  {
+    "match": "ultimaker",
+    "name": "UltiMaker",
+    "homepage": "https://ultimaker.com",
+    "note": "S 시리즈 FDM.",
+    "logo": "/api/modules/custom-catalog/assets/logo-ultimaker.jpg"
+  },
+  {
+    "match": "sindoh",
+    "name": "Sindoh",
+    "homepage": "https://www.sindoh.com",
+    "note": "신도리코 3DWOX.",
+    "logo": "/api/modules/custom-catalog/assets/logo-sindoh.jpg"
+  },
+  {
+    "match": "phrozen",
+    "name": "Phrozen",
+    "homepage": "https://phrozen3d.com",
+    "note": "고해상 레진 프린터.",
+    "logo": "/api/modules/custom-catalog/assets/logo-phrozen.jpg"
+  },
+  {
+    "match": "raise3d",
+    "name": "Raise3D",
+    "homepage": "https://www.raise3d.com",
+    "note": "Pro, E2 계열.",
+    "logo": "/api/modules/custom-catalog/assets/logo-raise3d.jpg"
+  }
+]

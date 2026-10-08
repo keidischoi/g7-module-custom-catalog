@@ -1,4 +1,4 @@
-/*! custom-catalog 0.1.38 */
+/*! custom-catalog 0.1.39 */
 (function () {
   "use strict";
   function boot() {
@@ -55,7 +55,7 @@
       var summary = row.summary ? "<p class=\"cct-sum\">" + esc(row.summary) + "</p>" : "";
       var wiki = row.wiki_url ? "<a href=\"" + esc(row.wiki_url) + "\" target=\"_blank\" rel=\"noopener\">위키에서 더 보기</a>" : "";
       var tools = can ? "<button type=\"button\" id=\"cct-edit\">수정</button><button type=\"button\" id=\"cct-del\">삭제</button>" : "";
-      root.innerHTML = "<style>.cct{max-width:980px;margin:0 auto;padding:28px 16px 72px;color:#0f172a}.cct a{color:#0f766e;font-weight:700;text-decoration:none}.cct-hero{width:100%;height:360px;object-fit:contain;background:linear-gradient(180deg,#f8fafc,#e2e8f0);border-radius:24px}.cct-ph{display:flex;align-items:center;justify-content:center;color:#64748b}.cct h1{font-size:32px;margin:18px 0 6px}.cct-badge{display:inline-block;background:#ccfbf1;color:#0f766e;border-radius:999px;padding:4px 10px;font-weight:700}.cct-spec{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:18px}.cct-spec div{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:12px}.cct-spec dt{color:#64748b;font-size:12px}.cct-spec dd{margin:4px 0 0;font-weight:700}.cct-actions{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}.cct-actions button,.cct-actions a{height:40px;border:0;border-radius:12px;background:#0f766e;color:#fff;padding:0 14px;display:inline-flex;align-items:center}.cct-minis{display:flex;gap:8px;overflow:auto;margin-top:10px}.cct-mini{position:relative;border:0;padding:0;background:#f8fafc;border-radius:12px}.cct-mini img{width:92px;height:72px;object-fit:contain;border-radius:12px}.cct-mini span{position:absolute;right:4px;top:4px;background:#0f172a;color:#fff;border-radius:999px;font-size:11px;padding:2px 6px}.cct-upload{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px}.cct-sum{line-height:1.6;color:#334155}.cct-form{display:grid;gap:8px;margin-top:16px}.cct-form input,.cct-form textarea{border:1px solid #e2e8f0;border-radius:10px;padding:8px}.cct-form textarea{min-height:90px}</style><div class=\"cct\"><p><a href=\"/catalog\">← 목록</a></p>" + main + "<div class=\"cct-minis\">" + thumbs + "</div>" + upload + "<h1>" + esc(title) + "</h1><span class=\"cct-badge\">" + esc(row.kind || "장비") + "</span>" + summary + "<dl class=\"cct-spec\">" + spec + "</dl><div class=\"cct-actions\">" + tools + "<button type=\"button\" id=\"cct-print\">PDF 출력</button>" + (row.sds_url ? "<a href=\"" + esc(row.sds_url) + "\" target=\"_blank\" rel=\"noopener\">MSDS</a>" : "") + wiki + "</div><div id=\"cct-form\"></div></div>";
+      root.innerHTML = "<style>.cct{max-width:980px;margin:0 auto;padding:28px 16px 72px;color:#0f172a}.cct a{color:#0f766e;font-weight:700;text-decoration:none}.cct-hero{width:100%;height:360px;object-fit:contain;background:linear-gradient(180deg,#f8fafc,#e2e8f0);border-radius:24px}.cct-ph{display:flex;align-items:center;justify-content:center;color:#64748b}.cct h1{font-size:32px;margin:18px 0 6px}.cct-badge{display:inline-block;background:#ccfbf1;color:#0f766e;border-radius:999px;padding:4px 10px;font-weight:700}.cct-spec{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:18px}.cct-spec div{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:12px}.cct-spec dt{color:#64748b;font-size:12px}.cct-spec dd{margin:4px 0 0;font-weight:700}.cct-actions{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}.cct-actions button,.cct-actions a{height:40px;border:0;border-radius:12px;background:#0f766e;color:#fff;padding:0 14px;display:inline-flex;align-items:center}.cct-minis{display:flex;gap:8px;overflow:auto;margin-top:10px}.cct-mini{position:relative;border:0;padding:0;background:#f8fafc;border-radius:12px}.cct-mini img{width:92px;height:72px;object-fit:contain;border-radius:12px}.cct-mini span{position:absolute;right:4px;top:4px;background:#0f172a;color:#fff;border-radius:999px;font-size:11px;padding:2px 6px}.cct-upload{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px}.cct-sum{line-height:1.6;color:#334155}.cct-form{display:grid;gap:8px;margin-top:16px}.cct-form input,.cct-form textarea{border:1px solid #e2e8f0;border-radius:10px;padding:8px}.cct-form textarea{min-height:90px}.cct-rel{margin-top:28px}.cct-rel h2{font-size:18px;margin:18px 0 8px}.cct-maker{display:flex;gap:12px;align-items:center;background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:12px}.cct-maker img{width:120px;height:48px;object-fit:contain;background:#f8fafc;border-radius:10px}.cct-tips{display:grid;gap:8px}.cct-tips div{background:#f0fdfa;border-radius:12px;padding:10px}.cct-combo{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}.cct-combo a{border:1px solid #e2e8f0;border-radius:14px;padding:8px;color:inherit;text-decoration:none}.cct-combo img{width:100%;height:90px;object-fit:contain;background:#f8fafc;border-radius:10px}</style><div class=\"cct\"><p><a href=\"/catalog\">← 목록</a></p>" + main + "<div class=\"cct-minis\">" + thumbs + "</div>" + upload + "<h1>" + esc(title) + "</h1><span class=\"cct-badge\">" + esc(row.kind || "장비") + "</span>" + summary + "<dl class=\"cct-spec\">" + spec + "</dl><div class=\"cct-actions\">" + tools + "<button type=\"button\" id=\"cct-print\">PDF 출력</button>" + (row.sds_url ? "<a href=\"" + esc(row.sds_url) + "\" target=\"_blank\" rel=\"noopener\">MSDS</a>" : "") + wiki + "</div><div id=\"cct-form\"></div><section id=\"cct-related\"></section></div>";
       var mainImg = document.getElementById("cct-main");
       [].forEach.call(root.querySelectorAll(".cct-mini"), function (b) {
         b.onclick = function (ev) {
@@ -108,6 +108,49 @@
       };
       var print = document.getElementById("cct-print");
       if (print) print.onclick = function () { window.print(); };
+      loadRelated(row);
+    }
+    function loadRelated(row) {
+      var box = document.getElementById("cct-related");
+      if (!box) return;
+      Promise.all([
+        fetch("/api/modules/custom-catalog/assets/makers.json").then(function (r) { return r.json(); }).catch(function () { return []; }),
+        fetch("/api/modules/custom-catalog/equipment").then(function (r) { return r.json(); }).catch(function () { return {}; }),
+        fetch("/api/modules/custom-catalog/materials").then(function (r) { return r.json(); }).catch(function () { return {}; })
+      ]).then(function (xs) {
+        var makers = xs[0] || [];
+        var eqs = (xs[1].data && xs[1].data.items) || [];
+        var mats = (xs[2].data && xs[2].data.items) || [];
+        var brand = String(row.brand || "").toLowerCase();
+        var maker = makers.filter(function (m) { return brand.indexOf(m.match) >= 0; })[0];
+        var makerHtml = maker ? "<h2>제작사</h2><div class=\"cct-maker\"><img alt=\"\" src=\"" + esc(maker.logo) + "\"><div><b>" + esc(maker.name) + "</b><div>" + esc(maker.note) + "</div><a href=\"" + esc(maker.homepage) + "\" target=\"_blank\" rel=\"noopener\">홈페이지</a></div></div>" : (row.homepage_url ? "<h2>제작사</h2><p><a href=\"" + esc(row.homepage_url) + "\" target=\"_blank\" rel=\"noopener\">홈페이지</a></p>" : "");
+        var tips = [];
+        var kind = row.kind || "";
+        var mat = String(row.material || row.material_norm || "").toLowerCase();
+        var isPrinter = !row.name || !!row.model;
+        if (isPrinter && (kind === "fdm" || kind === "")) tips.push("PLA가 기본입니다. 첫 출력은 노즐 200–220°C, 베드 55–60°C 근처에서 시작하세요.");
+        if (isPrinter && row.enclosed) tips.push("밀폐형이라 ABS · ASA도 가능합니다. 출력 중에는 환기하세요.");
+        if (isPrinter && row.enclosed === false) tips.push("개방형입니다. ABS는 수축이 크니 밀폐가 있는 장비를 권합니다.");
+        if (isPrinter && (kind === "sla" || kind === "dlp")) tips.push("405 nm 레진만 사용하세요. 장갑, 환기, 세척 · 경화기가 따로 필요합니다.");
+        if (!isPrinter && mat.indexOf("pla") >= 0) tips.push("개방형 프린터와 잘 맞습니다. 습하면 55°C에서 말린 뒤 쓰세요.");
+        if (!isPrinter && mat.indexOf("petg") >= 0) tips.push("출력 전 건조가 필요합니다. 끈적임이 있으면 노즐을 조금 올리세요.");
+        if (!isPrinter && mat.indexOf("abs") >= 0) tips.push("밀폐 프린터와 환기를 권합니다. 개방형에서는 갈라지기 쉽습니다.");
+        if (!isPrinter && (kind === "resin" || mat.indexOf("resin") >= 0)) tips.push("레진 프린터 전용입니다. 피부 접촉을 피하고 SDS를 확인하세요.");
+        var tipHtml = tips.length ? "<h2>권장</h2><div class=\"cct-tips\">" + tips.map(function (s) { return "<div>" + esc(s) + "</div>"; }).join("") + "</div>" : "";
+        var related = [];
+        if (isPrinter && (kind === "sla" || kind === "dlp")) related = mats.filter(function (m) { return m.kind === "resin"; });
+        else if (isPrinter) related = mats.filter(function (m) { return m.kind === "fdm"; });
+        else if (kind === "resin") related = eqs.filter(function (m) { return m.kind === "sla" || m.kind === "dlp"; });
+        else related = eqs.filter(function (m) { return m.kind === "fdm"; });
+        related = related.filter(function (m) { return m.key !== row.key; }).slice(0, 6);
+        var title = isPrinter ? (kind === "sla" || kind === "dlp" ? "같이 쓰는 레진" : "같이 쓰는 필라멘트") : "같이 쓰는 프린터";
+        var cards = related.map(function (m) {
+          var name = (m.brand || "") + " " + (m.model || m.name || "");
+          var img = m.image_url ? "<img alt=\"\" src=\"" + esc(m.image_url) + "\">" : "<div class=\"cct-ph\" style=\"height:90px\">사진 준비 중</div>";
+          return "<a href=\"/catalog/" + esc(m.key) + "\">" + img + "<b>" + esc(name) + "</b></a>";
+        }).join("");
+        box.innerHTML = makerHtml + tipHtml + (cards ? "<h2>" + title + "</h2><div class=\"cct-combo\">" + cards + "</div>" : "");
+      });
     }
     function load() {
       Promise.all([
