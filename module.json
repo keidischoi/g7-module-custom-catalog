@@ -5,7 +5,7 @@
     "ko": "3D 카탈로그",
     "en": "3D Catalog"
   },
-  "version": "0.1.44",
+  "version": "0.1.45",
   "license": "MIT",
   "description": {
     "ko": "3D 장비 · 프린터 · 필라멘트 · 레진 자료의 주인. 업체검색 등 다른 모듈은 catalog_key 로 가져다 씁니다.",
