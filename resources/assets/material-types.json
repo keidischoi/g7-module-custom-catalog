@@ -1,0 +1,482 @@
+[
+  {
+    "key": "fdm-pla",
+    "kind": "fdm",
+    "brand": "종류",
+    "name": "PLA",
+    "material": "PLA",
+    "note": "업체검색 필라멘트 종류"
+  },
+  {
+    "key": "fdm-pla",
+    "kind": "fdm",
+    "brand": "종류",
+    "name": "PLA+",
+    "material": "PLA+",
+    "note": "업체검색 필라멘트 종류"
+  },
+  {
+    "key": "fdm-pla",
+    "kind": "fdm",
+    "brand": "종류",
+    "name": "PLA 실크",
+    "material": "PLA 실크",
+    "note": "업체검색 필라멘트 종류"
+  },
+  {
+    "key": "fdm-pla",
+    "kind": "fdm",
+    "brand": "종류",
+    "name": "PLA 매트",
+    "material": "PLA 매트",
+    "note": "업체검색 필라멘트 종류"
+  },
+  {
+    "key": "fdm-pla-cf",
+    "kind": "fdm",
+    "brand": "종류",
+    "name": "PLA-CF",
+    "material": "PLA-CF",
+    "note": "업체검색 필라멘트 종류"
+  },
+  {
+    "key": "fdm-pla",
+    "kind": "fdm",
+    "brand": "종류",
+    "name": "PLA 우드",
+    "material": "PLA 우드",
+    "note": "업체검색 필라멘트 종류"
+  },
+  {
+    "key": "fdm-pla",
+    "kind": "fdm",
+    "brand": "종류",
+    "name": "PLA 대리석",
+    "material": "PLA 대리석",
+    "note": "업체검색 필라멘트 종류"
+  },
+  {
+    "key": "fdm-pla",
+    "kind": "fdm",
+    "brand": "종류",
+    "name": "PLA 야광",
+    "material": "PLA 야광",
+    "note": "업체검색 필라멘트 종류"
+  },
+  {
+    "key": "fdm-pla",
+    "kind": "fdm",
+    "brand": "종류",
+    "name": "PLA 열변색",
+    "material": "PLA 열변색",
+    "note": "업체검색 필라멘트 종류"
+  },
+  {
+    "key": "fdm-pla",
+    "kind": "fdm",
+    "brand": "종류",
+    "name": "PLA 메탈필",
+    "material": "PLA 메탈필",
+    "note": "업체검색 필라멘트 종류"
+  },
+  {
+    "key": "fdm-petg",
+    "kind": "fdm",
+    "brand": "종류",
+    "name": "PETG",
+    "material": "PETG",
+    "note": "업체검색 필라멘트 종류"
+  },
+  {
+    "key": "fdm-petg-cf",
+    "kind": "fdm",
+    "brand": "종류",
+    "name": "PETG-CF",
+    "material": "PETG-CF",
+    "note": "업체검색 필라멘트 종류"
+  },
+  {
+    "key": "fdm-petg-gf",
+    "kind": "fdm",
+    "brand": "종류",
+    "name": "PETG-GF",
+    "material": "PETG-GF",
+    "note": "업체검색 필라멘트 종류"
+  },
+  {
+    "key": "fdm-pet",
+    "kind": "fdm",
+    "brand": "종류",
+    "name": "PET",
+    "material": "PET",
+    "note": "업체검색 필라멘트 종류"
+  },
+  {
+    "key": "fdm-cpe",
+    "kind": "fdm",
+    "brand": "종류",
+    "name": "CPE",
+    "material": "CPE",
+    "note": "업체검색 필라멘트 종류"
+  },
+  {
+    "key": "fdm-abs",
+    "kind": "fdm",
+    "brand": "종류",
+    "name": "ABS",
+    "material": "ABS",
+    "note": "업체검색 필라멘트 종류"
+  },
+  {
+    "key": "fdm-abs-gf",
+    "kind": "fdm",
+    "brand": "종류",
+    "name": "ABS-GF",
+    "material": "ABS-GF",
+    "note": "업체검색 필라멘트 종류"
+  },
+  {
+    "key": "fdm-asa",
+    "kind": "fdm",
+    "brand": "종류",
+    "name": "ASA",
+    "material": "ASA",
+    "note": "업체검색 필라멘트 종류"
+  },
+  {
+    "key": "fdm-asa-cf",
+    "kind": "fdm",
+    "brand": "종류",
+    "name": "ASA-CF",
+    "material": "ASA-CF",
+    "note": "업체검색 필라멘트 종류"
+  },
+  {
+    "key": "fdm-hips",
+    "kind": "fdm",
+    "brand": "종류",
+    "name": "HIPS",
+    "material": "HIPS",
+    "note": "업체검색 필라멘트 종류"
+  },
+  {
+    "key": "fdm-pc",
+    "kind": "fdm",
+    "brand": "종류",
+    "name": "PC",
+    "material": "PC",
+    "note": "업체검색 필라멘트 종류"
+  },
+  {
+    "key": "fdm-pc-abs",
+    "kind": "fdm",
+    "brand": "종류",
+    "name": "PC-ABS",
+    "material": "PC-ABS",
+    "note": "업체검색 필라멘트 종류"
+  },
+  {
+    "key": "fdm-pc-cf",
+    "kind": "fdm",
+    "brand": "종류",
+    "name": "PC-CF",
+    "material": "PC-CF",
+    "note": "업체검색 필라멘트 종류"
+  },
+  {
+    "key": "fdm-tpu-95a",
+    "kind": "fdm",
+    "brand": "종류",
+    "name": "TPU 95A",
+    "material": "TPU 95A",
+    "note": "업체검색 필라멘트 종류"
+  },
+  {
+    "key": "fdm-tpu-85a",
+    "kind": "fdm",
+    "brand": "종류",
+    "name": "TPU 85A",
+    "material": "TPU 85A",
+    "note": "업체검색 필라멘트 종류"
+  },
+  {
+    "key": "fdm-tpu-64d",
+    "kind": "fdm",
+    "brand": "종류",
+    "name": "TPU 64D",
+    "material": "TPU 64D",
+    "note": "업체검색 필라멘트 종류"
+  },
+  {
+    "key": "fdm-tpe",
+    "kind": "fdm",
+    "brand": "종류",
+    "name": "TPE",
+    "material": "TPE",
+    "note": "업체검색 필라멘트 종류"
+  },
+  {
+    "key": "fdm-pa",
+    "kind": "fdm",
+    "brand": "종류",
+    "name": "PA (나일론)",
+    "material": "PA (나일론)",
+    "note": "업체검색 필라멘트 종류"
+  },
+  {
+    "key": "fdm-pa6-cf",
+    "kind": "fdm",
+    "brand": "종류",
+    "name": "PA6-CF",
+    "material": "PA6-CF",
+    "note": "업체검색 필라멘트 종류"
+  },
+  {
+    "key": "fdm-pa6-gf",
+    "kind": "fdm",
+    "brand": "종류",
+    "name": "PA6-GF",
+    "material": "PA6-GF",
+    "note": "업체검색 필라멘트 종류"
+  },
+  {
+    "key": "fdm-pa12-cf",
+    "kind": "fdm",
+    "brand": "종류",
+    "name": "PA12-CF",
+    "material": "PA12-CF",
+    "note": "업체검색 필라멘트 종류"
+  },
+  {
+    "key": "fdm-paht-cf",
+    "kind": "fdm",
+    "brand": "종류",
+    "name": "PAHT-CF",
+    "material": "PAHT-CF",
+    "note": "업체검색 필라멘트 종류"
+  },
+  {
+    "key": "fdm-pp",
+    "kind": "fdm",
+    "brand": "종류",
+    "name": "PP",
+    "material": "PP",
+    "note": "업체검색 필라멘트 종류"
+  },
+  {
+    "key": "fdm-pp-gf",
+    "kind": "fdm",
+    "brand": "종류",
+    "name": "PP-GF",
+    "material": "PP-GF",
+    "note": "업체검색 필라멘트 종류"
+  },
+  {
+    "key": "fdm-pva",
+    "kind": "fdm",
+    "brand": "종류",
+    "name": "PVA (수용성 서포트)",
+    "material": "PVA (수용성 서포트)",
+    "note": "업체검색 필라멘트 종류"
+  },
+  {
+    "key": "fdm-bvoh",
+    "kind": "fdm",
+    "brand": "종류",
+    "name": "BVOH",
+    "material": "BVOH",
+    "note": "업체검색 필라멘트 종류"
+  },
+  {
+    "key": "fdm-pvb",
+    "kind": "fdm",
+    "brand": "종류",
+    "name": "PVB",
+    "material": "PVB",
+    "note": "업체검색 필라멘트 종류"
+  },
+  {
+    "key": "fdm-peek",
+    "kind": "fdm",
+    "brand": "종류",
+    "name": "PEEK",
+    "material": "PEEK",
+    "note": "업체검색 필라멘트 종류"
+  },
+  {
+    "key": "fdm-pekk",
+    "kind": "fdm",
+    "brand": "종류",
+    "name": "PEKK",
+    "material": "PEKK",
+    "note": "업체검색 필라멘트 종류"
+  },
+  {
+    "key": "fdm-pei-ultem-9085",
+    "kind": "fdm",
+    "brand": "종류",
+    "name": "PEI (ULTEM 9085)",
+    "material": "PEI (ULTEM 9085)",
+    "note": "업체검색 필라멘트 종류"
+  },
+  {
+    "key": "fdm-pei-ultem-1010",
+    "kind": "fdm",
+    "brand": "종류",
+    "name": "PEI (ULTEM 1010)",
+    "material": "PEI (ULTEM 1010)",
+    "note": "업체검색 필라멘트 종류"
+  },
+  {
+    "key": "fdm-pps",
+    "kind": "fdm",
+    "brand": "종류",
+    "name": "PPS",
+    "material": "PPS",
+    "note": "업체검색 필라멘트 종류"
+  },
+  {
+    "key": "fdm-pps-cf",
+    "kind": "fdm",
+    "brand": "종류",
+    "name": "PPS-CF",
+    "material": "PPS-CF",
+    "note": "업체검색 필라멘트 종류"
+  },
+  {
+    "key": "fdm-pet-cf",
+    "kind": "fdm",
+    "brand": "종류",
+    "name": "PET-CF",
+    "material": "PET-CF",
+    "note": "업체검색 필라멘트 종류"
+  },
+  {
+    "key": "resin-",
+    "kind": "resin",
+    "brand": "종류",
+    "name": "스탠다드 레진",
+    "material": "스탠다드 레진",
+    "note": "업체검색 레진 종류"
+  },
+  {
+    "key": "resin-8k",
+    "kind": "resin",
+    "brand": "종류",
+    "name": "8K 고해상 레진",
+    "material": "8K 고해상 레진",
+    "note": "업체검색 레진 종류"
+  },
+  {
+    "key": "resin-abs-like",
+    "kind": "resin",
+    "brand": "종류",
+    "name": "ABS-Like 레진",
+    "material": "ABS-Like 레진",
+    "note": "업체검색 레진 종류"
+  },
+  {
+    "key": "resin-",
+    "kind": "resin",
+    "brand": "종류",
+    "name": "터프 레진",
+    "material": "터프 레진",
+    "note": "업체검색 레진 종류"
+  },
+  {
+    "key": "resin-",
+    "kind": "resin",
+    "brand": "종류",
+    "name": "플렉서블 레진",
+    "material": "플렉서블 레진",
+    "note": "업체검색 레진 종류"
+  },
+  {
+    "key": "resin-",
+    "kind": "resin",
+    "brand": "종류",
+    "name": "엘라스틱 레진",
+    "material": "엘라스틱 레진",
+    "note": "업체검색 레진 종류"
+  },
+  {
+    "key": "resin-",
+    "kind": "resin",
+    "brand": "종류",
+    "name": "고온 레진",
+    "material": "고온 레진",
+    "note": "업체검색 레진 종류"
+  },
+  {
+    "key": "resin-water-washable",
+    "kind": "resin",
+    "brand": "종류",
+    "name": "수세 레진 (Water Washable)",
+    "material": "수세 레진 (Water Washable)",
+    "note": "업체검색 레진 종류"
+  },
+  {
+    "key": "resin-",
+    "kind": "resin",
+    "brand": "종류",
+    "name": "클리어 레진",
+    "material": "클리어 레진",
+    "note": "업체검색 레진 종류"
+  },
+  {
+    "key": "resin-",
+    "kind": "resin",
+    "brand": "종류",
+    "name": "식물성 (바이오) 레진",
+    "material": "식물성 (바이오) 레진",
+    "note": "업체검색 레진 종류"
+  },
+  {
+    "key": "resin-",
+    "kind": "resin",
+    "brand": "종류",
+    "name": "캐스팅 · 왁스 레진",
+    "material": "캐스팅 · 왁스 레진",
+    "note": "업체검색 레진 종류"
+  },
+  {
+    "key": "resin-",
+    "kind": "resin",
+    "brand": "종류",
+    "name": "덴탈 모델 레진",
+    "material": "덴탈 모델 레진",
+    "note": "업체검색 레진 종류"
+  },
+  {
+    "key": "resin-",
+    "kind": "resin",
+    "brand": "종류",
+    "name": "덴탈 서지컬 가이드",
+    "material": "덴탈 서지컬 가이드",
+    "note": "업체검색 레진 종류"
+  },
+  {
+    "key": "resin-",
+    "kind": "resin",
+    "brand": "종류",
+    "name": "세라믹 레진",
+    "material": "세라믹 레진",
+    "note": "업체검색 레진 종류"
+  },
+  {
+    "key": "resin-esd",
+    "kind": "resin",
+    "brand": "종류",
+    "name": "ESD 레진",
+    "material": "ESD 레진",
+    "note": "업체검색 레진 종류"
+  },
+  {
+    "key": "resin-",
+    "kind": "resin",
+    "brand": "종류",
+    "name": "스킨톤 레진",
+    "material": "스킨톤 레진",
+    "note": "업체검색 레진 종류"
+  }
+]
