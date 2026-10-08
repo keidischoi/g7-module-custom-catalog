@@ -372,6 +372,11 @@ namespace {
     $mb = Catalog::materialBook();
     $es = array_values(array_filter($mb['fdm'], static fn ($x) => $x['b'] === 'eSUN'))[0];
     t($es['mat'] === 'PLA+' && $es['nz'] === [205, 225] && $es['dry'] === [50, 6], '재료 목록');
+    Catalog::forget();
+    $fe = Catalog::findEquipment('fdm', 'bambu lab', 'p1s');
+    $fm = Catalog::findMaterial('fdm', 'ESUN', 'pla+');
+    t($fe['url'] === '/catalog/bambu-lab-p1s-fdm' && in_array('500 mm/s', $fe['chips'], true) && $fm['title'] === 'PLA+' && $fm['chips'][0] === 'PLA+' && Catalog::findMaterial('fdm', 'eSUN', 'PEEK') === null && Catalog::findEquipment('fdm', '', 'P1S') === null,
+        '0.2.4 다른 모듈이 항목 하나를 찾아 감 (요약 · 그림 · 주소) — 대소문자 · 띄어쓰기 무시');
     $sr = CatalogListener::siteSearch('bambu', 1, 3, 'relevance');
     t($sr['total'] >= 4 && count($sr['items']) === 3 && $sr['has_more_pages'] && str_contains($sr['items'][0]['title_highlighted'], '<mark>Bambu</mark>') && str_starts_with($sr['items'][0]['url'], '/catalog/'), '통합 검색 — 카탈로그 탭');
     $sr2 = CatalogListener::siteSearch('pla', 1, 10, 'relevance');
