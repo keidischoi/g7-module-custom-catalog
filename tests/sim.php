@@ -339,6 +339,32 @@ namespace {
     $col->reject(array_values(array_filter($sg['items'], static fn ($x) => $x['title'] === 'Two Trees SK1'))[0]['id']);
     t(str_contains($col->taskMembers(), '없어요') && $col->suggestions()['pending'] === 0, '한 번 버린 것 · 이미 들어간 것은 다시 올리지 않음');
 
+    echo "■ 제조사 로고 (0.2.3)\n";
+    $LG = \Modules\Custom\Catalog\Support\Logos::class;
+    t($LG::map() === [] && $LG::of('Bambu Lab') === '' && $LG::home('Bambu Lab') === 'https://bambulab.com' && $LG::home('Prusa') !== '' && $LG::home('Two Trees') === '', '처음엔 로고 없음(머리글자 배지) · 제조사 홈페이지는 앎');
+    Collector::$pager = fn (string $url) => str_contains($url, 'bambulab.com') ? '<html><head><link rel="icon" href="/favicon.ico"><link rel="icon" type="image/png" sizes="32x32" href="/i32.png"><link rel="apple-touch-icon" sizes="180x180" href="//cdn.bambulab.com/touch.png"></head></html>' : '<html></html>';
+    $asked = [];
+    PhotoService::$fetcher = function (string $url) use (&$asked) {
+        $asked[] = $url;
+
+        return str_contains($url, 'touch.png') ? ['body' => jpeg(180, 180, 9), 'type' => 'image/png'] : null;
+    };
+    $bu = $LG::fetch('Bambu Lab');
+    t($asked[0] === 'https://cdn.bambulab.com/touch.png' && $LG::of('bambu lab') === $bu && PhotoService::size((string) PhotoService::read(basename($bu))) === [180, 180], '홈페이지에서 가져오기 — 가장 큰 아이콘(apple-touch-icon)부터');
+    try {
+        $LG::fetch('Creality');
+        t(false, '아이콘이 없으면 알려 줌');
+    } catch (\InvalidArgumentException $e) {
+        t(str_contains($e->getMessage(), '직접 올려'), '아이콘이 없으면 알려 줌');
+    }
+    $u = $LG::set('Kingroon', jpeg(900, 300, 7));
+    $ls = PhotoService::size((string) PhotoService::read(basename($u)));
+    t(str_contains($u, '/images/logo-') && $ls === [320, 107] && $LG::map()['kingroon'] === $u && array_values(array_filter($LG::adminList(), static fn ($x) => $x['brand'] === 'Kingroon'))[0]['logo'] === $u, '로고 올리기 — 320px 로 줄여 저장');
+    Settings::save(['per_page' => 30]);
+    t($LG::of('Kingroon') === $u, '다른 설정을 저장해도 로고는 그대로');
+    $LG::clear('Kingroon');
+    t($LG::of('Kingroon') === '' && $LG::of('Bambu Lab') === $bu, '로고 지우기');
+
     echo "■ 다른 모듈과 잇기\n";
     $book = Catalog::equipmentBook();
     $x1 = array_values(array_filter($book['fdm'], static fn ($x) => $x['m'] === 'X1 Carbon'))[0] ?? [];

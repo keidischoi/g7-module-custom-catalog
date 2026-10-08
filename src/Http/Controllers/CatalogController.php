@@ -38,7 +38,8 @@ class CatalogController extends Controller
         $meta['tabs'] = array_values(array_filter($meta['tabs'], static fn ($t) => ! in_array($t['key'], $s['tabs_off'], true)));
         $this->autoCollect();
 
-        return self::ok($meta + ['counts' => $this->catalog->counts(), 'per_page' => $s['per_page'], 'can_edit' => Access::canEdit($r)]);
+        return self::ok($meta + ['counts' => $this->catalog->counts(), 'per_page' => $s['per_page'], 'can_edit' => Access::canEdit($r),
+            'logos' => \Modules\Custom\Catalog\Support\Logos::map()]);
     }
 
     public function items(Request $r): JsonResponse

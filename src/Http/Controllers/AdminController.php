@@ -162,6 +162,57 @@ class AdminController extends Controller
         return self::ok(null, '대표 사진으로 정했어요.');
     }
 
+    /* ───────── 제조사 로고 ───────── */
+
+    public function logos(Request $r): JsonResponse
+    {
+        return $this->guard($r) ?? self::ok(['items' => \Modules\Custom\Catalog\Support\Logos::adminList()]);
+    }
+
+    public function logoSave(Request $r): JsonResponse
+    {
+        if ($g = $this->guard($r)) {
+            return $g;
+        }
+        $brand = trim((string) $r->input('brand', ''));
+        $f = $r->file('logo');
+        if ($brand === '' || ! $f || ! $f->isValid() || $f->getSize() > 6_000_000) {
+            return self::fail('제조사와 로고 그림(6MB 까지)을 골라 주세요.');
+        }
+        try {
+            \Modules\Custom\Catalog\Support\Logos::set($brand, (string) file_get_contents($f->getRealPath()));
+        } catch (\InvalidArgumentException $e) {
+            return self::fail($e->getMessage());
+        }
+
+        return self::ok(['items' => \Modules\Custom\Catalog\Support\Logos::adminList()], '로고를 넣었어요.');
+    }
+
+    /** 제조사 홈페이지의 아이콘을 받아 로고로 */
+    public function logoFetch(Request $r): JsonResponse
+    {
+        if ($g = $this->guard($r)) {
+            return $g;
+        }
+        try {
+            \Modules\Custom\Catalog\Support\Logos::fetch(trim((string) $r->input('brand', '')));
+        } catch (\InvalidArgumentException $e) {
+            return self::fail($e->getMessage());
+        }
+
+        return self::ok(['items' => \Modules\Custom\Catalog\Support\Logos::adminList()], '홈페이지에서 로고를 가져왔어요.');
+    }
+
+    public function logoDelete(Request $r): JsonResponse
+    {
+        if ($g = $this->guard($r)) {
+            return $g;
+        }
+        \Modules\Custom\Catalog\Support\Logos::clear((string) $r->input('brand', ''));
+
+        return self::ok(['items' => \Modules\Custom\Catalog\Support\Logos::adminList()], '올린 로고를 지웠어요.');
+    }
+
     /* ───────── 설정 · 자동 수집 ───────── */
 
     private function collectState(): array
@@ -183,7 +234,9 @@ class AdminController extends Controller
         if ($g = $this->guard($r)) {
             return $g;
         }
-        Settings::save((array) $r->input('settings', []));
+        $in = (array) $r->input('settings', []);
+        unset($in['logos']);   // 로고는 로고 올리기로만
+        Settings::save($in);
 
         return self::ok(['settings' => Settings::forAdmin(), 'collect' => $this->collectState()], '저장했어요.');
     }

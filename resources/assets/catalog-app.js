@@ -1,8 +1,8 @@
-/*! custom-catalog 0.2.2 — 3D 카탈로그 (목록 · 상세 · 편집) */
+/*! custom-catalog 0.2.3 — 3D 카탈로그 (목록 · 상세 · 편집) */
 (function () {
   'use strict';
   if (window.CCT) { try { window.CCT.tick(); } catch (e) {} return; }
-  var VERSION = '0.2.2', API = '/api/modules/custom-catalog', BASE = '/catalog';
+  var VERSION = '0.2.3', API = '/api/modules/custom-catalog', BASE = '/catalog';
 
   /* ───────── 도구 ───────── */
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
@@ -67,13 +67,24 @@
   function kindIcon(type, kind) { var k = ((META && META.kinds[type]) || []).filter(function (x) { return x.key === kind; })[0]; return k ? k.icon : '🧊'; }
   function tabOf(key) { return ((META && META.tabs) || []).filter(function (t) { return t.key === key; })[0] || null; }
 
+  /* 제조사 로고 (meta.logos: 정리한 이름 → 주소) — 서버 CatalogService::norm 과 같은 정리 */
+  function normBrand(s) { return String(s || '').trim().toLowerCase().replace(/[\s\-_.·\/]+/g, ''); }
+  function logoOf(brand) { return (META && META.logos && META.logos[normBrand(brand)]) || ''; }
+  /* 로고가 없으면 머리글자 배지 (제조사마다 색) */
+  function logoImg(brand, cls) {
+    var u = logoOf(brand), c = 'cct-logo' + (cls ? ' ' + cls : '');
+    if (u) return '<img class="' + c + '" alt="" loading="lazy" src="' + esc(u) + '">';
+    var ch = (String(brand || '').replace(/^[^0-9A-Za-z가-힣]+/, '').charAt(0) || '?').toUpperCase();
+    return '<span class="' + c + ' cct-logo--mono" style="--h:' + hue(brand) + '" aria-hidden="true">' + esc(ch) + '</span>';
+  }
+
   /* ───────── 카드 ───────── */
   function cardHtml(c, can) {
     var pic = c.image ? '<img loading="lazy" alt="" src="' + esc(c.image) + '">' :
       '<div class="cct-ph">' + art(c, 118) + '</div>';
     return '<a class="cct-card' + (c.status !== 'active' ? ' is-off' : '') + '" href="' + BASE + '/' + esc(c.key) + '" data-key="' + esc(c.key) + '">' +
       '<div class="cct-pic">' + pic + '<span class="cct-kind">' + esc(c.kind_label) + '</span></div>' +
-      '<div class="cct-card__body"><span class="cct-card__brand">' + esc(c.brand) + '</span><span class="cct-card__title">' +
+      '<div class="cct-card__body"><span class="cct-card__brand">' + logoImg(c.brand) + esc(c.brand) + '</span><span class="cct-card__title">' +
       (c.color_hex && /^#|^rgb|^linear/.test(c.color_hex) ? '<i class="cct-dot" style="background:' + esc(c.color_hex) + '"></i>' : '') + esc(c.title) + '</span>' +
       (c.chips.length ? '<div class="cct-tags">' + c.chips.map(function (x) { return '<span>' + esc(x) + '</span>'; }).join('') + '</div>' : '') + '</div>' +
       (can ? '<button type="button" class="cct-card__edit" data-edit="' + esc(c.key) + '" title="수정" aria-label="수정">✏️</button>' : '') + '</a>';
@@ -135,7 +146,7 @@
       var isPrinter = tab && tab.type === 'equipment' && ['fdm', 'resin_printer', 'industrial'].indexOf(tab.key) >= 0, flag = function (k, label) {
         return '<button type="button" class="cct-chip' + (S.flags.indexOf(k) >= 0 ? ' on' : '') + '" data-flag="' + k + '">' + label + '</button>'; };
       bar.innerHTML = (brands.length > 1 || S.brand ? '<div class="cct-bar"><div class="cct-brands" data-brands><button type="button" class="cct-chip' + (S.brand ? '' : ' on') + '" data-brand="">전체</button>' +
-        brands.map(function (b) { return '<button type="button" class="cct-chip' + (S.brand === b.name ? ' on' : '') + '" data-brand="' + esc(b.name) + '">' + esc(b.name) + ' <small>' + b.n + '</small></button>'; }).join('') +
+        brands.map(function (b) { return '<button type="button" class="cct-chip' + (S.brand === b.name ? ' on' : '') + '" data-brand="' + esc(b.name) + '">' + logoImg(b.name) + esc(b.name) + ' <small>' + b.n + '</small></button>'; }).join('') +
         '</div>' + (brands.length > 14 ? '<button type="button" class="cct-btn cct-btn--s" data-brands-more>제조사 더 보기</button>' : '') + '</div>' : '') +
         '<div class="cct-bar">' + (tab && tab.key === 'fdm' ? flag('multicolor', '🌈 다색') : '') + (isPrinter ? flag('enclosed', '📦 밀폐형') : '') + flag('photo', '🖼️ 사진 있는 것') +
         (S.q ? '<button type="button" class="cct-chip on" data-clear-q>「' + esc(S.q) + '」 ✕</button>' : '') +
@@ -200,7 +211,7 @@
         (can ? '<div class="cct-photo-tools"><label class="cct-btn cct-btn--s">📁 사진 올리기<input type="file" accept="image/*" multiple hidden data-up></label><input class="cct-in" style="height:32px" type="text" placeholder="또는 사진 주소 (https://…)" data-url>' +
           '<button type="button" class="cct-btn cct-btn--s" data-url-add>주소로 넣기</button><button type="button" class="cct-btn cct-btn--s" data-ph-main hidden>⭐ 대표로</button><button type="button" class="cct-btn cct-btn--s cct-btn--d" data-ph-del hidden>🗑 이 사진 지우기</button></div>' : '') + '</div>' +
         '<div class="cct-info"><span class="cct-info__kind">' + kindIcon(d.type, d.kind) + ' ' + esc(d.kind_label) + '</span>' + (d.status !== 'active' ? ' <span class="cct-info__kind" style="color:var(--warn)">🗄️ 보관함</span>' : '') +
-        '<div class="cct-info__brand">' + esc(d.brand) + '</div><h1>' + esc(d.title) + '</h1>' +
+        '<div class="cct-info__brand">' + logoImg(d.brand, 'cct-logo--lg') + esc(d.brand) + '</div><h1>' + esc(d.title) + '</h1>' +
         (d.summary ? '<p class="cct-info__sum">' + esc(d.summary) + '</p>' : '') + (d.note ? '<p class="cct-info__sum" style="font-size:14px">※ ' + esc(d.note) + '</p>' : '') +
         (keys.length ? '<div class="cct-keys">' + keys.map(function (k) { return '<div class="cct-key"><small>' + esc(k.label) + '</small><b>' + esc(k.value) + '</b></div>'; }).join('') + '</div>' : '') +
         (by.materials ? '<div class="cct-mats"><small>' + (d.kind === 'fdm' ? '🧵 쓸 수 있는 필라멘트' : d.kind === 'sla' || d.kind === 'dlp' ? '🧪 쓸 수 있는 레진' : '🧩 쓸 수 있는 재료') + '</small><div class="cct-tags">' +
@@ -233,7 +244,7 @@
       makerOf(d.brand).then(function (mk) {
         var el = q('[data-maker]'); if (!mk || !el) return;
         el.hidden = false;
-        el.innerHTML = (mk.logo ? '<img alt="" loading="lazy" src="' + esc(mk.logo) + '">' : '') + '<div><b>' + esc(mk.name || d.brand) + '</b><small>제조사</small></div><span style="flex:1"></span>' +
+        el.innerHTML = logoImg(d.brand, 'cct-logo--lg') + '<div><b>' + esc(mk.name || d.brand) + '</b><small>제조사</small></div><span style="flex:1"></span>' +
           (mk.homepage ? '<a class="cct-btn cct-btn--s" target="_blank" rel="noopener" href="' + esc(mk.homepage) + '">홈페이지 ↗</a>' : '') +
           (mk.support ? '<a class="cct-btn cct-btn--s" target="_blank" rel="noopener" href="' + esc(mk.support) + '">고객 지원 ↗</a>' : '');
       });
@@ -365,7 +376,7 @@
     Promise.all([meta(), icons()]).then(function () { if (root.__cct !== url) return; if (m) detailPage(root, m[1]); else listPage(root); try { window.scrollTo(0, 0); } catch (e) {} })
       .catch(function (e) { root.innerHTML = '<div class="cct"><div class="cct-empty"><b>⚠️</b>카탈로그를 열지 못했어요.<br>' + esc(e.message) + '</div></div>'; });
   }
-  window.CCT = { version: VERSION, api: api, esc: esc, toast: toast, css: css, meta: meta, getMeta: function () { return META; }, openEditor: openEditor, cardHtml: cardHtml, art: art, icons: icons, tick: tick, go: go, hue: hue, kindIcon: kindIcon };
+  window.CCT = { version: VERSION, api: api, esc: esc, toast: toast, css: css, meta: meta, getMeta: function () { return META; }, openEditor: openEditor, cardHtml: cardHtml, logoOf: logoOf, logoImg: logoImg, art: art, icons: icons, tick: tick, go: go, hue: hue, kindIcon: kindIcon };
   window.addEventListener('popstate', function () { setTimeout(tick, 0); });
   try { new MutationObserver(function () { var r = document.getElementById('cct_root'); if (r && (r.__cct !== location.pathname + location.search || !r.firstChild)) tick(); }).observe(document.body, { childList: true, subtree: true }); } catch (e) {}
   setInterval(tick, 800);
