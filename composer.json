@@ -1,0 +1,8 @@
+{
+  "name": "modules/custom-catalog",
+  "description": "3D equipment and material catalog",
+  "type": "library",
+  "license": "MIT",
+  "require": {"php": "^8.2"},
+  "autoload": {"psr-4": {"Modules\\Custom\\Catalog\\": "src/"}}
+}
