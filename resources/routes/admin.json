@@ -1,0 +1,6 @@
+{
+  "version": "1.0.0",
+  "routes": [
+    {"path": "*/admin/catalog", "layout": "admin_catalog", "auth_required": true, "meta": {"title": "3D 카탈로그"}}
+  ]
+}
