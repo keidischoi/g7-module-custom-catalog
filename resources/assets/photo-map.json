@@ -1,7 +1,7 @@
 {
   "equipment": {
     "bambu-lab-x1-carbon-fdm": "photo-bambulab-x1c.jpg",
-    "bambu-lab-p1s-fdm": "photo-bambulab-p1s.jpg",
+    "bambu-lab-p1s-fdm": "photo-bambu-lab-p1s-fdm.jpg",
     "bambu-lab-a1-fdm": "photo-bambu-lab-a1-fdm.jpg",
     "anycubic-kobra-3-fdm": "photo-anycubic-kobra-3-fdm.jpg",
     "anycubic-kobra-3-max-fdm": "photo-anycubic-kobra-3-max.jpg",
@@ -17,7 +17,12 @@
     "prusa-research-prusa-core-one-fdm": "photo-prusa-research-prusa-core-one-fdm.jpg",
     "xtool-p2s-laser": "photo-xtool-p2s-laser.jpg",
     "xtool-s1-laser": "photo-xtool-s1-laser.jpg",
-    "xtool-f1-ultra-laser": "photo-xtool-f1-ultra-laser.jpg"
+    "xtool-f1-ultra-laser": "photo-xtool-f1-ultra-laser.jpg",
+    "bambu-lab-a1-mini-fdm": "photo-bambu-lab-a1-mini-fdm.jpg",
+    "creality-ender-3-v3-fdm": "photo-creality-ender-3-v3-fdm.jpg",
+    "creality-k2-pro-fdm": "photo-creality-k2-pro-fdm.jpg",
+    "bambu-lab-p2s-fdm": "photo-bambu-lab-p2s-fdm.jpg",
+    "bambu-lab-h2s-fdm": "photo-bambu-lab-h2s-fdm.jpg"
   },
   "materials": {
     "esun-pla-plus": "photo-esun-pla-plus.jpg",
