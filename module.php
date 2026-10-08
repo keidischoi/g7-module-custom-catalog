@@ -57,6 +57,12 @@ class Module extends AbstractModule
                 'url' => '/admin/catalog',
                 'order' => 10,
                 'permission' => 'custom-catalog.specs.update',
+            ], [
+                'name' => ['ko' => '설정', 'en' => 'Settings'],
+                'slug' => 'custom-catalog-settings',
+                'url' => '/admin/catalog/settings',
+                'order' => 20,
+                'permission' => 'custom-catalog.specs.update',
             ]],
         ]];
     }

@@ -22,4 +22,10 @@ Route::middleware(['auth:sanctum', 'throttle:60,1'])->prefix('admin')->group(fun
     Route::get('materials', [AdminController::class, 'materials']);
     Route::post('materials', [AdminController::class, 'saveMaterial']);
     Route::post('materials/{key}/delete', [AdminController::class, 'remove'])->defaults('table', 'materials');
+    Route::get('me', [AdminController::class, 'me']);
+    Route::get('kinds', [AdminController::class, 'kinds']);
+    Route::post('kinds', [AdminController::class, 'saveKinds']);
+    Route::get('ai', [AdminController::class, 'ai']);
+    Route::post('ai', [AdminController::class, 'saveAi']);
+    Route::post('ai/suggest', [AdminController::class, 'suggest']);
 });

@@ -1,4 +1,4 @@
-/*! custom-catalog 0.1.28 — 관리자 제원 입력 */
+/*! custom-catalog 0.1.29 — 설정 */
 (function () {
   "use strict";
   function boot() {
@@ -9,63 +9,71 @@
     return true;
   }
   function start(root) {
-  var token = "";
-  try { token = localStorage.getItem("auth_token") || localStorage.getItem("token") || ""; } catch (e) {}
-  function headers() { var h = { Accept: "application/json", "Content-Type": "application/json" }; if (token) h.Authorization = "Bearer " + String(token).replace(/^"+|"+$/g, ""); return h; }
-  function esc(s) {
-  return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) {
-    if (c === "&") return "&amp;";
-    if (c === "<") return "&lt;";
-    if (c === ">") return "&gt;";
-    return "&quot;";
-  });
-}
-function field(name, label, value) { return '<label style="display:grid;gap:4px;font-size:13px">' + label + '<input name="' + name + '" value="' + esc(value || "") + '" style="height:36px;border:1px solid #cbd5e1;border-radius:8px;padding:0 8px"></label>'; }
-  function form(kind) {
-    var eq = kind === "equipment";
-    return '<form data-kind="' + kind + '" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin:8px 0 16px">' +
-      field("brand", "제조사") + field(eq ? "model" : "name", eq ? "모델" : "제품명") + field("kind", "종류", eq ? "fdm" : "fdm") +
-      (eq ? field("build_x_mm", "가로 mm") + field("build_y_mm", "세로 mm") + field("build_z_mm", "높이 mm") + field("nozzle", "노즐") : field("material", "재료", "PLA") + field("color", "색") + field("nozzle_min", "노즐 최소") + field("nozzle_max", "노즐 최대") + field("bed_min", "베드 최소") + field("bed_max", "베드 최대") + field("dry_temp", "건조 온도") + field("dry_hours", "건조 시간") + field("sds_url", "SDS 링크") + field("caution", "주의")) +
-      '<button type="submit" style="height:36px;border:0;border-radius:8px;background:#0f766e;color:#fff;font-weight:700">저장</button></form>';
-  }
-  function list(items, kind) {
-    if (!items.length) return "<p>아직 없습니다.</p>";
-    return items.map(function (r) { return "<li><b>" + esc(r.brand) + "</b> " + esc(r.model || r.name) + " <button type=\"button\" data-del=\"" + kind + ":" + esc(r.key) + "\">보관</button></li>"; }).join("");
-  }
-  function paint(eq, mt) {
-    root.innerHTML = '<div style="max-width:980px;margin:0 auto;padding:20px"><h1 style="font-size:24px">3D 카탈로그 제원</h1><p>관리자 또는 제원 입력 권한이 있는 회원만 넣습니다.</p><h2>장비</h2>' + form("equipment") + "<ul>" + list(eq, "equipment") + "</ul><h2>필라멘트 · 레진</h2>" + form("materials") + "<ul>" + list(mt, "materials") + "</ul></div>";
-    [].forEach.call(root.querySelectorAll("form"), function (f) {
-      f.addEventListener("submit", function (e) {
+    var token = "";
+    try { token = localStorage.getItem("auth_token") || localStorage.getItem("token") || ""; } catch (e) {}
+    function headers() {
+      var h = { Accept: "application/json", "Content-Type": "application/json" };
+      if (token) h.Authorization = "Bearer " + String(token).replace(/^"+|"+$/g, "");
+      return h;
+    }
+    function esc(s) {
+      return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) {
+        if (c === "&") return "&";
+        if (c === "<") return "<";
+        if (c === ">") return ">";
+        return """;
+      });
+    }
+    var state = { equipment_kinds: [], material_kinds: [], spec_fields: [], ai: {} };
+    function api(method, path, body) {
+      return fetch("/api/modules/custom-catalog/admin/" + path, { method: method, headers: headers(), credentials: "same-origin", body: body ? JSON.stringify(body) : undefined }).then(function (r) { return r.json(); });
+    }
+    function row(group, item, i) {
+      return "<li><b>" + esc(item.label || item.key) + "</b> <span>" + esc(item.key) + "</span> <button type=\"button\" data-del=\"" + group + ":" + i + "\">삭제</button></li>";
+    }
+    function paint() {
+      var ai = state.ai || {};
+      root.innerHTML = "<style>.cct-set{max-width:880px;margin:0 auto;padding:24px;color:#0f172a}.cct-set h1{font-size:28px;margin:0 0 6px}.cct-set h2{font-size:18px;margin:22px 0 8px}.cct-card{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:16px;margin:0 0 12px}.cct-card form,.cct-ai{display:flex;gap:8px;flex-wrap:wrap}.cct-card input,.cct-card select{height:40px;border:1px solid #cbd5e1;border-radius:10px;padding:0 10px}.cct-card button{height:40px;border:0;border-radius:10px;background:#0f766e;color:#fff;font-weight:700;padding:0 14px}.cct-card ul{list-style:none;padding:0;margin:10px 0 0}.cct-card li{display:flex;gap:8px;align-items:center;padding:8px 0;border-top:1px solid #e2e8f0}.cct-card li span{color:#64748b}.cct-note{color:#64748b}</style><div class=\"cct-set\"><h1>3D 카탈로그 설정</h1><p class=\"cct-note\">종류, 재원 항목, AI 서버를 여기서 넣습니다.</p>" +
+        card("장비 종류", "equipment_kinds", "laser", "레이저") +
+        card("재료 종류", "material_kinds", "resin", "레진") +
+        card("재원 항목", "spec_fields", "power", "소비 전력") +
+        "<section class=\"cct-card\"><h2>AI</h2><p class=\"cct-note\">제안만 하고 기존 카드는 덮지 않습니다.</p><form id=\"cct-ai\" class=\"cct-ai\"><label>사용 <input name=\"enabled\" type=\"checkbox\"" + (ai.enabled ? " checked" : "") + "></label><select name=\"provider\">" + ["ollama","openai","grok","gemini","claude"].map(function (p) { return "<option" + (ai.provider === p ? " selected" : "") + ">" + p + "</option>"; }).join("") + "</select><input name=\"url\" value=\"" + esc(ai.url || "http://localhost:11434") + "\" placeholder=\"주소\"><input name=\"model\" value=\"" + esc(ai.model || "qwen2.5:7b") + "\" placeholder=\"모델\"><input name=\"api_key\" placeholder=\"키, 비우면 유지\"><button>저장</button></form></section></div>";
+      bind();
+    }
+    function card(title, group, keyPh, labelPh) {
+      var items = state[group] || [];
+      return "<section class=\"cct-card\"><h2>" + title + "</h2><form data-add=\"" + group + "\"><input name=\"key\" placeholder=\"" + keyPh + "\"><input name=\"label\" placeholder=\"" + labelPh + "\"><button>추가</button></form><ul>" + items.map(function (item, i) { return row(group, item, i); }).join("") + "</ul></section>";
+    }
+    function bind() {
+      [].forEach.call(root.querySelectorAll("[data-add]"), function (f) {
+        f.onsubmit = function (e) {
+          e.preventDefault();
+          var g = f.getAttribute("data-add");
+          var key = f.key.value.trim();
+          var label = f.label.value.trim();
+          if (!key || !label) return;
+          state[g].push({ key: key, label: label, target: g === "spec_fields" ? "equipment" : "" });
+          api("POST", "kinds", state).then(function (j) { state = Object.assign(state, j.data || {}); paint(); });
+        };
+      });
+      [].forEach.call(root.querySelectorAll("[data-del]"), function (b) {
+        b.onclick = function () {
+          var p = b.getAttribute("data-del").split(":");
+          state[p[0]].splice(Number(p[1]), 1);
+          api("POST", "kinds", state).then(function (j) { state = Object.assign(state, j.data || {}); paint(); });
+        };
+      });
+      var ai = document.getElementById("cct-ai");
+      if (ai) ai.onsubmit = function (e) {
         e.preventDefault();
-        var body = {};
-        [].forEach.call(f.elements, function (el) { if (el.name) body[el.name] = el.value; });
-        fetch("/api/modules/custom-catalog/admin/" + f.getAttribute("data-kind"), { method: "POST", headers: headers(), credentials: "same-origin", body: JSON.stringify(body) })
-          .then(function (r) { return r.json(); }).then(load);
-      });
-    });
-    [].forEach.call(root.querySelectorAll("[data-del]"), function (b) {
-      b.addEventListener("click", function () {
-        var p = b.getAttribute("data-del").split(":");
-        fetch("/api/modules/custom-catalog/admin/" + p[0] + "/" + encodeURIComponent(p[1]) + "/delete", { method: "POST", headers: headers(), credentials: "same-origin" }).then(load);
-      });
-    });
-  }
-  function load() {
-    Promise.all([
-      fetch("/api/modules/custom-catalog/admin/equipment", { headers: headers(), credentials: "same-origin" }).then(function (r) { return r.json(); }),
-      fetch("/api/modules/custom-catalog/admin/materials", { headers: headers(), credentials: "same-origin" }).then(function (r) { return r.json(); })
-    ]).then(function (xs) { paint((xs[0].data && xs[0].data.items) || [], (xs[1].data && xs[1].data.items) || []); });
-  }
-  paint([], []);
-  var kinds = document.createElement("div");
-  kinds.id = "cct-kinds";
-  kinds.innerHTML = "<h2>재원 종류</h2><p>장비 종류, 재료 종류, 재원 항목을 넣고 뺄 수 있습니다. 기본 종류는 남기고 추가한 것만 지우세요.</p><form id=\"cct-kind-form\"><input name=\"group\" placeholder=\"equipment_kinds\"><input name=\"key\" placeholder=\"laser\"><input name=\"label\" placeholder=\"레이저\"><button>종류 추가</button></form><ul id=\"cct-kind-list\"></ul>";
-  root.appendChild(kinds);
-  var box=document.createElement("div"); box.id="cct-ai"; box.innerHTML="<h2>AI 설정</h2><p>도우미 AI와 같은 서버 설정입니다. 제안만 하고 기존 카드는 덮지 않습니다.</p><form id=\"cct-ai-form\"><label>사용 <input name=\"enabled\" type=\"checkbox\"></label><input name=\"provider\" placeholder=\"ollama\"><input name=\"url\" placeholder=\"http://localhost:11434\"><input name=\"model\" placeholder=\"qwen2.5:7b\"><input name=\"api_key\" placeholder=\"키, 비우면 유지\"><button>저장</button></form><button type=\"button\" id=\"cct-suggest\">새 기종 제안</button><pre id=\"cct-suggest-out\"></pre>"; root.appendChild(box);
-  load();
+        api("POST", "ai", { enabled: ai.enabled.checked, provider: ai.provider.value, url: ai.url.value, model: ai.model.value, api_key: ai.api_key.value }).then(function (j) { state.ai = j.data || state.ai; paint(); });
+      };
+    }
+    paint();
+    api("GET", "kinds").then(function (j) { state = Object.assign(state, j.data || {}); return api("GET", "ai"); }).then(function (j) { state.ai = (j && j.data) || {}; paint(); }).catch(function () { paint(); });
   }
   if (!boot()) {
     var n = 0;
-    var timer = setInterval(function () { if (boot() || ++n > 40) clearInterval(timer); }, 250);
+    var t = setInterval(function () { if (boot() || ++n > 20) clearInterval(t); }, 300);
   }
 })();
