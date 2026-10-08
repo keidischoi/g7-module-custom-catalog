@@ -15,6 +15,8 @@ final class Settings
     {
         return [
             'per_page' => 24,
+            'menu_enabled' => true,           // 0.2.10 헤더 메인 메뉴에 넣기 (홈 디자인 메뉴 목록과 서로 맞춤)
+            'menu_label' => '3D 카탈로그',    // 0.2.10 헤더 메뉴 이름
             'tabs_off' => [],                 // 숨길 탭 키
             'logos' => [],                    // 관리자가 올린 제조사 로고: 정리한 제조사 이름 → 주소 (Logos)
             'image_mode' => 'auto',           // 보여 줄 사진: auto · company · catalog · icon (CatalogService::imageOf)
@@ -99,6 +101,8 @@ final class Settings
 
         return [
             'per_page' => $int('per_page', 8, 96),
+            'menu_enabled' => $bool('menu_enabled'),
+            'menu_label' => mb_substr(trim(preg_replace('/\s+/u', ' ', strip_tags((string) ($raw['menu_label'] ?? ''))) ?? ''), 0, 20) ?: $d['menu_label'],
             'tabs_off' => array_values(array_intersect($tabs, is_array($raw['tabs_off'] ?? null) ? $raw['tabs_off'] : [])),
             'logos' => array_slice(array_filter(array_map('strval', is_array($raw['logos'] ?? null) ? $raw['logos'] : []), static fn ($u) => str_starts_with($u, '/api/modules/custom-catalog/')), 0, 400, true),
             'image_mode' => in_array($raw['image_mode'] ?? '', ['company', 'catalog', 'icon'], true) ? $raw['image_mode'] : 'auto',
