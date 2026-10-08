@@ -30,6 +30,25 @@ class CatalogController extends Controller
         return $this->one('cat_materials', $key);
     }
 
+    public function photo(Request $request): JsonResponse
+    {
+        $kind = trim((string) $request->query('kind', ''));
+        $brand = mb_strtolower((string) preg_replace('/[\s\-_.·\/]+/u', '', trim((string) $request->query('brand', ''))));
+        $model = mb_strtolower((string) preg_replace('/[\s\-_.·\/]+/u', '', trim((string) $request->query('model', ''))));
+        $url = null;
+        if (Schema::hasTable('cmp_settings') && $brand !== '' && $model !== '') {
+            $raw = DB::table('cmp_settings')->where('key', 'model_rules')->value('value');
+            $rules = is_string($raw) ? json_decode($raw, true) : [];
+            $hit = is_array($rules) ? ($rules[$kind.'|'.$brand.'|'.$model] ?? null) : null;
+            $hash = is_array($hit) ? (string) ($hit['img'] ?? '') : '';
+            if ($hash !== '' && ! in_array($hit['s'] ?? '', ['hidden', 'merged'], true)) {
+                $url = '/api/modules/custom-companies/files/'.$hash;
+            }
+        }
+
+        return response()->json(['success' => true, 'data' => ['url' => $url]]);
+    }
+
     private function one(string $table, string $key): JsonResponse
     {
         if (! Schema::hasTable($table)) {
