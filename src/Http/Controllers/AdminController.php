@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Modules\Custom\Catalog\Support\AiSettings;
+use Modules\Custom\Catalog\Support\CatalogSettings;
 
 class AdminController extends Controller
 {
@@ -181,4 +182,19 @@ class AdminController extends Controller
             : ["model" => $model, "messages" => [["role" => "user", "content" => $prompt]]];
         $res = Http::timeout(60)->withHeaders($headers)->post($base, $body);
         return (string) ($res->json("choices.0.message.content") ?? $res->json("content.0.text") ?? "");
+    }
+
+
+    public function kinds(): JsonResponse
+    {
+        return response()->json(['success' => true, 'data' => CatalogSettings::all()]);
+    }
+
+    public function saveKinds(Request $request): JsonResponse
+    {
+        if (! $this->allowed($request)) {
+            return $this->deny();
+        }
+
+        return response()->json(['success' => true, 'data' => CatalogSettings::save($request->all())]);
     }

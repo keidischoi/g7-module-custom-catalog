@@ -1,4 +1,4 @@
-/*! custom-catalog 0.1.27 — 관리자 제원 입력 */
+/*! custom-catalog 0.1.28 — 관리자 제원 입력 */
 (function () {
   "use strict";
   function boot() {
@@ -57,6 +57,10 @@ function field(name, label, value) { return '<label style="display:grid;gap:4px;
     ]).then(function (xs) { paint((xs[0].data && xs[0].data.items) || [], (xs[1].data && xs[1].data.items) || []); });
   }
   paint([], []);
+  var kinds = document.createElement("div");
+  kinds.id = "cct-kinds";
+  kinds.innerHTML = "<h2>재원 종류</h2><p>장비 종류, 재료 종류, 재원 항목을 넣고 뺄 수 있습니다. 기본 종류는 남기고 추가한 것만 지우세요.</p><form id=\"cct-kind-form\"><input name=\"group\" placeholder=\"equipment_kinds\"><input name=\"key\" placeholder=\"laser\"><input name=\"label\" placeholder=\"레이저\"><button>종류 추가</button></form><ul id=\"cct-kind-list\"></ul>";
+  root.appendChild(kinds);
   var box=document.createElement("div"); box.id="cct-ai"; box.innerHTML="<h2>AI 설정</h2><p>도우미 AI와 같은 서버 설정입니다. 제안만 하고 기존 카드는 덮지 않습니다.</p><form id=\"cct-ai-form\"><label>사용 <input name=\"enabled\" type=\"checkbox\"></label><input name=\"provider\" placeholder=\"ollama\"><input name=\"url\" placeholder=\"http://localhost:11434\"><input name=\"model\" placeholder=\"qwen2.5:7b\"><input name=\"api_key\" placeholder=\"키, 비우면 유지\"><button>저장</button></form><button type=\"button\" id=\"cct-suggest\">새 기종 제안</button><pre id=\"cct-suggest-out\"></pre>"; root.appendChild(box);
   load();
   }
