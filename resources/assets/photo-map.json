@@ -1,1 +1,29 @@
-{"equipment": {}, "materials": {}}
+{
+  "equipment": {
+    "bambu-lab-x1-carbon-fdm": "photo-bambulab-x1c.jpg",
+    "bambu-lab-p1s-fdm": "photo-bambulab-p1s.jpg",
+    "bambu-lab-a1-fdm": "photo-bambu-lab-a1-fdm.jpg",
+    "anycubic-kobra-3-fdm": "photo-anycubic-kobra-3-fdm.jpg",
+    "anycubic-kobra-3-max-fdm": "photo-anycubic-kobra-3-max.jpg",
+    "creality-k1-fdm": "photo-creality-k1-fdm.jpg",
+    "creality-k1c-fdm": "photo-creality-k1c-fdm.jpg",
+    "creality-k1-max-fdm": "photo-creality-k1-max-fdm.jpg",
+    "creality-k2-plus-fdm": "photo-creality-k2-plus-fdm.jpg",
+    "elegoo-centauri-carbon-fdm": "photo-elegoo-centauri-carbon-fdm.jpg",
+    "elegoo-neptune-4-pro-fdm": "photo-elegoo-neptune-4-pro-fdm.jpg",
+    "flashforge-adventurer-5m-fdm": "photo-flashforge-adventurer-5m-fdm.jpg",
+    "prusa-research-original-prusa-mk4s-fdm": "photo-prusa-research-original-prusa-mk4s-fdm.jpg",
+    "prusa-research-original-prusa-xl-fdm": "photo-prusa-research-original-prusa-xl-fdm.jpg",
+    "prusa-research-prusa-core-one-fdm": "photo-prusa-research-prusa-core-one-fdm.jpg",
+    "xtool-p2s-laser": "photo-xtool-p2s-laser.jpg",
+    "xtool-s1-laser": "photo-xtool-s1-laser.jpg",
+    "xtool-f1-ultra-laser": "photo-xtool-f1-ultra-laser.jpg"
+  },
+  "materials": {
+    "esun-pla-plus": "photo-esun-pla-plus.jpg",
+    "esun-petg": "photo-esun-pla-spool.jpg",
+    "esun-abs": "photo-esun-pla-spool.jpg",
+    "polymaker-polyterra-pla": "photo-polymaker-polyterra-pla.jpg",
+    "bambulab-pla-basic": "photo-bambulab-pla-basic.jpg"
+  }
+}
