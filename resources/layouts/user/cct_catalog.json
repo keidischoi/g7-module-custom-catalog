@@ -1,10 +1,10 @@
 {
-  "version": "0.1.20",
+  "version": "0.1.21",
   "layout_name": "cct_catalog",
   "extends": "_user_base",
   "meta": {"title": "3D 카탈로그"},
   "scripts": [
-    {"id": "cct_app", "src": "/api/modules/custom-catalog/assets/catalog-app.js?v=0.1.20", "async": true, "optional": true, "required": false, "failOnError": false, "onError": {"handler": "suppress"}}
+    {"id": "cct_app", "src": "/api/modules/custom-catalog/assets/catalog-app.js?v=0.1.21", "async": true, "optional": true, "required": false, "failOnError": false, "onError": {"handler": "suppress"}}
   ],
   "slots": {
     "content": [
