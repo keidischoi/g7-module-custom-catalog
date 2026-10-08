@@ -331,7 +331,8 @@ final class Collector
                     ."- 제조사가 공개한 값 중 확실히 아는 것만. 모르는 칸은 null (추측 금지).\n- 숫자 칸은 단위 없이 숫자만.\n"
                     .(trim((string) ($r->summary ?? '')) === '' ? "- summary: 이 제품을 소개하는 한국어 두세 문장 (사실만).\n" : '')
                     .(trim((string) ($r->homepage_url ?? '')) === '' ? "- homepage_url: 이 제품의 제조사 공식 페이지 주소 (확실할 때만).\n" : '')
-                    ."\n[칸]\n".implode("\n", $keys)."\n\n[답 모양]\n".'{"values":{"칸 키":값},"summary":"","homepage_url":""}');
+                    .(trim((string) ($r->issues ?? '')) === '' ? "- issues: 이 제품을 쓰는 사람들 사이에 널리 알려진 문제 · 고질병 · 주의할 점 (한국어 짧은 문장 2~5개의 배열 · 확실한 것만 · 모르면 빈 배열).\n" : '')
+                    ."\n[칸]\n".implode("\n", $keys)."\n\n[답 모양]\n".'{"values":{"칸 키":값},"summary":"","homepage_url":"","issues":[]}');
                 $in = is_array($j['values'] ?? null) ? $j['values'] : $j;
                 $vals = [];
                 foreach ($empty as $d) {
@@ -346,6 +347,12 @@ final class Collector
                 }
                 if (trim((string) ($r->homepage_url ?? '')) === '' && is_string($j['homepage_url'] ?? null) && preg_match('#^https?://#i', trim($j['homepage_url']))) {
                     $payload['homepage_url'] = trim($j['homepage_url']);
+                }
+                if (trim((string) ($r->issues ?? '')) === '' && is_array($j['issues'] ?? null)) {
+                    $iss = array_slice(array_values(array_filter(array_map(static fn ($x) => is_string($x) ? mb_substr(trim(strip_tags($x)), 0, 200) : '', $j['issues']), static fn ($x) => mb_strlen($x) >= 6)), 0, 6);
+                    if ($iss) {
+                        $payload['issues'] = implode("\n", $iss);
+                    }
                 }
                 if (! $vals && count($payload) === 1) {
                     return '제원 채우기 · '.$title.': AI 가 아는 값이 없어요 — '.$this->ai->last;
@@ -550,6 +557,11 @@ final class Collector
                 }
                 if (! empty($p['homepage_url'])) {
                     $lines[] = ['label' => '공식 페이지', 'value' => (string) $p['homepage_url']];
+                }
+                foreach (preg_split('/\R/u', (string) ($p['issues'] ?? '')) ?: [] as $is) {
+                    if (trim($is) !== '') {
+                        $lines[] = ['label' => '알려진 문제', 'value' => trim($is)];
+                    }
                 }
             }
             $items[] = ['id' => (int) $r->id, 'task' => (string) $r->task, 'type' => $type, 'key' => (string) ($r->item_key ?? ''), 'title' => (string) $r->title,

@@ -177,6 +177,19 @@ namespace {
     }
     t(! PhotoService::safeUrl('http://127.0.0.1/a.jpg') && ! PhotoService::safeUrl('http://192.168.0.5/a.jpg') && ! PhotoService::safeUrl('file:///etc/passwd') && PhotoService::safeUrl('https://93.184.216.34/a.jpg'), '주소로 가져오기 — 안쪽 주소는 막음');
 
+    echo "■ 설명 · 알려진 문제 · 메모 (0.2.2)\n";
+    $svc->save('equipment', ['key' => 'bambu-lab-x1-carbon-fdm', 'kind' => 'fdm', 'brand' => 'Bambu Lab', 'title' => 'X1 Carbon', 'detail' => "첫째 줄\n둘째 <b>줄</b>", 'issues' => "- 카본 로드에 먼지가 쌓임\n\n• 초기 펌웨어 소음", 'memo' => '국내 정식 발매',
+        'values' => ['speed_max' => 500]]);
+    $xd = $svc->detail(...$svc->find('bambu-lab-x1-carbon-fdm'));
+    t($xd['detail'] === "첫째 줄\n둘째 줄" && $xd['issues'] === ['카본 로드에 먼지가 쌓임', '초기 펌웨어 소음'] && $xd['memo'] === '국내 정식 발매' && in_array('500 mm/s', $xd['chips'], true), '자세한 설명(줄바꿈 유지) · 알려진 문제(한 줄에 하나) · 메모 · 카드에 속도');
+    $before = DB::table('cat_equipment')->where('key', 'bambu-lab-p1s-fdm')->first();
+    (require dirname(__DIR__).'/database/migrations/2026_10_09_000019_specs_and_notes.php')->up();
+    $pd2 = $svc->detail(...array_merge($svc->find('bambu-lab-p1s-fdm'), [true]));
+    $sd2 = $svc->detail(...array_merge($svc->find('elegoo-saturn-4-ultra-sla'), [true]));
+    t($pd2['values']['speed_max'] === 500 && $pd2['values']['accel_max'] === 20000 && $pd2['values']['nozzle_temp_max'] === 300 && $pd2['values']['structure'] === 'CoreXY' && in_array('ABS', $pd2['values']['materials'], true) && $pd2['values']['build_x_mm'] === 256,
+        '많이 쓰는 프린터의 속도 · 온도 · 구조 · 쓸 수 있는 필라멘트를 채움 (P1S)');
+    t($svc->detail(...array_merge($svc->find('bambu-lab-x1-carbon-fdm'), [true]))['values']['materials'] === ['PLA', 'PETG', 'ABS', 'PA-CF'] && ! isset($sd2['values']['speed_max']), '이미 적힌 값(X1 Carbon 의 재료)은 그대로 · 목록에 없는 것은 건드리지 않음');
+
     echo "■ 어떤 그림을 보여 줄까 (관리자 설정)\n";
     $img = static fn (string $key) => $svc->detail(...$svc->find($key));
     $p1s = (string) DB::table('cat_equipment')->where('key', 'bambu-lab-p1s-fdm')->value('image_url');
@@ -189,7 +202,7 @@ namespace {
     t($img('xtool-p2s-laser')['image'] === '' && $img('bambu-lab-p1s-fdm')['image'] === $p1s, '「카탈로그 사진만」');
     Settings::save(['image_mode' => 'icon']);
     $ic = $img('bambu-lab-p1s-fdm');
-    t($ic['image'] === '' && $ic['photos'] === [] && $ic['enclosed'] === false && count($svc->detail(...array_merge($svc->find('bambu-lab-p1s-fdm'), [true]))['photos']) === 1, '「그림만」 — 사진을 쓰지 않음 (편집하는 사람에게는 사진 관리가 보임)');
+    t($ic['image'] === '' && $ic['photos'] === [] && $ic['enclosed'] === true && count($svc->detail(...array_merge($svc->find('bambu-lab-p1s-fdm'), [true]))['photos']) === 1, '「그림만」 — 사진을 쓰지 않음 (편집하는 사람에게는 사진 관리가 보임)');
     Settings::save(['image_mode' => 'auto']);
 
     echo "■ AI 연결 · 자동 수집\n";
@@ -243,14 +256,15 @@ namespace {
     t(true, '다음 제조사로 넘어감 ('.implode(',', array_unique($asked)).')');
 
     DB::table('cat_suggestions')->delete();
-    $reply = json_encode(['values' => ['speed_max' => '500', 'nozzle_temp_max' => 300, 'build_x_mm' => 999, 'structure' => 'CoreXY', 'extruder' => '모름', 'camera' => 'yes', 'noise_db' => null], 'summary' => 'P1S 는 밀폐형 CoreXY 프린터입니다.', 'homepage_url' => 'https://bambulab.com/en/p1s']);
+    $reply = json_encode(['values' => ['speed_max' => '500', 'nozzle_temp_max' => 300, 'build_x_mm' => 999, 'structure' => 'CoreXY', 'extruder' => '모름', 'camera' => 'yes', 'noise_db' => 49, 'weight_kg' => 12.95, 'power_w' => 1000, 'size_w' => 389], 'summary' => 'P1S 는 밀폐형 CoreXY 프린터입니다.', 'homepage_url' => 'https://bambulab.com/en/p1s', 'issues' => ['보조 팬 소음이 큰 편', 'x', '고온 재료는 챔버 온도가 아쉬움']]);
     DB::table('cat_equipment')->where('key', '!=', 'bambu-lab-p1s-fdm')->update(['ai_fill_at' => now()]);
     $line = $col->taskFill();
     $sg = $col->suggestions();
     t($sg['pending'] === 1 && $sg['items'][0]['task'] === 'fill' && str_contains($line, 'Bambu Lab P1S'), '제원 채우기 — 덜 찬 항목 하나');
     $col->apply($sg['items'][0]['id']);
     $pd = $svc->detail(...array_merge($svc->find('bambu-lab-p1s-fdm'), [true]));
-    t($pd['values']['build_x_mm'] === 256 && $pd['values']['speed_max'] === 500 && $pd['values']['camera'] === true && ! isset($pd['values']['extruder']) && $pd['summary'] !== '' && $pd['homepage_url'] === 'https://bambulab.com/en/p1s', '빈 칸만 채움 (적혀 있던 256 은 그대로) · 목록에 없는 값(모름)은 버림');
+    t($pd['values']['build_x_mm'] === 256 && $pd['values']['noise_db'] === 49 && $pd['values']['weight_kg'] === 12.95 && $pd['values']['extruder'] === '다이렉트' && $pd['summary'] !== '' && $pd['homepage_url'] === 'https://bambulab.com/en/p1s', '빈 칸만 채움 (적혀 있던 256 은 그대로) · 목록에 없는 값(모름)은 버림');
+    t($pd['issues'] === ['보조 팬 소음이 큰 편', '고온 재료는 챔버 온도가 아쉬움'], 'AI 가 알려 준 알려진 문제도 (너무 짧은 것은 버림)');
 
     echo "■ 사진 찾기\n";
     DB::table('cat_suggestions')->delete();
