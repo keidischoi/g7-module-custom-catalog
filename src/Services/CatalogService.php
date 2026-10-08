@@ -112,6 +112,10 @@ final class CatalogService
             if ($r->build_x_mm && $r->build_y_mm) {
                 $chips[] = $r->build_x_mm.' × '.$r->build_y_mm.($r->build_z_mm ? ' × '.$r->build_z_mm : '').' mm';
             }
+            $sp = Schema::json($r->specs ?? null);
+            if (! empty($sp['speed_max'])) {
+                $chips[] = $sp['speed_max'].' mm/s';
+            }
             if (! empty($r->multicolor)) {
                 $chips[] = '다색';
             }
@@ -268,6 +272,9 @@ final class CatalogService
         [$n, $all] = self::filled($type, $r);
         $out = $this->card($type, $r) + [
             'summary' => (string) ($r->summary ?? ''), 'note' => (string) ($r->note ?? ''),
+            // 0.2.2 자세한 설명 · 알려진 문제(한 줄에 하나) · 메모
+            'detail' => (string) ($r->detail ?? ''), 'memo' => (string) ($r->memo ?? ''),
+            'issues' => array_values(array_filter(array_map(static fn ($l) => trim(ltrim(trim($l), '-•·*')), preg_split('/\R/u', (string) ($r->issues ?? '')) ?: []), static fn ($l) => $l !== '')),
             'homepage_url' => (string) ($r->homepage_url ?? ''), 'wiki_url' => (string) ($r->wiki_url ?? ''),
             'groups' => array_map(static fn ($g, $items) => ['group' => $g, 'items' => $items], array_keys($groups), $groups),
             'facts' => $facts, 'photos' => $photos, 'filled' => $n, 'fields' => $all,
@@ -365,6 +372,13 @@ final class CatalogService
         foreach (['summary' => 4000, 'note' => 500] as $k => $len) {
             if (array_key_exists($k, $in) && ! ($onlyEmpty && trim((string) ($old->{$k} ?? '')) !== '')) {
                 $t = mb_substr(trim(strip_tags((string) $in[$k])), 0, $len);
+                $row[$k] = $t === '' ? null : $t;
+            }
+        }
+        foreach (['detail' => 10000, 'issues' => 4000, 'memo' => 4000] as $k => $len) {
+            if (array_key_exists($k, $in) && ! ($onlyEmpty && trim((string) ($old->{$k} ?? '')) !== '')) {
+                $v = is_array($in[$k]) ? implode("\n", array_filter(array_map(static fn ($x) => is_scalar($x) ? trim((string) $x) : '', $in[$k]))) : (string) $in[$k];
+                $t = mb_substr(trim(str_replace("\r", '', strip_tags($v))), 0, $len);
                 $row[$k] = $t === '' ? null : $t;
             }
         }

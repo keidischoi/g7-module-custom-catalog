@@ -1,8 +1,8 @@
-/*! custom-catalog 0.2.1 — 3D 카탈로그 (목록 · 상세 · 편집) */
+/*! custom-catalog 0.2.2 — 3D 카탈로그 (목록 · 상세 · 편집) */
 (function () {
   'use strict';
   if (window.CCT) { try { window.CCT.tick(); } catch (e) {} return; }
-  var VERSION = '0.2.1', API = '/api/modules/custom-catalog', BASE = '/catalog';
+  var VERSION = '0.2.2', API = '/api/modules/custom-catalog', BASE = '/catalog';
 
   /* ───────── 도구 ───────── */
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
@@ -203,10 +203,13 @@
         '<div class="cct-info__brand">' + esc(d.brand) + '</div><h1>' + esc(d.title) + '</h1>' +
         (d.summary ? '<p class="cct-info__sum">' + esc(d.summary) + '</p>' : '') + (d.note ? '<p class="cct-info__sum" style="font-size:14px">※ ' + esc(d.note) + '</p>' : '') +
         (keys.length ? '<div class="cct-keys">' + keys.map(function (k) { return '<div class="cct-key"><small>' + esc(k.label) + '</small><b>' + esc(k.value) + '</b></div>'; }).join('') + '</div>' : '') +
+        (by.materials ? '<div class="cct-mats"><small>' + (d.kind === 'fdm' ? '🧵 쓸 수 있는 필라멘트' : d.kind === 'sla' || d.kind === 'dlp' ? '🧪 쓸 수 있는 레진' : '🧩 쓸 수 있는 재료') + '</small><div class="cct-tags">' +
+          by.materials.value.split(' · ').map(function (x) { return '<span>' + esc(x) + '</span>'; }).join('') + '</div></div>' : '') +
         '<div class="cct-links">' + (d.homepage_url ? '<a class="cct-btn cct-btn--p" target="_blank" rel="noopener" href="' + esc(d.homepage_url) + '">🌐 제조사 페이지</a>' : '') +
         (d.wiki_url && d.wiki_url !== d.homepage_url ? '<a class="cct-btn" target="_blank" rel="noopener" href="' + esc(d.wiki_url) + '">📖 더 알아보기</a>' : '') +
         (by.sds_url ? '<a class="cct-btn" target="_blank" rel="noopener" href="' + esc(by.sds_url.value) + '">🧾 안전 자료 (MSDS)</a>' : '') +
         (d.type === 'equipment' ? '<a class="cct-btn" href="/companies?q=' + encodeURIComponent(d.title) + '">🏢 이 장비를 가진 업체 찾기</a>' : '<a class="cct-btn" href="/companies?q=' + encodeURIComponent(by.material ? by.material.value : d.title) + '">🏢 이 재료로 출력하는 업체 찾기</a>') +
+        '<a class="cct-btn" href="/wiki/search?q=' + encodeURIComponent(d.title) + '">📚 위키에서 찾아보기</a>' +
         '<button type="button" class="cct-btn" data-print>🖨️ 인쇄</button></div><div class="cct-maker" data-maker hidden></div>' +
         (can ? '<div class="cct-edbar"><div class="cct-meter" style="--p:' + Math.round(d.filled / Math.max(1, d.fields) * 100) + '%">제원 ' + d.filled + ' / ' + d.fields + '칸<i></i></div>' +
           '<button type="button" class="cct-btn cct-btn--p cct-btn--s" data-ed>✏️ 수정</button>' + (d.status === 'active' ? '<button type="button" class="cct-btn cct-btn--s cct-btn--d" data-del>🗑 지우기</button>' :
@@ -217,6 +220,10 @@
       }).join('') + (d.facts.length ? '<div class="cct-spec"><h3>기타</h3><dl>' + d.facts.map(function (f) { return '<div><dt>' + esc(f.label) + '</dt><dd>' + esc(f.value) + '</dd></div>'; }).join('') + '</dl></div>' : '');
       h += '<div class="cct-sec"><h2>📋 제원</h2>' + (specs ? '<div class="cct-specs">' + specs + '</div>' : '<div class="cct-empty"><b>📝</b>아직 적힌 제원이 없어요.' + (can ? ' 「✏️ 수정」으로 채워 주세요.' : '') + '</div>') +
         '<p class="cct-note" style="margin-top:4px">제조사가 공개한 자료를 정리한 것으로, 실제 제품과 다를 수 있어요. 구매 · 사용 전에는 제조사 자료를 확인해 주세요.' + (d.updated_at ? ' (마지막 고침 ' + esc(d.updated_at) + ')' : '') + '</p></div>';
+      if (d.detail) h += '<div class="cct-sec"><h2>📖 자세한 설명</h2><div class="cct-text">' + esc(d.detail) + '</div></div>';
+      if (d.issues.length) h += '<div class="cct-sec"><h2>⚠️ 알려진 문제 · 고질병</h2><ul class="cct-issues">' + d.issues.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' +
+        '<p class="cct-note" style="margin-top:8px">쓰는 사람들 사이에 알려진 내용을 정리한 것이에요. 제품 개선판 · 펌웨어에 따라 달라졌을 수 있어요.</p></div>';
+      if (d.memo) h += '<div class="cct-sec"><h2>📝 메모</h2><div class="cct-text cct-text--memo">' + esc(d.memo) + '</div></div>';
       if (d.related.length) h += '<div class="cct-sec"><h2>🏷️ ' + esc(d.brand) + '의 다른 제품</h2><div class="cct-grid">' + d.related.map(function (c) { return cardHtml(c, false); }).join('') + '</div></div>';
       root.innerHTML = h + '</div>';
       var box = root.querySelector('.cct'), cur = 0, q = function (s) { return box.querySelector(s); };
@@ -268,7 +275,8 @@
     var start = function (d) {
       var type = d ? d.type : (opt.type || 'equipment'), kind = d ? d.kind : (opt.kind || (type === 'materials' ? 'fdm' : 'fdm'));
       var V = d ? JSON.parse(JSON.stringify(d.values || {})) : {}, facts = d ? Object.keys(d.facts_raw || {}).map(function (k) { return [k, d.facts_raw[k]]; }) : [];
-      var base = { brand: d ? d.brand : (opt.brand || ''), title: d ? d.title : '', summary: d ? d.summary : '', note: d ? d.note : '', homepage_url: d ? d.homepage_url : '', wiki_url: d ? d.wiki_url : '' };
+      var base = { brand: d ? d.brand : (opt.brand || ''), title: d ? d.title : '', summary: d ? d.summary : '', note: d ? d.note : '', homepage_url: d ? d.homepage_url : '', wiki_url: d ? d.wiki_url : '',
+        detail: d ? d.detail || '' : '', issues: d ? (d.issues || []).join('\n') : '', memo: d ? d.memo || '' : '' };
       var m = document.createElement('div'); m.className = 'cct cct-modal'; document.body.appendChild(m);
       var close = function () { m.remove(); document.removeEventListener('keydown', onKey); };
       var onKey = function (e) { if (e.key === 'Escape') close(); };
@@ -304,6 +312,10 @@
           '<label class="cct-f"><span>더 알아보기 주소 <small>위키 등</small></span><input class="cct-in" data-b="wiki_url" value="' + esc(base.wiki_url) + '" placeholder="https://"></label>' +
           '<label class="cct-f cct-f--w"><span>한 줄 메모</span><input class="cct-in" data-b="note" value="' + esc(base.note) + '"></label></div>' +
           groups.map(function (g, i) { var n = has(g); return '<details class="cct-grp"' + (i < 2 || n ? ' open' : '') + '><summary>' + esc(g.group) + ' <small>' + n + ' / ' + g.fields.length + '</small></summary><div class="cct-form">' + g.fields.map(ctl).join('') + '</div></details>'; }).join('') +
+          '<details class="cct-grp"' + (base.detail || base.issues || base.memo ? ' open' : '') + '><summary>설명 · 알려진 문제 · 메모 <small>위키처럼 길게 적는 곳</small></summary><div class="cct-form" style="grid-template-columns:1fr">' +
+          '<label class="cct-f"><span>📖 자세한 설명 <small>특징 · 쓰임새 · 역사 등</small></span><textarea class="cct-in" style="min-height:120px" data-b="detail">' + esc(base.detail) + '</textarea></label>' +
+          '<label class="cct-f"><span>⚠️ 알려진 문제 · 고질병 <small>한 줄에 하나 (예: 초기 물량 히트베드 케이블 리콜)</small></span><textarea class="cct-in" style="min-height:100px" data-b="issues">' + esc(base.issues) + '</textarea></label>' +
+          '<label class="cct-f"><span>📝 메모 <small>자유롭게 — 상세 화면에 그대로 보여요</small></span><textarea class="cct-in" data-b="memo">' + esc(base.memo) + '</textarea></label></div></details>' +
           '<details class="cct-grp"' + (facts.length ? ' open' : '') + '><summary>기타 제원 <small>위에 없는 것 — 이름과 값을 자유롭게</small></summary><div><div class="cct-facts" data-facts>' +
           facts.map(function (f) { return '<div data-fact><input class="cct-in" value="' + esc(f[0]) + '" placeholder="이름"><input class="cct-in" value="' + esc(f[1]) + '" placeholder="값"><button type="button" class="cct-x" data-fact-del>✕</button></div>'; }).join('') +
           '</div><button type="button" class="cct-btn cct-btn--s" style="margin-top:8px" data-fact-add>➕ 줄 더하기</button></div></details></div>' +
@@ -323,7 +335,7 @@
         m.querySelector('[data-save]').onclick = function () {
           collect();
           var b = this, msg = m.querySelector('[data-msg]'), fo = {}; facts.forEach(function (f) { if (f[0] && f[1]) fo[f[0]] = f[1]; });
-          var body = { type: type, kind: kind, brand: base.brand, title: base.title, summary: base.summary, note: base.note, homepage_url: base.homepage_url, wiki_url: base.wiki_url, values: V, facts: fo };
+          var body = { type: type, kind: kind, brand: base.brand, title: base.title, summary: base.summary, note: base.note, homepage_url: base.homepage_url, wiki_url: base.wiki_url, detail: base.detail, issues: base.issues, memo: base.memo, values: V, facts: fo };
           if (d) body.key = d.key;
           b.disabled = true; msg.textContent = '';
           api('POST', '/admin/items', body).then(function (r) { close(); toast(api.last || '저장했어요.'); if (done) done(r.key); }).catch(function (e) { b.disabled = false; msg.textContent = e.message; });

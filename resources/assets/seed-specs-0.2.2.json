@@ -1,0 +1,907 @@
+{
+"items": [
+{
+"kind": "fdm",
+"brand": "Bambu Lab",
+"model": "X1 Carbon",
+"values": {
+"speed_max": 500,
+"accel_max": 20000,
+"nozzle_temp_max": 300,
+"bed_temp_max": 110,
+"enclosed": true,
+"structure": "CoreXY",
+"materials": [
+"PLA",
+"PETG",
+"TPU",
+"ABS",
+"ASA",
+"PA",
+"PC",
+"PLA-CF",
+"PETG-CF",
+"PA-CF"
+],
+"ams": "AMS",
+"colors_max": 16,
+"camera": true,
+"ai_detect": true,
+"extruder": "다이렉트",
+"filament_dia": "1.75",
+"leveling": "자동"
+}
+},
+{
+"kind": "fdm",
+"brand": "Bambu Lab",
+"model": "X1E",
+"values": {
+"speed_max": 500,
+"accel_max": 20000,
+"nozzle_temp_max": 320,
+"bed_temp_max": 110,
+"enclosed": true,
+"structure": "CoreXY",
+"materials": [
+"PLA",
+"PETG",
+"TPU",
+"ABS",
+"ASA",
+"PA",
+"PC",
+"PLA-CF",
+"PETG-CF",
+"PA-CF"
+],
+"chamber_temp_max": 60,
+"chamber_heated": true,
+"ams": "AMS",
+"colors_max": 16,
+"camera": true,
+"extruder": "다이렉트",
+"filament_dia": "1.75",
+"leveling": "자동"
+}
+},
+{
+"kind": "fdm",
+"brand": "Bambu Lab",
+"model": "P1S",
+"values": {
+"speed_max": 500,
+"accel_max": 20000,
+"nozzle_temp_max": 300,
+"bed_temp_max": 100,
+"enclosed": true,
+"structure": "CoreXY",
+"materials": [
+"PLA",
+"PETG",
+"TPU",
+"ABS",
+"ASA",
+"PA",
+"PC"
+],
+"ams": "AMS",
+"colors_max": 16,
+"camera": true,
+"extruder": "다이렉트",
+"filament_dia": "1.75",
+"leveling": "자동"
+}
+},
+{
+"kind": "fdm",
+"brand": "Bambu Lab",
+"model": "P1P",
+"values": {
+"speed_max": 500,
+"accel_max": 20000,
+"nozzle_temp_max": 300,
+"bed_temp_max": 100,
+"enclosed": false,
+"structure": "CoreXY",
+"materials": [
+"PLA",
+"PETG",
+"TPU"
+],
+"ams": "AMS",
+"colors_max": 16,
+"extruder": "다이렉트",
+"filament_dia": "1.75",
+"leveling": "자동"
+}
+},
+{
+"kind": "fdm",
+"brand": "Bambu Lab",
+"model": "A1",
+"values": {
+"speed_max": 500,
+"accel_max": 10000,
+"nozzle_temp_max": 300,
+"bed_temp_max": 100,
+"enclosed": false,
+"structure": "베드슬링거",
+"materials": [
+"PLA",
+"PETG",
+"TPU"
+],
+"ams": "AMS lite",
+"colors_max": 4,
+"camera": true,
+"extruder": "다이렉트",
+"filament_dia": "1.75",
+"leveling": "자동"
+}
+},
+{
+"kind": "fdm",
+"brand": "Bambu Lab",
+"model": "A1 mini",
+"values": {
+"speed_max": 500,
+"accel_max": 10000,
+"nozzle_temp_max": 300,
+"bed_temp_max": 80,
+"enclosed": false,
+"structure": "베드슬링거",
+"materials": [
+"PLA",
+"PETG",
+"TPU"
+],
+"ams": "AMS lite",
+"colors_max": 4,
+"camera": true,
+"extruder": "다이렉트",
+"filament_dia": "1.75",
+"leveling": "자동"
+}
+},
+{
+"kind": "fdm",
+"brand": "Bambu Lab",
+"model": "H2D",
+"values": {
+"speed_max": 600,
+"accel_max": 20000,
+"nozzle_temp_max": 350,
+"bed_temp_max": 120,
+"enclosed": true,
+"structure": "CoreXY",
+"materials": [
+"PLA",
+"PETG",
+"TPU",
+"ABS",
+"ASA",
+"PA",
+"PC",
+"PLA-CF",
+"PETG-CF",
+"PA-CF"
+],
+"chamber_temp_max": 65,
+"chamber_heated": true,
+"toolheads": 2,
+"camera": true,
+"extruder": "다이렉트",
+"filament_dia": "1.75",
+"leveling": "자동"
+}
+},
+{
+"kind": "fdm",
+"brand": "Creality",
+"model": "K1",
+"values": {
+"speed_max": 600,
+"accel_max": 20000,
+"nozzle_temp_max": 300,
+"bed_temp_max": 100,
+"enclosed": true,
+"structure": "CoreXY",
+"materials": [
+"PLA",
+"PETG",
+"TPU",
+"ABS",
+"ASA",
+"PA",
+"PC"
+],
+"extruder": "다이렉트",
+"filament_dia": "1.75",
+"leveling": "자동"
+}
+},
+{
+"kind": "fdm",
+"brand": "Creality",
+"model": "K1C",
+"values": {
+"speed_max": 600,
+"accel_max": 20000,
+"nozzle_temp_max": 300,
+"bed_temp_max": 100,
+"enclosed": true,
+"structure": "CoreXY",
+"materials": [
+"PLA",
+"PETG",
+"TPU",
+"ABS",
+"ASA",
+"PA",
+"PC",
+"PLA-CF",
+"PETG-CF",
+"PA-CF"
+],
+"camera": true,
+"extruder": "다이렉트",
+"filament_dia": "1.75",
+"leveling": "자동"
+}
+},
+{
+"kind": "fdm",
+"brand": "Creality",
+"model": "K1 Max",
+"values": {
+"speed_max": 600,
+"accel_max": 20000,
+"nozzle_temp_max": 300,
+"bed_temp_max": 100,
+"enclosed": true,
+"structure": "CoreXY",
+"materials": [
+"PLA",
+"PETG",
+"TPU",
+"ABS",
+"ASA",
+"PA",
+"PC"
+],
+"camera": true,
+"extruder": "다이렉트",
+"filament_dia": "1.75",
+"leveling": "자동"
+}
+},
+{
+"kind": "fdm",
+"brand": "Creality",
+"model": "K1 SE",
+"values": {
+"speed_max": 600,
+"accel_max": 20000,
+"nozzle_temp_max": 300,
+"bed_temp_max": 100,
+"enclosed": false,
+"structure": "CoreXY",
+"materials": [
+"PLA",
+"PETG",
+"TPU"
+],
+"extruder": "다이렉트",
+"filament_dia": "1.75",
+"leveling": "자동"
+}
+},
+{
+"kind": "fdm",
+"brand": "Creality",
+"model": "K2 Plus",
+"values": {
+"speed_max": 600,
+"accel_max": 30000,
+"nozzle_temp_max": 350,
+"bed_temp_max": 120,
+"enclosed": true,
+"structure": "CoreXY",
+"materials": [
+"PLA",
+"PETG",
+"TPU",
+"ABS",
+"ASA",
+"PA",
+"PC",
+"PLA-CF",
+"PETG-CF",
+"PA-CF"
+],
+"chamber_temp_max": 60,
+"chamber_heated": true,
+"ams": "CFS",
+"colors_max": 16,
+"camera": true,
+"extruder": "다이렉트",
+"filament_dia": "1.75",
+"leveling": "자동"
+}
+},
+{
+"kind": "fdm",
+"brand": "Creality",
+"model": "Ender-3 V3",
+"values": {
+"speed_max": 600,
+"accel_max": 20000,
+"nozzle_temp_max": 300,
+"bed_temp_max": 110,
+"enclosed": false,
+"materials": [
+"PLA",
+"PETG",
+"TPU"
+],
+"extruder": "다이렉트",
+"filament_dia": "1.75",
+"leveling": "자동"
+}
+},
+{
+"kind": "fdm",
+"brand": "Creality",
+"model": "Ender-3 V3 SE",
+"values": {
+"speed_max": 250,
+"accel_max": 2500,
+"nozzle_temp_max": 260,
+"bed_temp_max": 100,
+"enclosed": false,
+"structure": "베드슬링거",
+"materials": [
+"PLA",
+"PETG",
+"TPU"
+],
+"extruder": "다이렉트",
+"filament_dia": "1.75",
+"leveling": "자동"
+}
+},
+{
+"kind": "fdm",
+"brand": "Creality",
+"model": "Ender-3 V3 KE",
+"values": {
+"speed_max": 500,
+"accel_max": 8000,
+"nozzle_temp_max": 300,
+"bed_temp_max": 100,
+"enclosed": false,
+"structure": "베드슬링거",
+"materials": [
+"PLA",
+"PETG",
+"TPU"
+],
+"extruder": "다이렉트",
+"filament_dia": "1.75",
+"leveling": "자동"
+}
+},
+{
+"kind": "fdm",
+"brand": "Prusa Research",
+"model": "Original Prusa MK4S",
+"values": {
+"nozzle_temp_max": 290,
+"bed_temp_max": 120,
+"enclosed": false,
+"structure": "베드슬링거",
+"materials": [
+"PLA",
+"PETG",
+"TPU",
+"ASA",
+"PC",
+"PA"
+],
+"open_source": true,
+"extruder": "다이렉트",
+"filament_dia": "1.75",
+"leveling": "자동"
+}
+},
+{
+"kind": "fdm",
+"brand": "Prusa Research",
+"model": "Original Prusa MK4",
+"values": {
+"nozzle_temp_max": 290,
+"bed_temp_max": 120,
+"enclosed": false,
+"structure": "베드슬링거",
+"materials": [
+"PLA",
+"PETG",
+"TPU",
+"ASA",
+"PC",
+"PA"
+],
+"open_source": true,
+"extruder": "다이렉트",
+"filament_dia": "1.75",
+"leveling": "자동"
+}
+},
+{
+"kind": "fdm",
+"brand": "Prusa Research",
+"model": "Original Prusa MK3S+",
+"values": {
+"nozzle_temp_max": 300,
+"bed_temp_max": 120,
+"enclosed": false,
+"structure": "베드슬링거",
+"materials": [
+"PLA",
+"PETG",
+"TPU",
+"ASA"
+],
+"open_source": true,
+"extruder": "다이렉트",
+"filament_dia": "1.75"
+}
+},
+{
+"kind": "fdm",
+"brand": "Prusa Research",
+"model": "Original Prusa XL",
+"values": {
+"nozzle_temp_max": 290,
+"bed_temp_max": 120,
+"enclosed": false,
+"structure": "CoreXY",
+"materials": [
+"PLA",
+"PETG",
+"TPU",
+"ASA",
+"PC",
+"PA"
+],
+"open_source": true,
+"extruder": "다이렉트",
+"filament_dia": "1.75",
+"leveling": "자동"
+}
+},
+{
+"kind": "fdm",
+"brand": "Prusa Research",
+"model": "Prusa CORE One",
+"values": {
+"nozzle_temp_max": 290,
+"bed_temp_max": 120,
+"enclosed": true,
+"structure": "CoreXY",
+"materials": [
+"PLA",
+"PETG",
+"TPU",
+"ABS",
+"ASA",
+"PA",
+"PC"
+],
+"chamber_temp_max": 55,
+"chamber_heated": false,
+"open_source": true,
+"extruder": "다이렉트",
+"filament_dia": "1.75",
+"leveling": "자동"
+}
+},
+{
+"kind": "fdm",
+"brand": "Prusa Research",
+"model": "Original Prusa MINI+",
+"values": {
+"nozzle_temp_max": 280,
+"bed_temp_max": 100,
+"enclosed": false,
+"materials": [
+"PLA",
+"PETG",
+"TPU"
+],
+"open_source": true,
+"extruder": "보우덴",
+"filament_dia": "1.75"
+}
+},
+{
+"kind": "fdm",
+"brand": "Elegoo",
+"model": "Neptune 4",
+"values": {
+"speed_max": 500,
+"nozzle_temp_max": 300,
+"bed_temp_max": 110,
+"enclosed": false,
+"structure": "베드슬링거",
+"materials": [
+"PLA",
+"PETG",
+"TPU"
+],
+"firmware": "Klipper",
+"extruder": "다이렉트",
+"filament_dia": "1.75",
+"leveling": "자동"
+}
+},
+{
+"kind": "fdm",
+"brand": "Elegoo",
+"model": "Neptune 4 Pro",
+"values": {
+"speed_max": 500,
+"nozzle_temp_max": 300,
+"bed_temp_max": 110,
+"enclosed": false,
+"structure": "베드슬링거",
+"materials": [
+"PLA",
+"PETG",
+"TPU"
+],
+"firmware": "Klipper",
+"extruder": "다이렉트",
+"filament_dia": "1.75",
+"leveling": "자동"
+}
+},
+{
+"kind": "fdm",
+"brand": "Elegoo",
+"model": "Centauri Carbon",
+"values": {
+"speed_max": 500,
+"accel_max": 20000,
+"nozzle_temp_max": 320,
+"bed_temp_max": 110,
+"enclosed": true,
+"structure": "CoreXY",
+"materials": [
+"PLA",
+"PETG",
+"TPU",
+"ABS",
+"ASA",
+"PA",
+"PC",
+"PLA-CF",
+"PETG-CF",
+"PA-CF"
+],
+"camera": true,
+"extruder": "다이렉트",
+"filament_dia": "1.75",
+"leveling": "자동"
+}
+},
+{
+"kind": "fdm",
+"brand": "Anycubic",
+"model": "Kobra 3",
+"values": {
+"speed_max": 600,
+"accel_max": 20000,
+"nozzle_temp_max": 300,
+"bed_temp_max": 110,
+"enclosed": false,
+"structure": "베드슬링거",
+"materials": [
+"PLA",
+"PETG",
+"TPU"
+],
+"ams": "ACE Pro",
+"colors_max": 8,
+"extruder": "다이렉트",
+"filament_dia": "1.75",
+"leveling": "자동"
+}
+},
+{
+"kind": "fdm",
+"brand": "Anycubic",
+"model": "Kobra S1",
+"values": {
+"speed_max": 600,
+"accel_max": 20000,
+"nozzle_temp_max": 320,
+"bed_temp_max": 120,
+"enclosed": true,
+"structure": "CoreXY",
+"materials": [
+"PLA",
+"PETG",
+"TPU",
+"ABS",
+"ASA",
+"PA",
+"PC"
+],
+"ams": "ACE Pro",
+"extruder": "다이렉트",
+"filament_dia": "1.75",
+"leveling": "자동"
+}
+},
+{
+"kind": "fdm",
+"brand": "QIDI Tech",
+"model": "Plus4",
+"values": {
+"speed_max": 600,
+"accel_max": 20000,
+"nozzle_temp_max": 370,
+"bed_temp_max": 120,
+"enclosed": true,
+"structure": "CoreXY",
+"materials": [
+"PLA",
+"PETG",
+"TPU",
+"ABS",
+"ASA",
+"PA",
+"PC",
+"PLA-CF",
+"PETG-CF",
+"PA-CF",
+"PPS-CF"
+],
+"chamber_temp_max": 65,
+"chamber_heated": true,
+"firmware": "Klipper",
+"extruder": "다이렉트",
+"filament_dia": "1.75",
+"leveling": "자동"
+}
+},
+{
+"kind": "fdm",
+"brand": "QIDI Tech",
+"model": "Q1 Pro",
+"values": {
+"speed_max": 600,
+"accel_max": 20000,
+"nozzle_temp_max": 350,
+"bed_temp_max": 120,
+"enclosed": true,
+"structure": "CoreXY",
+"materials": [
+"PLA",
+"PETG",
+"TPU",
+"ABS",
+"ASA",
+"PA",
+"PC",
+"PLA-CF",
+"PETG-CF",
+"PA-CF"
+],
+"chamber_temp_max": 60,
+"chamber_heated": true,
+"firmware": "Klipper",
+"extruder": "다이렉트",
+"filament_dia": "1.75",
+"leveling": "자동"
+}
+},
+{
+"kind": "fdm",
+"brand": "QIDI Tech",
+"model": "X-Max 3",
+"values": {
+"speed_max": 600,
+"accel_max": 20000,
+"nozzle_temp_max": 350,
+"bed_temp_max": 120,
+"enclosed": true,
+"structure": "CoreXY",
+"materials": [
+"PLA",
+"PETG",
+"TPU",
+"ABS",
+"ASA",
+"PA",
+"PC",
+"PLA-CF",
+"PETG-CF",
+"PA-CF"
+],
+"chamber_temp_max": 65,
+"chamber_heated": true,
+"firmware": "Klipper",
+"extruder": "다이렉트",
+"filament_dia": "1.75",
+"leveling": "자동"
+}
+},
+{
+"kind": "fdm",
+"brand": "QIDI Tech",
+"model": "X-Plus 3",
+"values": {
+"speed_max": 600,
+"accel_max": 20000,
+"nozzle_temp_max": 350,
+"bed_temp_max": 120,
+"enclosed": true,
+"structure": "CoreXY",
+"materials": [
+"PLA",
+"PETG",
+"TPU",
+"ABS",
+"ASA",
+"PA",
+"PC",
+"PLA-CF",
+"PETG-CF",
+"PA-CF"
+],
+"chamber_temp_max": 65,
+"chamber_heated": true,
+"firmware": "Klipper",
+"extruder": "다이렉트",
+"filament_dia": "1.75",
+"leveling": "자동"
+}
+},
+{
+"kind": "fdm",
+"brand": "Flashforge",
+"model": "Adventurer 5M",
+"values": {
+"speed_max": 600,
+"accel_max": 20000,
+"nozzle_temp_max": 280,
+"bed_temp_max": 110,
+"enclosed": false,
+"structure": "CoreXY",
+"materials": [
+"PLA",
+"PETG",
+"TPU"
+],
+"extruder": "다이렉트",
+"filament_dia": "1.75",
+"leveling": "자동"
+}
+},
+{
+"kind": "fdm",
+"brand": "Flashforge",
+"model": "Adventurer 5M Pro",
+"values": {
+"speed_max": 600,
+"accel_max": 20000,
+"nozzle_temp_max": 280,
+"bed_temp_max": 110,
+"enclosed": true,
+"structure": "CoreXY",
+"materials": [
+"PLA",
+"PETG",
+"TPU",
+"ABS",
+"ASA"
+],
+"camera": true,
+"air_filter": true,
+"extruder": "다이렉트",
+"filament_dia": "1.75",
+"leveling": "자동"
+}
+},
+{
+"kind": "fdm",
+"brand": "Sovol",
+"model": "SV08",
+"values": {
+"speed_max": 700,
+"accel_max": 40000,
+"nozzle_temp_max": 300,
+"bed_temp_max": 100,
+"enclosed": false,
+"structure": "CoreXY",
+"materials": [
+"PLA",
+"PETG",
+"TPU"
+],
+"firmware": "Klipper",
+"open_source": true,
+"extruder": "다이렉트",
+"filament_dia": "1.75",
+"leveling": "자동"
+}
+},
+{
+"kind": "fdm",
+"brand": "AnkerMake",
+"model": "M5",
+"values": {
+"speed_max": 500,
+"nozzle_temp_max": 260,
+"bed_temp_max": 100,
+"enclosed": false,
+"structure": "베드슬링거",
+"materials": [
+"PLA",
+"PETG",
+"TPU"
+],
+"camera": true,
+"extruder": "다이렉트",
+"filament_dia": "1.75",
+"leveling": "자동"
+}
+},
+{
+"kind": "fdm",
+"brand": "AnkerMake",
+"model": "M5C",
+"values": {
+"speed_max": 500,
+"nozzle_temp_max": 300,
+"bed_temp_max": 100,
+"enclosed": false,
+"structure": "베드슬링거",
+"materials": [
+"PLA",
+"PETG",
+"TPU"
+],
+"extruder": "다이렉트",
+"filament_dia": "1.75",
+"leveling": "자동"
+}
+}
+],
+"resin": {
+"brands": [
+"Elegoo",
+"Anycubic",
+"Phrozen",
+"Creality",
+"Uniformation",
+"HeyGears"
+],
+"values": {
+"light": "LCD (MSLA)",
+"wavelength_nm": 405,
+"enclosed": true,
+"materials": [
+"405nm UV 레진",
+"스탠다드 레진",
+"ABS-Like 레진",
+"수세 레진",
+"터프 레진",
+"플렉서블 레진"
+]
+}
+}
+}
