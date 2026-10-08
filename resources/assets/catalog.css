@@ -62,15 +62,19 @@ html.dark .cct-pic,.dark .cct-pic{background:linear-gradient(160deg,#f8fafc,#dbe
 .cct-kind{position:absolute;left:10px;top:10px;padding:3px 9px;border-radius:999px;font-size:11.5px;font-weight:800;color:#fff;background:rgba(15,23,42,.55);backdrop-filter:blur(6px)}
 .cct-card__body{padding:12px 14px 14px;display:flex;flex-direction:column;gap:3px;flex:1}
 .cct-card__brand{font-size:12px;font-weight:800;color:var(--a);letter-spacing:.02em}
-.cct-logo{width:18px;height:18px;margin-right:5px;border-radius:5px;object-fit:contain;background:#fff;border:1px solid var(--line);vertical-align:-4px}
+/* 로고 — 높이는 고정, 너비는 그림대로 (정사각 아이콘도, 옆으로 긴 글자 로고도) */
+.cct-logo{height:18px;width:auto;min-width:18px;max-width:72px;margin-right:5px;border-radius:5px;object-fit:contain;background:#fff;border:1px solid var(--line);vertical-align:-4px}
 .cct-logo--mono{display:inline-flex;align-items:center;justify-content:center;border:0;color:#fff;font-size:11px;font-weight:900;line-height:1;background:linear-gradient(140deg,hsl(var(--h,240) 62% 56%),hsl(calc(var(--h,240) + 40) 66% 44%))}
 .cct-logo--lg.cct-logo--mono{font-size:16px}
-.cct-maker .cct-logo{width:44px;height:44px;margin:0;border-radius:10px;font-size:20px;vertical-align:0}
-.cct-logo--lg{width:30px;height:30px;margin-right:8px;border-radius:8px;vertical-align:-9px}
+.cct-maker .cct-logo{height:44px;min-width:44px;max-width:170px;margin:0;border-radius:10px;font-size:20px;vertical-align:0}
+.cct-maker .cct-logo--mono{width:44px}
+.cct-logo--lg{height:32px;min-width:32px;max-width:150px;margin-right:8px;border-radius:8px;vertical-align:-10px}
+.cct-logo--mono{width:18px}.cct-logo--lg.cct-logo--mono{width:32px}
 .cct-chip .cct-logo{margin-right:0}
 .cct-lg{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
 .cct-lg__i{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:14px;background:var(--bg)}
-.cct-lg__i .cct-logo{flex:none;width:46px;height:46px;margin:0;border-radius:10px;font-size:20px;vertical-align:0}
+.cct-lg__i .cct-logo{flex:none;height:46px;min-width:46px;max-width:96px;margin:0;border-radius:10px;font-size:20px;vertical-align:0}
+.cct-lg__i .cct-logo--mono{width:46px}
 .cct-lg__i b{flex:1;min-width:0;font-size:13.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .cct-card__title{font-size:16px;font-weight:800;line-height:1.3;letter-spacing:-.01em}
 .cct-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:7px}

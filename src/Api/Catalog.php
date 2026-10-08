@@ -17,7 +17,7 @@ use Modules\Custom\Catalog\Support\Schema;
  */
 final class Catalog
 {
-    public const VERSION = '0.2.3';
+    public const VERSION = '0.2.4';
 
     /** @return array<string, list<array<string, mixed>>> */
     public static function equipmentBook(): array
@@ -86,6 +86,73 @@ final class Catalog
         }
 
         return $out;
+    }
+
+    /** @var array<string, array<string, array<string, mixed>>>|null 찾기용 색인 (요청 한 번에 한 번만 읽음) */
+    private static ?array $index = null;
+
+    public static function forget(): void
+    {
+        self::$index = null;
+    }
+
+    private static function index(): array
+    {
+        if (self::$index !== null) {
+            return self::$index;
+        }
+        $ix = ['equipment' => [], 'materials' => []];
+        try {
+            Schema::ensure();
+            $svc = new \Modules\Custom\Catalog\Services\CatalogService();
+            foreach (['equipment' => 'model', 'materials' => 'name'] as $type => $tcol) {
+                foreach (DB::table(Schema::table($type))->where('status', 'active')->orderBy('id')->get() as $r) {
+                    $b = \Modules\Custom\Catalog\Services\CatalogService::norm((string) $r->brand);
+                    if ($b === '' || $r->brand === '종류') {
+                        continue;
+                    }
+                    $c = $svc->card($type, $r);
+                    $card = ['key' => $c['key'], 'url' => '/catalog/'.$c['key'], 'brand' => $c['brand'], 'title' => $c['title'], 'kind' => $c['kind'], 'kind_label' => $c['kind_label'],
+                        'image' => $c['image'], 'chips' => $c['chips'], 'summary' => mb_substr(trim((string) ($r->summary ?? '')), 0, 90)];
+                    $names = [\Modules\Custom\Catalog\Services\CatalogService::norm((string) $r->{$tcol})];
+                    if ($type === 'materials') {
+                        $names[] = \Modules\Custom\Catalog\Services\CatalogService::norm((string) $r->material);   // 제품 이름이 달라도 같은 제조사 · 같은 재료면 (먼저 들어온 것)
+                    }
+                    foreach (array_unique(array_filter($names)) as $i => $n) {
+                        $k = $r->kind.'|'.$b.'|'.$n;
+                        if ($i === 0 || ! isset($ix[$type][$k])) {
+                            $ix[$type][$k] ??= $card;
+                            if ($i === 0) {
+                                $ix[$type][$k] = $card;
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (\Throwable) {
+        }
+
+        return self::$index = $ix;
+    }
+
+    /**
+     * 0.2.4 이 장비가 카탈로그에 있나 — 다른 모듈(업체검색 지도 말풍선 등)이 요약 · 그림 · 주소를 받아 감
+     *
+     * @return array{key: string, url: string, brand: string, title: string, kind: string, kind_label: string, image: string, chips: list<string>, summary: string}|null
+     */
+    public static function findEquipment(string $kind, ?string $brand, ?string $model): ?array
+    {
+        $n = \Modules\Custom\Catalog\Services\CatalogService::class;
+
+        return self::index()['equipment'][$kind.'|'.$n::norm($brand).'|'.$n::norm($model)] ?? null;
+    }
+
+    /** 0.2.4 이 재료(제조사 + 재료 이름)가 카탈로그에 있나 — 제품 이름이 같거나, 같은 제조사의 그 재료 @return array<string, mixed>|null */
+    public static function findMaterial(string $kind, ?string $brand, ?string $material): ?array
+    {
+        $n = \Modules\Custom\Catalog\Services\CatalogService::class;
+
+        return self::index()['materials'][$kind.'|'.$n::norm($brand).'|'.$n::norm($material)] ?? null;
     }
 
     /** 제조사 목록 @return list<string> */
