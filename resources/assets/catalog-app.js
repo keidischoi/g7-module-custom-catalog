@@ -2,7 +2,7 @@
 (function () {
   'use strict';
   if (window.CCT) { try { window.CCT.tick(); } catch (e) {} return; }
-  var VERSION = '0.2.9', API = '/api/modules/custom-catalog', BASE = '/catalog';
+  var VERSION = '0.2.10', API = '/api/modules/custom-catalog', BASE = '/catalog';
 
   /* ───────── 도구 ───────── */
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }

@@ -24,6 +24,9 @@ class CatalogListener implements HookListenerInterface
         return [
             'custom-home_design.search.providers' => ['method' => 'searchProviders', 'priority' => 16, 'type' => 'filter'],
             'custom-home_design.home.sections' => ['method' => 'homeSections', 'priority' => 36, 'type' => 'filter'],
+            // 헤더 메뉴 이름 · 켜기/끄기를 홈 디자인(0.7.67+)과 서로 맞춤 — 값의 원본은 이 확장 설정
+            'custom-home_design.menus' => ['method' => 'homeMenus', 'priority' => 47, 'type' => 'filter'],
+            'custom-home_design.menu.update' => ['method' => 'onHomeMenuUpdate', 'priority' => 20, 'sync' => true],
             'core.layout.filter_child_data' => ['method' => 'scripts'] + $spec,
             'core.layout.filter_merged' => ['method' => 'scripts'] + $spec,
             'core.layout_extension.after_apply' => ['method' => 'scripts'] + $spec,
@@ -31,6 +34,41 @@ class CatalogListener implements HookListenerInterface
     }
 
     public function handle(...$args): void {}
+
+    /** 홈 디자인(0.7.67+) 메뉴 목록에 이 확장의 헤더 메뉴(지금 이름 · 켜짐)를 알림 — 값의 원본은 이 확장 설정 */
+    public function homeMenus(mixed $list = []): array
+    {
+        $list = is_array($list) ? array_values($list) : [];
+        try {
+            $list[] = ['key' => 'catalog', 'label' => (string) (\Modules\Custom\Catalog\Support\Settings::get('menu_label')), 'enabled' => (bool) (\Modules\Custom\Catalog\Support\Settings::get('menu_enabled')), 'default_label' => (string) (\Modules\Custom\Catalog\Support\Settings::defaults()['menu_label'])];
+        } catch (\Throwable $e) {
+            report($e);
+        }
+
+        return $list;
+    }
+
+    /** 홈 디자인에서 메뉴 이름 · 켜기/끄기를 바꾸면 이 확장 설정에 저장 ($change = 바뀐 것만: label · enabled) */
+    public function onHomeMenuUpdate(mixed $key = null, mixed $change = null): void
+    {
+        if ($key !== 'catalog' || ! is_array($change)) {
+            return;
+        }
+        try {
+            $in = [];
+            if (isset($change['label']) && trim((string) $change['label']) !== '') {
+                $in['menu_label'] = trim((string) $change['label']);
+            }
+            if (array_key_exists('enabled', $change)) {
+                $in['menu_enabled'] = (bool) $change['enabled'];
+            }
+            if ($in !== []) {
+                \Modules\Custom\Catalog\Support\Settings::save($in);
+            }
+        } catch (\Throwable $e) {
+            report($e);
+        }
+    }
 
     /* ── 통합 검색 ── */
 
@@ -175,7 +213,16 @@ class CatalogListener implements HookListenerInterface
                 return $layout;
             }
         }
-        $layout['scripts'][] = ['src' => '/api/modules/custom-catalog/assets/catalog-nav.js?v='.Catalog::VERSION, 'defer' => true];
+        // 0.2.10 「헤더 메뉴 보이기」가 꺼져 있으면 안 붙임 · 메뉴 이름은 주소의 l= 로 넘김 (스크립트가 자기 주소에서 읽음)
+        try {
+            if (! \Modules\Custom\Catalog\Support\Settings::get('menu_enabled')) {
+                return $layout;
+            }
+            $label = (string) \Modules\Custom\Catalog\Support\Settings::get('menu_label');
+        } catch (\Throwable) {
+            $label = '';
+        }
+        $layout['scripts'][] = ['src' => '/api/modules/custom-catalog/assets/catalog-nav.js?v='.Catalog::VERSION.($label !== '' ? '&l='.rawurlencode($label) : ''), 'defer' => true];
 
         return $layout;
     }

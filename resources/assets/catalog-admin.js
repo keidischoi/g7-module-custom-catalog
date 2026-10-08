@@ -6,7 +6,7 @@
   function C() { return window.CCT; }
   function need(cb) {
     if (window.CCT) return cb();
-    if (!document.getElementById('cct-app-js')) { var s = document.createElement('script'); s.id = 'cct-app-js'; s.src = '/api/modules/custom-catalog/assets/catalog-app.js?v=0.2.9'; document.head.appendChild(s); }
+    if (!document.getElementById('cct-app-js')) { var s = document.createElement('script'); s.id = 'cct-app-js'; s.src = '/api/modules/custom-catalog/assets/catalog-app.js?v=0.2.10'; document.head.appendChild(s); }
     var n = 0, t = setInterval(function () { if (window.CCT || ++n > 100) { clearInterval(t); if (window.CCT) cb(); } }, 60);
   }
   function page() {
@@ -249,6 +249,9 @@
           ['catalog', '카탈로그 사진만', '카탈로그에 올린 사진만 쓰고, 없으면 그림'],
           ['icon', '그림만', '사진을 쓰지 않고 모두 그림으로 — 업체검색과 똑같은 모양']].map(function (o) {
           return '<label class="cct-row" style="cursor:pointer"><div><b>' + o[1] + '</b><small>' + o[2] + '</small></div><input type="radio" name="cct-imode" value="' + o[0] + '"' + (S.image_mode === o[0] ? ' checked' : '') + ' style="width:20px;height:20px"></label>'; }).join('') + '</div>' +
+        '<div class="cct-panel"><h3>🧭 헤더 메뉴</h3>' +
+        '<label class="cct-row" style="cursor:pointer"><div><b>헤더 메뉴 보이기</b><small>헤더 메인 메뉴에 넣어요 — 홈 디자인 › 헤더 › 메뉴 순서와 서로 맞춰져요 (메뉴 자리는 홈 디자인에서)</small></div><input type="checkbox" data-menu-on' + (S.menu_enabled !== false ? ' checked' : '') + '></label>' +
+        '<div class="cct-row"><div><b>메뉴 이름</b><small>헤더 메뉴에 보일 이름 (20자) — 홈 디자인 메뉴 목록과 서로 맞춰져요</small></div><input class="cct-in" type="text" maxlength="20" data-menu-label value="' + String(S.menu_label || '3D 카탈로그').replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }) + '"></div></div>' +
         '<div class="cct-panel"><h3>🖥️ 화면</h3>' +
         '<div class="cct-row"><div><b>한 번에 보이는 개수</b><small>목록에서 「더 보기」 전까지</small></div><span class="cct-num"><input class="cct-in" type="number" min="8" max="96" data-n="per_page" value="' + S.per_page + '"> 개</span></div>' +
         '<div class="cct-row"><div><b>사진 크기</b><small>올리거나 가져온 사진은 이 크기(긴 변)로 줄여 JPEG 로 저장해요. 목록에는 더 작은 사진(480px)을 따로 만들어 써요</small></div><span class="cct-num"><input class="cct-in" type="number" min="480" max="2400" step="20" data-n="photo_px" value="' + S.photo_px + '"> px</span></div>' +
@@ -265,6 +268,9 @@
         '<div class="cct-bar"><button type="button" class="cct-btn cct-btn--p" data-save>저장</button></div>';
       Array.prototype.forEach.call(body.querySelectorAll('[data-n]'), function (i) { i.onchange = function () { S[i.getAttribute('data-n')] = Number(i.value); }; });
       Array.prototype.forEach.call(body.querySelectorAll('[name="cct-imode"]'), function (i) { i.onchange = function () { if (i.checked) S.image_mode = i.value; }; });
+      var mOn = body.querySelector('[data-menu-on]'), mLabel = body.querySelector('[data-menu-label]');
+      if (mOn) mOn.onchange = function () { S.menu_enabled = mOn.checked; };
+      if (mLabel) mLabel.oninput = function () { S.menu_label = mLabel.value; };
       Array.prototype.forEach.call(body.querySelectorAll('[data-tab]'), function (b) { b.onclick = function () {
         var k = b.getAttribute('data-tab'), i = S.tabs_off.indexOf(k); if (i >= 0) S.tabs_off.splice(i, 1); else S.tabs_off.push(k); b.classList.toggle('on', i >= 0); }; });
       var drawLogos = function (items) {

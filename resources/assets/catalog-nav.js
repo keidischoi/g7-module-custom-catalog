@@ -1,10 +1,13 @@
-/*! custom-catalog 0.2.9 — 헤더 메인 메뉴 「3D 카탈로그」 */
+/*! custom-catalog 0.2.10 — 헤더 메인 메뉴 「3D 카탈로그」 */
 (function () {
   "use strict";
   if (window.__cctNav) { try { window.__cctNav(); } catch (e) {} return; }
   var PATH = "/catalog";
   var DESK = "cct-nav-catalog";
   var MOB = "cct-nav-catalog-mobile";
+  // 0.2.10 메뉴 이름 — 이 스크립트 주소의 l= (모듈 설정 「메뉴 이름」), 없으면 기본 이름
+  var LABEL = "3D 카탈로그";
+  try { var cur = document.currentScript, ql = cur && cur.src ? new URL(cur.src, location.href).searchParams.get("l") : ""; if (ql) LABEL = ql; } catch (eL) {}
   function path() { return location.pathname || ""; }
   function here() { var p = path(); return p === PATH || p.indexOf(PATH + "/") === 0; }
   function text(el) { return el ? String(el.textContent || "").replace(/\s+/g, "") : ""; }
@@ -25,7 +28,7 @@
     el.href = PATH;
     el.setAttribute("data-cext-nav", "1");
     el.setAttribute("data-slug", "catalog");
-    el.textContent = "3D 카탈로그";
+    el.textContent = LABEL;
     if (sib && sib.getAttribute("class")) el.setAttribute("class", sib.getAttribute("class"));
     if (here()) el.setAttribute("aria-current", "page");
     el.addEventListener("click", function (e) {
