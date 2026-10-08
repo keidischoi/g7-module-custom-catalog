@@ -1,4 +1,4 @@
-/*! custom-catalog 0.1.31 — 설정 */
+/*! custom-catalog 0.1.32 — 설정 */
 (function () {
   "use strict";
   function boot() {
@@ -21,7 +21,7 @@
         if (c === "&") return "&";
         if (c === "<") return "<";
         if (c === ">") return ">";
-        return """;
+        return "&#34;";
       });
     }
     var state = { equipment_kinds: [], material_kinds: [], spec_fields: [], ai: {} };
