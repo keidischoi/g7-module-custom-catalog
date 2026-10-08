@@ -1,4 +1,4 @@
-/*! custom-catalog 0.1.33 */
+/*! custom-catalog 0.1.34 */
 (function () {
   "use strict";
   function boot() {
@@ -9,7 +9,27 @@
     start(root);
     return true;
   }
+  
+  function renderDetail(root, key) {
+    root.innerHTML = "<style>.cct{max-width:860px;margin:0 auto;padding:24px;color:#0f172a}.cct a{color:#0f766e}.cct-photo{width:100%;max-height:360px;object-fit:contain;background:#f8fafc;border-radius:16px}.cct-spec{display:grid;grid-template-columns:160px 1fr;gap:8px 12px}.cct-spec dt{color:#64748b}</style><div class=\"cct\"><p>불러오는 중</p></div>";
+    function show(row) {
+      if (!row) { root.innerHTML = "<div class=\"cct\"><p>없습니다.</p><p><a href=\"/catalog\">목록</a></p></div>"; return; }
+      var title = (row.brand || "") + " " + (row.model || row.name || "");
+      var rows = [["제조사", row.brand], ["모델", row.model || row.name], ["종류", row.kind], ["재료", row.material], ["크기", [row.build_x_mm, row.build_y_mm, row.build_z_mm].filter(Boolean).join(" x ")], ["노즐", row.nozzle], ["주의", row.caution], ["메모", row.note]];
+      var spec = rows.filter(function (r) { return r[1]; }).map(function (r) { return "<dt>" + r[0] + "</dt><dd>" + String(r[1]) + "</dd>"; }).join("");
+      root.innerHTML = "<div class=\"cct\"><p><a href=\"/catalog\">목록</a></p>" + (row.image_url ? "<img class=\"cct-photo\" alt=\"\" src=\"" + row.image_url + "\">" : "") + "<h1>" + title + "</h1><dl class=\"cct-spec\">" + spec + "</dl><p><button type=\"button\" id=\"cct-print\">PDF 출력</button> " + (row.sds_url ? "<a href=\"" + row.sds_url + "\" target=\"_blank\" rel=\"noopener\">MSDS</a>" : "") + "</p></div>";
+      document.getElementById("cct-print").onclick = function () { window.print(); };
+    }
+    fetch("/api/modules/custom-catalog/equipment/" + encodeURIComponent(key), {credentials:"same-origin"}).then(function (r) { return r.json(); }).then(function (j) {
+      if (j && j.data) return show(j.data);
+      return fetch("/api/modules/custom-catalog/materials/" + encodeURIComponent(key), {credentials:"same-origin"}).then(function (r) { return r.json(); }).then(function (m) { show(m && m.data); });
+    }).catch(function () { show(null); });
+  }
+
   function start(root) {
+    var parts = location.pathname.split("/").filter(Boolean);
+    var detailKey = parts[0] === "catalog" && parts[1] ? decodeURIComponent(parts[1]) : "";
+    if (detailKey) { renderDetail(root, detailKey); return; }
     var q = "", tab = "fdm", brand = "", can = false, items = {equipment: [], materials: []};
     var CSS = ".cct{--ink:#0f172a;--mute:#64748b;--line:#e2e8f0;--card:#fff;--soft:#f8fafc;--acc:#0f766e;color:var(--ink);font-size:14px;line-height:1.55;max-width:1100px;margin:0 auto;padding:20px 16px 64px}html.dark .cct,.dark .cct{--ink:#f1f5f9;--mute:#94a3b8;--line:#334155;--card:#1e293b;--soft:#0f172a;--acc:#2dd4bf}.cct *{box-sizing:border-box}.cct h1,.cct h2{margin:0;letter-spacing:-.02em}.cct a{color:var(--acc)}.cct-hero{border-radius:28px;padding:28px 26px;margin:0 0 16px;color:#fff;background:linear-gradient(135deg,#134e4a,#164e63)}.cct-find{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.cct-find input{flex:1;min-width:200px;height:44px;border:0;border-radius:12px;padding:0 12px}.cct-find button{height:44px;padding:0 16px;border:0;border-radius:12px;background:#fff;color:#0f766e;font-weight:800}.cct-chips{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 16px}.cct-chip{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:6px 12px;cursor:pointer;font-weight:700}.cct-chip.on{background:var(--acc);color:#fff;border-color:var(--acc)}.cct-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px}.cct-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;cursor:pointer;text-align:left}.cct-card b{display:block}.cct-card .sub{color:var(--mute);font-size:12.5px}.cct-empty{color:var(--mute);min-height:280px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center}.cct-empty svg{width:120px;height:90px;color:var(--acc)}.cct-empty b{color:var(--ink);font-size:16px}.cct-sheet{position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:80;display:flex;justify-content:center;align-items:flex-start;padding:24px 12px;overflow:auto}.cct-panel{background:var(--card);color:var(--ink);width:min(760px,100%);border-radius:20px;padding:18px}.cct-photo{width:100%;height:220px;object-fit:cover;border-radius:14px;background:var(--soft)}.cct-table{width:100%;border-collapse:collapse;margin-top:12px}.cct-table td{padding:7px 4px;border-bottom:1px solid var(--line)}.cct-actions{display:flex;gap:8px;margin-top:14px}.cct-actions button,.cct-actions a{height:38px;padding:0 12px;border-radius:10px;border:1px solid var(--line);background:var(--soft);color:inherit;text-decoration:none;display:inline-flex;align-items:center;font-weight:700}@media print{.cct-hero,.cct-chips,.cct-find,.cct-grid,.cct-sheet{display:none!important}#cct-print{display:block!important}}";
     function esc(s) {
@@ -50,7 +70,7 @@
       document.getElementById("cct-find").onsubmit = function (e) { e.preventDefault(); q = document.getElementById("cct-q").value.trim(); if (q && window.__cpsRecord) window.__cpsRecord(q, "catalog"); load(); };
       [].forEach.call(root.querySelectorAll("[data-k]"), function (b) { b.onclick = function () { tab = b.getAttribute("data-k") || "fdm"; brand = ""; paint(false); }; });
       [].forEach.call(root.querySelectorAll("[data-b]"), function (b) { b.onclick = function () { brand = b.getAttribute("data-b") || ""; paint(false); }; });
-      [].forEach.call(root.querySelectorAll(".cct-card"), function (b) { b.onclick = function () { open(b.getAttribute("data-type"), b.getAttribute("data-key")); }; });
+      [].forEach.call(root.querySelectorAll(".cct-card"), function (b) { b.onclick = function () { location.assign("/catalog/" + b.getAttribute("data-key")); }; });
     }
     function open(type, key) {
       var row = (items[type] || []).filter(function (r) { return r.key === key; })[0];
