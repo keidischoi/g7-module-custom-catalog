@@ -16,6 +16,8 @@ class AssetController extends Controller
         }
         $type = match (true) {
             str_ends_with($name, '.js') => 'application/javascript; charset=UTF-8',
+            str_ends_with($name, '.css') => 'text/css; charset=UTF-8',
+            str_ends_with($name, '.json') => 'application/json; charset=UTF-8',
             str_ends_with($name, '.jpg'), str_ends_with($name, '.jpeg') => 'image/jpeg',
             str_ends_with($name, '.png') => 'image/png',
             str_ends_with($name, '.webp') => 'image/webp',

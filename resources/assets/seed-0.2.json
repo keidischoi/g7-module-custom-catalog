@@ -1,0 +1,1354 @@
+{
+"equipment": [
+{
+"kind": "fdm",
+"brand": "Creality",
+"model": "Ender-3 V3 SE"
+},
+{
+"kind": "fdm",
+"brand": "Creality",
+"model": "Ender-3 V3 KE"
+},
+{
+"kind": "fdm",
+"brand": "Creality",
+"model": "Ender-3 V3 Plus"
+},
+{
+"kind": "fdm",
+"brand": "Creality",
+"model": "K1 SE"
+},
+{
+"kind": "fdm",
+"brand": "Creality",
+"model": "Hi"
+},
+{
+"kind": "fdm",
+"brand": "Creality",
+"model": "Ender-5 Max"
+},
+{
+"kind": "fdm",
+"brand": "Creality",
+"model": "CR-10 SE"
+},
+{
+"kind": "fdm",
+"brand": "Elegoo",
+"model": "Neptune 4 Plus"
+},
+{
+"kind": "fdm",
+"brand": "Elegoo",
+"model": "Neptune 4 Max"
+},
+{
+"kind": "fdm",
+"brand": "Elegoo",
+"model": "Centauri"
+},
+{
+"kind": "fdm",
+"brand": "Elegoo",
+"model": "OrangeStorm Giga"
+},
+{
+"kind": "fdm",
+"brand": "Anycubic",
+"model": "Kobra S1"
+},
+{
+"kind": "fdm",
+"brand": "Anycubic",
+"model": "Kobra 2 Pro"
+},
+{
+"kind": "fdm",
+"brand": "Anycubic",
+"model": "Kobra 2 Neo"
+},
+{
+"kind": "fdm",
+"brand": "Anycubic",
+"model": "Kobra 2 Max"
+},
+{
+"kind": "fdm",
+"brand": "Prusa Research",
+"model": "Original Prusa MINI+"
+},
+{
+"kind": "fdm",
+"brand": "Prusa Research",
+"model": "Original Prusa MK3S+"
+},
+{
+"kind": "fdm",
+"brand": "QIDI Tech",
+"model": "Plus4"
+},
+{
+"kind": "fdm",
+"brand": "QIDI Tech",
+"model": "Q1 Pro"
+},
+{
+"kind": "fdm",
+"brand": "QIDI Tech",
+"model": "X-Max 3"
+},
+{
+"kind": "fdm",
+"brand": "QIDI Tech",
+"model": "X-Plus 3"
+},
+{
+"kind": "fdm",
+"brand": "Flashforge",
+"model": "AD5X"
+},
+{
+"kind": "fdm",
+"brand": "Flashforge",
+"model": "Adventurer 5M Pro"
+},
+{
+"kind": "fdm",
+"brand": "Sovol",
+"model": "SV08"
+},
+{
+"kind": "fdm",
+"brand": "Sovol",
+"model": "SV06"
+},
+{
+"kind": "fdm",
+"brand": "Sovol",
+"model": "SV06 Plus"
+},
+{
+"kind": "fdm",
+"brand": "Sovol",
+"model": "SV07"
+},
+{
+"kind": "fdm",
+"brand": "Voron Design",
+"model": "Voron 0.2"
+},
+{
+"kind": "fdm",
+"brand": "Raise3D",
+"model": "Pro3"
+},
+{
+"kind": "fdm",
+"brand": "Raise3D",
+"model": "Pro3 Plus"
+},
+{
+"kind": "fdm",
+"brand": "Raise3D",
+"model": "E2"
+},
+{
+"kind": "fdm",
+"brand": "UltiMaker",
+"model": "S3"
+},
+{
+"kind": "fdm",
+"brand": "UltiMaker",
+"model": "S5"
+},
+{
+"kind": "fdm",
+"brand": "UltiMaker",
+"model": "S7"
+},
+{
+"kind": "fdm",
+"brand": "UltiMaker",
+"model": "Method XL"
+},
+{
+"kind": "fdm",
+"brand": "Snapmaker",
+"model": "J1s"
+},
+{
+"kind": "fdm",
+"brand": "Snapmaker",
+"model": "Artisan"
+},
+{
+"kind": "fdm",
+"brand": "Snapmaker",
+"model": "U1"
+},
+{
+"kind": "fdm",
+"brand": "AnkerMake",
+"model": "M5"
+},
+{
+"kind": "fdm",
+"brand": "AnkerMake",
+"model": "M5C"
+},
+{
+"kind": "fdm",
+"brand": "FLSUN",
+"model": "T1 Pro"
+},
+{
+"kind": "fdm",
+"brand": "FLSUN",
+"model": "S1"
+},
+{
+"kind": "fdm",
+"brand": "FLSUN",
+"model": "V400"
+},
+{
+"kind": "dlp",
+"brand": "Elegoo",
+"model": "Saturn 4 Ultra"
+},
+{
+"kind": "dlp",
+"brand": "Elegoo",
+"model": "Saturn 4"
+},
+{
+"kind": "dlp",
+"brand": "Elegoo",
+"model": "Saturn 3 Ultra"
+},
+{
+"kind": "dlp",
+"brand": "Elegoo",
+"model": "Mars 5 Ultra"
+},
+{
+"kind": "dlp",
+"brand": "Elegoo",
+"model": "Mars 5"
+},
+{
+"kind": "dlp",
+"brand": "Elegoo",
+"model": "Mars 4 Ultra"
+},
+{
+"kind": "dlp",
+"brand": "Elegoo",
+"model": "Jupiter SE"
+},
+{
+"kind": "dlp",
+"brand": "Anycubic",
+"model": "Photon Mono M7 Pro"
+},
+{
+"kind": "dlp",
+"brand": "Anycubic",
+"model": "Photon Mono M7"
+},
+{
+"kind": "dlp",
+"brand": "Anycubic",
+"model": "Photon Mono M5s"
+},
+{
+"kind": "dlp",
+"brand": "Anycubic",
+"model": "Photon Mono M5s Pro"
+},
+{
+"kind": "dlp",
+"brand": "Anycubic",
+"model": "Photon Mono 4"
+},
+{
+"kind": "dlp",
+"brand": "Anycubic",
+"model": "Photon Mono 4 Ultra"
+},
+{
+"kind": "dlp",
+"brand": "Phrozen",
+"model": "Sonic Mighty 8K"
+},
+{
+"kind": "dlp",
+"brand": "Phrozen",
+"model": "Sonic Mini 8K S"
+},
+{
+"kind": "dlp",
+"brand": "Phrozen",
+"model": "Sonic Mega 8K S"
+},
+{
+"kind": "dlp",
+"brand": "Phrozen",
+"model": "Sonic Mighty Revo"
+},
+{
+"kind": "dlp",
+"brand": "Creality",
+"model": "Halot-Mage S"
+},
+{
+"kind": "dlp",
+"brand": "Creality",
+"model": "Halot-Mage Pro"
+},
+{
+"kind": "dlp",
+"brand": "Uniformation",
+"model": "GKtwo"
+},
+{
+"kind": "dlp",
+"brand": "HeyGears",
+"model": "UltraCraft Reflex"
+},
+{
+"kind": "sla",
+"brand": "Formlabs",
+"model": "Form 4"
+},
+{
+"kind": "sla",
+"brand": "Formlabs",
+"model": "Form 4L"
+},
+{
+"kind": "sla",
+"brand": "Formlabs",
+"model": "Form 3+"
+},
+{
+"kind": "sla",
+"brand": "Formlabs",
+"model": "Form 3L"
+}
+],
+"materials": [
+{
+"kind": "fdm",
+"brand": "Bambu Lab",
+"name": "PLA Matte",
+"material": "PLA"
+},
+{
+"kind": "fdm",
+"brand": "Bambu Lab",
+"name": "PLA Silk",
+"material": "PLA"
+},
+{
+"kind": "fdm",
+"brand": "Bambu Lab",
+"name": "PLA Tough+",
+"material": "PLA"
+},
+{
+"kind": "fdm",
+"brand": "Bambu Lab",
+"name": "PLA-CF",
+"material": "PLA-CF"
+},
+{
+"kind": "fdm",
+"brand": "Bambu Lab",
+"name": "PLA Marble",
+"material": "PLA"
+},
+{
+"kind": "fdm",
+"brand": "Bambu Lab",
+"name": "PLA Sparkle",
+"material": "PLA"
+},
+{
+"kind": "fdm",
+"brand": "Bambu Lab",
+"name": "PLA Metal",
+"material": "PLA"
+},
+{
+"kind": "fdm",
+"brand": "Bambu Lab",
+"name": "PLA Galaxy",
+"material": "PLA"
+},
+{
+"kind": "fdm",
+"brand": "Bambu Lab",
+"name": "PLA Glow",
+"material": "PLA"
+},
+{
+"kind": "fdm",
+"brand": "Bambu Lab",
+"name": "PLA Wood",
+"material": "PLA"
+},
+{
+"kind": "fdm",
+"brand": "Bambu Lab",
+"name": "PLA Aero",
+"material": "PLA"
+},
+{
+"kind": "fdm",
+"brand": "Bambu Lab",
+"name": "PETG HF",
+"material": "PETG"
+},
+{
+"kind": "fdm",
+"brand": "Bambu Lab",
+"name": "PETG Translucent",
+"material": "PETG"
+},
+{
+"kind": "fdm",
+"brand": "Bambu Lab",
+"name": "PETG-CF",
+"material": "PETG-CF"
+},
+{
+"kind": "fdm",
+"brand": "Bambu Lab",
+"name": "ABS",
+"material": "ABS"
+},
+{
+"kind": "fdm",
+"brand": "Bambu Lab",
+"name": "ABS-GF",
+"material": "ABS-GF"
+},
+{
+"kind": "fdm",
+"brand": "Bambu Lab",
+"name": "ASA",
+"material": "ASA"
+},
+{
+"kind": "fdm",
+"brand": "Bambu Lab",
+"name": "ASA-CF",
+"material": "ASA-CF"
+},
+{
+"kind": "fdm",
+"brand": "Bambu Lab",
+"name": "ASA Aero",
+"material": "ASA"
+},
+{
+"kind": "fdm",
+"brand": "Bambu Lab",
+"name": "PC",
+"material": "PC"
+},
+{
+"kind": "fdm",
+"brand": "Bambu Lab",
+"name": "PC FR",
+"material": "PC"
+},
+{
+"kind": "fdm",
+"brand": "Bambu Lab",
+"name": "TPU 95A HF",
+"material": "TPU"
+},
+{
+"kind": "fdm",
+"brand": "Bambu Lab",
+"name": "TPU for AMS",
+"material": "TPU"
+},
+{
+"kind": "fdm",
+"brand": "Bambu Lab",
+"name": "PA6-CF",
+"material": "PA6-CF"
+},
+{
+"kind": "fdm",
+"brand": "Bambu Lab",
+"name": "PA6-GF",
+"material": "PA6-GF"
+},
+{
+"kind": "fdm",
+"brand": "Bambu Lab",
+"name": "PAHT-CF",
+"material": "PAHT-CF"
+},
+{
+"kind": "fdm",
+"brand": "Bambu Lab",
+"name": "PPA-CF",
+"material": "PPA-CF"
+},
+{
+"kind": "fdm",
+"brand": "Bambu Lab",
+"name": "PPS-CF",
+"material": "PPS-CF"
+},
+{
+"kind": "fdm",
+"brand": "Bambu Lab",
+"name": "PET-CF",
+"material": "PET-CF"
+},
+{
+"kind": "fdm",
+"brand": "Bambu Lab",
+"name": "PVA",
+"material": "PVA"
+},
+{
+"kind": "fdm",
+"brand": "Bambu Lab",
+"name": "Support for PLA/PETG",
+"material": "서포트"
+},
+{
+"kind": "fdm",
+"brand": "Polymaker",
+"name": "PolyLite PLA",
+"material": "PLA"
+},
+{
+"kind": "fdm",
+"brand": "Polymaker",
+"name": "PolyLite PLA Pro",
+"material": "PLA"
+},
+{
+"kind": "fdm",
+"brand": "Polymaker",
+"name": "PolyTerra PLA+",
+"material": "PLA+"
+},
+{
+"kind": "fdm",
+"brand": "Polymaker",
+"name": "PolySonic PLA",
+"material": "PLA"
+},
+{
+"kind": "fdm",
+"brand": "Polymaker",
+"name": "PolyLite PETG",
+"material": "PETG"
+},
+{
+"kind": "fdm",
+"brand": "Polymaker",
+"name": "PolyLite ABS",
+"material": "ABS"
+},
+{
+"kind": "fdm",
+"brand": "Polymaker",
+"name": "PolyLite ASA",
+"material": "ASA"
+},
+{
+"kind": "fdm",
+"brand": "Polymaker",
+"name": "PolyMax PLA",
+"material": "PLA"
+},
+{
+"kind": "fdm",
+"brand": "Polymaker",
+"name": "PolyMax PETG",
+"material": "PETG"
+},
+{
+"kind": "fdm",
+"brand": "Polymaker",
+"name": "PolyMax PC",
+"material": "PC"
+},
+{
+"kind": "fdm",
+"brand": "Polymaker",
+"name": "PolyFlex TPU95",
+"material": "TPU"
+},
+{
+"kind": "fdm",
+"brand": "Polymaker",
+"name": "PolyFlex TPU90",
+"material": "TPU"
+},
+{
+"kind": "fdm",
+"brand": "Polymaker",
+"name": "PolyMide PA6-CF",
+"material": "PA6-CF"
+},
+{
+"kind": "fdm",
+"brand": "Polymaker",
+"name": "PolyMide PA12-CF",
+"material": "PA12-CF"
+},
+{
+"kind": "fdm",
+"brand": "Polymaker",
+"name": "PolyMide CoPA",
+"material": "PA"
+},
+{
+"kind": "fdm",
+"brand": "Polymaker",
+"name": "PolyCast",
+"material": "PVB"
+},
+{
+"kind": "fdm",
+"brand": "Polymaker",
+"name": "PolySmooth",
+"material": "PVB"
+},
+{
+"kind": "fdm",
+"brand": "Polymaker",
+"name": "PolyDissolve S1",
+"material": "PVA"
+},
+{
+"kind": "fdm",
+"brand": "Polymaker",
+"name": "PolyWood",
+"material": "PLA"
+},
+{
+"kind": "fdm",
+"brand": "Polymaker",
+"name": "Panchroma Matte PLA",
+"material": "PLA"
+},
+{
+"kind": "fdm",
+"brand": "Polymaker",
+"name": "Fiberon PA6-CF20",
+"material": "PA6-CF"
+},
+{
+"kind": "fdm",
+"brand": "Polymaker",
+"name": "Fiberon PET-CF17",
+"material": "PET-CF"
+},
+{
+"kind": "fdm",
+"brand": "Polymaker",
+"name": "Fiberon PPS-CF10",
+"material": "PPS-CF"
+},
+{
+"kind": "fdm",
+"brand": "eSUN",
+"name": "PLA Basic",
+"material": "PLA"
+},
+{
+"kind": "fdm",
+"brand": "eSUN",
+"name": "PLA+ HS",
+"material": "PLA+"
+},
+{
+"kind": "fdm",
+"brand": "eSUN",
+"name": "ePLA-Matte",
+"material": "PLA"
+},
+{
+"kind": "fdm",
+"brand": "eSUN",
+"name": "ePLA-Silk",
+"material": "PLA"
+},
+{
+"kind": "fdm",
+"brand": "eSUN",
+"name": "ePLA-CF",
+"material": "PLA-CF"
+},
+{
+"kind": "fdm",
+"brand": "eSUN",
+"name": "ePLA-LW",
+"material": "PLA"
+},
+{
+"kind": "fdm",
+"brand": "eSUN",
+"name": "PETG",
+"material": "PETG"
+},
+{
+"kind": "fdm",
+"brand": "eSUN",
+"name": "ABS+",
+"material": "ABS"
+},
+{
+"kind": "fdm",
+"brand": "eSUN",
+"name": "eASA",
+"material": "ASA"
+},
+{
+"kind": "fdm",
+"brand": "eSUN",
+"name": "eTPU-95A",
+"material": "TPU"
+},
+{
+"kind": "fdm",
+"brand": "eSUN",
+"name": "ePA-CF",
+"material": "PA-CF"
+},
+{
+"kind": "fdm",
+"brand": "eSUN",
+"name": "ePA12-CF",
+"material": "PA12-CF"
+},
+{
+"kind": "fdm",
+"brand": "eSUN",
+"name": "ePC",
+"material": "PC"
+},
+{
+"kind": "fdm",
+"brand": "eSUN",
+"name": "PVA",
+"material": "PVA"
+},
+{
+"kind": "fdm",
+"brand": "SUNLU",
+"name": "PLA",
+"material": "PLA"
+},
+{
+"kind": "fdm",
+"brand": "SUNLU",
+"name": "PLA+",
+"material": "PLA+"
+},
+{
+"kind": "fdm",
+"brand": "SUNLU",
+"name": "PLA+ 2.0",
+"material": "PLA+"
+},
+{
+"kind": "fdm",
+"brand": "SUNLU",
+"name": "PLA Meta",
+"material": "PLA"
+},
+{
+"kind": "fdm",
+"brand": "SUNLU",
+"name": "PLA Matte",
+"material": "PLA"
+},
+{
+"kind": "fdm",
+"brand": "SUNLU",
+"name": "Silk PLA+",
+"material": "PLA"
+},
+{
+"kind": "fdm",
+"brand": "SUNLU",
+"name": "PETG",
+"material": "PETG"
+},
+{
+"kind": "fdm",
+"brand": "SUNLU",
+"name": "ABS",
+"material": "ABS"
+},
+{
+"kind": "fdm",
+"brand": "SUNLU",
+"name": "ASA",
+"material": "ASA"
+},
+{
+"kind": "fdm",
+"brand": "SUNLU",
+"name": "TPU",
+"material": "TPU"
+},
+{
+"kind": "fdm",
+"brand": "Elegoo",
+"name": "PLA",
+"material": "PLA"
+},
+{
+"kind": "fdm",
+"brand": "Elegoo",
+"name": "PLA+",
+"material": "PLA+"
+},
+{
+"kind": "fdm",
+"brand": "Elegoo",
+"name": "Rapid PLA+",
+"material": "PLA+"
+},
+{
+"kind": "fdm",
+"brand": "Elegoo",
+"name": "PLA Silk",
+"material": "PLA"
+},
+{
+"kind": "fdm",
+"brand": "Elegoo",
+"name": "PLA Matte",
+"material": "PLA"
+},
+{
+"kind": "fdm",
+"brand": "Elegoo",
+"name": "Rapid PETG",
+"material": "PETG"
+},
+{
+"kind": "fdm",
+"brand": "Elegoo",
+"name": "PETG Pro",
+"material": "PETG"
+},
+{
+"kind": "fdm",
+"brand": "Elegoo",
+"name": "ASA",
+"material": "ASA"
+},
+{
+"kind": "fdm",
+"brand": "Elegoo",
+"name": "ABS",
+"material": "ABS"
+},
+{
+"kind": "fdm",
+"brand": "Elegoo",
+"name": "TPU 95A",
+"material": "TPU"
+},
+{
+"kind": "fdm",
+"brand": "Elegoo",
+"name": "PLA-CF",
+"material": "PLA-CF"
+},
+{
+"kind": "fdm",
+"brand": "Creality",
+"name": "Hyper PLA",
+"material": "PLA"
+},
+{
+"kind": "fdm",
+"brand": "Creality",
+"name": "Hyper PLA-CF",
+"material": "PLA-CF"
+},
+{
+"kind": "fdm",
+"brand": "Creality",
+"name": "Ender-PLA",
+"material": "PLA"
+},
+{
+"kind": "fdm",
+"brand": "Creality",
+"name": "CR-PLA",
+"material": "PLA"
+},
+{
+"kind": "fdm",
+"brand": "Creality",
+"name": "CR-PETG",
+"material": "PETG"
+},
+{
+"kind": "fdm",
+"brand": "Creality",
+"name": "CR-ABS",
+"material": "ABS"
+},
+{
+"kind": "fdm",
+"brand": "Creality",
+"name": "CR-TPU",
+"material": "TPU"
+},
+{
+"kind": "fdm",
+"brand": "Prusament",
+"name": "PLA",
+"material": "PLA"
+},
+{
+"kind": "fdm",
+"brand": "Prusament",
+"name": "PETG",
+"material": "PETG"
+},
+{
+"kind": "fdm",
+"brand": "Prusament",
+"name": "ASA",
+"material": "ASA"
+},
+{
+"kind": "fdm",
+"brand": "Prusament",
+"name": "PC Blend",
+"material": "PC"
+},
+{
+"kind": "fdm",
+"brand": "Prusament",
+"name": "PC Blend Carbon Fiber",
+"material": "PC-CF"
+},
+{
+"kind": "fdm",
+"brand": "Prusament",
+"name": "PA11 Carbon Fiber",
+"material": "PA11-CF"
+},
+{
+"kind": "fdm",
+"brand": "Prusament",
+"name": "PVB",
+"material": "PVB"
+},
+{
+"kind": "fdm",
+"brand": "Prusament",
+"name": "rPLA",
+"material": "PLA"
+},
+{
+"kind": "fdm",
+"brand": "Anycubic",
+"name": "PLA",
+"material": "PLA"
+},
+{
+"kind": "fdm",
+"brand": "Anycubic",
+"name": "PLA+",
+"material": "PLA+"
+},
+{
+"kind": "fdm",
+"brand": "Anycubic",
+"name": "High Speed PLA",
+"material": "PLA"
+},
+{
+"kind": "fdm",
+"brand": "Anycubic",
+"name": "Silk PLA",
+"material": "PLA"
+},
+{
+"kind": "fdm",
+"brand": "Anycubic",
+"name": "Matte PLA",
+"material": "PLA"
+},
+{
+"kind": "fdm",
+"brand": "Anycubic",
+"name": "PETG",
+"material": "PETG"
+},
+{
+"kind": "fdm",
+"brand": "Anycubic",
+"name": "ABS",
+"material": "ABS"
+},
+{
+"kind": "fdm",
+"brand": "Anycubic",
+"name": "ASA",
+"material": "ASA"
+},
+{
+"kind": "fdm",
+"brand": "Anycubic",
+"name": "TPU",
+"material": "TPU"
+},
+{
+"kind": "fdm",
+"brand": "Overture",
+"name": "PLA",
+"material": "PLA"
+},
+{
+"kind": "fdm",
+"brand": "Overture",
+"name": "PLA Professional",
+"material": "PLA+"
+},
+{
+"kind": "fdm",
+"brand": "Overture",
+"name": "Matte PLA",
+"material": "PLA"
+},
+{
+"kind": "fdm",
+"brand": "Overture",
+"name": "Silk PLA",
+"material": "PLA"
+},
+{
+"kind": "fdm",
+"brand": "Overture",
+"name": "PETG",
+"material": "PETG"
+},
+{
+"kind": "fdm",
+"brand": "Overture",
+"name": "ABS",
+"material": "ABS"
+},
+{
+"kind": "fdm",
+"brand": "Overture",
+"name": "ASA",
+"material": "ASA"
+},
+{
+"kind": "fdm",
+"brand": "Overture",
+"name": "TPU",
+"material": "TPU"
+},
+{
+"kind": "fdm",
+"brand": "Overture",
+"name": "Easy Nylon",
+"material": "PA"
+},
+{
+"kind": "resin",
+"brand": "Elegoo",
+"name": "Standard Photopolymer Resin",
+"material": "스탠다드 레진"
+},
+{
+"kind": "resin",
+"brand": "Elegoo",
+"name": "ABS-Like Resin",
+"material": "ABS-Like 레진"
+},
+{
+"kind": "resin",
+"brand": "Elegoo",
+"name": "ABS-Like Resin V3.0",
+"material": "ABS-Like 레진"
+},
+{
+"kind": "resin",
+"brand": "Elegoo",
+"name": "Water Washable Resin",
+"material": "수세 레진"
+},
+{
+"kind": "resin",
+"brand": "Elegoo",
+"name": "Plant-based Resin",
+"material": "식물성 레진"
+},
+{
+"kind": "resin",
+"brand": "Elegoo",
+"name": "8K Standard Resin",
+"material": "8K 고해상 레진"
+},
+{
+"kind": "resin",
+"brand": "Anycubic",
+"name": "Standard Resin",
+"material": "스탠다드 레진"
+},
+{
+"kind": "resin",
+"brand": "Anycubic",
+"name": "ABS-Like Resin Pro 2",
+"material": "ABS-Like 레진"
+},
+{
+"kind": "resin",
+"brand": "Anycubic",
+"name": "Water-Wash Resin+",
+"material": "수세 레진"
+},
+{
+"kind": "resin",
+"brand": "Anycubic",
+"name": "Plant-Based UV Resin",
+"material": "식물성 레진"
+},
+{
+"kind": "resin",
+"brand": "Anycubic",
+"name": "Tough Resin 2.0",
+"material": "터프 레진"
+},
+{
+"kind": "resin",
+"brand": "Siraya Tech",
+"name": "Fast ABS-Like",
+"material": "ABS-Like 레진"
+},
+{
+"kind": "resin",
+"brand": "Siraya Tech",
+"name": "Blu",
+"material": "터프 레진"
+},
+{
+"kind": "resin",
+"brand": "Siraya Tech",
+"name": "Tenacious",
+"material": "플렉서블 레진"
+},
+{
+"kind": "resin",
+"brand": "Siraya Tech",
+"name": "Sculpt",
+"material": "고온 레진"
+},
+{
+"kind": "resin",
+"brand": "Siraya Tech",
+"name": "Build",
+"material": "스탠다드 레진"
+},
+{
+"kind": "resin",
+"brand": "Phrozen",
+"name": "Aqua-Gray 8K",
+"material": "8K 고해상 레진"
+},
+{
+"kind": "resin",
+"brand": "Phrozen",
+"name": "Aqua 4K",
+"material": "스탠다드 레진"
+},
+{
+"kind": "resin",
+"brand": "Phrozen",
+"name": "TR300 Ultra-High Temp",
+"material": "고온 레진"
+},
+{
+"kind": "resin",
+"brand": "Formlabs",
+"name": "Clear Resin",
+"material": "클리어 레진"
+},
+{
+"kind": "resin",
+"brand": "Formlabs",
+"name": "Grey Resin",
+"material": "스탠다드 레진"
+},
+{
+"kind": "resin",
+"brand": "Formlabs",
+"name": "Tough 2000 Resin",
+"material": "터프 레진"
+},
+{
+"kind": "resin",
+"brand": "Formlabs",
+"name": "Tough 1500 Resin",
+"material": "터프 레진"
+},
+{
+"kind": "resin",
+"brand": "Formlabs",
+"name": "Durable Resin",
+"material": "터프 레진"
+},
+{
+"kind": "resin",
+"brand": "Formlabs",
+"name": "Flexible 80A Resin",
+"material": "플렉서블 레진"
+},
+{
+"kind": "resin",
+"brand": "Formlabs",
+"name": "Elastic 50A Resin",
+"material": "엘라스틱 레진"
+},
+{
+"kind": "resin",
+"brand": "Formlabs",
+"name": "High Temp Resin",
+"material": "고온 레진"
+},
+{
+"kind": "resin",
+"brand": "Formlabs",
+"name": "Rigid 10K Resin",
+"material": "세라믹 레진"
+},
+{
+"kind": "resin",
+"brand": "Formlabs",
+"name": "Castable Wax Resin",
+"material": "캐스팅 · 왁스 레진"
+},
+{
+"kind": "resin",
+"brand": "Formlabs",
+"name": "BioMed Clear Resin",
+"material": "덴탈 · 의료 레진"
+},
+{
+"kind": "resin",
+"brand": "SUNLU",
+"name": "Standard Resin",
+"material": "스탠다드 레진"
+},
+{
+"kind": "resin",
+"brand": "SUNLU",
+"name": "ABS-Like Resin",
+"material": "ABS-Like 레진"
+},
+{
+"kind": "resin",
+"brand": "SUNLU",
+"name": "Water Washable Resin",
+"material": "수세 레진"
+},
+{
+"kind": "powder",
+"brand": "Formlabs",
+"name": "Nylon 12 Powder",
+"material": "PA12 분말"
+},
+{
+"kind": "powder",
+"brand": "Formlabs",
+"name": "Nylon 11 Powder",
+"material": "PA11 분말"
+},
+{
+"kind": "powder",
+"brand": "Formlabs",
+"name": "Nylon 12 GF Powder",
+"material": "PA12-GF 분말"
+},
+{
+"kind": "powder",
+"brand": "Formlabs",
+"name": "TPU 90A Powder",
+"material": "TPU 분말"
+},
+{
+"kind": "powder",
+"brand": "HP",
+"name": "3D High Reusability PA 12",
+"material": "PA12 분말"
+},
+{
+"kind": "powder",
+"brand": "HP",
+"name": "3D High Reusability PA 11",
+"material": "PA11 분말"
+},
+{
+"kind": "powder",
+"brand": "HP",
+"name": "3D High Reusability PA 12 Glass Beads",
+"material": "PA12-GB 분말"
+},
+{
+"kind": "powder",
+"brand": "EOS",
+"name": "PA 2200",
+"material": "PA12 분말"
+},
+{
+"kind": "powder",
+"brand": "EOS",
+"name": "PA 1101",
+"material": "PA11 분말"
+},
+{
+"kind": "powder",
+"brand": "EOS",
+"name": "AlSi10Mg",
+"material": "알루미늄"
+},
+{
+"kind": "powder",
+"brand": "EOS",
+"name": "StainlessSteel 316L",
+"material": "스테인리스 316L"
+},
+{
+"kind": "powder",
+"brand": "EOS",
+"name": "Ti64",
+"material": "티타늄 Ti6Al4V"
+},
+{
+"kind": "powder",
+"brand": "EOS",
+"name": "MaragingSteel MS1",
+"material": "공구강"
+}
+]
+}

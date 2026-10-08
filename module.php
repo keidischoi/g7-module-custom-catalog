@@ -52,7 +52,7 @@ class Module extends AbstractModule
             'order' => 42,
             'permission' => 'custom-catalog.specs.update',
             'children' => [[
-                'name' => ['ko' => '제원 입력', 'en' => 'Specs'],
+                'name' => ['ko' => '항목 관리', 'en' => 'Items'],
                 'slug' => 'custom-catalog-edit',
                 'url' => '/admin/catalog',
                 'order' => 10,
@@ -70,5 +70,18 @@ class Module extends AbstractModule
     public function getHookListeners(): array
     {
         return [CatalogListener::class];
+    }
+
+    public function getDynamicTables(): array
+    {
+        return ['cat_equipment', 'cat_materials', 'cat_barcodes', 'cat_photos', 'cat_suggestions'];
+    }
+
+    /** 0.2.0 🌙 조용할 때 자동 수집 — 10분마다 불러 보고, 설정한 시간 · 부하가 아니면 바로 끝남 */
+    public function getSchedules(): array
+    {
+        return [
+            ['command' => 'catalog:collect', 'schedule' => '*/10 * * * *', 'description' => '3D 카탈로그 — 조용할 때 AI 로 새 모델 · 제원 · 사진 찾기'],
+        ];
     }
 }

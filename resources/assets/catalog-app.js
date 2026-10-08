@@ -1,279 +1,339 @@
-/*! custom-catalog 0.1.56 */
+/*! custom-catalog 0.2.0 — 3D 카탈로그 (목록 · 상세 · 편집) */
 (function () {
-  "use strict";
-  function boot() {
-    var root = document.getElementById("cct_root");
-    if (!root) return false;
-    if (root.dataset.ready) return true;
-    root.dataset.ready = "1";
-    start(root);
-    return true;
+  'use strict';
+  if (window.CCT) { try { window.CCT.tick(); } catch (e) {} return; }
+  var VERSION = '0.2.0', API = '/api/modules/custom-catalog', BASE = '/catalog';
+
+  /* ───────── 도구 ───────── */
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function token() {
+    try { if (window.G7Core && G7Core.api && typeof G7Core.api.getToken === 'function') { var t = G7Core.api.getToken(); if (t) return String(t); } } catch (e) {}
+    try { return localStorage.getItem('auth_token') || sessionStorage.getItem('auth_token') || ''; } catch (e) { return ''; }
   }
-  
-  function renderDetail(root, key) {
-    root.innerHTML = "<div class=\"cct\"><p>불러오는 중</p></div>";
-    var token = "";
-    try { token = localStorage.getItem("auth_token") || localStorage.getItem("token") || ""; } catch (e) {}
-    function authHeaders(json) {
-      var h = { Accept: "application/json" };
-      if (json) h["Content-Type"] = "application/json";
-      if (token) h.Authorization = "Bearer " + String(token).replace(/^"+|"+$/g, "");
-      return h;
-    }
-    function esc(s) {
-      return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) {
-        if (c === "&") return "&amp;";
-        if (c === "<") return "&lt;";
-        if (c === ">") return "&gt;";
-        return "&quot;";
+  function api(method, path, body) {
+    var h = { Accept: 'application/json', 'X-Requested-With': 'XMLHttpRequest' }, t = token(), form = typeof FormData !== 'undefined' && body instanceof FormData;
+    if (t) h.Authorization = 'Bearer ' + String(t).replace(/^"+|"+$/g, '');
+    if (body && !form) h['Content-Type'] = 'application/json';
+    return fetch(API + path, { method: method, headers: h, credentials: 'same-origin', body: body ? (form ? body : JSON.stringify(body)) : undefined }).then(function (r) {
+      return r.json().catch(function () { return {}; }).then(function (j) {
+        if (!r.ok || j.success === false) { var e = new Error(j.message || (r.status === 401 ? '로그인이 필요해요.' : '요청을 처리하지 못했어요 (' + r.status + ')')); e.status = r.status; e.data = j.data; throw e; }
+        if (j.message) api.last = j.message;
+        return j.data;
       });
-    }
-    function show(row, can) {
-      if (!row) { root.innerHTML = "<div class=\"cct\"><p>없습니다.</p><p><a href=\"/catalog\">목록</a></p></div>"; return; }
-      var title = ((row.brand || "") + " " + (row.model || row.name || "")).trim();
-      var type = row.name && !row.model ? "material" : "equipment";
-      var photos = row.photos && row.photos.length ? row.photos : (row.image_url ? [{id:0, url:row.image_url}] : []);
-      var main = photos.length ? "<img class=\"cct-hero\" id=\"cct-main\" alt=\"" + esc(title) + "\" src=\"" + esc(photos[0].url) + "\">" : "<div class=\"cct-hero cct-ph\">사진 준비 중</div>";
-      var thumbs = photos.map(function (ph, i) {
-        return "<button type=\"button\" class=\"cct-mini\" data-src=\"" + esc(ph.url) + "\"><img alt=\"\" src=\"" + esc(ph.url) + "\">" + (can && ph.id ? "<span data-del-photo=\"" + ph.id + "\">삭제</span>" : "") + "</button>";
-      }).join("");
-      var upload = can ? "<form class=\"cct-upload\"><input type=\"file\" accept=\"image/*\" multiple name=\"photos\"><button>사진 올리기</button><small>1장 이상, 여러 장 가능. 긴 변 720px로 저장</small></form>" : "";
-      var labels = {brand:"제조사", model:"모델", name:"이름", kind:"종류", material:"재료", build_x_mm:"가로 mm", build_y_mm:"세로 mm", build_z_mm:"높이 mm", min_layer_um:"최소 층 µm", nozzle:"노즐", color:"색", diameter:"직경 mm", nozzle_min:"노즐 최저 °C", nozzle_max:"노즐 최고 °C", bed_min:"베드 최저 °C", bed_max:"베드 최고 °C", dry_temp:"건조 °C", dry_hours:"건조 시간", chamber:"챔버", weight_g:"무게 g", traits:"특성", caution:"주의", storage_note:"보관", note:"메모", homepage_url:"제조사 페이지"};
-      var spec = "";
-      Object.keys(labels).forEach(function (k) {
-        if (row[k] === null || row[k] === undefined || row[k] === "") return;
-        var val = row[k];
-        if (k === "homepage_url") val = "<a href=\"" + esc(val) + "\" target=\"_blank\" rel=\"noopener\">열기</a>";
-        else val = esc(val);
-        spec += "<div><dt>" + labels[k] + "</dt><dd>" + val + "</dd></div>";
-      });
-      var facts = row.facts || {};
-      if (typeof facts === "string") { try { facts = JSON.parse(facts); } catch (e) { facts = {}; } }
-      Object.keys(facts).forEach(function (k) {
-        spec += "<div><dt>" + esc(k) + "</dt><dd>" + esc(facts[k]) + "</dd></div>";
-      });
-      var summary = row.summary ? "<p class=\"cct-sum\">" + esc(row.summary) + "</p>" : "";
-      var link = "";
-      if (row.wiki_url && /wikipedia\\.org/.test(row.wiki_url)) link += "<a href=\"" + esc(row.wiki_url) + "\" target=\"_blank\" rel=\"noopener\">위키에서 더 보기</a>";
-      else if (row.wiki_url) link += "<a href=\"" + esc(row.wiki_url) + "\" target=\"_blank\" rel=\"noopener\">제조사 홈</a>";
-      if (row.homepage_url && row.homepage_url !== row.wiki_url) link += "<a href=\"" + esc(row.homepage_url) + "\" target=\"_blank\" rel=\"noopener\">제조사 홈</a>";
-      var makerHit = null;
-      (window.__cctMakers || []).forEach(function (m) { if (!makerHit && String(row.brand || "").toLowerCase().indexOf(m.match) >= 0) makerHit = m; });
-      if (makerHit && makerHit.support) link += "<a href=\"" + esc(makerHit.support) + "\" target=\"_blank\" rel=\"noopener\">고객센터</a>";
-      if (makerHit && makerHit.contact) link += "<a href=\"" + esc(makerHit.contact) + "\" target=\"_blank\" rel=\"noopener\">문의하기</a>";
-      var tools = can ? "<button type=\"button\" id=\"cct-edit\">수정</button><button type=\"button\" id=\"cct-del\">삭제</button>" : "";
-      root.innerHTML = "<style>.cct{max-width:980px;margin:0 auto;padding:28px 16px 72px;color:#0f172a}.cct a{color:#0f766e;font-weight:700;text-decoration:none}.cct-hero{width:100%;height:360px;object-fit:contain;background:linear-gradient(180deg,#f8fafc,#e2e8f0);border-radius:24px}.cct-ph{display:flex;align-items:center;justify-content:center;color:#64748b}.cct h1{font-size:32px;margin:18px 0 6px}.cct-badge{display:inline-block;background:#ccfbf1;color:#0f766e;border-radius:999px;padding:4px 10px;font-weight:700}.cct-spec{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:18px}.cct-spec div{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:12px}.cct-spec dt{color:#64748b;font-size:12px}.cct-spec dd{margin:4px 0 0;font-weight:700}.cct-actions{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}.cct-actions button,.cct-actions a{height:40px;border:0;border-radius:12px;background:#0f766e;color:#fff;padding:0 14px;display:inline-flex;align-items:center}.cct-minis{display:flex;gap:8px;overflow:auto;margin-top:10px}.cct-mini{position:relative;border:0;padding:0;background:#f8fafc;border-radius:12px}.cct-mini img{width:92px;height:72px;object-fit:contain;border-radius:12px}.cct-mini span{position:absolute;right:4px;top:4px;background:#0f172a;color:#fff;border-radius:999px;font-size:11px;padding:2px 6px}.cct-upload{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px}.cct-sum{line-height:1.6;color:#334155}.cct-form{display:grid;gap:8px;margin-top:16px}.cct-form input,.cct-form textarea{border:1px solid #e2e8f0;border-radius:10px;padding:8px}.cct-form textarea{min-height:90px}.cct-rel{margin-top:28px}.cct-rel h2{font-size:18px;margin:18px 0 8px}.cct-maker{display:flex;gap:12px;align-items:center;background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:12px}.cct-maker img{width:120px;height:48px;object-fit:contain;background:#f8fafc;border-radius:10px}.cct-tips{display:grid;gap:8px}.cct-tips div{background:#f0fdfa;border-radius:12px;padding:10px}.cct-combo{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}.cct-combo a{border:1px solid #e2e8f0;border-radius:14px;padding:8px;color:inherit;text-decoration:none}.cct-combo img{width:100%;height:90px;object-fit:contain;background:#f8fafc;border-radius:10px}</style><div class=\"cct\"><p><a href=\"/catalog\">← 목록</a></p>" + main + "<div class=\"cct-minis\">" + thumbs + "</div>" + upload + "<h1>" + esc(title) + "</h1><span class=\"cct-badge\">" + esc(row.kind || "장비") + "</span>" + summary + "<dl class=\"cct-spec\">" + spec + "</dl><div class=\"cct-actions\">" + tools + "<button type=\"button\" id=\"cct-print\">PDF 출력</button>" + (row.sds_url ? "<a href=\"" + esc(row.sds_url) + "\" target=\"_blank\" rel=\"noopener\">MSDS</a>" : "") + link + "</div><div id=\"cct-form\"></div><section id=\"cct-related\"></section></div>";
-      var mainImg = document.getElementById("cct-main");
-      [].forEach.call(root.querySelectorAll(".cct-mini"), function (b) {
-        b.onclick = function (ev) {
-          if (ev.target.getAttribute("data-del-photo")) return;
-          if (mainImg) mainImg.src = b.getAttribute("data-src");
-        };
-      });
-      [].forEach.call(root.querySelectorAll("[data-del-photo]"), function (b) {
-        b.onclick = function (ev) {
-          ev.stopPropagation();
-          if (!confirm("이 사진을 삭제할까요?")) return;
-          fetch("/api/modules/custom-catalog/admin/photos/" + b.getAttribute("data-del-photo") + "/delete", {method:"POST", headers:authHeaders(true), credentials:"same-origin", body:"{}"}).then(function () { load(); });
-        };
-      });
-      var form = root.querySelector(".cct-upload");
-      if (form) form.onsubmit = function (ev) {
-        ev.preventDefault();
-        var input = form.querySelector("input");
-        if (!input.files || !input.files.length) return;
-        var body = new FormData();
-        body.append("key", row.key);
-        body.append("type", type);
-        [].forEach.call(input.files, function (f) { body.append("photos[]", f); });
-        var h = authHeaders(false);
-        fetch("/api/modules/custom-catalog/admin/photos", {method:"POST", headers:h, credentials:"same-origin", body:body}).then(function (r) { return r.json(); }).then(function (j) {
-          if (!j.success) alert(j.message || "올리지 못했습니다.");
-          load();
-        });
-      };
-      var edit = document.getElementById("cct-edit");
-      if (edit) edit.onclick = function () {
-        var box = document.getElementById("cct-form");
-        box.innerHTML = "<form class=\"cct-form\"><input name=\"brand\" value=\"" + esc(row.brand || "") + "\" placeholder=\"제조사\"><input name=\"model\" value=\"" + esc(row.model || row.name || "") + "\" placeholder=\"모델\"><input name=\"build_x_mm\" value=\"" + esc(row.build_x_mm || "") + "\" placeholder=\"가로 mm\"><input name=\"build_y_mm\" value=\"" + esc(row.build_y_mm || "") + "\" placeholder=\"세로 mm\"><input name=\"build_z_mm\" value=\"" + esc(row.build_z_mm || "") + "\" placeholder=\"높이 mm\"><input name=\"nozzle\" value=\"" + esc(row.nozzle || "") + "\" placeholder=\"노즐\"><input name=\"wiki_url\" value=\"" + esc(row.wiki_url || "") + "\" placeholder=\"참고 주소\"><textarea name=\"summary\" placeholder=\"설명\">" + esc(row.summary || "") + "</textarea><textarea name=\"note\" placeholder=\"메모\">" + esc(row.note || "") + "</textarea><button>저장</button></form>";
-        box.querySelector("form").onsubmit = function (ev) {
-          ev.preventDefault();
-          var fd = new FormData(ev.target);
-          var payload = {key: row.key, kind: row.kind || "fdm"};
-          fd.forEach(function (v, k) { payload[k] = v; });
-          if (type === "material") payload.name = payload.model;
-          fetch("/api/modules/custom-catalog/admin/" + (type === "material" ? "materials" : "equipment"), {method:"POST", headers:authHeaders(true), credentials:"same-origin", body:JSON.stringify(payload)}).then(function (r) { return r.json(); }).then(function (j) {
-            if (!j.success) alert(j.message || "저장하지 못했습니다.");
-            else load();
-          });
-        };
-      };
-      var del = document.getElementById("cct-del");
-      if (del) del.onclick = function () {
-        if (!confirm("이 항목을 삭제할까요?")) return;
-        fetch("/api/modules/custom-catalog/admin/" + (type === "material" ? "materials" : "equipment") + "/" + row.key + "/delete", {method:"POST", headers:authHeaders(true), credentials:"same-origin", body:"{}"}).then(function () { location.assign("/catalog"); });
-      };
-      var print = document.getElementById("cct-print");
-      if (print) print.onclick = function () { window.print(); };
-      loadRelated(row);
-    }
-    function loadRelated(row) {
-      var box = document.getElementById("cct-related");
-      if (!box) return;
-      Promise.all([
-        fetch("/api/modules/custom-catalog/assets/makers.json").then(function (r) { return r.json(); }).catch(function () { return []; }),
-        fetch("/api/modules/custom-catalog/equipment").then(function (r) { return r.json(); }).catch(function () { return {}; }),
-        fetch("/api/modules/custom-catalog/materials").then(function (r) { return r.json(); }).catch(function () { return {}; })
-      ]).then(function (xs) {
-        var makers = xs[0] || [];
-        var eqs = (xs[1].data && xs[1].data.items) || [];
-        var mats = (xs[2].data && xs[2].data.items) || [];
-        var brand = String(row.brand || "").toLowerCase();
-        var maker = makers.filter(function (m) { return brand.indexOf(m.match) >= 0; })[0];
-        var makerHtml = maker ? "<h2>제작사</h2><div class=\"cct-maker\"><img alt=\"\" src=\"" + esc(maker.logo) + "\"><div><b>" + esc(maker.name) + "</b><div>" + esc(maker.note) + "</div><a href=\"" + esc(maker.homepage) + "\" target=\"_blank\" rel=\"noopener\">홈페이지</a> " + (maker.support ? "<a href=\"" + esc(maker.support) + "\" target=\"_blank\" rel=\"noopener\">고객센터</a> " : "") + (maker.contact ? "<a href=\"" + esc(maker.contact) + "\" target=\"_blank\" rel=\"noopener\">문의하기</a>" : "") + "</div></div>" : (row.homepage_url ? "<h2>제작사</h2><p><a href=\"" + esc(row.homepage_url) + "\" target=\"_blank\" rel=\"noopener\">홈페이지</a></p>" : "");
-        var tips = [];
-        var kind = row.kind || "";
-        var mat = String(row.material || row.material_norm || "").toLowerCase();
-        var isPrinter = !row.name || !!row.model;
-        if (isPrinter && (kind === "fdm" || kind === "")) tips.push("PLA가 기본입니다. 첫 출력은 노즐 200–220°C, 베드 55–60°C 근처에서 시작하세요.");
-        if (isPrinter && row.enclosed) tips.push("밀폐형이라 ABS · ASA도 가능합니다. 출력 중에는 환기하세요.");
-        if (isPrinter && row.enclosed === false) tips.push("개방형입니다. ABS는 수축이 크니 밀폐가 있는 장비를 권합니다.");
-        if (isPrinter && (kind === "sla" || kind === "dlp")) tips.push("405 nm 레진만 사용하세요. 장갑, 환기, 세척 · 경화기가 따로 필요합니다.");
-        if (!isPrinter && mat.indexOf("pla") >= 0) tips.push("개방형 프린터와 잘 맞습니다. 습하면 55°C에서 말린 뒤 쓰세요.");
-        if (!isPrinter && mat.indexOf("petg") >= 0) tips.push("출력 전 건조가 필요합니다. 끈적임이 있으면 노즐을 조금 올리세요.");
-        if (!isPrinter && mat.indexOf("abs") >= 0) tips.push("밀폐 프린터와 환기를 권합니다. 개방형에서는 갈라지기 쉽습니다.");
-        if (!isPrinter && (kind === "resin" || mat.indexOf("resin") >= 0)) tips.push("레진 프린터 전용입니다. 피부 접촉을 피하고 SDS를 확인하세요.");
-        var tipHtml = tips.length ? "<h2>권장</h2><div class=\"cct-tips\">" + tips.map(function (s) { return "<div>" + esc(s) + "</div>"; }).join("") + "</div>" : "";
-        var related = [];
-        if (isPrinter && (kind === "sla" || kind === "dlp")) related = mats.filter(function (m) { return m.kind === "resin"; });
-        else if (isPrinter) related = mats.filter(function (m) { return m.kind === "fdm"; });
-        else if (kind === "resin") related = eqs.filter(function (m) { return m.kind === "sla" || m.kind === "dlp"; });
-        else related = eqs.filter(function (m) { return m.kind === "fdm"; });
-        related = related.filter(function (m) { return m.key !== row.key; }).slice(0, 6);
-        var title = isPrinter ? (kind === "sla" || kind === "dlp" ? "같이 쓰는 레진" : "같이 쓰는 필라멘트") : "같이 쓰는 프린터";
-        var cards = related.map(function (m) {
-          var name = (m.brand || "") + " " + (m.model || m.name || "");
-          var img = m.image_url ? "<img alt=\"\" src=\"" + esc(m.image_url) + "\">" : "<div class=\"cct-ph\" style=\"height:90px\">사진 준비 중</div>";
-          return "<a href=\"/catalog/" + esc(m.key) + "\">" + img + "<b>" + esc(name) + "</b></a>";
-        }).join("");
-        box.innerHTML = makerHtml + tipHtml + (cards ? "<h2>" + title + "</h2><div class=\"cct-combo\">" + cards + "</div>" : "");
-      });
-    }
-    function load() {
-      var can = false;
-      function paint(row) { try { show(row, can); } catch (e) { root.innerHTML = "<div class=\"cct\"><p>화면을 그리지 못했습니다.</p></div>"; } }
-      fetch("/api/modules/custom-catalog/equipment/" + encodeURIComponent(key)).then(function (r) { return r.json(); }).then(function (j) {
-        if (j && j.success && j.data) { paint(j.data); return; }
-        return fetch("/api/modules/custom-catalog/materials/" + encodeURIComponent(key)).then(function (r) { return r.json(); }).then(function (m) { paint(m && m.success ? m.data : null); });
-      }).catch(function () { paint(null); });
-      fetch("/api/modules/custom-catalog/me", {headers: authHeaders(true), credentials:"same-origin"}).then(function (r) { return r.json(); }).then(function (j) { can = !!(j.data && j.data.can_edit); }).catch(function () {});
-      fetch("/api/modules/custom-catalog/assets/makers.json").then(function (r) { return r.json(); }).then(function (j) { window.__cctMakers = j || []; }).catch(function () {});
-    }
-    load();
+    });
+  }
+  function toast(msg) {
+    var old = document.querySelector('.cct-toast'); if (old) old.remove();
+    var el = document.createElement('div'); el.className = 'cct cct-toast'; el.textContent = msg; document.body.appendChild(el);
+    setTimeout(function () { el.remove(); }, 3200);
+  }
+  function css() {
+    if (document.getElementById('cct-css')) return;
+    var l = document.createElement('link'); l.id = 'cct-css'; l.rel = 'stylesheet'; l.href = API + '/assets/catalog.css?v=' + VERSION; document.head.appendChild(l);
+  }
+  function go(url) {
+    try { if (window.G7Core && G7Core.router && G7Core.router.push) { G7Core.router.push(url); setTimeout(tick, 60); return; } } catch (e) {}
+    try { history.pushState({}, '', url); tick(); } catch (e2) { location.href = url; }
+  }
+  function hue(s) { var h = 0; s = String(s || ''); for (var i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) % 360; return h; }
+  var META = null, metaP = null;
+  function meta(force) {
+    if (META && !force) return Promise.resolve(META);
+    if (!metaP || force) metaP = api('GET', '/meta').then(function (m) { META = m; return m; }).catch(function (e) { metaP = null; throw e; });
+    return metaP;
+  }
+  function kindIcon(type, kind) { var k = ((META && META.kinds[type]) || []).filter(function (x) { return x.key === kind; })[0]; return k ? k.icon : '🧊'; }
+  function tabOf(key) { return ((META && META.tabs) || []).filter(function (t) { return t.key === key; })[0] || null; }
+
+  /* ───────── 카드 ───────── */
+  function cardHtml(c, can) {
+    var pic = c.image ? '<img loading="lazy" alt="" src="' + esc(c.image) + '">' :
+      '<div class="cct-ph" style="--h:' + hue(c.brand) + '"><i>' + kindIcon(c.type, c.kind) + '</i><b>' + esc(c.brand) + '</b></div>';
+    return '<a class="cct-card' + (c.status !== 'active' ? ' is-off' : '') + '" href="' + BASE + '/' + esc(c.key) + '" data-key="' + esc(c.key) + '">' +
+      '<div class="cct-pic">' + pic + '<span class="cct-kind">' + esc(c.kind_label) + '</span></div>' +
+      '<div class="cct-card__body"><span class="cct-card__brand">' + esc(c.brand) + '</span><span class="cct-card__title">' +
+      (c.color_hex && /^#|^rgb|^linear/.test(c.color_hex) ? '<i class="cct-dot" style="background:' + esc(c.color_hex) + '"></i>' : '') + esc(c.title) + '</span>' +
+      (c.chips.length ? '<div class="cct-tags">' + c.chips.map(function (x) { return '<span>' + esc(x) + '</span>'; }).join('') + '</div>' : '') + '</div>' +
+      (can ? '<button type="button" class="cct-card__edit" data-edit="' + esc(c.key) + '" title="수정" aria-label="수정">✏️</button>' : '') + '</a>';
+  }
+  function bindCards(root, reload) {
+    root.addEventListener('click', function (e) {
+      var ed = e.target.closest && e.target.closest('[data-edit]');
+      if (ed) { e.preventDefault(); e.stopPropagation(); openEditor({ key: ed.getAttribute('data-edit') }, reload); return; }
+      var a = e.target.closest && e.target.closest('a.cct-card, a[data-go]');
+      if (!a || e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;
+      e.preventDefault(); go(a.getAttribute('href'));
+    });
   }
 
-  function start(root) {
-    var parts = location.pathname.split("/").filter(Boolean);
-    var detailKey = parts[0] === "catalog" && parts[1] ? decodeURIComponent(parts[1]) : "";
-    if (detailKey) { renderDetail(root, detailKey); return; }
-    var q = "", tab = "fdm", brand = "", can = false, limit = 20, items = {equipment: [], materials: []}, makers = [];
-    var CSS = ".cct{--ink:#0f172a;--mute:#64748b;--line:#e2e8f0;--card:#fff;--soft:#f8fafc;--acc:#0f766e;color:var(--ink);font-size:14px;line-height:1.55;max-width:1100px;margin:0 auto;padding:20px 16px 64px}html.dark .cct,.dark .cct{--ink:#f1f5f9;--mute:#94a3b8;--line:#334155;--card:#1e293b;--soft:#0f172a;--acc:#2dd4bf}.cct *{box-sizing:border-box}.cct h1,.cct h2{margin:0;letter-spacing:-.02em}.cct a{color:var(--acc)}.cct-hero{border-radius:28px;padding:28px 26px;margin:0 0 16px;color:#fff;background:linear-gradient(135deg,#134e4a,#164e63)}.cct-find{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.cct-find input{flex:1;min-width:200px;height:44px;border:0;border-radius:12px;padding:0 12px}.cct-find button{height:44px;padding:0 16px;border:0;border-radius:12px;background:#fff;color:#0f766e;font-weight:800}.cct-chips{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 16px}.cct-chip{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:6px 12px;cursor:pointer;font-weight:700}.cct-chip.on{background:var(--acc);color:#fff;border-color:var(--acc)}.cct-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px}.cct-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;cursor:pointer;text-align:left}.cct-card img.cct-thumb,.cct-card .cct-thumb{width:100%;height:132px;object-fit:contain;background:var(--soft);border-radius:10px;margin:0 0 8px;display:flex;align-items:center;justify-content:center;color:var(--mute);font-size:12px}.cct-card b{display:block}.cct-card .sub{color:var(--mute);font-size:12.5px}.cct-empty{color:var(--mute);min-height:280px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center}.cct-empty svg{width:120px;height:90px;color:var(--acc)}.cct-empty b{color:var(--ink);font-size:16px}.cct-sheet{position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:80;display:flex;justify-content:center;align-items:flex-start;padding:24px 12px;overflow:auto}.cct-panel{background:var(--card);color:var(--ink);width:min(760px,100%);border-radius:20px;padding:18px}.cct-photo{width:100%;height:220px;object-fit:contain;border-radius:14px;background:var(--soft)}.cct-table{width:100%;border-collapse:collapse;margin-top:12px}.cct-table td{padding:7px 4px;border-bottom:1px solid var(--line)}.cct-actions{display:flex;gap:8px;margin-top:14px}.cct-actions button,.cct-actions a{height:38px;padding:0 12px;border-radius:10px;border:1px solid var(--line);background:var(--soft);color:inherit;text-decoration:none;display:inline-flex;align-items:center;font-weight:700}@media print{.cct-hero,.cct-chips,.cct-find,.cct-grid,.cct-sheet{display:none!important}#cct-print{display:block!important}}";
-    function esc(s) {
-      return String(s == null ? "" : s).replace(/[&<>\"]/g, function (c) {
-        if (c === "&") return "&amp;";
-        if (c === "<") return "&lt;";
-        if (c === ">") return "&gt;";
-        return "&quot;";
+  /* ───────── 목록 ───────── */
+  function readState() {
+    var p = new URLSearchParams(location.search);
+    return { tab: p.get('tab') || '', brand: p.get('brand') || '', q: (p.get('q') || '').trim(), sort: p.get('sort') || '', flags: (p.get('flags') || '').split(',').filter(Boolean), status: p.get('status') || '' };
+  }
+  function urlOf(s) {
+    var p = new URLSearchParams();
+    ['tab', 'brand', 'q', 'sort', 'status'].forEach(function (k) { if (s[k]) p.set(k, s[k]); });
+    if (s.flags && s.flags.length) p.set('flags', s.flags.join(','));
+    var qs = p.toString();
+    return BASE + (qs ? '?' + qs : '');
+  }
+  function record(term) {
+    if (!term || term.length > 40) return;
+    try { if (typeof window.__cpsRecord === 'function') { window.__cpsRecord(term, 'catalog'); return; } } catch (e) {}
+    try { fetch('/api/plugins/custom-popular_search/record', { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify({ scope: 'catalog', term: term }) }).catch(function () {}); } catch (e2) {}
+  }
+  function listPage(root) {
+    var S = readState(), can = !!META.can_edit;
+    if (!S.q && !tabOf(S.tab)) S.tab = (META.tabs[0] || {}).key || '';
+    var tab = tabOf(S.tab), total = 0;
+    Object.keys(META.counts).forEach(function (k) { total += META.counts[k]; });
+    var eq = 0, mt = 0; META.tabs.forEach(function (t) { if (t.type === 'materials') mt += META.counts[t.key] || 0; else eq += META.counts[t.key] || 0; });
+    root.innerHTML = '<div class="cct"><div class="cct-hero"><div class="cct-hero__grid"></div><h1>🧊 3D 카탈로그</h1><p>3D 프린터 · 장비 · 필라멘트 · 레진의 제원을 한곳에서 찾아보세요.</p>' +
+      '<form class="cct-search" data-search><input type="search" name="q" autocomplete="off" placeholder="제조사 · 모델 · 재료 이름으로 찾기 (예: Bambu P1S, PETG)" value="' + esc(S.q) + '"><button type="submit">찾기</button></form>' +
+      '<div class="cct-stats"><span>장비 ' + eq.toLocaleString() + '종</span><span>재료 ' + mt.toLocaleString() + '종</span>' + (can ? '<span>✏️ 편집할 수 있어요</span>' : '') + '</div></div>' +
+      '<div class="cct-tabs" role="tablist">' + META.tabs.map(function (t) {
+        return '<button type="button" role="tab" class="cct-tab' + (tab && t.key === tab.key ? ' on' : '') + '" data-tab="' + t.key + '"><i>' + t.icon + '</i>' + esc(t.label) + '<small>' + (META.counts[t.key] || 0) + '</small></button>';
+      }).join('') + '</div><div data-bar></div><div class="cct-count" data-count></div><div class="cct-grid" data-grid>' + new Array(9).join('<div class="cct-skel"></div>') + '</div><div class="cct-more" data-more></div></div>';
+    var box = root.querySelector('.cct'), grid = box.querySelector('[data-grid]'), bar = box.querySelector('[data-bar]'), more = box.querySelector('[data-more]'), cnt = box.querySelector('[data-count]');
+    var nav = function (patch) { var n = {}; Object.keys(S).forEach(function (k) { n[k] = S[k]; }); Object.keys(patch).forEach(function (k) { n[k] = patch[k]; }); go(urlOf(n)); };
+    box.querySelector('[data-search]').onsubmit = function (e) { e.preventDefault(); var q = this.q.value.trim(); if (q) record(q); nav({ q: q, brand: '' }); };
+    Array.prototype.forEach.call(box.querySelectorAll('[data-tab]'), function (b) { b.onclick = function () { nav({ tab: b.getAttribute('data-tab'), brand: '', flags: [], q: '' }); }; });
+    bindCards(box, function () { meta(true).then(function () { listPage(root); }); });
+
+    var types = S.q && !tab ? ['equipment', 'materials'] : [tab ? tab.type : 'equipment'], page = 1, pages = 1, shown = 0, sum = 0;
+    var query = function (type, pg) {
+      var p = new URLSearchParams({ page: pg, per: META.per_page });
+      if (tab) p.set('tab', tab.key); else p.set('type', type);
+      ['brand', 'q', 'sort', 'status'].forEach(function (k) { if (S[k]) p.set(k, S[k]); });
+      if (S.flags.length) p.set('flags', S.flags.join(','));
+      return api('GET', '/items?' + p.toString());
+    };
+    var drawBar = function (brands) {
+      var isPrinter = tab && tab.type === 'equipment' && ['fdm', 'resin_printer', 'industrial'].indexOf(tab.key) >= 0, flag = function (k, label) {
+        return '<button type="button" class="cct-chip' + (S.flags.indexOf(k) >= 0 ? ' on' : '') + '" data-flag="' + k + '">' + label + '</button>'; };
+      bar.innerHTML = (brands.length > 1 || S.brand ? '<div class="cct-bar"><div class="cct-brands" data-brands><button type="button" class="cct-chip' + (S.brand ? '' : ' on') + '" data-brand="">전체</button>' +
+        brands.map(function (b) { return '<button type="button" class="cct-chip' + (S.brand === b.name ? ' on' : '') + '" data-brand="' + esc(b.name) + '">' + esc(b.name) + ' <small>' + b.n + '</small></button>'; }).join('') +
+        '</div>' + (brands.length > 14 ? '<button type="button" class="cct-btn cct-btn--s" data-brands-more>제조사 더 보기</button>' : '') + '</div>' : '') +
+        '<div class="cct-bar">' + (tab && tab.key === 'fdm' ? flag('multicolor', '🌈 다색') : '') + (isPrinter ? flag('enclosed', '📦 밀폐형') : '') + flag('photo', '🖼️ 사진 있는 것') +
+        (S.q ? '<button type="button" class="cct-chip on" data-clear-q>「' + esc(S.q) + '」 ✕</button>' : '') +
+        '<span style="flex:1"></span>' + (can ? '<button type="button" class="cct-chip' + (S.status === 'archived' ? ' on' : '') + '" data-arch>🗄️ 보관한 것</button><button type="button" class="cct-btn cct-btn--s cct-btn--p" data-new>➕ 새 항목</button>' : '') +
+        '<select class="cct-sel" data-sort aria-label="정렬"><option value="">사진 있는 것부터</option><option value="name"' + (S.sort === 'name' ? ' selected' : '') + '>이름순</option><option value="new"' + (S.sort === 'new' ? ' selected' : '') + '>새로 들어온 순</option>' +
+        (tab && tab.type === 'equipment' ? '<option value="size"' + (S.sort === 'size' ? ' selected' : '') + '>출력 크기 큰 순</option>' : '') + '<option value="updated"' + (S.sort === 'updated' ? ' selected' : '') + '>최근 고친 순</option></select></div>';
+      Array.prototype.forEach.call(bar.querySelectorAll('[data-brand]'), function (b) { b.onclick = function () { nav({ brand: b.getAttribute('data-brand') }); }; });
+      Array.prototype.forEach.call(bar.querySelectorAll('[data-flag]'), function (b) { b.onclick = function () { var k = b.getAttribute('data-flag'), f = S.flags.slice(), i = f.indexOf(k); if (i >= 0) f.splice(i, 1); else f.push(k); nav({ flags: f }); }; });
+      var bm = bar.querySelector('[data-brands-more]'); if (bm) bm.onclick = function () { var el = bar.querySelector('[data-brands]'); el.classList.toggle('open'); bm.textContent = el.classList.contains('open') ? '접기' : '제조사 더 보기'; };
+      var cq = bar.querySelector('[data-clear-q]'); if (cq) cq.onclick = function () { nav({ q: '', tab: S.tab || (META.tabs[0] || {}).key }); };
+      var ar = bar.querySelector('[data-arch]'); if (ar) ar.onclick = function () { nav({ status: S.status === 'archived' ? '' : 'archived' }); };
+      var nw = bar.querySelector('[data-new]'); if (nw) nw.onclick = function () { openEditor({ type: tab ? tab.type : 'equipment', kind: tab ? tab.kinds[0] : 'fdm' }, function (key) { meta(true); go(BASE + '/' + key); }); };
+      bar.querySelector('[data-sort]').onchange = function () { nav({ sort: this.value }); };
+    };
+    var load = function (append) {
+      Promise.all(types.map(function (t) { return query(t, page); })).then(function (res) {
+        if (!document.body.contains(grid)) return;
+        var items = [], brands = []; sum = 0; pages = 1;
+        res.forEach(function (r) { items = items.concat(r.items); sum += r.total; pages = Math.max(pages, r.pages); if (!brands.length) brands = r.brands; });
+        if (!append) { drawBar(types.length > 1 ? [] : brands); grid.innerHTML = ''; shown = 0; }
+        shown += items.length;
+        if (!shown) grid.outerHTML = '<div class="cct-empty" data-grid><b>🔎</b>' + (S.q ? '「' + esc(S.q) + '」에 맞는 항목이 없어요.' : S.status === 'archived' ? '보관한 항목이 없어요.' : '아직 항목이 없어요.') +
+          (can && !S.status ? '<br><br><button type="button" class="cct-btn cct-btn--p" onclick="this.closest(\'.cct\').querySelector(\'[data-new]\').click()">➕ 새 항목 넣기</button>' : '') + '</div>';
+        else grid.insertAdjacentHTML('beforeend', items.map(function (c) { return cardHtml(c, can); }).join(''));
+        cnt.innerHTML = shown ? (S.q ? '「' + esc(S.q) + '」 ' : '') + '<b>' + sum.toLocaleString() + '</b>개' + (S.brand ? ' · ' + esc(S.brand) : '') : '';
+        more.innerHTML = page < pages ? '<button type="button" class="cct-btn">더 보기 (' + shown + ' / ' + sum + ')</button>' : '';
+        var mb = more.querySelector('button'); if (mb) mb.onclick = function () { mb.disabled = true; page++; load(true); };
+      }).catch(function (e) { if (document.body.contains(grid)) grid.outerHTML = '<div class="cct-empty"><b>⚠️</b>' + esc(e.message) + '</div>'; });
+    };
+    load(false);
+  }
+
+  /* 제조사 로고 · 지원 주소 (resources/assets/makers.json) — 상세를 열 때 한 번 */
+  var makersP = null;
+  function makerOf(brand) {
+    if (!makersP) makersP = fetch(API + '/assets/makers.json?v=' + VERSION).then(function (r) { return r.json(); }).catch(function () { return []; });
+    var b = String(brand || '').toLowerCase();
+    return makersP.then(function (list) { return (list || []).filter(function (m) { return m.match && (b === m.match || b.indexOf(m.match) === 0 || b.indexOf('(' + m.match + ')') >= 0); })[0] || null; });
+  }
+
+  /* ───────── 상세 ───────── */
+  var KEYS = ['material', 'speed_max', 'nozzle_temp_max', 'min_layer_um', 'xy_um', 'laser_w', 'wavelength_nm', 'diameter', 'weight_g', 'density', 'hdt_c', 'colors_max', 'weight_kg', 'price_krw'];
+  function detailPage(root, key) {
+    root.innerHTML = '<div class="cct"><div class="cct-skel" style="height:420px"></div></div>';
+    var can = !!META.can_edit;
+    var reload = function () { detailPage(root, key); };
+    api('GET', '/items/' + encodeURIComponent(key)).then(function (d) {
+      if (!document.body.contains(root)) return;
+      var tab = META.tabs.filter(function (t) { return t.type === d.type && t.kinds.indexOf(d.kind) >= 0; })[0];
+      var keys = [], by = {};
+      d.groups.forEach(function (g) { g.items.forEach(function (it) { by[it.key] = it; }); });
+      if (d.type === 'equipment' && d.chips[0] && / mm$/.test(d.chips[0])) keys.push({ label: '출력 · 작업 크기', value: d.chips[0] });
+      if (d.type === 'materials' && by.nozzle_min && by.nozzle_max) keys.push({ label: '노즐 온도', value: by.nozzle_min.value.replace(/ ?°C/, '') + '–' + by.nozzle_max.value });
+      if (d.type === 'materials' && by.bed_min && by.bed_max) keys.push({ label: '베드 온도', value: by.bed_min.value.replace(/ ?°C/, '') + '–' + by.bed_max.value });
+      if (by.dry_temp) keys.push({ label: '건조', value: by.dry_temp.value + (by.dry_hours ? ' · ' + by.dry_hours.value : '') });
+      KEYS.forEach(function (k) { if (by[k] && keys.length < 6) keys.push(by[k]); });
+      var ph = d.photos, mainPic = ph.length ? '<img alt="' + esc(d.brand + ' ' + d.title) + '" src="' + esc(ph[0].url) + '" data-main>' + (ph[0].credit ? '<span class="cct-gal__credit" data-credit>📷 ' + esc(ph[0].credit) + '</span>' : '<span class="cct-gal__credit" data-credit hidden></span>') :
+        '<div class="cct-ph" style="--h:' + hue(d.brand) + '"><i style="font-size:84px">' + kindIcon(d.type, d.kind) + '</i><b>사진 준비 중</b></div>';
+      var h = '<div class="cct"><a class="cct-back" data-go href="' + BASE + (tab ? '?tab=' + tab.key : '') + '">‹ ' + esc(tab ? tab.label : '카탈로그') + ' 목록</a>' +
+        '<div class="cct-top"><div class="cct-gal"><div class="cct-gal__main">' + mainPic + '</div>' +
+        (ph.length > 1 || (can && ph.length) ? '<div class="cct-thumbs">' + ph.map(function (p, i) { return '<button type="button" class="cct-thumb' + (i ? '' : ' on') + '" data-ph="' + i + '"><img alt="" loading="lazy" src="' + esc(p.thumb || p.url) + '">' + (i ? '' : '<em>대표</em>') + '</button>'; }).join('') + '</div>' : '') +
+        (can ? '<div class="cct-photo-tools"><label class="cct-btn cct-btn--s">📁 사진 올리기<input type="file" accept="image/*" multiple hidden data-up></label><input class="cct-in" style="height:32px" type="text" placeholder="또는 사진 주소 (https://…)" data-url>' +
+          '<button type="button" class="cct-btn cct-btn--s" data-url-add>주소로 넣기</button><button type="button" class="cct-btn cct-btn--s" data-ph-main hidden>⭐ 대표로</button><button type="button" class="cct-btn cct-btn--s cct-btn--d" data-ph-del hidden>🗑 이 사진 지우기</button></div>' : '') + '</div>' +
+        '<div class="cct-info"><span class="cct-info__kind">' + kindIcon(d.type, d.kind) + ' ' + esc(d.kind_label) + '</span>' + (d.status !== 'active' ? ' <span class="cct-info__kind" style="color:var(--warn)">🗄️ 보관함</span>' : '') +
+        '<div class="cct-info__brand">' + esc(d.brand) + '</div><h1>' + esc(d.title) + '</h1>' +
+        (d.summary ? '<p class="cct-info__sum">' + esc(d.summary) + '</p>' : '') + (d.note ? '<p class="cct-info__sum" style="font-size:14px">※ ' + esc(d.note) + '</p>' : '') +
+        (keys.length ? '<div class="cct-keys">' + keys.map(function (k) { return '<div class="cct-key"><small>' + esc(k.label) + '</small><b>' + esc(k.value) + '</b></div>'; }).join('') + '</div>' : '') +
+        '<div class="cct-links">' + (d.homepage_url ? '<a class="cct-btn cct-btn--p" target="_blank" rel="noopener" href="' + esc(d.homepage_url) + '">🌐 제조사 페이지</a>' : '') +
+        (d.wiki_url && d.wiki_url !== d.homepage_url ? '<a class="cct-btn" target="_blank" rel="noopener" href="' + esc(d.wiki_url) + '">📖 더 알아보기</a>' : '') +
+        (by.sds_url ? '<a class="cct-btn" target="_blank" rel="noopener" href="' + esc(by.sds_url.value) + '">🧾 안전 자료 (MSDS)</a>' : '') +
+        (d.type === 'equipment' ? '<a class="cct-btn" href="/companies?q=' + encodeURIComponent(d.title) + '">🏢 이 장비를 가진 업체 찾기</a>' : '<a class="cct-btn" href="/companies?q=' + encodeURIComponent(by.material ? by.material.value : d.title) + '">🏢 이 재료로 출력하는 업체 찾기</a>') +
+        '<button type="button" class="cct-btn" data-print>🖨️ 인쇄</button></div><div class="cct-maker" data-maker hidden></div>' +
+        (can ? '<div class="cct-edbar"><div class="cct-meter" style="--p:' + Math.round(d.filled / Math.max(1, d.fields) * 100) + '%">제원 ' + d.filled + ' / ' + d.fields + '칸<i></i></div>' +
+          '<button type="button" class="cct-btn cct-btn--p cct-btn--s" data-ed>✏️ 수정</button>' + (d.status === 'active' ? '<button type="button" class="cct-btn cct-btn--s cct-btn--d" data-del>🗑 지우기</button>' :
+          '<button type="button" class="cct-btn cct-btn--s" data-restore>↩ 되살리기</button><button type="button" class="cct-btn cct-btn--s cct-btn--d" data-hard>아주 지우기</button>') + '</div>' : '') + '</div></div>';
+      var specs = d.groups.map(function (g) {
+        return '<div class="cct-spec"><h3>' + esc(g.group) + '</h3><dl>' + g.items.map(function (it) {
+          return '<div><dt>' + esc(it.label) + '</dt><dd>' + (it.url ? '<a target="_blank" rel="noopener" href="' + esc(it.value) + '">열기 ↗</a>' : esc(it.value)) + '</dd></div>'; }).join('') + '</dl></div>';
+      }).join('') + (d.facts.length ? '<div class="cct-spec"><h3>기타</h3><dl>' + d.facts.map(function (f) { return '<div><dt>' + esc(f.label) + '</dt><dd>' + esc(f.value) + '</dd></div>'; }).join('') + '</dl></div>' : '');
+      h += '<div class="cct-sec"><h2>📋 제원</h2>' + (specs ? '<div class="cct-specs">' + specs + '</div>' : '<div class="cct-empty"><b>📝</b>아직 적힌 제원이 없어요.' + (can ? ' 「✏️ 수정」으로 채워 주세요.' : '') + '</div>') +
+        '<p class="cct-note" style="margin-top:4px">제조사가 공개한 자료를 정리한 것으로, 실제 제품과 다를 수 있어요. 구매 · 사용 전에는 제조사 자료를 확인해 주세요.' + (d.updated_at ? ' (마지막 고침 ' + esc(d.updated_at) + ')' : '') + '</p></div>';
+      if (d.related.length) h += '<div class="cct-sec"><h2>🏷️ ' + esc(d.brand) + '의 다른 제품</h2><div class="cct-grid">' + d.related.map(function (c) { return cardHtml(c, false); }).join('') + '</div></div>';
+      root.innerHTML = h + '</div>';
+      var box = root.querySelector('.cct'), cur = 0, q = function (s) { return box.querySelector(s); };
+      bindCards(box, reload);
+      try { document.title = d.brand + ' ' + d.title + ' — 3D 카탈로그'; } catch (e) {}
+      q('[data-print]').onclick = function () { window.print(); };
+      makerOf(d.brand).then(function (mk) {
+        var el = q('[data-maker]'); if (!mk || !el) return;
+        el.hidden = false;
+        el.innerHTML = (mk.logo ? '<img alt="" loading="lazy" src="' + esc(mk.logo) + '">' : '') + '<div><b>' + esc(mk.name || d.brand) + '</b><small>제조사</small></div><span style="flex:1"></span>' +
+          (mk.homepage ? '<a class="cct-btn cct-btn--s" target="_blank" rel="noopener" href="' + esc(mk.homepage) + '">홈페이지 ↗</a>' : '') +
+          (mk.support ? '<a class="cct-btn cct-btn--s" target="_blank" rel="noopener" href="' + esc(mk.support) + '">고객 지원 ↗</a>' : '');
       });
-    }
-    function card(r, type) {
-      var title = r.brand + " " + (r.model || r.name || "");
-      var logo = "";
-      makers.forEach(function (m) { if (!logo && String(r.brand || "").toLowerCase().indexOf(m.match) >= 0) logo = m.logo; });
-      var src = r.image_url || logo;
-      var photo = src
-        ? "<img class=\"cct-thumb\" alt=\"\" loading=\"lazy\" decoding=\"async\" src=\"" + esc(src) + "\">"
-        : "<div class=\"cct-thumb cct-ph\">사진 준비 중</div>";
-      return "<button class=\"cct-card\" data-type=\"" + type + "\" data-key=\"" + esc(r.key) + "\">" + photo + "<b>" + esc(title) + "</b><div class=\"sub\">" + esc(r.material || r.kind || "") + "</div></button>";
-    }
-    function section(title, rows, type) {
-      return "<h2>" + title + " " + rows.length + "</h2><div class=\"cct-grid\">" + (rows.map(function (r) { return card(r, type); }).join("") || "<p class=\"cct-empty\">없습니다.</p>") + "</div>";
-    }
-    function paint(err) {
-      var eq = items.equipment, mt = items.materials;
-      var fdm = eq.filter(function (r) { return r.kind === "fdm"; });
-      var filament = mt.filter(function (r) { return r.kind === "fdm"; });
-      var resinEq = eq.filter(function (r) { return r.kind === "sla" || r.kind === "dlp"; });
-      var resin = mt.filter(function (r) { return r.kind === "resin"; });
-      var other = eq.filter(function (r) { return r.kind !== "fdm" && r.kind !== "sla" && r.kind !== "dlp"; });
-      var chips = [["fdm","FDM 프린터"],["filament","필라멘트"],["resin-eq","레진 프린터"],["resin","레진"],["other","기타 장비"]];
-      var rows = tab === "filament" ? filament : tab === "resin-eq" ? resinEq : tab === "resin" ? resin : tab === "other" ? other : fdm;
-      var title = tab === "filament" ? "필라멘트" : tab === "resin-eq" ? "레진 프린터" : tab === "resin" ? "레진" : tab === "other" ? "기타 장비" : "FDM 프린터";
-      var type = tab === "filament" || tab === "resin" ? "materials" : "equipment";
-      var brands = [];
-      rows.forEach(function (r) { if (r.brand && brands.indexOf(r.brand) < 0) brands.push(r.brand); });
-      brands.sort();
-      if (brand && brands.indexOf(brand) < 0) brand = "";
-      var shown = brand ? rows.filter(function (r) { return r.brand === brand; }) : rows;
-      var brandHtml = "<div class=\"cct-chips\">" + "<button type=\"button\" class=\"cct-chip" + (brand === "" ? " on" : "") + "\" data-b=\"\">전체 제조사</button>" + brands.map(function (b) { return "<button type=\"button\" class=\"cct-chip" + (b === brand ? " on" : "") + "\" data-b=\"" + esc(b) + "\">" + esc(b) + "</button>"; }).join("") + "</div>";
-      var empty = "<div class=\"cct-empty\"><svg viewBox=\"0 0 120 90\" aria-hidden=\"true\"><rect x=\"18\" y=\"16\" width=\"84\" height=\"58\" rx=\"10\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"/><circle cx=\"46\" cy=\"40\" r=\"8\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"/><path d=\"M62 52l10 8\" stroke=\"currentColor\" stroke-width=\"2\"/><path d=\"M28 78h64\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"/></svg><b>결과가 없습니다</b><span>다른 제조사나 검색어를 골라 보세요.</span></div>";
-      var page = shown.slice(0, limit);
-      var more = shown.length > page.length ? "<p class=\"cct-more\">" + page.length + " / " + shown.length + " · 스크롤하면 더 봅니다</p>" : "";
-      var body = page.length ? section(title, page, type) + more : empty;
-      root.innerHTML = "<style>" + CSS + "</style><div class=\"cct\"><section class=\"cct-hero\"><h1>3D 카탈로그</h1><p>종류와 제조사로 좁힐 수 있습니다.</p><form class=\"cct-find\" id=\"cct-find\"><input id=\"cct-q\" value=\"" + esc(q) + "\" placeholder=\"제조사, 모델, PLA\"><button>찾기</button></form></section><div class=\"cct-chips\">" + chips.map(function (c) { return "<button type=\"button\" class=\"cct-chip" + (c[0] === tab ? " on" : "") + "\" data-k=\"" + c[0] + "\">" + c[1] + "</button>"; }).join("") + "</div>" + brandHtml + (err ? empty.replace("결과가 없습니다","목록을 불러오지 못했습니다") : body) + "</div>";
-      var find = document.getElementById("cct-find"); find.onsubmit = function (e) { e.preventDefault(); q = document.getElementById("cct-q").value.trim(); if (q && window.__cpsRecord) window.__cpsRecord(q, "catalog"); load(); }; var box = document.getElementById("cct-q"); if (box) box.oninput = function () { var v = box.value.trim(); clearTimeout(window.__cctFind); window.__cctFind = setTimeout(function () { if (v === q) return; q = v; load(); }, 280); };
-      [].forEach.call(root.querySelectorAll("[data-k]"), function (b) { b.onclick = function () { tab = b.getAttribute("data-k") || "fdm"; brand = ""; limit = 20; load(); }; });
-      [].forEach.call(root.querySelectorAll("[data-b]"), function (b) { b.onclick = function () { brand = b.getAttribute("data-b") || ""; limit = 20; paint(false); }; });
-      [].forEach.call(root.querySelectorAll(".cct-card"), function (b) { b.onclick = function () { location.assign("/catalog/" + b.getAttribute("data-key")); }; });
-      if (!window.__cctScroll) {
-        window.__cctScroll = function () {
-          if (window.scrollY + window.innerHeight < document.body.scrollHeight - 240) return;
-          if (limit >= 500) return;
-          limit += 20;
-          paint(false);
+      Array.prototype.forEach.call(box.querySelectorAll('[data-ph]'), function (b) { b.onclick = function () {
+        cur = +b.getAttribute('data-ph'); var p = ph[cur], img = q('[data-main]'), cr = q('[data-credit]');
+        if (img) img.src = p.url; if (cr) { cr.hidden = !p.credit; cr.textContent = '📷 ' + p.credit; }
+        Array.prototype.forEach.call(box.querySelectorAll('[data-ph]'), function (x) { x.classList.toggle('on', x === b); });
+        var m = q('[data-ph-main]'), dl = q('[data-ph-del]'); if (m) m.hidden = !p.id || cur === 0; if (dl) dl.hidden = !p.id;
+      }; });
+      if (!can) return;
+      var busy = function (b, on) { b.disabled = on; };
+      if (ph.length && ph[0].id) q('[data-ph-del]').hidden = false;
+      q('[data-up]').onchange = function () {
+        if (!this.files.length) return;
+        var fd = new FormData(); Array.prototype.forEach.call(this.files, function (f) { fd.append('photos[]', f); });
+        toast('사진을 올리는 중…');
+        api('POST', '/admin/items/' + key + '/photos', fd).then(function () { toast(api.last || '사진을 넣었어요.'); reload(); }).catch(function (e) { toast(e.message); });
+      };
+      q('[data-url-add]').onclick = function () {
+        var u = q('[data-url]').value.trim(), b = this; if (!/^https?:\/\//i.test(u)) { toast('https:// 로 시작하는 사진 주소를 넣어 주세요.'); return; }
+        busy(b, true);
+        api('POST', '/admin/items/' + key + '/photos', { url: u }).then(function () { toast(api.last || '사진을 넣었어요.'); reload(); }).catch(function (e) { busy(b, false); toast(e.message); });
+      };
+      q('[data-ph-main]').onclick = function () { api('POST', '/admin/photos/' + ph[cur].id + '/main').then(function () { toast('대표 사진으로 정했어요.'); reload(); }).catch(function (e) { toast(e.message); }); };
+      q('[data-ph-del]').onclick = function () { if (!confirm('이 사진을 지울까요?')) return; api('POST', '/admin/photos/' + ph[cur].id + '/delete').then(function () { toast('사진을 지웠어요.'); reload(); }).catch(function (e) { toast(e.message); }); };
+      q('[data-ed]').onclick = function () { openEditor({ key: key, detail: d }, reload); };
+      var del = q('[data-del]'); if (del) del.onclick = function () { if (!confirm('「' + d.brand + ' ' + d.title + '」 을(를) 지울까요?\n보관함으로 옮겨지고, 나중에 되살릴 수 있어요.')) return; api('POST', '/admin/items/' + key + '/delete').then(function () { toast(api.last); meta(true); go(BASE + (tab ? '?tab=' + tab.key : '')); }).catch(function (e) { toast(e.message); }); };
+      var rs = q('[data-restore]'); if (rs) rs.onclick = function () { api('POST', '/admin/items/' + key + '/restore').then(function () { toast('되살렸어요.'); meta(true); reload(); }).catch(function (e) { toast(e.message); }); };
+      var hd = q('[data-hard]'); if (hd) hd.onclick = function () { if (!confirm('아주 지우면 되살릴 수 없어요. 사진도 함께 지워져요. 지울까요?')) return; api('POST', '/admin/items/' + key + '/delete', { hard: 1 }).then(function () { toast('아주 지웠어요.'); go(BASE + '?status=archived' + (tab ? '&tab=' + tab.key : '')); }).catch(function (e) { toast(e.message); }); };
+    }).catch(function (e) {
+      root.innerHTML = '<div class="cct"><div class="cct-empty"><b>🧐</b>' + esc(e.message) + '<br><br><a class="cct-btn" data-go href="' + BASE + '">카탈로그 목록으로</a></div></div>';
+      bindCards(root.querySelector('.cct'), function () {});
+    });
+  }
+
+  /* ───────── 편집 창 ───────── */
+  function openEditor(opt, done) {
+    css();
+    var start = function (d) {
+      var type = d ? d.type : (opt.type || 'equipment'), kind = d ? d.kind : (opt.kind || (type === 'materials' ? 'fdm' : 'fdm'));
+      var V = d ? JSON.parse(JSON.stringify(d.values || {})) : {}, facts = d ? Object.keys(d.facts_raw || {}).map(function (k) { return [k, d.facts_raw[k]]; }) : [];
+      var base = { brand: d ? d.brand : (opt.brand || ''), title: d ? d.title : '', summary: d ? d.summary : '', note: d ? d.note : '', homepage_url: d ? d.homepage_url : '', wiki_url: d ? d.wiki_url : '' };
+      var m = document.createElement('div'); m.className = 'cct cct-modal'; document.body.appendChild(m);
+      var close = function () { m.remove(); document.removeEventListener('keydown', onKey); };
+      var onKey = function (e) { if (e.key === 'Escape') close(); };
+      document.addEventListener('keydown', onKey);
+      var ctl = function (f) {
+        var v = V[f.key], id = 'cct-f-' + f.key, lab = '<span>' + esc(f.label) + (f.hint ? ' <small>' + esc(f.hint) + '</small>' : '') + '</span>';
+        if (f.type === 'bool') return '<div class="cct-f">' + lab + '<div class="cct-yn" data-yn="' + f.key + '">' + [['true', '예'], ['false', '아니오'], ['', '모름']].map(function (o) {
+          return '<button type="button" data-v="' + o[0] + '" class="' + (String(v === undefined || v === null ? '' : v) === o[0] ? 'on' : '') + '">' + o[1] + '</button>'; }).join('') + '</div></div>';
+        if (f.type === 'sel') return '<label class="cct-f">' + lab + '<div class="cct-f__u"><select class="cct-in" data-k="' + f.key + '"><option value="">—</option>' + (f.options || []).map(function (o) {
+          return '<option' + (String(v) === String(o) ? ' selected' : '') + '>' + esc(o) + '</option>'; }).join('') + (v != null && v !== '' && (f.options || []).map(String).indexOf(String(v)) < 0 ? '<option selected>' + esc(v) + '</option>' : '') + '</select>' + (f.unit ? '<em>' + esc(f.unit) + '</em>' : '') + '</div></label>';
+        if (f.type === 'tags') return '<label class="cct-f cct-f--w">' + lab + '<input class="cct-in" data-k="' + f.key + '" data-tags value="' + esc((v || []).join(', ')) + '" placeholder="쉼표로 여러 개">' +
+          (f.options ? '<div class="cct-opts" data-opts="' + f.key + '">' + f.options.map(function (o) { return '<button type="button" class="' + ((v || []).indexOf(o) >= 0 ? 'on' : '') + '">' + esc(o) + '</button>'; }).join('') + '</div>' : '') + '</label>';
+        return '<label class="cct-f' + (f.type === 'url' ? ' cct-f--w' : '') + '" for="' + id + '">' + lab + '<div class="cct-f__u"><input id="' + id + '" class="cct-in" data-k="' + f.key + '" ' + (f.type === 'num' ? 'type="number" step="any" inputmode="decimal"' : 'type="text"') +
+          ' value="' + esc(v == null ? '' : v) + '">' + (f.unit ? '<em>' + esc(f.unit) + '</em>' : '') + '</div></label>';
+      };
+      var collect = function () {
+        Array.prototype.forEach.call(m.querySelectorAll('[data-k]'), function (el) {
+          var k = el.getAttribute('data-k'); V[k] = el.hasAttribute('data-tags') ? el.value.split(/[,\n]+/).map(function (x) { return x.trim(); }).filter(Boolean) : el.value.trim(); });
+        Array.prototype.forEach.call(m.querySelectorAll('[data-b]'), function (el) { base[el.getAttribute('data-b')] = el.value.trim(); });
+        facts = Array.prototype.map.call(m.querySelectorAll('[data-fact]'), function (r) { var i = r.querySelectorAll('input'); return [i[0].value.trim(), i[1].value.trim()]; });
+      };
+      var draw = function () {
+        var groups = META.fields[type].map(function (g) { return { group: g.group, fields: g.fields.filter(function (f) { return !f.kinds.length || f.kinds.indexOf(kind) >= 0; }) }; }).filter(function (g) { return g.fields.length; });
+        var has = function (g) { return g.fields.filter(function (f) { var v = V[f.key]; return v !== undefined && v !== null && v !== '' && !(Array.isArray(v) && !v.length); }).length; };
+        m.innerHTML = '<div class="cct-modal__box"><div class="cct-modal__head"><h3>' + (d ? '✏️ ' + esc(d.brand + ' ' + d.title) + ' 고치기' : '➕ 새 항목') + '</h3><button type="button" class="cct-x" data-close aria-label="닫기">✕</button></div>' +
+          '<div class="cct-modal__body"><div class="cct-form">' +
+          (d ? '' : '<label class="cct-f"><span>무엇</span><select class="cct-in" data-type><option value="equipment"' + (type === 'equipment' ? ' selected' : '') + '>장비 · 프린터</option><option value="materials"' + (type === 'materials' ? ' selected' : '') + '>재료 (필라멘트 · 레진 …)</option></select></label>') +
+          '<label class="cct-f"><span>종류</span><select class="cct-in" data-kind>' + META.kinds[type].map(function (k) { return '<option value="' + k.key + '"' + (k.key === kind ? ' selected' : '') + '>' + k.icon + ' ' + esc(k.label) + '</option>'; }).join('') + '</select></label>' +
+          '<label class="cct-f"><span>제조사</span><input class="cct-in" data-b="brand" value="' + esc(base.brand) + '" placeholder="예: Bambu Lab"></label>' +
+          '<label class="cct-f"><span>' + (type === 'materials' ? '제품 이름' : '모델 이름') + '</span><input class="cct-in" data-b="title" value="' + esc(base.title) + '" placeholder="' + (type === 'materials' ? '예: PLA Basic' : '예: P1S') + '"></label>' +
+          '<label class="cct-f cct-f--w"><span>소개 <small>두세 문장</small></span><textarea class="cct-in" data-b="summary">' + esc(base.summary) + '</textarea></label>' +
+          '<label class="cct-f"><span>제품 공식 페이지</span><input class="cct-in" data-b="homepage_url" value="' + esc(base.homepage_url) + '" placeholder="https://"></label>' +
+          '<label class="cct-f"><span>더 알아보기 주소 <small>위키 등</small></span><input class="cct-in" data-b="wiki_url" value="' + esc(base.wiki_url) + '" placeholder="https://"></label>' +
+          '<label class="cct-f cct-f--w"><span>한 줄 메모</span><input class="cct-in" data-b="note" value="' + esc(base.note) + '"></label></div>' +
+          groups.map(function (g, i) { var n = has(g); return '<details class="cct-grp"' + (i < 2 || n ? ' open' : '') + '><summary>' + esc(g.group) + ' <small>' + n + ' / ' + g.fields.length + '</small></summary><div class="cct-form">' + g.fields.map(ctl).join('') + '</div></details>'; }).join('') +
+          '<details class="cct-grp"' + (facts.length ? ' open' : '') + '><summary>기타 제원 <small>위에 없는 것 — 이름과 값을 자유롭게</small></summary><div><div class="cct-facts" data-facts>' +
+          facts.map(function (f) { return '<div data-fact><input class="cct-in" value="' + esc(f[0]) + '" placeholder="이름"><input class="cct-in" value="' + esc(f[1]) + '" placeholder="값"><button type="button" class="cct-x" data-fact-del>✕</button></div>'; }).join('') +
+          '</div><button type="button" class="cct-btn cct-btn--s" style="margin-top:8px" data-fact-add>➕ 줄 더하기</button></div></details></div>' +
+          '<div class="cct-modal__foot"><span class="cct-msg" data-msg></span><button type="button" class="cct-btn" data-close>닫기</button><button type="button" class="cct-btn cct-btn--p" data-save>저장</button></div></div>';
+        Array.prototype.forEach.call(m.querySelectorAll('[data-close]'), function (b) { b.onclick = close; });
+        var ts = m.querySelector('[data-type]'); if (ts) ts.onchange = function () { collect(); type = ts.value; kind = META.kinds[type][0].key; draw(); };
+        m.querySelector('[data-kind]').onchange = function () { collect(); kind = this.value; draw(); };
+        Array.prototype.forEach.call(m.querySelectorAll('[data-yn]'), function (box) { Array.prototype.forEach.call(box.querySelectorAll('button'), function (b) { b.onclick = function () {
+          var v = b.getAttribute('data-v'); V[box.getAttribute('data-yn')] = v === '' ? '' : v === 'true';
+          Array.prototype.forEach.call(box.querySelectorAll('button'), function (x) { x.classList.toggle('on', x === b); }); }; }); });
+        Array.prototype.forEach.call(m.querySelectorAll('[data-opts]'), function (box) { var inp = m.querySelector('[data-k="' + box.getAttribute('data-opts') + '"]');
+          Array.prototype.forEach.call(box.querySelectorAll('button'), function (b) { b.onclick = function (e) { e.preventDefault();
+            var list = inp.value.split(/[,\n]+/).map(function (x) { return x.trim(); }).filter(Boolean), t = b.textContent, i = list.indexOf(t);
+            if (i >= 0) list.splice(i, 1); else list.push(t); inp.value = list.join(', '); b.classList.toggle('on', i < 0); }; }); });
+        m.querySelector('[data-fact-add]').onclick = function () { collect(); facts.push(['', '']); draw(); var all = m.querySelectorAll('[data-fact] input'); if (all.length) all[all.length - 2].focus(); };
+        Array.prototype.forEach.call(m.querySelectorAll('[data-fact-del]'), function (b, i) { b.onclick = function () { collect(); facts.splice(i, 1); draw(); }; });
+        m.querySelector('[data-save]').onclick = function () {
+          collect();
+          var b = this, msg = m.querySelector('[data-msg]'), fo = {}; facts.forEach(function (f) { if (f[0] && f[1]) fo[f[0]] = f[1]; });
+          var body = { type: type, kind: kind, brand: base.brand, title: base.title, summary: base.summary, note: base.note, homepage_url: base.homepage_url, wiki_url: base.wiki_url, values: V, facts: fo };
+          if (d) body.key = d.key;
+          b.disabled = true; msg.textContent = '';
+          api('POST', '/admin/items', body).then(function (r) { close(); toast(api.last || '저장했어요.'); if (done) done(r.key); }).catch(function (e) { b.disabled = false; msg.textContent = e.message; });
         };
-        window.addEventListener("scroll", window.__cctScroll);
-      }
-    }
-    function open(type, key) {
-      var row = (items[type] || []).filter(function (r) { return r.key === key; })[0];
-      if (!row) return;
-      var sheet = document.createElement("div");
-      sheet.className = "cct-sheet";
-      sheet.innerHTML = "<article class=\"cct-panel\">" + (row.image_url ? "<img class=\"cct-photo\" alt=\"\" src=\"" + esc(row.image_url) + "\">" : "") + "<h2>" + esc(row.brand + " " + (row.model || row.name || "")) + "</h2><p>" + esc(row.material || row.kind || "") + "</p><div class=\"cct-actions\"><button type=\"button\" data-print>PDF 출력</button>" + (row.sds_url ? "<a href=\"" + esc(row.sds_url) + "\" target=\"_blank\" rel=\"noopener\">MSDS</a>" : "") + "<button type=\"button\" data-close>닫기</button></div></article>";
-      document.body.appendChild(sheet);
-      sheet.querySelector("[data-close]").onclick = function () { sheet.remove(); };
-      sheet.querySelector("[data-print]").onclick = function () { window.print(); };
-    }
-    var cache = {};
-    function spec() {
-      if (tab === "filament") return ["materials", "fdm", "materials"];
-      if (tab === "resin") return ["materials", "resin", "materials"];
-      if (tab === "resin-eq") return ["equipment", "sla,dlp", "equipment"];
-      if (tab === "other") return ["equipment", "", "equipment"];
-      return ["equipment", "fdm", "equipment"];
-    }
-    function load() {
-      var sp = spec();
-      var p = new URLSearchParams();
-      if (q) p.set("q", q);
-      if (sp[1]) p.set("kind", sp[1]);
-      var key = sp[0] + "?" + p.toString();
-      if (cache[key]) { items[sp[2]] = cache[key]; paint(false); return; }
-      fetch("/api/modules/custom-catalog/" + sp[0] + "?" + p.toString()).then(function (r) { return r.json(); }).then(function (j) {
-        var rows = (j.data && j.data.items) || [];
-        cache[key] = rows;
-        items[sp[2]] = rows;
-        paint(false);
-      }).catch(function () { paint(true); });
-    }
-    paint(false);
-    fetch("/api/modules/custom-catalog/assets/makers.json").then(function(r){return r.json()}).then(function(j){makers=j||[]; paint(false)}).catch(function(){});
-    fetch("/api/modules/custom-catalog/me", {credentials:"same-origin"}).then(function(r){return r.json()}).then(function(j){can=!!(j.data&&j.data.can_edit); paint(false)}).catch(function(){});
-    load();
+      };
+      draw();
+      if (!d) { var f0 = m.querySelector('[data-b="brand"]'); if (f0) f0.focus(); }
+    };
+    meta().then(function () {
+      if (opt.detail && opt.detail.values) return start(opt.detail);
+      if (opt.key) return api('GET', '/items/' + encodeURIComponent(opt.key)).then(start);
+      start(null);
+    }).catch(function (e) { toast(e.message); });
   }
-  if (!boot()) {
-    var n = 0;
-    var timer = setInterval(function () { if (boot() || ++n > 40) clearInterval(timer); }, 250);
+
+  /* ───────── 시작 ───────── */
+  var lastUrl = '';
+  function tick() {
+    var root = document.getElementById('cct_root');
+    if (!root) { lastUrl = ''; return; }
+    var url = location.pathname + location.search;
+    if (root.__cct === url && root.firstChild) return;
+    root.__cct = url; lastUrl = url;
+    css();
+    var m = /\/catalog\/([a-z0-9][a-z0-9_-]{1,79})\/?$/.exec(location.pathname);
+    if (!root.firstChild) root.innerHTML = '<div class="cct"><div class="cct-skel" style="height:190px;border-radius:24px"></div></div>';
+    meta().then(function () { if (root.__cct !== url) return; if (m) detailPage(root, m[1]); else listPage(root); try { window.scrollTo(0, 0); } catch (e) {} })
+      .catch(function (e) { root.innerHTML = '<div class="cct"><div class="cct-empty"><b>⚠️</b>카탈로그를 열지 못했어요.<br>' + esc(e.message) + '</div></div>'; });
   }
+  window.CCT = { version: VERSION, api: api, esc: esc, toast: toast, css: css, meta: meta, getMeta: function () { return META; }, openEditor: openEditor, cardHtml: cardHtml, tick: tick, go: go, hue: hue, kindIcon: kindIcon };
+  window.addEventListener('popstate', function () { setTimeout(tick, 0); });
+  try { new MutationObserver(function () { var r = document.getElementById('cct_root'); if (r && (r.__cct !== location.pathname + location.search || !r.firstChild)) tick(); }).observe(document.body, { childList: true, subtree: true }); } catch (e) {}
+  setInterval(tick, 800);
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', tick); else tick();
 })();
