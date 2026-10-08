@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\Http;\nuse Illuminate\Support\Str;\nuse Modules\Custom\Catalog\Support\AiSettings;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
+use Modules\Custom\Catalog\Support\AiSettings;
 
 class AdminController extends Controller
 {
