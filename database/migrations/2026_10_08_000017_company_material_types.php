@@ -25,7 +25,7 @@ return new class extends Migration
                 'name' => $row['name'],
                 'material' => $row['material'],
                 'material_norm' => mb_strtolower($row['material']),
-                'note' => $row['note'],
+                'caution' => mb_substr($row['note'], 0, 300),
                 'status' => 'active',
                 'created_at' => now(),
                 'updated_at' => now(),
