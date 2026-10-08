@@ -247,7 +247,7 @@ class AdminController extends Controller
             return $g;
         }
         @set_time_limit(300);
-        $task = in_array($r->input('task'), ['members', 'new', 'fill', 'photo'], true) ? (string) $r->input('task') : null;
+        $task = in_array($r->input('task'), Collector::TASKS, true) ? (string) $r->input('task') : null;
         $res = $this->collector->tick(true, $task);
 
         return self::ok(['ran' => $res['ran'], 'collect' => $this->collectState()], $res['ran'] ? implode("\n", $res['ran']) : $res['skipped']);

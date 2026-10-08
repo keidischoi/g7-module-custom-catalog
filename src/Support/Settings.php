@@ -31,6 +31,7 @@ final class Settings
             'task_new' => true,               // 새 모델 · 재료 찾기
             'task_fill' => true,              // 빈 제원 채우기
             'task_photo' => true,             // 사진 찾기
+            'task_sds' => true,               // 안전 자료(MSDS) 찾기 — 재료
             'apply' => 'review',              // review = 제안함에 쌓고 관리자가 확인 · auto = 바로 반영
             'search' => 'none',               // 사진 · 자료 검색: none · brave
             'brave_key' => '',
@@ -114,6 +115,7 @@ final class Settings
             'task_new' => $bool('task_new'),
             'task_fill' => $bool('task_fill'),
             'task_photo' => $bool('task_photo'),
+            'task_sds' => $bool('task_sds'),
             'apply' => ($raw['apply'] ?? '') === 'auto' ? 'auto' : 'review',
             'search' => ($raw['search'] ?? '') === 'brave' ? 'brave' : 'none',
             'brave_key' => mb_substr(preg_replace('/\s/', '', (string) ($raw['brave_key'] ?? '')) ?? '', 0, 200),
