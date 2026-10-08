@@ -1,4 +1,4 @@
-/*! custom-catalog 0.1.40 */
+/*! custom-catalog 0.1.42 */
 (function () {
   "use strict";
   function boot() {
@@ -159,7 +159,15 @@
         fetch("/api/modules/custom-catalog/me", {headers: authHeaders(true), credentials:"same-origin"}).then(function (r) { return r.json(); }).catch(function () { return {}; })
       ]).then(function (xs) {
         var row = (xs[0] && xs[0].success && xs[0].data) || (xs[1] && xs[1].success && xs[1].data) || null;
-        show(row, !!(xs[2] && xs[2].data && xs[2].data.can_edit));
+        fetch("/api/modules/custom-catalog/assets/briefs.json").then(function (r) { return r.json(); }).then(function (briefs) {
+          var extra = briefs && row ? briefs[row.key] : null;
+          if (extra) {
+            if (!row.summary) row.summary = extra.summary;
+            if (!row.wiki_url) row.wiki_url = extra.wiki_url;
+            row.facts = Object.assign({}, extra.facts || {}, row.facts || {});
+          }
+          show(row, !!(xs[2] && xs[2].data && xs[2].data.can_edit));
+        }).catch(function () { show(row, !!(xs[2] && xs[2].data && xs[2].data.can_edit)); });
       });
     }
     load();
@@ -169,7 +177,7 @@
     var parts = location.pathname.split("/").filter(Boolean);
     var detailKey = parts[0] === "catalog" && parts[1] ? decodeURIComponent(parts[1]) : "";
     if (detailKey) { renderDetail(root, detailKey); return; }
-    var q = "", tab = "fdm", brand = "", can = false, items = {equipment: [], materials: []};
+    var q = "", tab = "fdm", brand = "", can = false, limit = 20, items = {equipment: [], materials: []}, makers = [];
     var CSS = ".cct{--ink:#0f172a;--mute:#64748b;--line:#e2e8f0;--card:#fff;--soft:#f8fafc;--acc:#0f766e;color:var(--ink);font-size:14px;line-height:1.55;max-width:1100px;margin:0 auto;padding:20px 16px 64px}html.dark .cct,.dark .cct{--ink:#f1f5f9;--mute:#94a3b8;--line:#334155;--card:#1e293b;--soft:#0f172a;--acc:#2dd4bf}.cct *{box-sizing:border-box}.cct h1,.cct h2{margin:0;letter-spacing:-.02em}.cct a{color:var(--acc)}.cct-hero{border-radius:28px;padding:28px 26px;margin:0 0 16px;color:#fff;background:linear-gradient(135deg,#134e4a,#164e63)}.cct-find{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.cct-find input{flex:1;min-width:200px;height:44px;border:0;border-radius:12px;padding:0 12px}.cct-find button{height:44px;padding:0 16px;border:0;border-radius:12px;background:#fff;color:#0f766e;font-weight:800}.cct-chips{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 16px}.cct-chip{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:6px 12px;cursor:pointer;font-weight:700}.cct-chip.on{background:var(--acc);color:#fff;border-color:var(--acc)}.cct-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px}.cct-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;cursor:pointer;text-align:left}.cct-card img.cct-thumb,.cct-card .cct-thumb{width:100%;height:132px;object-fit:contain;background:var(--soft);border-radius:10px;margin:0 0 8px;display:flex;align-items:center;justify-content:center;color:var(--mute);font-size:12px}.cct-card b{display:block}.cct-card .sub{color:var(--mute);font-size:12.5px}.cct-empty{color:var(--mute);min-height:280px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center}.cct-empty svg{width:120px;height:90px;color:var(--acc)}.cct-empty b{color:var(--ink);font-size:16px}.cct-sheet{position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:80;display:flex;justify-content:center;align-items:flex-start;padding:24px 12px;overflow:auto}.cct-panel{background:var(--card);color:var(--ink);width:min(760px,100%);border-radius:20px;padding:18px}.cct-photo{width:100%;height:220px;object-fit:contain;border-radius:14px;background:var(--soft)}.cct-table{width:100%;border-collapse:collapse;margin-top:12px}.cct-table td{padding:7px 4px;border-bottom:1px solid var(--line)}.cct-actions{display:flex;gap:8px;margin-top:14px}.cct-actions button,.cct-actions a{height:38px;padding:0 12px;border-radius:10px;border:1px solid var(--line);background:var(--soft);color:inherit;text-decoration:none;display:inline-flex;align-items:center;font-weight:700}@media print{.cct-hero,.cct-chips,.cct-find,.cct-grid,.cct-sheet{display:none!important}#cct-print{display:block!important}}";
     function esc(s) {
       return String(s == null ? "" : s).replace(/[&<>\"]/g, function (c) {
@@ -181,8 +189,11 @@
     }
     function card(r, type) {
       var title = r.brand + " " + (r.model || r.name || "");
-      var photo = r.image_url
-        ? "<img class=\"cct-thumb\" alt=\"\" src=\"" + esc(r.image_url) + "\">"
+      var logo = "";
+      makers.forEach(function (m) { if (!logo && String(r.brand || "").toLowerCase().indexOf(m.match) >= 0) logo = m.logo; });
+      var src = r.image_url || logo;
+      var photo = src
+        ? "<img class=\"cct-thumb\" alt=\"\" src=\"" + esc(src) + "\">"
         : "<div class=\"cct-thumb cct-ph\">사진 준비 중</div>";
       return "<button class=\"cct-card\" data-type=\"" + type + "\" data-key=\"" + esc(r.key) + "\">" + photo + "<b>" + esc(title) + "</b><div class=\"sub\">" + esc(r.material || r.kind || "") + "</div></button>";
     }
@@ -207,12 +218,23 @@
       var shown = brand ? rows.filter(function (r) { return r.brand === brand; }) : rows;
       var brandHtml = "<div class=\"cct-chips\">" + "<button type=\"button\" class=\"cct-chip" + (brand === "" ? " on" : "") + "\" data-b=\"\">전체 제조사</button>" + brands.map(function (b) { return "<button type=\"button\" class=\"cct-chip" + (b === brand ? " on" : "") + "\" data-b=\"" + esc(b) + "\">" + esc(b) + "</button>"; }).join("") + "</div>";
       var empty = "<div class=\"cct-empty\"><svg viewBox=\"0 0 120 90\" aria-hidden=\"true\"><rect x=\"18\" y=\"16\" width=\"84\" height=\"58\" rx=\"10\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"/><circle cx=\"46\" cy=\"40\" r=\"8\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"/><path d=\"M62 52l10 8\" stroke=\"currentColor\" stroke-width=\"2\"/><path d=\"M28 78h64\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"/></svg><b>결과가 없습니다</b><span>다른 제조사나 검색어를 골라 보세요.</span></div>";
-      var body = shown.length ? section(title, shown, type) : empty;
+      var page = shown.slice(0, limit);
+      var more = shown.length > page.length ? "<p class=\"cct-more\">" + page.length + " / " + shown.length + " · 스크롤하면 더 봅니다</p>" : "";
+      var body = page.length ? section(title, page, type) + more : empty;
       root.innerHTML = "<style>" + CSS + "</style><div class=\"cct\"><section class=\"cct-hero\"><h1>3D 카탈로그</h1><p>종류와 제조사로 좁힐 수 있습니다.</p><form class=\"cct-find\" id=\"cct-find\"><input id=\"cct-q\" value=\"" + esc(q) + "\" placeholder=\"제조사, 모델, PLA\"><button>찾기</button></form></section><div class=\"cct-chips\">" + chips.map(function (c) { return "<button type=\"button\" class=\"cct-chip" + (c[0] === tab ? " on" : "") + "\" data-k=\"" + c[0] + "\">" + c[1] + "</button>"; }).join("") + "</div>" + brandHtml + (err ? empty.replace("결과가 없습니다","목록을 불러오지 못했습니다") : body) + "</div>";
       document.getElementById("cct-find").onsubmit = function (e) { e.preventDefault(); q = document.getElementById("cct-q").value.trim(); if (q && window.__cpsRecord) window.__cpsRecord(q, "catalog"); load(); };
-      [].forEach.call(root.querySelectorAll("[data-k]"), function (b) { b.onclick = function () { tab = b.getAttribute("data-k") || "fdm"; brand = ""; paint(false); }; });
-      [].forEach.call(root.querySelectorAll("[data-b]"), function (b) { b.onclick = function () { brand = b.getAttribute("data-b") || ""; paint(false); }; });
+      [].forEach.call(root.querySelectorAll("[data-k]"), function (b) { b.onclick = function () { tab = b.getAttribute("data-k") || "fdm"; brand = ""; limit = 20; paint(false); }; });
+      [].forEach.call(root.querySelectorAll("[data-b]"), function (b) { b.onclick = function () { brand = b.getAttribute("data-b") || ""; limit = 20; paint(false); }; });
       [].forEach.call(root.querySelectorAll(".cct-card"), function (b) { b.onclick = function () { location.assign("/catalog/" + b.getAttribute("data-key")); }; });
+      if (!window.__cctScroll) {
+        window.__cctScroll = function () {
+          if (window.scrollY + window.innerHeight < document.body.scrollHeight - 240) return;
+          if (limit >= 500) return;
+          limit += 20;
+          paint(false);
+        };
+        window.addEventListener("scroll", window.__cctScroll);
+      }
     }
     function open(type, key) {
       var row = (items[type] || []).filter(function (r) { return r.key === key; })[0];
@@ -238,6 +260,7 @@
       }).catch(function () { paint(true); });
     }
     paint(false);
+    fetch("/api/modules/custom-catalog/assets/makers.json").then(function(r){return r.json()}).then(function(j){makers=j||[]; paint(false)}).catch(function(){});
     fetch("/api/modules/custom-catalog/me", {credentials:"same-origin"}).then(function(r){return r.json()}).then(function(j){can=!!(j.data&&j.data.can_edit); paint(false)}).catch(function(){});
     load();
   }
