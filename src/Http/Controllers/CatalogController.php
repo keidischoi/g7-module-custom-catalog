@@ -88,7 +88,7 @@ class CatalogController extends Controller
         $kind = trim((string) $request->query('kind', ''));
         $query = DB::table($table)->where('status', 'active');
         if ($kind !== '') {
-            $query->where('kind', $kind);
+            $query->whereIn('kind', array_values(array_filter(explode(',', $kind))));
         }
         if ($q !== '') {
             $like = '%'.addcslashes($q, '%_\\').'%';
@@ -98,9 +98,12 @@ class CatalogController extends Controller
                 }
             });
         }
+        $fields = $table === 'cat_materials'
+            ? ['key', 'kind', 'brand', 'name', 'material', 'image_url']
+            : ['key', 'kind', 'brand', 'model', 'image_url'];
 
         try {
-            return ['ready' => true, 'items' => $query->orderBy('brand')->limit(300)->get()];
+            return ['ready' => true, 'items' => $query->orderBy('brand')->limit(120)->get($fields)];
         } catch (\Throwable) {
             return ['items' => [], 'ready' => false];
         }

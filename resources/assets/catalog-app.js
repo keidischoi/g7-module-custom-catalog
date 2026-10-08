@@ -1,4 +1,4 @@
-/*! custom-catalog 0.1.50 */
+/*! custom-catalog 0.1.53 */
 (function () {
   "use strict";
   function boot() {
@@ -198,7 +198,7 @@
       makers.forEach(function (m) { if (!logo && String(r.brand || "").toLowerCase().indexOf(m.match) >= 0) logo = m.logo; });
       var src = r.image_url || logo;
       var photo = src
-        ? "<img class=\"cct-thumb\" alt=\"\" src=\"" + esc(src) + "\">"
+        ? "<img class=\"cct-thumb\" alt=\"\" loading=\"lazy\" decoding=\"async\" src=\"" + esc(src) + "\">"
         : "<div class=\"cct-thumb cct-ph\">사진 준비 중</div>";
       return "<button class=\"cct-card\" data-type=\"" + type + "\" data-key=\"" + esc(r.key) + "\">" + photo + "<b>" + esc(title) + "</b><div class=\"sub\">" + esc(r.material || r.kind || "") + "</div></button>";
     }
@@ -227,8 +227,8 @@
       var more = shown.length > page.length ? "<p class=\"cct-more\">" + page.length + " / " + shown.length + " · 스크롤하면 더 봅니다</p>" : "";
       var body = page.length ? section(title, page, type) + more : empty;
       root.innerHTML = "<style>" + CSS + "</style><div class=\"cct\"><section class=\"cct-hero\"><h1>3D 카탈로그</h1><p>종류와 제조사로 좁힐 수 있습니다.</p><form class=\"cct-find\" id=\"cct-find\"><input id=\"cct-q\" value=\"" + esc(q) + "\" placeholder=\"제조사, 모델, PLA\"><button>찾기</button></form></section><div class=\"cct-chips\">" + chips.map(function (c) { return "<button type=\"button\" class=\"cct-chip" + (c[0] === tab ? " on" : "") + "\" data-k=\"" + c[0] + "\">" + c[1] + "</button>"; }).join("") + "</div>" + brandHtml + (err ? empty.replace("결과가 없습니다","목록을 불러오지 못했습니다") : body) + "</div>";
-      document.getElementById("cct-find").onsubmit = function (e) { e.preventDefault(); q = document.getElementById("cct-q").value.trim(); if (q && window.__cpsRecord) window.__cpsRecord(q, "catalog"); load(); };
-      [].forEach.call(root.querySelectorAll("[data-k]"), function (b) { b.onclick = function () { tab = b.getAttribute("data-k") || "fdm"; brand = ""; limit = 20; paint(false); }; });
+      var find = document.getElementById("cct-find"); find.onsubmit = function (e) { e.preventDefault(); q = document.getElementById("cct-q").value.trim(); if (q && window.__cpsRecord) window.__cpsRecord(q, "catalog"); load(); }; var box = document.getElementById("cct-q"); if (box) box.oninput = function () { var v = box.value.trim(); clearTimeout(window.__cctFind); window.__cctFind = setTimeout(function () { if (v === q) return; q = v; load(); }, 280); };
+      [].forEach.call(root.querySelectorAll("[data-k]"), function (b) { b.onclick = function () { tab = b.getAttribute("data-k") || "fdm"; brand = ""; limit = 20; load(); }; });
       [].forEach.call(root.querySelectorAll("[data-b]"), function (b) { b.onclick = function () { brand = b.getAttribute("data-b") || ""; limit = 20; paint(false); }; });
       [].forEach.call(root.querySelectorAll(".cct-card"), function (b) { b.onclick = function () { location.assign("/catalog/" + b.getAttribute("data-key")); }; });
       if (!window.__cctScroll) {
@@ -251,16 +251,25 @@
       sheet.querySelector("[data-close]").onclick = function () { sheet.remove(); };
       sheet.querySelector("[data-print]").onclick = function () { window.print(); };
     }
+    var cache = {};
+    function spec() {
+      if (tab === "filament") return ["materials", "fdm", "materials"];
+      if (tab === "resin") return ["materials", "resin", "materials"];
+      if (tab === "resin-eq") return ["equipment", "sla,dlp", "equipment"];
+      if (tab === "other") return ["equipment", "", "equipment"];
+      return ["equipment", "fdm", "equipment"];
+    }
     function load() {
+      var sp = spec();
       var p = new URLSearchParams();
       if (q) p.set("q", q);
-      var qs = p.toString() ? "?" + p.toString() : "";
-      Promise.all([
-        fetch("/api/modules/custom-catalog/equipment" + qs).then(function (r) { return r.json(); }),
-        fetch("/api/modules/custom-catalog/materials" + qs).then(function (r) { return r.json(); })
-      ]).then(function (xs) {
-        items.equipment = (xs[0].data && xs[0].data.items) || [];
-        items.materials = (xs[1].data && xs[1].data.items) || [];
+      if (sp[1]) p.set("kind", sp[1]);
+      var key = sp[0] + "?" + p.toString();
+      if (cache[key]) { items[sp[2]] = cache[key]; paint(false); return; }
+      fetch("/api/modules/custom-catalog/" + sp[0] + "?" + p.toString()).then(function (r) { return r.json(); }).then(function (j) {
+        var rows = (j.data && j.data.items) || [];
+        cache[key] = rows;
+        items[sp[2]] = rows;
         paint(false);
       }).catch(function () { paint(true); });
     }
