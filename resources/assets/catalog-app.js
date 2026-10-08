@@ -1,4 +1,4 @@
-/*! custom-catalog 0.1.18 */
+/*! custom-catalog 0.1.19 */
 (function () {
   "use strict";
   function boot() {
@@ -46,7 +46,7 @@
       if (!row) return;
       var sheet = document.createElement("div");
       sheet.className = "cct-sheet";
-      sheet.innerHTML = "<article class=\"cct-panel\"><img class=\"cct-photo\" alt=\"\" hidden><h2>" + esc(row.brand + " " + (row.model || row.name || "")) + "</h2><p>" + esc(row.material || row.kind || "") + "</p><div class=\"cct-actions\"><button type=\"button\" data-print>PDF 출력</button>" + (row.sds_url ? "<a href=\"" + esc(row.sds_url) + "\" target=\"_blank\" rel=\"noopener\">MSDS</a>" : "") + "<button type=\"button\" data-close>닫기</button></div></article>";
+      sheet.innerHTML = "<article class=\"cct-panel\">" + (row.image_url ? "<img class=\"cct-photo\" alt=\"\" src=\"" + esc(row.image_url) + "\">" : "") + "<h2>" + esc(row.brand + " " + (row.model || row.name || "")) + "</h2><p>" + esc(row.material || row.kind || "") + "</p><div class=\"cct-actions\"><button type=\"button\" data-print>PDF 출력</button>" + (row.sds_url ? "<a href=\"" + esc(row.sds_url) + "\" target=\"_blank\" rel=\"noopener\">MSDS</a>" : "") + "<button type=\"button\" data-close>닫기</button></div></article>";
       document.body.appendChild(sheet);
       sheet.querySelector("[data-close]").onclick = function () { sheet.remove(); };
       sheet.querySelector("[data-print]").onclick = function () { window.print(); };
