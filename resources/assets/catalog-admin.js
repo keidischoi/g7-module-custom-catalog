@@ -1,4 +1,4 @@
-/*! custom-catalog 0.1.19 — 관리자 제원 입력 */
+/*! custom-catalog 0.1.20 — 관리자 제원 입력 */
 (function () {
   "use strict";
   function boot() {

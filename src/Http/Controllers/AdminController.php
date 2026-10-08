@@ -37,6 +37,11 @@ class AdminController extends Controller
         return response()->json(['success' => false, 'message' => '제원 입력 권한이 없습니다.'], 403);
     }
 
+    public function me(Request $request): JsonResponse
+    {
+        return response()->json(["success" => true, "data" => ["can_edit" => $this->allowed($request)]]);
+    }
+
     public function equipment(Request $request): JsonResponse
     {
         if (! $this->allowed($request)) return $this->deny();
