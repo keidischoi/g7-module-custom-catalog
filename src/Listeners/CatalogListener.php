@@ -44,13 +44,18 @@ class CatalogListener implements HookListenerInterface
             return $layout;
         }
         $layout['scripts'] = is_array($layout['scripts'] ?? null) ? $layout['scripts'] : [];
-        $src = '/api/modules/custom-catalog/assets/catalog-nav.js?v=0.1.1';
+        $src = '/api/modules/custom-catalog/assets/catalog-nav.js?v=0.1.43';
+        $admin = '/api/modules/custom-catalog/assets/catalog-admin.js?v=0.1.43';
         foreach ($layout['scripts'] as $s) {
             if (is_array($s) && ($s['src'] ?? '') === $src) {
                 return $layout;
             }
         }
         $layout['scripts'][] = ['src' => $src, 'defer' => true];
+        $path = request()->path();
+        if (is_string($path) && str_contains($path, 'admin/catalog')) {
+            $layout['scripts'][] = ['src' => $admin, 'defer' => true];
+        }
 
         return $layout;
     }

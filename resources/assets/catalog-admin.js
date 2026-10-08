@@ -1,16 +1,11 @@
-/*! custom-catalog 0.1.41 — 관리자 */
+/*! custom-catalog 0.1.43 — 관리자 */
 (function () {
   "use strict";
   function boot() {
-    var root = document.getElementById("cct_admin");
-    if (!root) {
-      root = document.createElement("div");
-      root.id = "cct_admin";
-      var host = document.querySelector("main") || document.querySelector("[data-slot='content']") || document.body;
-      host.appendChild(root);
-    }
-    if (root.dataset.ready) return true;
-    root.dataset.ready = "1";
+    var root = document.getElementById("cct_admin_root") || document.getElementById("cct_admin");
+    if (!root) return false;
+    if (root.dataset.ready === location.pathname) return true;
+    root.dataset.ready = location.pathname;
     start(root);
     return true;
   }
@@ -121,6 +116,10 @@
   }
   if (!boot()) {
     var n = 0;
-    var timer = setInterval(function () { if (boot() || ++n > 40) clearInterval(timer); }, 250);
+    var timer = setInterval(function () { if (boot() || ++n > 80) clearInterval(timer); }, 250);
   }
+  try {
+    new MutationObserver(function () { boot(); }).observe(document.documentElement, { childList: true, subtree: true });
+  } catch (e) {}
+  addEventListener("popstate", function () { setTimeout(boot, 50); });
 })();
