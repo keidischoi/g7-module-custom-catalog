@@ -84,7 +84,7 @@ class CatalogController extends Controller
         }
 
         try {
-            return ['ready' => true, 'items' => $query->orderBy('brand')->limit(80)->get()];
+            return ['ready' => true, 'items' => $query->orderBy('brand')->limit(300)->get()];
         } catch (\Throwable) {
             return ['items' => [], 'ready' => false];
         }
