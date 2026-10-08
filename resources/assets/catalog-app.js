@@ -1,8 +1,8 @@
-/*! custom-catalog 0.2.0 — 3D 카탈로그 (목록 · 상세 · 편집) */
+/*! custom-catalog 0.2.1 — 3D 카탈로그 (목록 · 상세 · 편집) */
 (function () {
   'use strict';
   if (window.CCT) { try { window.CCT.tick(); } catch (e) {} return; }
-  var VERSION = '0.2.0', API = '/api/modules/custom-catalog', BASE = '/catalog';
+  var VERSION = '0.2.1', API = '/api/modules/custom-catalog', BASE = '/catalog';
 
   /* ───────── 도구 ───────── */
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
@@ -35,6 +35,28 @@
     try { if (window.G7Core && G7Core.router && G7Core.router.push) { G7Core.router.push(url); setTimeout(tick, 60); return; } } catch (e) {}
     try { history.pushState({}, '', url); tick(); } catch (e2) { location.href = url; }
   }
+  /* 사진이 없을 때 그림 — 업체검색과 같은 입체 그림 (catalog-icons.js) */
+  var iconsP = null;
+  function icons() {
+    if (window.CCTIcons) return Promise.resolve();
+    if (!iconsP) iconsP = new Promise(function (ok) {
+      var s = document.createElement('script'); s.src = API + '/assets/catalog-icons.js?v=' + VERSION; s.onload = s.onerror = function () { ok(); };
+      document.head.appendChild(s); setTimeout(ok, 2500);
+    });
+    return iconsP;
+  }
+  function hueHex(h) {
+    var s = 0.62, l = 0.55, a = s * Math.min(l, 1 - l), f = function (n) { var k = (n + h / 30) % 12, c = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1); return ('0' + Math.round(255 * c).toString(16)).slice(-2); };
+    return '#' + f(0) + f(8) + f(4);
+  }
+  function art(c, px) {
+    var I = window.CCTIcons;
+    if (!I) return '<i>' + kindIcon(c.type, c.kind) + '</i>';
+    try {
+      if (c.type === 'materials') return I.material({ kind: c.kind, material: c.material || c.title, color_hex: /^#[0-9a-f]{3,6}$/i.test(c.color_hex || '') || /gradient/.test(c.color_hex || '') ? c.color_hex : hueHex(hue(c.brand + c.title)) }, px);
+      return I.equipment({ kind: c.kind, enclosed: c.enclosed, tint: hueHex(hue(c.brand)) }, px);
+    } catch (e) { return '<i>' + kindIcon(c.type, c.kind) + '</i>'; }
+  }
   function hue(s) { var h = 0; s = String(s || ''); for (var i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) % 360; return h; }
   var META = null, metaP = null;
   function meta(force) {
@@ -48,7 +70,7 @@
   /* ───────── 카드 ───────── */
   function cardHtml(c, can) {
     var pic = c.image ? '<img loading="lazy" alt="" src="' + esc(c.image) + '">' :
-      '<div class="cct-ph" style="--h:' + hue(c.brand) + '"><i>' + kindIcon(c.type, c.kind) + '</i><b>' + esc(c.brand) + '</b></div>';
+      '<div class="cct-ph">' + art(c, 118) + '</div>';
     return '<a class="cct-card' + (c.status !== 'active' ? ' is-off' : '') + '" href="' + BASE + '/' + esc(c.key) + '" data-key="' + esc(c.key) + '">' +
       '<div class="cct-pic">' + pic + '<span class="cct-kind">' + esc(c.kind_label) + '</span></div>' +
       '<div class="cct-card__body"><span class="cct-card__brand">' + esc(c.brand) + '</span><span class="cct-card__title">' +
@@ -171,7 +193,7 @@
       if (by.dry_temp) keys.push({ label: '건조', value: by.dry_temp.value + (by.dry_hours ? ' · ' + by.dry_hours.value : '') });
       KEYS.forEach(function (k) { if (by[k] && keys.length < 6) keys.push(by[k]); });
       var ph = d.photos, mainPic = ph.length ? '<img alt="' + esc(d.brand + ' ' + d.title) + '" src="' + esc(ph[0].url) + '" data-main>' + (ph[0].credit ? '<span class="cct-gal__credit" data-credit>📷 ' + esc(ph[0].credit) + '</span>' : '<span class="cct-gal__credit" data-credit hidden></span>') :
-        '<div class="cct-ph" style="--h:' + hue(d.brand) + '"><i style="font-size:84px">' + kindIcon(d.type, d.kind) + '</i><b>사진 준비 중</b></div>';
+        '<div class="cct-ph">' + art(d, 230) + '</div>';
       var h = '<div class="cct"><a class="cct-back" data-go href="' + BASE + (tab ? '?tab=' + tab.key : '') + '">‹ ' + esc(tab ? tab.label : '카탈로그') + ' 목록</a>' +
         '<div class="cct-top"><div class="cct-gal"><div class="cct-gal__main">' + mainPic + '</div>' +
         (ph.length > 1 || (can && ph.length) ? '<div class="cct-thumbs">' + ph.map(function (p, i) { return '<button type="button" class="cct-thumb' + (i ? '' : ' on') + '" data-ph="' + i + '"><img alt="" loading="lazy" src="' + esc(p.thumb || p.url) + '">' + (i ? '' : '<em>대표</em>') + '</button>'; }).join('') + '</div>' : '') +
@@ -328,10 +350,10 @@
     css();
     var m = /\/catalog\/([a-z0-9][a-z0-9_-]{1,79})\/?$/.exec(location.pathname);
     if (!root.firstChild) root.innerHTML = '<div class="cct"><div class="cct-skel" style="height:190px;border-radius:24px"></div></div>';
-    meta().then(function () { if (root.__cct !== url) return; if (m) detailPage(root, m[1]); else listPage(root); try { window.scrollTo(0, 0); } catch (e) {} })
+    Promise.all([meta(), icons()]).then(function () { if (root.__cct !== url) return; if (m) detailPage(root, m[1]); else listPage(root); try { window.scrollTo(0, 0); } catch (e) {} })
       .catch(function (e) { root.innerHTML = '<div class="cct"><div class="cct-empty"><b>⚠️</b>카탈로그를 열지 못했어요.<br>' + esc(e.message) + '</div></div>'; });
   }
-  window.CCT = { version: VERSION, api: api, esc: esc, toast: toast, css: css, meta: meta, getMeta: function () { return META; }, openEditor: openEditor, cardHtml: cardHtml, tick: tick, go: go, hue: hue, kindIcon: kindIcon };
+  window.CCT = { version: VERSION, api: api, esc: esc, toast: toast, css: css, meta: meta, getMeta: function () { return META; }, openEditor: openEditor, cardHtml: cardHtml, art: art, icons: icons, tick: tick, go: go, hue: hue, kindIcon: kindIcon };
   window.addEventListener('popstate', function () { setTimeout(tick, 0); });
   try { new MutationObserver(function () { var r = document.getElementById('cct_root'); if (r && (r.__cct !== location.pathname + location.search || !r.firstChild)) tick(); }).observe(document.body, { childList: true, subtree: true }); } catch (e) {}
   setInterval(tick, 800);

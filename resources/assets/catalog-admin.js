@@ -1,4 +1,4 @@
-/*! custom-catalog 0.2.0 — 관리자 (항목 · 제안함 · 자동 수집 · AI 연결 · 설정) */
+/*! custom-catalog 0.2.1 — 관리자 (항목 · 제안함 · 자동 수집 · AI 연결 · 설정) */
 (function () {
   'use strict';
   if (window.__cctAdmin) { try { window.__cctAdmin(); } catch (e) {} return; }
@@ -6,7 +6,7 @@
   function C() { return window.CCT; }
   function need(cb) {
     if (window.CCT) return cb();
-    if (!document.getElementById('cct-app-js')) { var s = document.createElement('script'); s.id = 'cct-app-js'; s.src = '/api/modules/custom-catalog/assets/catalog-app.js?v=0.2.0'; document.head.appendChild(s); }
+    if (!document.getElementById('cct-app-js')) { var s = document.createElement('script'); s.id = 'cct-app-js'; s.src = '/api/modules/custom-catalog/assets/catalog-app.js?v=0.2.1'; document.head.appendChild(s); }
     var n = 0, t = setInterval(function () { if (window.CCT || ++n > 100) { clearInterval(t); if (window.CCT) cb(); } }, 60);
   }
   function page() {
@@ -130,6 +130,7 @@
         row('한 번에 하는 일', 'AI 에게 묻는 횟수와 같아요', num('auto_per_run', '개', 1, 10)) +
         row('하루 최대', '', num('auto_per_day', '개', 1, 500)) + '</div>' +
         '<div class="cct-panel"><h3>🧩 할 일</h3><p>켠 것을 차례로 돌아가며 해요.</p>' +
+        row('🏢 회원이 등록한 것 가져오기', '업체검색에서 회원이 적어 넣은 장비 모델 · 재료 — 업체검색 규칙 그대로 (관리자가 승인했거나 서로 다른 업체 여러 곳이 쓴 것만 · 숨김/합침은 빼고). AI 를 쓰지 않아요', sw(S.task_members, 'data-b="task_members"')) +
         row('🆕 새 모델 · 재료 찾기', '제조사를 돌아가며 「목록에 없는 제품」을 AI 에게 물어요', sw(S.task_new, 'data-b="task_new"') ) +
         row('📝 빈 제원 채우기', '제원이 덜 찬 항목의 빈 칸만 물어요 (적혀 있는 값은 건드리지 않아요)', sw(S.task_fill, 'data-b="task_fill"')) +
         row('🖼️ 사진 찾기', '사진 없는 항목 — 제품 공식 페이지의 대표 사진 → 위키미디어 공용 순서로 (검색 키가 있으면 검색 먼저)', sw(S.task_photo, 'data-b="task_photo"')) +
@@ -138,7 +139,7 @@
         row('검색', '', '<select class="cct-sel" data-s="search"><option value="none"' + (S.search === 'none' ? ' selected' : '') + '>쓰지 않음</option><option value="brave"' + (S.search === 'brave' ? ' selected' : '') + '>Brave Search</option></select>') +
         row('Brave API 키', S.brave_key_set ? '저장됨 · ' + esc(S.brave_key_hint) + ' (비워 두면 그대로)' : '없음', '<span class="cct-num"><input class="cct-in" style="width:220px;text-align:left" type="password" autocomplete="new-password" data-key placeholder="' + (S.brave_key_set ? '바꿀 때만 입력' : '키 입력') + '">' + (S.brave_key_set ? '<label style="font-size:12.5px"><input type="checkbox" data-key-clear> 지우기</label>' : '') + '</span>') +
         '</div><div class="cct-bar" style="margin-bottom:16px"><button type="button" class="cct-btn cct-btn--p" data-save>저장</button><span style="flex:1"></span>' +
-        '<button type="button" class="cct-btn" data-run="new">🆕 새 항목 찾기 한 번</button><button type="button" class="cct-btn" data-run="fill">📝 제원 채우기 한 번</button><button type="button" class="cct-btn" data-run="photo">🖼️ 사진 찾기 한 번</button></div>' +
+        '<button type="button" class="cct-btn" data-run="members">🏢 회원 등록 가져오기</button><button type="button" class="cct-btn" data-run="new">🆕 새 항목 찾기 한 번</button><button type="button" class="cct-btn" data-run="fill">📝 제원 채우기 한 번</button><button type="button" class="cct-btn" data-run="photo">🖼️ 사진 찾기 한 번</button></div>' +
         '<div class="cct-out" data-run-out></div>' +
         '<div class="cct-panel"><h3>📜 한 일</h3>' + (c.log.length ? '<div class="cct-log">' + c.log.map(function (l) { return '<div><time>' + esc(l.at) + '</time>' + esc(l.text) + '</div>'; }).join('') + '</div>' : '<p>아직 없어요.</p>') + '</div>' +
         '<p class="cct-note">서버 스케줄(크론)이 돌고 있으면 10분마다 알아서 살펴봐요. 스케줄이 없는 서버에서는 누가 카탈로그 화면을 열 때 살펴봐요. 직접 돌리려면: <code>php artisan catalog:collect --force</code></p>';
@@ -240,7 +241,13 @@
     var esc = C().esc, api = C().api, body = frame(root, 'settings'), M = C().getMeta(), S = null;
     var draw = function (d) {
       S = d.settings;
-      body.innerHTML = '<div class="cct-panel"><h3>🖥️ 화면</h3>' +
+      body.innerHTML = '<div class="cct-panel"><h3>🖼️ 어떤 그림을 보여 줄까</h3><p>목록 카드와 상세 화면에 보이는 그림이에요. 「그림」은 업체검색의 장비 · 재고에서 쓰는 것과 같은 입체 그림(프린터 · 필라멘트 롤 · 레진 병 · 분말 통)이에요.</p>' +
+        [['auto', '카탈로그 사진 → 업체검색 대표 사진 → 그림', '카탈로그에 올린 사진이 있으면 그것, 없으면 업체검색에서 관리자가 고른 모델 대표 사진, 그것도 없으면 그림'],
+          ['company', '업체검색 대표 사진 먼저', '업체검색에서 고른 모델 대표 사진이 있으면 그것을 먼저 (없으면 카탈로그 사진 → 그림)'],
+          ['catalog', '카탈로그 사진만', '카탈로그에 올린 사진만 쓰고, 없으면 그림'],
+          ['icon', '그림만', '사진을 쓰지 않고 모두 그림으로 — 업체검색과 똑같은 모양']].map(function (o) {
+          return '<label class="cct-row" style="cursor:pointer"><div><b>' + o[1] + '</b><small>' + o[2] + '</small></div><input type="radio" name="cct-imode" value="' + o[0] + '"' + (S.image_mode === o[0] ? ' checked' : '') + ' style="width:20px;height:20px"></label>'; }).join('') + '</div>' +
+        '<div class="cct-panel"><h3>🖥️ 화면</h3>' +
         '<div class="cct-row"><div><b>한 번에 보이는 개수</b><small>목록에서 「더 보기」 전까지</small></div><span class="cct-num"><input class="cct-in" type="number" min="8" max="96" data-n="per_page" value="' + S.per_page + '"> 개</span></div>' +
         '<div class="cct-row"><div><b>사진 크기</b><small>올리거나 가져온 사진은 이 크기(긴 변)로 줄여 JPEG 로 저장해요. 목록에는 더 작은 사진(480px)을 따로 만들어 써요</small></div><span class="cct-num"><input class="cct-in" type="number" min="480" max="2400" step="20" data-n="photo_px" value="' + S.photo_px + '"> px</span></div>' +
         '<div class="cct-row"><div><b>사진 품질</b><small>낮을수록 파일이 작아요 (권장 78 ~ 85)</small></div><span class="cct-num"><input class="cct-in" type="number" min="50" max="95" data-n="photo_quality" value="' + S.photo_quality + '"></span></div></div>' +
@@ -253,6 +260,7 @@
         '<div class="cct-row"><div><b>🏠 홈 화면</b><small>홈 디자인의 칸으로 「3D 카탈로그」를 고를 수 있어요</small></div><span class="cct-state ok">연결됨</span></div></div>' +
         '<div class="cct-bar"><button type="button" class="cct-btn cct-btn--p" data-save>저장</button></div>';
       Array.prototype.forEach.call(body.querySelectorAll('[data-n]'), function (i) { i.onchange = function () { S[i.getAttribute('data-n')] = Number(i.value); }; });
+      Array.prototype.forEach.call(body.querySelectorAll('[name="cct-imode"]'), function (i) { i.onchange = function () { if (i.checked) S.image_mode = i.value; }; });
       Array.prototype.forEach.call(body.querySelectorAll('[data-tab]'), function (b) { b.onclick = function () {
         var k = b.getAttribute('data-tab'), i = S.tabs_off.indexOf(k); if (i >= 0) S.tabs_off.splice(i, 1); else S.tabs_off.push(k); b.classList.toggle('on', i >= 0); }; });
       body.querySelector('[data-save]').onclick = function () { var b = this; b.disabled = true; var out = JSON.parse(JSON.stringify(S)); delete out.brave_key;

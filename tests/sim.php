@@ -16,6 +16,25 @@ namespace App\Contracts\Extension {
     }
 }
 
+namespace Modules\Custom\Companies\Services {
+    /** 업체검색 ModelBook 흉내 — known() 은 규칙(승인 · 업체 수 · 숨김/합침)을 넘은 모델만 돌려줌 */
+    final class ModelBook
+    {
+        public static array $known = [];
+
+        public static function known(string $kind, int $uid = 0, int $limit = 300): array
+        {
+            return self::$known[$kind] ?? [];
+        }
+
+        /** 관리자가 고른 모델 대표 사진 */
+        public static function photo(string $kind, ?string $brand, ?string $model): ?string
+        {
+            return $model === 'P2S' || $model === 'P1S' ? '/api/modules/custom-companies/files/'.strtolower((string) $model) : null;
+        }
+    }
+}
+
 namespace {
     use Illuminate\Database\Capsule\Manager as Capsule;
     use Illuminate\Support\Facades\DB;
@@ -158,6 +177,21 @@ namespace {
     }
     t(! PhotoService::safeUrl('http://127.0.0.1/a.jpg') && ! PhotoService::safeUrl('http://192.168.0.5/a.jpg') && ! PhotoService::safeUrl('file:///etc/passwd') && PhotoService::safeUrl('https://93.184.216.34/a.jpg'), '주소로 가져오기 — 안쪽 주소는 막음');
 
+    echo "■ 어떤 그림을 보여 줄까 (관리자 설정)\n";
+    $img = static fn (string $key) => $svc->detail(...$svc->find($key));
+    $p1s = (string) DB::table('cat_equipment')->where('key', 'bambu-lab-p1s-fdm')->value('image_url');
+    $a1 = $img('xtool-p2s-laser');
+    $a2 = $img('bambu-lab-p1s-fdm');
+    t($a1['image'] === '/api/modules/custom-companies/files/p2s' && $a1['photos'][0]['credit'] === '업체검색 대표 사진' && $a2['image'] === $p1s && $img('elegoo-saturn-4-ultra-sla')['image'] === '', '기본: 카탈로그 사진 → 없으면 업체검색 대표 사진 → 없으면 그림');
+    Settings::save(['image_mode' => 'company']);
+    t($img('bambu-lab-p1s-fdm')['image'] === '/api/modules/custom-companies/files/p1s' && count($img('bambu-lab-p1s-fdm')['photos']) === 1, '「업체검색 대표 사진 먼저」');
+    Settings::save(['image_mode' => 'catalog']);
+    t($img('xtool-p2s-laser')['image'] === '' && $img('bambu-lab-p1s-fdm')['image'] === $p1s, '「카탈로그 사진만」');
+    Settings::save(['image_mode' => 'icon']);
+    $ic = $img('bambu-lab-p1s-fdm');
+    t($ic['image'] === '' && $ic['photos'] === [] && $ic['enclosed'] === false && count($svc->detail(...array_merge($svc->find('bambu-lab-p1s-fdm'), [true]))['photos']) === 1, '「그림만」 — 사진을 쓰지 않음 (편집하는 사람에게는 사진 관리가 보임)');
+    Settings::save(['image_mode' => 'auto']);
+
     echo "■ AI 연결 · 자동 수집\n";
     t(AiSettings::normalize(['enabled' => true, 'provider' => 'ollama', 'url' => 'http://192.168.0.216:11434', 'model' => 'qwen2.5:7b', 'api_key' => ''])['servers'][0]['models'][0]['name'] === 'qwen2.5:7b', '예전 카탈로그 AI 설정(서버 하나)도 첫 서버로 읽음');
     AiClient::$settingsOverride = ['enabled' => true, 'servers' => [
@@ -257,12 +291,47 @@ namespace {
     t(count($res['ran']) === 1 || str_contains($col->quiet()['reason'], '오늘'), '하루 최대를 넘지 않음');
     t(str_contains($col->tick(true)['ran'][0] ?? '', '') && count(Settings::state()['log']) >= 3, '「지금 돌리기」는 조건 없이 · 기록이 남음');
 
+    echo "■ 회원이 등록한 것 (업체검색 규칙 그대로)\n";
+    DB::table('cat_suggestions')->delete();
+    Settings::save(['apply' => 'review']);
+    \Modules\Custom\Companies\Services\ModelBook::$known = ['fdm' => [
+        ['b' => 'Bambu Lab', 'm' => 'p1s', 'n' => 5, 's' => [256, 256, 256]],           // 이미 있음 (표기만 다름)
+        ['b' => 'Two Trees', 'm' => 'SK1', 'n' => 3, 's' => [256, 256, 256], 'mc' => 0],   // 업체 3곳이 씀 → 가져옴
+        ['b' => '', 'm' => '이름 모를 것', 'n' => 4],                                       // 제조사 없음 → 건너뜀
+    ]];
+    DB::connection()->getSchemaBuilder()->create('cmp_spools', function ($t) {
+        $t->id();
+        $t->unsignedBigInteger('company_id');
+        $t->string('kind', 12);
+        $t->string('material', 40);
+        $t->string('brand', 40)->nullable();
+        $t->unsignedSmallInteger('nozzle_min')->nullable();
+        $t->unsignedSmallInteger('nozzle_max')->nullable();
+        $t->unsignedInteger('weight_g')->nullable();
+        $t->timestamp('deleted_at')->nullable();
+    });
+    foreach ([[1, 'Kingroon', 'PETG', 230, 250], [2, 'kingroon', 'petg', null, null], [2, 'Kingroon', 'PETG', null, null], [3, 'JAYO', 'PLA+', null, null], [4, 'eSUN', 'pla+', null, null], [5, 'ESUN', 'PLA+', null, null]] as $x) {
+        DB::table('cmp_spools')->insert(['company_id' => $x[0], 'kind' => 'fdm', 'brand' => $x[1], 'material' => $x[2], 'nozzle_min' => $x[3], 'nozzle_max' => $x[4], 'weight_g' => 1000]);
+    }
+    $line = $col->taskMembers();
+    $sg = $col->suggestions();
+    $titles = array_column($sg['items'], 'title');
+    sort($titles);
+    t($titles === ['Kingroon PETG', 'Two Trees SK1'] && str_contains($line, '2개'), '업체검색 규칙을 넘은 것만 — 장비 SK1(업체 3곳) · 재료 Kingroon PETG(업체 2곳). 이미 있는 것(P1S · eSUN PLA+) · 한 곳만 쓴 것(JAYO)은 빼고');
+    $kp = array_values(array_filter($sg['items'], static fn ($x) => $x['title'] === 'Kingroon PETG'))[0];
+    t(str_contains($kp['source'], '회원 등록 · 업체 2곳') && in_array(['label' => '노즐 최저', 'value' => '230 °C'], $kp['lines'], true), '회원이 적은 값(노즐 온도)도 같이 · 출처 「회원 등록」');
+    $ak = $col->apply($kp['id'])['key'];
+    t(DB::table('cat_materials')->where('key', $ak)->value('source') === 'members' && DB::table('cat_materials')->where('key', $ak)->value('nozzle_max') == 250, '반영 → 카탈로그 재료');
+    $col->reject(array_values(array_filter($sg['items'], static fn ($x) => $x['title'] === 'Two Trees SK1'))[0]['id']);
+    t(str_contains($col->taskMembers(), '없어요') && $col->suggestions()['pending'] === 0, '한 번 버린 것 · 이미 들어간 것은 다시 올리지 않음');
+
     echo "■ 다른 모듈과 잇기\n";
     $book = Catalog::equipmentBook();
     $x1 = array_values(array_filter($book['fdm'], static fn ($x) => $x['m'] === 'X1 Carbon'))[0] ?? [];
     t(isset($book['fdm'], $book['sla'], $book['laser']) && $x1['b'] === 'Bambu Lab' && $x1['s'] === [256, 256, 256] && $x1['mc'] === 1 && ! isset($x1['image']), '업체검색용 장비 목록 — equipment-catalog.json 과 같은 꼴 (사진 없음)');
     $mb = Catalog::materialBook();
-    t($mb['fdm'][0]['mat'] === 'PLA+' && $mb['fdm'][0]['nz'] === [205, 225] && $mb['fdm'][0]['dry'] === [50, 6], '재료 목록');
+    $es = array_values(array_filter($mb['fdm'], static fn ($x) => $x['b'] === 'eSUN'))[0];
+    t($es['mat'] === 'PLA+' && $es['nz'] === [205, 225] && $es['dry'] === [50, 6], '재료 목록');
     $sr = CatalogListener::siteSearch('bambu', 1, 3, 'relevance');
     t($sr['total'] >= 4 && count($sr['items']) === 3 && $sr['has_more_pages'] && str_contains($sr['items'][0]['title_highlighted'], '<mark>Bambu</mark>') && str_starts_with($sr['items'][0]['url'], '/catalog/'), '통합 검색 — 카탈로그 탭');
     $sr2 = CatalogListener::siteSearch('pla', 1, 10, 'relevance');

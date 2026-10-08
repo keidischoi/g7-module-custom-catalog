@@ -10,6 +10,7 @@ use Modules\Custom\Catalog\Support\Settings;
 /**
  * 0.2.0 🌙 자동 수집 — 서버가 조용할 때 AI 가 카탈로그를 채움.
  *
+ *  회원 등록 가져오기(members): 업체검색에서 회원이 적어 넣은 장비 모델 · 재료 — 업체검색 규칙(관리자 승인, 또는 서로 다른 업체 N곳 이상 · 숨김/합침은 빼고)을 넘은 것만. AI 를 쓰지 않음
  *  새 모델 · 재료 찾기(new): 제조사를 돌아가며 「목록에 없는 제품」을 물음
  *  빈 제원 채우기(fill)   : 제원이 덜 찬 항목의 빈 칸만 물음 (이미 적힌 값은 건드리지 않음)
  *  사진 찾기(photo)       : 사진 없는 항목 — ① 검색(Brave 키가 있으면) ② 제품 공식 페이지의 대표 사진 ③ 위키미디어 공용
@@ -54,7 +55,7 @@ final class Collector
         if (! $s['auto']) {
             return ['ok' => false, 'reason' => '자동 수집이 꺼져 있어요.'];
         }
-        if (! $s['task_new'] && ! $s['task_fill'] && ! $s['task_photo']) {
+        if (! $s['task_members'] && ! $s['task_new'] && ! $s['task_fill'] && ! $s['task_photo']) {
             return ['ok' => false, 'reason' => '할 일이 모두 꺼져 있어요.'];
         }
         $h = self::$hourOverride ?? (int) date('G');
@@ -111,7 +112,7 @@ final class Collector
             }
             $st['last'] = time();
             Settings::saveState($st);
-            $tasks = array_values(array_filter(['new', 'fill', 'photo'], static fn ($t) => $only ? $t === $only : $s['task_'.$t]));
+            $tasks = array_values(array_filter(['members', 'new', 'fill', 'photo'], static fn ($t) => $only ? $t === $only : $s['task_'.$t]));
             $ran = [];
             $n = $only ? 1 : $s['auto_per_run'];
             for ($i = 0; $i < $n && $tasks; $i++) {
@@ -122,12 +123,13 @@ final class Collector
                 Settings::saveState($st);
                 try {
                     $line = match ($task) {
+                        'members' => $this->taskMembers(),
                         'new' => $this->taskNew(),
                         'fill' => $this->taskFill(),
                         default => $this->taskPhoto(),
                     };
                 } catch (\Throwable $e) {
-                    $line = '⚠ '.['new' => '새 항목 찾기', 'fill' => '제원 채우기', 'photo' => '사진 찾기'][$task].': '.mb_substr($e->getMessage(), 0, 200);
+                    $line = '⚠ '.['members' => '회원 등록 가져오기', 'new' => '새 항목 찾기', 'fill' => '제원 채우기', 'photo' => '사진 찾기'][$task].': '.mb_substr($e->getMessage(), 0, 200);
                 }
                 Settings::log($line);
                 $ran[] = $line;
@@ -138,6 +140,101 @@ final class Collector
             flock($lock, LOCK_UN);
             fclose($lock);
         }
+    }
+
+    /* ───────── 회원이 등록한 것 (업체검색) ───────── */
+
+    /**
+     * 업체검색에서 회원이 적어 넣은 장비 모델 · 재료를 카탈로그로 — 업체검색이 정한 규칙 그대로:
+     *  장비: ModelBook::known() 이 「다른 사람에게도 보여 주는」 모델 = 관리자가 승인했거나 서로 다른 업체 N곳(model_min_companies) 이상이 쓴 것. 숨김 · 합침은 빠짐.
+     *  재료: 재고(cmp_spools)에 서로 다른 업체 N곳 이상이 같은 제조사 · 재료로 넣은 것. 가장 많이 쓴 표기로.
+     * AI 를 쓰지 않음. 이미 카탈로그에 있거나(보관한 것 포함) 한 번 버린 제안은 다시 올리지 않음.
+     */
+    public function taskMembers(int $limit = 20): string
+    {
+        $MB = '\Modules\Custom\Companies\Services\ModelBook';
+        $ST = '\Modules\Custom\Companies\Support\Settings';
+        $spools = false;
+        try {
+            $spools = \Illuminate\Support\Facades\Schema::hasTable('cmp_spools');
+        } catch (\Throwable) {
+        }
+        if (! class_exists($MB) && ! $spools) {
+            return '회원 등록 가져오기: 업체검색 모듈이 없어요.';
+        }
+        $min = 2;
+        try {
+            $min = class_exists($ST) ? max(1, (int) $ST::get('model_min_companies')) : 2;
+        } catch (\Throwable) {
+        }
+        $seen = ['equipment' => [], 'materials' => []];
+        foreach (['equipment' => 'model', 'materials' => 'name'] as $type => $tcol) {
+            foreach (DB::table(Schema::table($type))->get(['brand', $tcol, 'kind']) as $r) {
+                $seen[$type][$r->kind.'|'.CatalogService::norm($r->brand).'|'.CatalogService::norm($r->{$tcol})] = true;
+            }
+            foreach (DB::table(Schema::SUGGEST)->where('task', 'new')->where('item_type', $type)->whereIn('status', ['pending', 'rejected'])->pluck('payload') as $p) {
+                $p = Schema::json($p);
+                $seen[$type][($p['kind'] ?? '').'|'.CatalogService::norm($p['brand'] ?? '').'|'.CatalogService::norm($p['title'] ?? '')] = true;
+            }
+        }
+        $added = [];
+        if (class_exists($MB)) {
+            foreach (array_keys(Fields::EQUIPMENT_KINDS) as $kind) {
+                foreach ($MB::known($kind, 0, 300) as $m) {
+                    $brand = trim((string) ($m['b'] ?? ''));
+                    $model = trim((string) ($m['m'] ?? ''));
+                    $k = $kind.'|'.CatalogService::norm($brand).'|'.CatalogService::norm($model);
+                    if ($brand === '' || mb_strlen($model) < 2 || isset($seen['equipment'][$k]) || count($added) >= $limit) {
+                        continue;
+                    }
+                    $seen['equipment'][$k] = true;
+                    $vals = [];
+                    if (is_array($m['s'] ?? null) && count($m['s']) >= 2) {
+                        $vals = ['build_x_mm' => (int) $m['s'][0], 'build_y_mm' => (int) $m['s'][1], 'build_z_mm' => (int) ($m['s'][2] ?? 0)];
+                    }
+                    if (! empty($m['mc'])) {
+                        $vals['multicolor'] = true;
+                    }
+                    $this->suggest('new', 'equipment', null, $brand.' '.$model, ['brand' => $brand, 'title' => $model, 'kind' => $kind, 'values' => array_filter($vals)],
+                        '회원 등록 · 업체 '.(int) ($m['n'] ?? 1).'곳');
+                    $added[] = $brand.' '.$model;
+                }
+            }
+        }
+        if ($spools) {
+            $g = [];
+            foreach (DB::table('cmp_spools')->whereNull('deleted_at')->whereNotNull('brand')->where('brand', '!=', '')->where('material', '!=', '')->get() as $r) {
+                if (! Fields::validKind('materials', (string) $r->kind)) {
+                    continue;
+                }
+                $k = $r->kind.'|'.CatalogService::norm($r->brand).'|'.CatalogService::norm($r->material);
+                $x = &$g[$k];
+                $x ??= ['kind' => (string) $r->kind, 'spell' => [], 'companies' => [], 'vals' => []];
+                $sp = trim((string) $r->brand).'|'.trim((string) $r->material);
+                $x['spell'][$sp] = ($x['spell'][$sp] ?? 0) + 1;
+                $x['companies'][(int) $r->company_id] = true;
+                foreach (['diameter', 'nozzle_min', 'nozzle_max', 'bed_min', 'bed_max', 'dry_temp', 'dry_hours', 'weight_g'] as $c) {
+                    if (! isset($x['vals'][$c]) && isset($r->{$c}) && (float) $r->{$c} > 0) {
+                        $x['vals'][$c] = $r->{$c};
+                    }
+                }
+                unset($x);
+            }
+            foreach ($g as $k => $x) {
+                if (count($x['companies']) < $min || isset($seen['materials'][$k]) || count($added) >= $limit) {
+                    continue;
+                }
+                arsort($x['spell']);
+                [$brand, $mat] = explode('|', (string) array_key_first($x['spell']), 2);
+                $seen['materials'][$k] = true;
+                $this->suggest('new', 'materials', null, $brand.' '.$mat, ['brand' => $brand, 'title' => $mat, 'kind' => $x['kind'], 'values' => ['material' => $mat] + $x['vals']],
+                    '회원 등록 · 업체 '.count($x['companies']).'곳');
+                $added[] = $brand.' '.$mat;
+            }
+        }
+
+        return '회원 등록 가져오기: '.($added ? count($added).'개 ('.implode(', ', array_slice($added, 0, 4)).(count($added) > 4 ? ' …' : '').')'
+            : '새로 넘어온 것이 없어요 (관리자가 승인했거나 업체 '.$min.'곳 이상이 쓴 것만 가져와요)');
     }
 
     /* ───────── 새 모델 · 재료 ───────── */
@@ -355,7 +452,8 @@ final class Collector
         $j = json_decode((string) self::page('https://commons.wikimedia.org/w/api.php?action=query&format=json&generator=search&gsrnamespace=6&gsrlimit=6&prop=imageinfo&iiprop=url|extmetadata|mime&iiurlwidth=1280&gsrsearch='.rawurlencode($brand.' '.$model), []), true);
         foreach (is_array($j['query']['pages'] ?? null) ? $j['query']['pages'] : [] as $pg) {
             $ii = $pg['imageinfo'][0] ?? null;
-            if (! is_array($ii) || ! preg_match('#^image/(jpeg|png|webp)$#', (string) ($ii['mime'] ?? '')) || ! self::matches((string) ($pg['title'] ?? ''), $model)) {
+            if (! is_array($ii) || ! preg_match('#^image/(jpeg|png|webp)$#', (string) ($ii['mime'] ?? '')) || ! self::matches((string) ($pg['title'] ?? ''), $model)
+                || ! self::matches((string) ($pg['title'] ?? ''), (string) (preg_split('/[\s(]+/u', trim($brand))[0] ?? ''))) {
                 continue;
             }
             $meta = $ii['extmetadata'] ?? [];
@@ -387,10 +485,10 @@ final class Collector
     /* ───────── 제안함 ───────── */
 
     /** @param array<string, mixed> $payload */
-    public function suggest(string $task, string $type, ?string $key, string $title, array $payload): int
+    public function suggest(string $task, string $type, ?string $key, string $title, array $payload, string $source = ''): int
     {
         $id = (int) DB::table(Schema::SUGGEST)->insertGetId(['task' => $task, 'item_type' => $type, 'item_key' => $key, 'title' => mb_substr($title, 0, 160),
-            'payload' => json_encode($payload, JSON_UNESCAPED_UNICODE), 'source' => mb_substr($task === 'photo' ? (string) ($payload['from'] ?? '') : $this->ai->last, 0, 300),
+            'payload' => json_encode($payload, JSON_UNESCAPED_UNICODE), 'source' => mb_substr($source !== '' ? $source : ($task === 'photo' ? (string) ($payload['from'] ?? '') : $this->ai->last), 0, 300),
             'status' => 'pending', 'created_at' => now(), 'updated_at' => now()]);
         if (Settings::get('apply') === 'auto') {
             try {
@@ -413,7 +511,7 @@ final class Collector
         $p = is_array($edited) ? $edited : Schema::json($sg->payload);
         $type = (string) $sg->item_type;
         if ($sg->task === 'new') {
-            $key = $this->catalog->save($type, $p, true, 'ai')['key'];
+            $key = $this->catalog->save($type, $p, true, str_starts_with((string) ($sg->source ?? ''), '회원') ? 'members' : 'ai')['key'];
         } elseif ($sg->task === 'fill') {
             $key = $this->catalog->save($type, ['key' => (string) $sg->item_key] + $p, true)['key'];
         } else {

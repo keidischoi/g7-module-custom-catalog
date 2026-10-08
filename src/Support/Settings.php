@@ -16,6 +16,7 @@ final class Settings
         return [
             'per_page' => 24,
             'tabs_off' => [],                 // 숨길 탭 키
+            'image_mode' => 'auto',           // 보여 줄 사진: auto · company · catalog · icon (CatalogService::imageOf)
             'photo_px' => 1100,               // 사진 긴 변
             'photo_quality' => 82,            // JPEG 품질
             'auto' => false,                  // 🌙 조용할 때 자동 수집
@@ -25,6 +26,7 @@ final class Settings
             'auto_every' => 10,               // 분 — 한 번 돌고 쉬는 시간
             'auto_per_run' => 2,              // 한 번에 하는 일 수
             'auto_per_day' => 40,             // 하루 최대
+            'task_members' => true,           // 업체검색에서 회원이 등록한 모델 · 재료 가져오기 (AI 안 씀)
             'task_new' => true,               // 새 모델 · 재료 찾기
             'task_fill' => true,              // 빈 제원 채우기
             'task_photo' => true,             // 사진 찾기
@@ -96,6 +98,7 @@ final class Settings
         return [
             'per_page' => $int('per_page', 8, 96),
             'tabs_off' => array_values(array_intersect($tabs, is_array($raw['tabs_off'] ?? null) ? $raw['tabs_off'] : [])),
+            'image_mode' => in_array($raw['image_mode'] ?? '', ['company', 'catalog', 'icon'], true) ? $raw['image_mode'] : 'auto',
             'photo_px' => $int('photo_px', 480, 2400),
             'photo_quality' => $int('photo_quality', 50, 95),
             'auto' => $bool('auto'),
@@ -105,6 +108,7 @@ final class Settings
             'auto_every' => $int('auto_every', 1, 720),
             'auto_per_run' => $int('auto_per_run', 1, 10),
             'auto_per_day' => $int('auto_per_day', 1, 500),
+            'task_members' => $bool('task_members'),
             'task_new' => $bool('task_new'),
             'task_fill' => $bool('task_fill'),
             'task_photo' => $bool('task_photo'),
