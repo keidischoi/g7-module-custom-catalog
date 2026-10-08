@@ -1,4 +1,4 @@
-/*! custom-catalog 0.1.55 */
+/*! custom-catalog 0.1.56 */
 (function () {
   "use strict";
   function boot() {
@@ -58,7 +58,7 @@
       else if (row.wiki_url) link += "<a href=\"" + esc(row.wiki_url) + "\" target=\"_blank\" rel=\"noopener\">제조사 홈</a>";
       if (row.homepage_url && row.homepage_url !== row.wiki_url) link += "<a href=\"" + esc(row.homepage_url) + "\" target=\"_blank\" rel=\"noopener\">제조사 홈</a>";
       var makerHit = null;
-      makers.forEach(function (m) { if (!makerHit && String(row.brand || "").toLowerCase().indexOf(m.match) >= 0) makerHit = m; });
+      (window.__cctMakers || []).forEach(function (m) { if (!makerHit && String(row.brand || "").toLowerCase().indexOf(m.match) >= 0) makerHit = m; });
       if (makerHit && makerHit.support) link += "<a href=\"" + esc(makerHit.support) + "\" target=\"_blank\" rel=\"noopener\">고객센터</a>";
       if (makerHit && makerHit.contact) link += "<a href=\"" + esc(makerHit.contact) + "\" target=\"_blank\" rel=\"noopener\">문의하기</a>";
       var tools = can ? "<button type=\"button\" id=\"cct-edit\">수정</button><button type=\"button\" id=\"cct-del\">삭제</button>" : "";
@@ -160,22 +160,14 @@
       });
     }
     function load() {
-      Promise.all([
-        fetch("/api/modules/custom-catalog/equipment/" + encodeURIComponent(key)).then(function (r) { return r.json(); }).catch(function () { return {}; }),
-        fetch("/api/modules/custom-catalog/materials/" + encodeURIComponent(key)).then(function (r) { return r.json(); }).catch(function () { return {}; }),
-        fetch("/api/modules/custom-catalog/me", {headers: authHeaders(true), credentials:"same-origin"}).then(function (r) { return r.json(); }).catch(function () { return {}; })
-      ]).then(function (xs) {
-        var row = (xs[0] && xs[0].success && xs[0].data) || (xs[1] && xs[1].success && xs[1].data) || null;
-        fetch("/api/modules/custom-catalog/assets/briefs.json").then(function (r) { return r.json(); }).then(function (briefs) {
-          var extra = briefs && row ? briefs[row.key] : null;
-          if (extra) {
-            if (!row.summary) row.summary = extra.summary;
-            if (!row.wiki_url) row.wiki_url = extra.wiki_url;
-            row.facts = Object.assign({}, extra.facts || {}, row.facts || {});
-          }
-          show(row, !!(xs[2] && xs[2].data && xs[2].data.can_edit));
-        }).catch(function () { show(row, !!(xs[2] && xs[2].data && xs[2].data.can_edit)); });
-      });
+      var can = false;
+      function paint(row) { try { show(row, can); } catch (e) { root.innerHTML = "<div class=\"cct\"><p>화면을 그리지 못했습니다.</p></div>"; } }
+      fetch("/api/modules/custom-catalog/equipment/" + encodeURIComponent(key)).then(function (r) { return r.json(); }).then(function (j) {
+        if (j && j.success && j.data) { paint(j.data); return; }
+        return fetch("/api/modules/custom-catalog/materials/" + encodeURIComponent(key)).then(function (r) { return r.json(); }).then(function (m) { paint(m && m.success ? m.data : null); });
+      }).catch(function () { paint(null); });
+      fetch("/api/modules/custom-catalog/me", {headers: authHeaders(true), credentials:"same-origin"}).then(function (r) { return r.json(); }).then(function (j) { can = !!(j.data && j.data.can_edit); }).catch(function () {});
+      fetch("/api/modules/custom-catalog/assets/makers.json").then(function (r) { return r.json(); }).then(function (j) { window.__cctMakers = j || []; }).catch(function () {});
     }
     load();
   }
