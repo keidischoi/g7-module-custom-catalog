@@ -1,4 +1,4 @@
-/*! custom-catalog 0.1.7 — 관리자 제원 입력 */
+/*! custom-catalog 0.1.8 — 관리자 제원 입력 */
 (function () {
   "use strict";
   var root = document.getElementById("cct_admin");
@@ -21,7 +21,7 @@
     return items.map(function (r) { return "<li><b>" + esc(r.brand) + "</b> " + esc(r.model || r.name) + " <button type=\"button\" data-del=\"" + kind + ":" + esc(r.key) + "\">보관</button></li>"; }).join("");
   }
   function paint(eq, mt) {
-    root.innerHTML = '<div style="max-width:980px;margin:0 auto;padding:20px"><h1 style="font-size:24px">3D 카탈로그 제원</h1><p>관리자만 장비 · 필라멘트 · 레진 카드를 넣습니다.</p><h2>장비</h2>' + form("equipment") + "<ul>" + list(eq, "equipment") + "</ul><h2>필라멘트 · 레진</h2>" + form("materials") + "<ul>" + list(mt, "materials") + "</ul></div>";
+    root.innerHTML = '<div style="max-width:980px;margin:0 auto;padding:20px"><h1 style="font-size:24px">3D 카탈로그 제원</h1><p>관리자 또는 제원 입력 권한이 있는 회원만 넣습니다.</p><h2>장비</h2>' + form("equipment") + "<ul>" + list(eq, "equipment") + "</ul><h2>필라멘트 · 레진</h2>" + form("materials") + "<ul>" + list(mt, "materials") + "</ul></div>";
     [].forEach.call(root.querySelectorAll("form"), function (f) {
       f.addEventListener("submit", function (e) {
         e.preventDefault();

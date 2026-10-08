@@ -1,4 +1,4 @@
-/*! custom-catalog 0.1.7 — /catalog 장비 · 필라멘트 검색 */
+/*! custom-catalog 0.1.8 — /catalog 장비 · 필라멘트 검색 */
 (function () {
   "use strict";
   var root = document.getElementById("cct_root");

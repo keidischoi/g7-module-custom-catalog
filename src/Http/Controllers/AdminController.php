@@ -11,28 +11,59 @@ use Illuminate\Support\Str;
 
 class AdminController extends Controller
 {
+    private function allowed(Request $request): bool
+    {
+        $user = $request->user();
+        if (! $user) {
+            return false;
+        }
+        foreach (['hasRole', 'hasPermission', 'can'] as $m) {
+            if (! method_exists($user, $m)) {
+                continue;
+            }
+            if ($m === 'hasRole' && ($user->hasRole('admin') || $user->hasRole('custom-catalog.editor'))) {
+                return true;
+            }
+            if ($m !== 'hasRole' && $user->{$m}('custom-catalog.specs.update')) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function deny(): JsonResponse
+    {
+        return response()->json(['success' => false, 'message' => '제원 입력 권한이 없습니다.'], 403);
+    }
+
     public function equipment(Request $request): JsonResponse
     {
+        if (! $this->allowed($request)) return $this->deny();
         return response()->json(['success' => true, 'data' => $this->rows('cat_equipment', $request)]);
     }
 
     public function materials(Request $request): JsonResponse
     {
+        if (! $this->allowed($request)) return $this->deny();
         return response()->json(['success' => true, 'data' => $this->rows('cat_materials', $request)]);
     }
 
     public function saveEquipment(Request $request): JsonResponse
     {
+        if (! $this->allowed($request)) return $this->deny();
         return $this->save('cat_equipment', $request, ['kind', 'brand', 'model', 'build_x_mm', 'build_y_mm', 'build_z_mm', 'min_layer_um', 'multicolor', 'enclosed', 'nozzle', 'homepage_url', 'note']);
     }
 
     public function saveMaterial(Request $request): JsonResponse
     {
+        if (! $this->allowed($request)) return $this->deny();
         return $this->save('cat_materials', $request, ['kind', 'brand', 'name', 'material', 'color', 'color_hex', 'diameter', 'nozzle_min', 'nozzle_max', 'bed_min', 'bed_max', 'dry_temp', 'dry_hours', 'chamber', 'weight_g', 'traits', 'sds_url', 'storage_note', 'caution']);
     }
 
     public function remove(Request $request, string $table, string $key): JsonResponse
     {
+        if (! $this->allowed($request)) return $this->deny();
         $table = $table === 'materials' ? 'cat_materials' : 'cat_equipment';
         if (Schema::hasTable($table)) {
             DB::table($table)->where('key', $key)->update(['status' => 'archived', 'updated_at' => now()]);
