@@ -427,6 +427,16 @@ namespace {
     t($sr['total'] >= 4 && count($sr['items']) === 3 && $sr['has_more_pages'] && str_contains($sr['items'][0]['title_highlighted'], '<mark>Bambu</mark>') && str_starts_with($sr['items'][0]['url'], '/catalog/'), '통합 검색 — 카탈로그 탭');
     $sr2 = CatalogListener::siteSearch('pla', 1, 10, 'relevance');
     t($sr2['total'] === 1 && $sr2['items'][0]['badge'] === '필라멘트', '통합 검색 — 재료도');
+    t(CatalogService::kindWords('equipment', '레진 프린터')[0] === ['sla', 'dlp'] && CatalogService::kindWords('equipment', 'Elegoo 레진프린터') === [['sla', 'dlp'], ['Elegoo']]
+        && CatalogService::kindWords('materials', 'eSUN 필라멘트') === [['fdm'], ['eSUN']] && CatalogService::kindWords('materials', '레진 프린터') === [['resin'], ['프린터']]
+        && CatalogService::kindWords('equipment', 'Bambu P1S') === [null, ['Bambu', 'P1S']] && CatalogService::kindWords('equipment', 'FDM 프린터')[0] === ['fdm'], '검색어에서 종류 이름을 골라냄 (띄어쓰기 상관없이)');
+    $st = CatalogListener::searchType('materials', '필라멘트', 1, 50);
+    $fdmN = DB::table('cat_materials')->where('status', 'active')->where('kind', 'fdm')->count();
+    t($st['total'] === $fdmN && $fdmN > 0 && $st['items'][0]['category'] === 'filament' && str_starts_with($st['items'][0]['url'], '/catalog/') && $st['items'][0]['title'] !== '', '통합 검색 「필라멘트 · 레진」 — 「필라멘트」 로 필라멘트 전부 (제목 · 주소)');
+    $rp = CatalogListener::searchType('equipment', '레진 프린터', 1, 50);
+    t($rp['total'] === DB::table('cat_equipment')->where('status', 'active')->whereIn('kind', ['sla', 'dlp'])->count() && CatalogListener::searchType('materials', '레진 프린터', 1, 5)['total'] === 0, '「레진 프린터」 는 장비에서만 (레진 재료로 잘못 나오지 않음)');
+    $wp = CatalogListener::searchType('equipment', 'P1S', 1, 5);
+    t($wp['total'] >= 1 && $wp['items'][0]['has_thumbnail'] === ($wp['items'][0]['thumbnail'] !== '') && array_key_exists('image_url', $wp['items'][0]) && CatalogListener::searchType('equipment', 'P1S', 9, 5)['items'] === [], '사진 주소 · 넘는 쪽은 빈 목록');
     $home = (new CatalogListener())->homeSections([]);
     t($home[0]['key'] === 'catalog' && count($home[0]['items']) >= 4 && $home[0]['items'][0]['image'] !== '', '홈 칸 — 사진 있는 것부터');
     t(count(Fields::forKind('equipment', 'fdm')) >= 40 && count(Fields::forKind('materials', 'fdm')) >= 30 && count(Fields::meta()['tabs']) === 8, '칸 정의 (FDM 장비 '.count(Fields::forKind('equipment', 'fdm')).'칸 · 필라멘트 '.count(Fields::forKind('materials', 'fdm')).'칸)');

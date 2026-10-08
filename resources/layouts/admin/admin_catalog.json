@@ -1,5 +1,5 @@
 {
-  "version": "0.2.8",
+  "version": "0.2.9",
   "layout_name": "admin_catalog",
   "extends": "_admin_base",
   "meta": {
@@ -8,7 +8,7 @@
   "scripts": [
     {
       "id": "cct_app",
-      "src": "/api/modules/custom-catalog/assets/catalog-app.js?v=0.2.8",
+      "src": "/api/modules/custom-catalog/assets/catalog-app.js?v=0.2.9",
       "async": true,
       "optional": true,
       "required": false,
@@ -19,7 +19,7 @@
     },
     {
       "id": "cct_admin_js",
-      "src": "/api/modules/custom-catalog/assets/catalog-admin.js?v=0.2.8",
+      "src": "/api/modules/custom-catalog/assets/catalog-admin.js?v=0.2.9",
       "async": true,
       "optional": true,
       "required": false,
