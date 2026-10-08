@@ -1,9 +1,15 @@
-/*! custom-catalog 0.1.8 — /catalog 장비 · 필라멘트 검색 */
+/*! custom-catalog 0.1.9 — /catalog 장비 · 필라멘트 검색 */
 (function () {
   "use strict";
-  var root = document.getElementById("cct_root");
-  if (!root || root.dataset.ready) return;
-  root.dataset.ready = "1";
+  function boot() {
+    var root = document.getElementById("cct_root");
+    if (!root) return false;
+    if (root.dataset.ready) return true;
+    root.dataset.ready = "1";
+    start(root);
+    return true;
+  }
+  function start(root) {
   var q = "";
   var kind = "";
   var CSS = ".cct{--ink:#0f172a;--mute:#64748b;--line:#e2e8f0;--card:#fff;--soft:#f8fafc;--acc:#0f766e;--acc2:#0891b2;color:var(--ink);font-size:14px;line-height:1.55;max-width:1100px;margin:0 auto;padding:20px 16px 64px}" +
@@ -69,4 +75,9 @@
   }
   paint([], [], false);
   load();
+  }
+  if (!boot()) {
+    var n = 0;
+    var timer = setInterval(function () { if (boot() || ++n > 40) clearInterval(timer); }, 250);
+  }
 })();

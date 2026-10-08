@@ -1,9 +1,14 @@
-/*! custom-catalog 0.1.8 — 관리자 제원 입력 */
+/*! custom-catalog 0.1.9 — 관리자 제원 입력 */
 (function () {
   "use strict";
-  var root = document.getElementById("cct_admin");
-  if (!root || root.dataset.ready) return;
-  root.dataset.ready = "1";
+  function boot() {
+    var root = document.getElementById("cct_admin");
+    if (!root || root.dataset.ready) return !!root;
+    root.dataset.ready = "1";
+    start(root);
+    return true;
+  }
+  function start(root) {
   var token = "";
   try { token = localStorage.getItem("auth_token") || localStorage.getItem("token") || ""; } catch (e) {}
   function headers() { var h = { Accept: "application/json", "Content-Type": "application/json" }; if (token) h.Authorization = "Bearer " + String(token).replace(/^"+|"+$/g, ""); return h; }
@@ -46,4 +51,9 @@
   }
   paint([], []);
   load();
+  }
+  if (!boot()) {
+    var n = 0;
+    var timer = setInterval(function () { if (boot() || ++n > 40) clearInterval(timer); }, 250);
+  }
 })();
