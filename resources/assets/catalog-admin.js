@@ -1,4 +1,4 @@
-/*! custom-catalog 0.1.22 — 관리자 제원 입력 */
+/*! custom-catalog 0.1.23 — 관리자 제원 입력 */
 (function () {
   "use strict";
   function boot() {
@@ -56,7 +56,8 @@ function field(name, label, value) { return '<label style="display:grid;gap:4px;
       fetch("/api/modules/custom-catalog/admin/materials", { headers: headers(), credentials: "same-origin" }).then(function (r) { return r.json(); })
     ]).then(function (xs) { paint((xs[0].data && xs[0].data.items) || [], (xs[1].data && xs[1].data.items) || []); });
   }
-  paint([], []);\n  var box=document.createElement("div"); box.id="cct-ai"; box.innerHTML="<h2>AI 설정</h2><p>도우미 AI와 같은 서버 설정입니다. 제안만 하고 기존 카드는 덮지 않습니다.</p><form id=\"cct-ai-form\"><label>사용 <input name=\"enabled\" type=\"checkbox\"></label><input name=\"provider\" placeholder=\"ollama\"><input name=\"url\" placeholder=\"http://localhost:11434\"><input name=\"model\" placeholder=\"qwen2.5:7b\"><input name=\"api_key\" placeholder=\"키, 비우면 유지\"><button>저장</button></form><button type=\"button\" id=\"cct-suggest\">새 기종 제안</button><pre id=\"cct-suggest-out\"></pre>"; root.appendChild(box);
+  paint([], []);
+  var box=document.createElement("div"); box.id="cct-ai"; box.innerHTML="<h2>AI 설정</h2><p>도우미 AI와 같은 서버 설정입니다. 제안만 하고 기존 카드는 덮지 않습니다.</p><form id=\"cct-ai-form\"><label>사용 <input name=\"enabled\" type=\"checkbox\"></label><input name=\"provider\" placeholder=\"ollama\"><input name=\"url\" placeholder=\"http://localhost:11434\"><input name=\"model\" placeholder=\"qwen2.5:7b\"><input name=\"api_key\" placeholder=\"키, 비우면 유지\"><button>저장</button></form><button type=\"button\" id=\"cct-suggest\">새 기종 제안</button><pre id=\"cct-suggest-out\"></pre>"; root.appendChild(box);
   load();
   }
   if (!boot()) {

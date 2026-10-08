@@ -1,10 +1,10 @@
 {
-  "version": "0.1.22",
+  "version": "0.1.23",
   "layout_name": "admin_catalog",
   "extends": "_admin_base",
   "meta": {"title": "3D 카탈로그"},
   "scripts": [
-    {"id": "cct_admin", "src": "/api/modules/custom-catalog/assets/catalog-admin.js?v=0.1.22", "async": true, "optional": true, "required": false, "failOnError": false, "onError": {"handler": "suppress"}}
+    {"id": "cct_admin", "src": "/api/modules/custom-catalog/assets/catalog-admin.js?v=0.1.23", "async": true, "optional": true, "required": false, "failOnError": false, "onError": {"handler": "suppress"}}
   ],
   "slots": {"content": [{"id": "cct_admin", "type": "basic", "name": "Div", "props": {"className": "w-full"}}]}
 }
