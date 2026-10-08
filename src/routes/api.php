@@ -1,35 +1,37 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Custom\Catalog\Http\Controllers\AssetController;
 use Modules\Custom\Catalog\Http\Controllers\AdminController;
+use Modules\Custom\Catalog\Http\Controllers\AssetController;
 use Modules\Custom\Catalog\Http\Controllers\CatalogController;
 
 Route::get('assets/{file}', [AssetController::class, 'show'])->where('file', '[A-Za-z0-9_.-]+');
 Route::get('images/{file}', [CatalogController::class, 'image'])->where('file', '[A-Za-z0-9_.-]+');
-Route::get('me', [AdminController::class, 'me'])->middleware('auth:sanctum');
 
-Route::middleware(['throttle:120,1'])->group(function () {
-    Route::get('equipment', [CatalogController::class, 'equipment']);
-    Route::get('photo', [CatalogController::class, 'photo']);
-    Route::get('equipment/{key}', [CatalogController::class, 'equipmentOne'])->where('key', '[a-z0-9][a-z0-9_-]{1,59}');
-    Route::get('materials', [CatalogController::class, 'materials']);
-    Route::get('materials/{key}', [CatalogController::class, 'materialOne'])->where('key', '[a-z0-9][a-z0-9_-]{1,79}');
+Route::middleware(['throttle:180,1'])->group(function () {
+    Route::get('meta', [CatalogController::class, 'meta']);
+    Route::get('items', [CatalogController::class, 'items']);
+    Route::get('items/{key}', [CatalogController::class, 'item'])->where('key', '[a-z0-9][a-z0-9_-]{1,79}');
+    Route::get('book', [CatalogController::class, 'book']);
 });
 
-Route::middleware(['auth:sanctum', 'throttle:60,1'])->prefix('admin')->group(function () {
-    Route::get('equipment', [AdminController::class, 'equipment']);
-    Route::post('equipment', [AdminController::class, 'saveEquipment']);
-    Route::post('equipment/{key}/delete', [AdminController::class, 'remove'])->defaults('table', 'equipment');
-    Route::get('materials', [AdminController::class, 'materials']);
-    Route::post('materials', [AdminController::class, 'saveMaterial']);
-    Route::post('materials/{key}/delete', [AdminController::class, 'remove'])->defaults('table', 'materials');
-    Route::get('me', [AdminController::class, 'me'])->middleware('auth:sanctum');
-    Route::get('kinds', [AdminController::class, 'kinds']);
-    Route::post('kinds', [AdminController::class, 'saveKinds']);
+Route::middleware(['auth:sanctum', 'throttle:120,1'])->prefix('admin')->group(function () {
+    Route::post('items', [AdminController::class, 'save']);
+    Route::post('items/{key}/delete', [AdminController::class, 'remove'])->where('key', '[a-z0-9][a-z0-9_-]{1,79}');
+    Route::post('items/{key}/restore', [AdminController::class, 'restore'])->where('key', '[a-z0-9][a-z0-9_-]{1,79}');
+    Route::post('items/{key}/photos', [AdminController::class, 'photos'])->where('key', '[a-z0-9][a-z0-9_-]{1,79}');
+    Route::post('photos/{id}/delete', [AdminController::class, 'photoDelete'])->whereNumber('id');
+    Route::post('photos/{id}/main', [AdminController::class, 'photoMain'])->whereNumber('id');
+    Route::get('settings', [AdminController::class, 'settings']);
+    Route::post('settings', [AdminController::class, 'saveSettings']);
+    Route::post('collect/run', [AdminController::class, 'collectRun'])->middleware('throttle:12,1');
+    Route::get('suggestions', [AdminController::class, 'suggestions']);
+    Route::post('suggestions/{id}/apply', [AdminController::class, 'suggestionApply'])->whereNumber('id');
+    Route::post('suggestions/{id}/reject', [AdminController::class, 'suggestionReject'])->whereNumber('id');
     Route::get('ai', [AdminController::class, 'ai']);
-    Route::post('ai', [AdminController::class, 'saveAi']);
-    Route::post('ai/suggest', [AdminController::class, 'suggest']);
-    Route::post('photos', [AdminController::class, 'uploadPhotos']);
-    Route::post('photos/{id}/delete', [AdminController::class, 'deletePhoto'])->whereNumber('id');
+    Route::post('ai', [AdminController::class, 'aiSave']);
+    Route::post('ai/import-jobs', [AdminController::class, 'aiImportJobs']);
+    Route::post('ai/live', [AdminController::class, 'aiLive'])->middleware('throttle:10,1');
+    Route::post('ai/test', [AdminController::class, 'aiTest'])->middleware('throttle:20,1');
+    Route::post('ai/models', [AdminController::class, 'aiModels'])->middleware('throttle:20,1');
 });

@@ -5,299 +5,327 @@ namespace Modules\Custom\Catalog\Http\Controllers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Str;
+use Modules\Custom\Catalog\Services\AiClient;
+use Modules\Custom\Catalog\Services\CatalogService;
+use Modules\Custom\Catalog\Services\Collector;
+use Modules\Custom\Catalog\Services\PhotoService;
+use Modules\Custom\Catalog\Support\Access;
+use Modules\Custom\Catalog\Support\AiConflict;
 use Modules\Custom\Catalog\Support\AiSettings;
-use Modules\Custom\Catalog\Support\CatalogSettings;
+use Modules\Custom\Catalog\Support\Settings;
 
+/**
+ * 0.2.0 편집 쪽 (관리자 · 카탈로그 편집 역할)
+ *
+ *  POST admin/items                 저장 (새로 · 고치기)
+ *  POST admin/items/{key}/delete    보관 (hard=1 이면 보관한 것을 아주 지움) · restore 되살리기
+ *  POST admin/items/{key}/photos    사진 올리기 (photos[]) 또는 주소로 (url)
+ *  POST admin/photos/{id}/delete · main
+ *  GET/POST admin/settings          설정 · 자동 수집
+ *  GET/POST admin/ai · ai/test · ai/models · ai/live · ai/import-jobs   AI 서버 연결 (구인구직과 같은 꼴)
+ *  GET admin/collect · POST admin/collect/run     자동 수집 상태 · 지금 한 번
+ *  GET admin/suggestions · POST admin/suggestions/{id}/apply · reject
+ */
 class AdminController extends Controller
 {
-    private function allowed(Request $request): bool
+    public function __construct(private CatalogService $catalog, private PhotoService $photos, private Collector $collector, private AiClient $ai) {}
+
+    private function guard(Request $r): ?JsonResponse
     {
-        $user = $request->user();
-        if (! $user) {
-            return false;
+        return Access::canEdit($r) ? null : response()->json(['success' => false, 'message' => '카탈로그를 고칠 권한이 없어요.'], 403);
+    }
+
+    private static function ok(mixed $data = null, string $message = ''): JsonResponse
+    {
+        return response()->json(['success' => true, 'message' => $message, 'data' => $data]);
+    }
+
+    private static function fail(string $message, int $code = 422, mixed $data = null): JsonResponse
+    {
+        return response()->json(['success' => false, 'message' => $message, 'data' => $data], $code);
+    }
+
+    private static function type(mixed $v): string
+    {
+        return $v === 'materials' || $v === 'material' ? 'materials' : 'equipment';
+    }
+
+    public function save(Request $r): JsonResponse
+    {
+        if ($g = $this->guard($r)) {
+            return $g;
         }
-        foreach (['hasRole', 'hasPermission', 'can'] as $m) {
-            if (! method_exists($user, $m)) {
-                continue;
-            }
-            if ($m === 'hasRole' && ($user->hasRole('admin') || $user->hasRole('custom-catalog.editor'))) {
-                return true;
-            }
-            if ($m !== 'hasRole' && $user->{$m}('custom-catalog.specs.update')) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private function deny(): JsonResponse
-    {
-        return response()->json(['success' => false, 'message' => '제원 입력 권한이 없습니다.'], 403);
-    }
-
-    public function me(Request $request): JsonResponse
-    {
-        return response()->json(["success" => true, "data" => ["can_edit" => $this->allowed($request)]]);
-    }
-
-    public function equipment(Request $request): JsonResponse
-    {
-        if (! $this->allowed($request)) return $this->deny();
-        return response()->json(['success' => true, 'data' => $this->rows('cat_equipment', $request)]);
-    }
-
-    public function materials(Request $request): JsonResponse
-    {
-        if (! $this->allowed($request)) return $this->deny();
-        return response()->json(['success' => true, 'data' => $this->rows('cat_materials', $request)]);
-    }
-
-    public function saveEquipment(Request $request): JsonResponse
-    {
-        if (! $this->allowed($request)) return $this->deny();
-        return $this->save('cat_equipment', $request, ['kind', 'brand', 'model', 'build_x_mm', 'build_y_mm', 'build_z_mm', 'min_layer_um', 'multicolor', 'enclosed', 'nozzle', 'homepage_url', 'note', 'wiki_url', 'summary']);
-    }
-
-    public function saveMaterial(Request $request): JsonResponse
-    {
-        if (! $this->allowed($request)) return $this->deny();
-        return $this->save('cat_materials', $request, ['kind', 'brand', 'name', 'material', 'color', 'color_hex', 'diameter', 'nozzle_min', 'nozzle_max', 'bed_min', 'bed_max', 'dry_temp', 'dry_hours', 'chamber', 'weight_g', 'traits', 'sds_url', 'storage_note', 'caution', 'wiki_url', 'summary']);
-    }
-
-    public function remove(Request $request, string $table, string $key): JsonResponse
-    {
-        if (! $this->allowed($request)) return $this->deny();
-        $table = $table === 'materials' ? 'cat_materials' : 'cat_equipment';
-        if (Schema::hasTable($table)) {
-            DB::table($table)->where('key', $key)->update(['status' => 'archived', 'updated_at' => now()]);
-        }
-
-        return response()->json(['success' => true]);
-    }
-
-    private function rows(string $table, Request $request): array
-    {
-        if (! Schema::hasTable($table)) {
-            return ['items' => []];
-        }
-        $q = trim((string) $request->query('q', ''));
-        $query = DB::table($table)->where('status', 'active');
-        if ($q !== '') {
-            $like = '%'.addcslashes($q, '%_\\').'%';
-            $query->where(function ($w) use ($like) {
-                $w->orWhere('brand', 'like', $like)->orWhere('key', 'like', $like);
-            });
-        }
-
-        return ['items' => $query->orderByDesc('id')->limit(100)->get()];
-    }
-
-    private function save(string $table, Request $request, array $fields): JsonResponse
-    {
-        if (! Schema::hasTable($table)) {
-            return response()->json(['success' => false, 'message' => '표가 없습니다.'], 404);
-        }
-        $in = $request->all();
-        $brand = trim((string) ($in['brand'] ?? ''));
-        $title = trim((string) ($in['model'] ?? $in['name'] ?? ''));
-        if ($brand === '' || $title === '') {
-            return response()->json(['success' => false, 'message' => '제조사와 이름을 입력하세요.'], 422);
-        }
-        $key = Str::slug((string) ($in['key'] ?? ($brand.'-'.$title)), '-');
-        $key = substr($key !== '' ? $key : 'item-'.time(), 0, $table === 'cat_equipment' ? 60 : 80);
-        $row = ['key' => $key, 'brand' => mb_substr($brand, 0, 60), 'status' => 'active', 'updated_at' => now()];
-        if ($table === 'cat_equipment') {
-            $row['model'] = mb_substr($title, 0, 80);
-        } else {
-            $row['name'] = mb_substr($title, 0, 80);
-            $row['material'] = mb_substr(trim((string) ($in['material'] ?? '')), 0, 40);
-            $row['material_norm'] = mb_strtolower($row['material']);
-        }
-        foreach ($fields as $f) {
-            if (! array_key_exists($f, $in) || in_array($f, ['brand', 'model', 'name'], true)) {
-                continue;
-            }
-            $row[$f] = $in[$f] === '' ? null : $in[$f];
-        }
-        $exists = DB::table($table)->where('key', $key)->exists();
-        if ($exists) {
-            DB::table($table)->where('key', $key)->update($row);
-        } else {
-            $row['created_at'] = now();
-            DB::table($table)->insert($row);
-        }
-
-        return response()->json(['success' => true, 'data' => ['key' => $key]]);
-    }
-}
-
-
-    public function ai(Request $request): JsonResponse
-    {
-        if (! $this->allowed($request)) return $this->deny();
-        return response()->json(["success" => true, "data" => AiSettings::public()]);
-    }
-
-    public function saveAi(Request $request): JsonResponse
-    {
-        if (! $this->allowed($request)) return $this->deny();
-        AiSettings::save($request->all());
-        return response()->json(["success" => true, "data" => AiSettings::public()]);
-    }
-
-    public function suggest(Request $request): JsonResponse
-    {
-        if (! $this->allowed($request)) return $this->deny();
-        $s = AiSettings::all();
-        if (! $s["enabled"]) {
-            return response()->json(["success" => false, "message" => "AI가 꺼져 있습니다."], 422);
-        }
-        $prompt = "3D 프린터나 필라멘트 공개 제원 후보를 JSON 배열로만 답하세요. 배합은 쓰지 마세요. 각 항목은 brand, model, kind, note. 기존 카드를 덮지 않는 제안만.";
         try {
-            $text = $this->ask($s, $prompt);
-        } catch (\Throwable $e) {
-            return response()->json(["success" => false, "message" => "AI 연결에 실패했습니다."], 502);
+            $res = $this->catalog->save(self::type($r->input('type')), (array) $r->all());
+        } catch (\InvalidArgumentException $e) {
+            return self::fail($e->getMessage());
         }
-        return response()->json(["success" => true, "data" => ["text" => mb_substr($text, 0, 4000)]]);
+
+        return self::ok($res, $res['created'] ? '새 항목을 넣었어요.' : '저장했어요.');
     }
 
-    private function ask(array $s, string $prompt): string
+    public function remove(Request $r, string $key): JsonResponse
     {
-        $provider = $s["provider"];
-        $url = rtrim((string) $s["url"], "/");
-        $model = (string) $s["model"];
-        if ($provider === "ollama") {
-            $res = Http::timeout(60)->post($url."/api/chat", ["model" => $model, "stream" => false, "messages" => [["role" => "user", "content" => $prompt]]]);
-            return (string) ($res->json("message.content") ?? "");
+        if ($g = $this->guard($r)) {
+            return $g;
         }
-        $base = $provider === "claude" ? $url."/messages" : $url."/chat/completions";
-        $headers = ["Authorization" => "Bearer ".$s["api_key"]];
-        $body = $provider === "claude"
-            ? ["model" => $model, "max_tokens" => 800, "messages" => [["role" => "user", "content" => $prompt]]]
-            : ["model" => $model, "messages" => [["role" => "user", "content" => $prompt]]];
-        $res = Http::timeout(60)->withHeaders($headers)->post($base, $body);
-        return (string) ($res->json("choices.0.message.content") ?? $res->json("content.0.text") ?? "");
-    }
-
-
-    public function kinds(): JsonResponse
-    {
-        return response()->json(['success' => true, 'data' => CatalogSettings::all()]);
-    }
-
-    public function saveKinds(Request $request): JsonResponse
-    {
-        if (! $this->allowed($request)) {
-            return $this->deny();
+        $hit = $this->catalog->find($key, null, true);
+        if (! $hit) {
+            return self::fail('없는 항목이에요.', 404);
         }
-
-        return response()->json(['success' => true, 'data' => CatalogSettings::save($request->all())]);
-    }
-
-    public function uploadPhotos(Request $request): JsonResponse
-    {
-        if (! $this->allowed($request)) {
-            return $this->deny();
-        }
-        $type = $request->input('type') === 'material' ? 'material' : 'equipment';
-        $key = substr(preg_replace('/[^a-z0-9_-]/', '', strtolower((string) $request->input('key'))), 0, 80);
-        $table = $type === 'material' ? 'cat_materials' : 'cat_equipment';
-        if ($key === '' || ! Schema::hasTable($table) || ! DB::table($table)->where('key', $key)->exists()) {
-            return response()->json(['success' => false, 'message' => '항목이 없습니다.'], 404);
-        }
-        $files = $request->file('photos', []);
-        if (! is_array($files)) {
-            $files = [$files];
-        }
-        $files = array_values(array_filter($files));
-        if ($files === []) {
-            return response()->json(['success' => false, 'message' => '사진을 선택하세요.'], 422);
-        }
-        if (! Schema::hasTable('cat_photos')) {
-            return response()->json(['success' => false, 'message' => '사진 표가 없습니다. migrate를 실행하세요.'], 422);
-        }
-        $have = (int) DB::table('cat_photos')->where('item_type', $type)->where('item_key', $key)->count();
-        $sort = (int) DB::table('cat_photos')->where('item_type', $type)->where('item_key', $key)->max('sort');
-        $saved = [];
-        foreach (array_slice($files, 0, max(0, 12 - $have)) as $file) {
-            if (! $file->isValid() || $file->getSize() > 4_000_000) {
-                continue;
+        if ($r->boolean('hard')) {
+            if ($hit[1]->status !== 'archived') {
+                return self::fail('보관한 항목만 아주 지울 수 있어요.');
             }
-            $raw = (string) file_get_contents($file->getRealPath());
-            $jpeg = $this->fitJpeg($raw);
-            if ($jpeg === null) {
-                continue;
+            $this->photos->purge($hit[0], $key);
+            $this->catalog->remove($hit[0], $key, true);
+
+            return self::ok(null, '아주 지웠어요.');
+        }
+        $this->catalog->remove($hit[0], $key);
+
+        return self::ok(null, '보관함으로 옮겼어요 — 「보관한 것」에서 되살릴 수 있어요.');
+    }
+
+    public function restore(Request $r, string $key): JsonResponse
+    {
+        if ($g = $this->guard($r)) {
+            return $g;
+        }
+        $hit = $this->catalog->find($key, null, true);
+        if (! $hit) {
+            return self::fail('없는 항목이에요.', 404);
+        }
+        $this->catalog->restore($hit[0], $key);
+
+        return self::ok(null, '되살렸어요.');
+    }
+
+    public function photos(Request $r, string $key): JsonResponse
+    {
+        if ($g = $this->guard($r)) {
+            return $g;
+        }
+        $hit = $this->catalog->find($key, null, true);
+        if (! $hit) {
+            return self::fail('없는 항목이에요.', 404);
+        }
+        $added = 0;
+        $errors = [];
+        try {
+            $url = trim((string) $r->input('url', ''));
+            if ($url !== '') {
+                $this->photos->addFromUrl($hit[0], $key, $url, mb_substr((string) $r->input('credit', ''), 0, 200));
+                $added++;
             }
-            $name = $key.'-'.substr(md5($jpeg.microtime(true)), 0, 10).'.jpg';
-            $dest = 'modules/custom-catalog/images/'.$name;
-            \Illuminate\Support\Facades\Storage::disk('local')->put($dest, $jpeg);
-            $url = '/api/modules/custom-catalog/images/'.$name;
-            $sort++;
-            $id = DB::table('cat_photos')->insertGetId([
-                'item_type' => $type, 'item_key' => $key, 'url' => $url, 'sort' => $sort,
-                'created_at' => now(), 'updated_at' => now(),
-            ]);
-            $saved[] = ['id' => $id, 'url' => $url];
+            $files = $r->file('photos', []);
+            foreach (array_filter(is_array($files) ? $files : [$files]) as $f) {
+                if (! $f->isValid() || $f->getSize() > 12_000_000) {
+                    $errors[] = '너무 큰 사진은 건너뛰었어요 (12MB 까지).';
+
+                    continue;
+                }
+                try {
+                    $this->photos->add($hit[0], $key, (string) file_get_contents($f->getRealPath()));
+                    $added++;
+                } catch (\InvalidArgumentException $e) {
+                    $errors[] = $e->getMessage();
+                }
+            }
+        } catch (\InvalidArgumentException $e) {
+            $errors[] = $e->getMessage();
         }
-        if ($saved !== [] && Schema::hasColumn($table, 'image_url')) {
-            $first = DB::table('cat_photos')->where('item_type', $type)->where('item_key', $key)->orderBy('sort')->value('url');
-            DB::table($table)->where('key', $key)->update(['image_url' => $first, 'updated_at' => now()]);
+        if ($added === 0) {
+            return self::fail($errors[0] ?? '사진을 골라 주세요.');
         }
 
-        return response()->json(['success' => true, 'data' => ['photos' => $saved]]);
+        return self::ok(['photos' => $this->photos->of($hit[0], $key)], '사진 '.$added.'장을 넣었어요.'.($errors ? ' ('.$errors[0].')' : ''));
     }
 
-    public function deletePhoto(Request $request, int $id): JsonResponse
+    public function photoDelete(Request $r, int $id): JsonResponse
     {
-        if (! $this->allowed($request)) {
-            return $this->deny();
+        if ($g = $this->guard($r)) {
+            return $g;
         }
-        if (! Schema::hasTable('cat_photos')) {
-            return response()->json(['success' => false], 404);
-        }
-        $photo = DB::table('cat_photos')->where('id', $id)->first();
-        if (! $photo) {
-            return response()->json(['success' => false, 'message' => '없습니다.'], 404);
-        }
-        DB::table('cat_photos')->where('id', $id)->delete();
-        $table = $photo->item_type === 'material' ? 'cat_materials' : 'cat_equipment';
-        $next = DB::table('cat_photos')->where('item_type', $photo->item_type)->where('item_key', $photo->item_key)->orderBy('sort')->value('url');
-        if (Schema::hasColumn($table, 'image_url')) {
-            DB::table($table)->where('key', $photo->item_key)->update(['image_url' => $next, 'updated_at' => now()]);
-        }
+        $this->photos->delete($id);
 
-        return response()->json(['success' => true]);
+        return self::ok(null, '사진을 지웠어요.');
     }
 
-    private function fitJpeg(string $raw): ?string
+    public function photoMain(Request $r, int $id): JsonResponse
     {
-        if (! function_exists('imagecreatefromstring')) {
-            return strlen($raw) <= 80000 && str_starts_with($raw, "\xFF\xD8") ? $raw : null;
+        if ($g = $this->guard($r)) {
+            return $g;
         }
-        $im = @imagecreatefromstring($raw);
-        if (! $im) {
-            return null;
-        }
-        $w = imagesx($im);
-        $h = imagesy($im);
-        $scale = 720 / max($w, $h, 1);
-        if ($scale < 1) {
-            $nw = max(1, (int) ($w * $scale));
-            $nh = max(1, (int) ($h * $scale));
-            $next = imagecreatetruecolor($nw, $nh);
-            imagecopyresampled($next, $im, 0, 0, 0, 0, $nw, $nh, $w, $h);
-            imagedestroy($im);
-            $im = $next;
-        }
-        ob_start();
-        imagejpeg($im, null, 70);
-        imagedestroy($im);
+        $this->photos->main($id);
 
-        return (string) ob_get_clean();
+        return self::ok(null, '대표 사진으로 정했어요.');
+    }
+
+    /* ───────── 설정 · 자동 수집 ───────── */
+
+    private function collectState(): array
+    {
+        $st = Settings::state();
+        $q = $this->collector->quiet();
+
+        return ['quiet' => $q, 'load' => Collector::loadPercent(), 'last' => $st['last'] ? date('Y-m-d H:i', $st['last']) : '', 'today' => $st['day'] === date('Y-m-d') ? $st['count'] : 0,
+            'log' => array_slice($st['log'], 0, 30), 'ai' => $this->ai->available(), 'pending' => $this->collector->suggestions('pending', 1)['pending']];
+    }
+
+    public function settings(Request $r): JsonResponse
+    {
+        return $this->guard($r) ?? self::ok(['settings' => Settings::forAdmin(), 'collect' => $this->collectState()]);
+    }
+
+    public function saveSettings(Request $r): JsonResponse
+    {
+        if ($g = $this->guard($r)) {
+            return $g;
+        }
+        Settings::save((array) $r->input('settings', []));
+
+        return self::ok(['settings' => Settings::forAdmin(), 'collect' => $this->collectState()], '저장했어요.');
+    }
+
+    public function collectRun(Request $r): JsonResponse
+    {
+        if ($g = $this->guard($r)) {
+            return $g;
+        }
+        @set_time_limit(300);
+        $task = in_array($r->input('task'), ['new', 'fill', 'photo'], true) ? (string) $r->input('task') : null;
+        $res = $this->collector->tick(true, $task);
+
+        return self::ok(['ran' => $res['ran'], 'collect' => $this->collectState()], $res['ran'] ? implode("\n", $res['ran']) : $res['skipped']);
+    }
+
+    public function suggestions(Request $r): JsonResponse
+    {
+        return $this->guard($r) ?? self::ok($this->collector->suggestions((string) $r->query('status', 'pending')));
+    }
+
+    public function suggestionApply(Request $r, int $id): JsonResponse
+    {
+        if ($g = $this->guard($r)) {
+            return $g;
+        }
+        try {
+            $res = $this->collector->apply($id);
+        } catch (\InvalidArgumentException $e) {
+            return self::fail($e->getMessage());
+        }
+
+        return self::ok($res, '반영했어요.');
+    }
+
+    public function suggestionReject(Request $r, int $id): JsonResponse
+    {
+        if ($g = $this->guard($r)) {
+            return $g;
+        }
+        $this->collector->reject($id);
+
+        return self::ok(null, '버렸어요.');
+    }
+
+    /* ───────── AI 서버 연결 (구인구직 AiController 와 같음) ───────── */
+
+    private static function aiPayload(array $s): array
+    {
+        $s = AiSettings::normalize($s);
+
+        return ['ai' => AiSettings::forAdmin($s), 'status' => AiSettings::available($s), 'jobs_available' => AiSettings::adAvailable()];
+    }
+
+    public function ai(Request $r): JsonResponse
+    {
+        return $this->guard($r) ?? self::ok(self::aiPayload(AiSettings::load()));
+    }
+
+    public function aiSave(Request $r): JsonResponse
+    {
+        if ($g = $this->guard($r)) {
+            return $g;
+        }
+        try {
+            $s = AiSettings::save((array) $r->input('ai', []));
+            $a = AiSettings::available($s);
+
+            return self::ok(self::aiPayload($s), $a['enabled'] ? 'AI 연결을 저장했어요.' : '저장했어요 — '.$a['reason']);
+        } catch (AiConflict $e) {
+            return self::fail($e->getMessage(), 409, self::aiPayload($e->current));
+        }
+    }
+
+    public function aiImportJobs(Request $r): JsonResponse
+    {
+        if ($g = $this->guard($r)) {
+            return $g;
+        }
+        try {
+            $s = AiSettings::importFromAd();
+        } catch (\RuntimeException $e) {
+            return self::fail($e->getMessage());
+        }
+
+        return self::ok(self::aiPayload($s), '구인구직 AI 연결 설정을 가져왔어요.');
+    }
+
+    public function aiLive(Request $r): JsonResponse
+    {
+        if ($g = $this->guard($r)) {
+            return $g;
+        }
+        $in = (array) $r->input('ai', []);
+        unset($in['rev']);
+        @set_time_limit(60);
+        $s = AiSettings::merge($in, AiSettings::load());
+        $order = AiSettings::order($s);
+        if (! $order) {
+            return self::ok(['ok' => false, 'message' => '❌ 물어볼 서버 · 모델이 없어요 (켜짐 · API 키 · 모델 확인).', 'tries' => []]);
+        }
+        $t0 = microtime(true);
+        $tries = [];
+        foreach ($order as $o) {
+            $left = (int) floor(25 - (microtime(true) - $t0));
+            if ($left < 3) {
+                break;
+            }
+            $res = $this->ai->test($o['server'], $o['model'], $left);
+            $tries[] = ['server' => $o['server']['name'], 'model' => $o['model'], 'ok' => $res['ok'], 'message' => $res['message'], 'sec' => $res['sec']];
+            if ($res['ok']) {
+                return self::ok(['ok' => true, 'message' => '✅ 「'.$o['server']['name'].' · '.$o['model'].'」 가 '.$res['sec'].'초 만에 답해요.', 'tries' => $tries]);
+            }
+        }
+
+        return self::ok(['ok' => false, 'message' => '❌ 모든 서버 · 모델이 답하지 못했어요.', 'tries' => $tries]);
+    }
+
+    public function aiTest(Request $r): JsonResponse
+    {
+        if ($g = $this->guard($r)) {
+            return $g;
+        }
+        $sv = is_array($r->input('server')) ? AiSettings::formServer((array) $r->input('server'), AiSettings::load()) : null;
+        if (! $sv) {
+            return self::fail('시험할 서버가 없어요.');
+        }
+        @set_time_limit(60);
+
+        return self::ok($this->ai->test($sv, (string) $r->input('model', ''), AiSettings::timeoutFor($sv, AiSettings::load())));
+    }
+
+    public function aiModels(Request $r): JsonResponse
+    {
+        if ($g = $this->guard($r)) {
+            return $g;
+        }
+        $sv = is_array($r->input('server')) ? AiSettings::formServer((array) $r->input('server'), AiSettings::load()) : null;
+        if (! $sv) {
+            return self::fail('서버가 없어요.');
+        }
+
+        return self::ok($this->ai->models($sv));
     }
 }

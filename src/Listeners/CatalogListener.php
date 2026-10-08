@@ -3,7 +3,18 @@
 namespace Modules\Custom\Catalog\Listeners;
 
 use App\Contracts\Extension\HookListenerInterface;
+use Illuminate\Support\Facades\DB;
+use Modules\Custom\Catalog\Api\Catalog;
+use Modules\Custom\Catalog\Services\CatalogService;
+use Modules\Custom\Catalog\Support\Schema;
 
+/**
+ * 다른 확장과 잇는 곳
+ *  - 홈 디자인 통합 검색(custom-home_design.search.providers): 「카탈로그」 탭 — 장비 · 재료를 제조사 · 모델 · 재료 이름으로
+ *  - 홈 칸(custom-home_design.home.sections): 새로 들어온 장비 · 재료
+ *  - 헤더 메뉴 스크립트
+ * 인기 검색어(custom-popular_search)는 화면에서 검색할 때 남김 (scope catalog).
+ */
 class CatalogListener implements HookListenerInterface
 {
     public static function getSubscribedHooks(): array
@@ -11,6 +22,7 @@ class CatalogListener implements HookListenerInterface
         $spec = ['priority' => 50, 'type' => 'filter', 'sync' => true];
 
         return [
+            'custom-home_design.search.providers' => ['method' => 'searchProviders', 'priority' => 16, 'type' => 'filter'],
             'custom-home_design.home.sections' => ['method' => 'homeSections', 'priority' => 36, 'type' => 'filter'],
             'core.layout.filter_child_data' => ['method' => 'scripts'] + $spec,
             'core.layout.filter_merged' => ['method' => 'scripts'] + $spec,
@@ -20,23 +32,105 @@ class CatalogListener implements HookListenerInterface
 
     public function handle(...$args): void {}
 
-    public function homeSections(mixed $list = []): array
+    /* ── 통합 검색 ── */
+
+    public function searchProviders(mixed $list = []): array
     {
-        $list = is_array($list) ? array_values($list) : [];
-        $list[] = [
-            'key' => 'catalog',
-            'title' => '3D 카탈로그',
-            'subtitle' => '장비 · 필라멘트 · 레진',
-            'emoji' => '🧪',
-            'color' => '#b45309',
-            'style' => 'cards',
-            'more_url' => '/catalog',
-            'order' => 49,
-            'items' => [],
+        $list = is_array($list) ? $list : [];
+        $list['catalog'] = [
+            'label' => '카탈로그',
+            'icon' => 'cube',
+            'search' => static fn (string $q, int $page, int $perPage, string $sort = 'relevance'): array => self::siteSearch($q, $page, $perPage, $sort),
+            'count' => static fn (string $q): int => (int) self::siteSearch($q, 1, 1, 'relevance')['total'],
         ];
 
         return $list;
     }
+
+    /** @return array{total: int, items: list<array<string, mixed>>, last_page: int, has_more_pages: bool} */
+    public static function siteSearch(string $q, int $page, int $perPage, string $sort): array
+    {
+        $empty = ['total' => 0, 'items' => [], 'last_page' => 1, 'has_more_pages' => false];
+        try {
+            $q = trim(mb_substr(ltrim($q, '#'), 0, 60));
+            if ($q === '') {
+                return $empty;
+            }
+            $svc = new CatalogService();
+            $perPage = max(1, min(50, $perPage));
+            $all = [];
+            $total = 0;
+            // 장비 먼저, 그다음 재료 — 두 표를 이어서 쪽을 나눔
+            $skip = (max(1, $page) - 1) * $perPage;
+            foreach (['equipment', 'materials'] as $type) {
+                $n = $svc->list(['type' => $type, 'q' => $q, 'per' => 1])['total'];
+                if (count($all) < $perPage && $skip < $n) {
+                    $need = $perPage - count($all);
+                    $rows = $svc->list(['type' => $type, 'q' => $q, 'per' => min(200, $skip + $need), 'sort' => $sort === 'latest' ? 'new' : ''])['items'];
+                    $all = array_merge($all, array_slice($rows, $skip, $need));
+                }
+                $skip = max(0, $skip - $n);
+                $total += $n;
+            }
+            $items = [];
+            foreach ($all as $c) {
+                $title = trim($c['brand'].' '.$c['title']);
+                $excerpt = implode(' · ', $c['chips']);
+                $items[] = [
+                    'id' => $c['key'], 'category' => 'catalog',
+                    'title' => $title, 'title_highlighted' => self::mark($title, $q),
+                    'excerpt' => $excerpt, 'excerpt_highlighted' => self::mark($excerpt, $q),
+                    'url' => '/catalog/'.$c['key'], 'thumbnail' => $c['image'], 'has_thumbnail' => $c['image'] !== '',
+                    'badge' => $c['kind_label'], 'date' => '', 'tags' => [],
+                ];
+            }
+            $last = max(1, (int) ceil($total / $perPage));
+
+            return ['total' => $total, 'items' => $items, 'last_page' => $last, 'has_more_pages' => $page < $last];
+        } catch (\Throwable) {
+            return $empty;
+        }
+    }
+
+    private static function mark(string $text, string $q): string
+    {
+        $safe = htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
+        foreach (array_slice(preg_split('/\s+/u', $q) ?: [], 0, 5) as $w) {
+            $needle = htmlspecialchars($w, ENT_QUOTES, 'UTF-8');
+            if ($needle !== '') {
+                $safe = preg_replace('/'.preg_quote($needle, '/').'(?![^<]*>)/iu', '<mark>$0</mark>', $safe) ?? $safe;
+            }
+        }
+
+        return $safe;
+    }
+
+    /* ── 홈 칸 ── */
+
+    public function homeSections(mixed $list = []): array
+    {
+        $list = is_array($list) ? array_values($list) : [];
+        $items = [];
+        try {
+            Schema::ensure();
+            $svc = new CatalogService();
+            foreach (['equipment', 'materials'] as $type) {
+                foreach (DB::table(Schema::table($type))->where('status', 'active')->where('brand', '!=', '종류')->orderByRaw("case when image_url is null or image_url = '' then 1 else 0 end")
+                    ->orderByDesc('id')->limit($type === 'equipment' ? 8 : 4)->get() as $r) {
+                    $c = $svc->card($type, $r);
+                    $items[] = ['title' => trim($c['brand'].' '.$c['title']), 'url' => '/catalog/'.$c['key'], 'badge' => $c['kind_label'], 'state' => '', 'excerpt' => implode(' · ', $c['chips']),
+                        'chips' => array_slice($c['chips'], 0, 2), 'image' => $c['image'], 'thumbnail' => $c['image'], 'created_at' => $r->created_at, 'view_count' => 0, 'author_name' => '', 'is_new' => false];
+                }
+            }
+        } catch (\Throwable) {
+            $items = [];
+        }
+        $list[] = ['key' => 'catalog', 'title' => '3D 카탈로그', 'subtitle' => '프린터 · 장비 · 필라멘트 · 레진 제원', 'emoji' => '🧊', 'color' => '#4f46e5', 'style' => 'cards', 'more_url' => '/catalog', 'order' => 49, 'items' => $items];
+
+        return $list;
+    }
+
+    /* ── 헤더 메뉴 ── */
 
     public function scripts(mixed $layout = null): mixed
     {
@@ -44,18 +138,12 @@ class CatalogListener implements HookListenerInterface
             return $layout;
         }
         $layout['scripts'] = is_array($layout['scripts'] ?? null) ? $layout['scripts'] : [];
-        $src = '/api/modules/custom-catalog/assets/catalog-nav.js?v=0.1.43';
-        $admin = '/api/modules/custom-catalog/assets/catalog-admin.js?v=0.1.43';
         foreach ($layout['scripts'] as $s) {
-            if (is_array($s) && ($s['src'] ?? '') === $src) {
+            if (is_array($s) && str_contains((string) ($s['src'] ?? ''), 'catalog-nav.js')) {
                 return $layout;
             }
         }
-        $layout['scripts'][] = ['src' => $src, 'defer' => true];
-        $path = request()->path();
-        if (is_string($path) && str_contains($path, 'admin/catalog')) {
-            $layout['scripts'][] = ['src' => $admin, 'defer' => true];
-        }
+        $layout['scripts'][] = ['src' => '/api/modules/custom-catalog/assets/catalog-nav.js?v='.Catalog::VERSION, 'defer' => true];
 
         return $layout;
     }
