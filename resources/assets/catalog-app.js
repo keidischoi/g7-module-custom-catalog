@@ -1,4 +1,4 @@
-/*! custom-catalog 0.1.24 */
+/*! custom-catalog 0.1.25 */
 (function () {
   "use strict";
   function boot() {
@@ -46,7 +46,7 @@
       var brandHtml = "<div class=\"cct-chips\">" + "<button type=\"button\" class=\"cct-chip" + (brand === "" ? " on" : "") + "\" data-b=\"\">전체 제조사</button>" + brands.map(function (b) { return "<button type=\"button\" class=\"cct-chip" + (b === brand ? " on" : "") + "\" data-b=\"" + esc(b) + "\">" + esc(b) + "</button>"; }).join("") + "</div>";
       var body = section(title, shown, type);
       root.innerHTML = "<style>" + CSS + "</style><div class=\"cct\"><section class=\"cct-hero\"><h1>3D 카탈로그</h1><p>종류와 제조사로 좁힐 수 있습니다.</p><form class=\"cct-find\" id=\"cct-find\"><input id=\"cct-q\" value=\"" + esc(q) + "\" placeholder=\"제조사, 모델, PLA\"><button>찾기</button></form></section><div class=\"cct-chips\">" + chips.map(function (c) { return "<button type=\"button\" class=\"cct-chip" + (c[0] === tab ? " on" : "") + "\" data-k=\"" + c[0] + "\">" + c[1] + "</button>"; }).join("") + "</div>" + brandHtml + (err ? "<p class=\"cct-empty\">목록을 불러오지 못했습니다.</p>" : body) + "</div>";
-      document.getElementById("cct-find").onsubmit = function (e) { e.preventDefault(); q = document.getElementById("cct-q").value.trim(); load(); };
+      document.getElementById("cct-find").onsubmit = function (e) { e.preventDefault(); q = document.getElementById("cct-q").value.trim(); if (q && window.__cpsRecord) window.__cpsRecord(q, "catalog"); load(); };
       [].forEach.call(root.querySelectorAll("[data-k]"), function (b) { b.onclick = function () { tab = b.getAttribute("data-k") || "fdm"; brand = ""; paint(false); }; });
       [].forEach.call(root.querySelectorAll("[data-b]"), function (b) { b.onclick = function () { brand = b.getAttribute("data-b") || ""; paint(false); }; });
       [].forEach.call(root.querySelectorAll(".cct-card"), function (b) { b.onclick = function () { open(b.getAttribute("data-type"), b.getAttribute("data-key")); }; });
