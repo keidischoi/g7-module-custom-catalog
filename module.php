@@ -81,7 +81,7 @@ class Module extends AbstractModule
     public function getSchedules(): array
     {
         return [
-            ['command' => 'catalog:collect', 'schedule' => '*/10 * * * *', 'description' => '3D 카탈로그 — 조용할 때 AI 로 새 모델 · 제원 · 사진 찾기'],
+            ['command' => 'catalog:collect', 'schedule' => '*/10 * * * *', 'description' => '3D 카탈로그 — 조용할 때 AI 로 새 모델 · 제원 · 사진 · 안전 자료(MSDS) 찾기'],
         ];
     }
 }

@@ -91,7 +91,7 @@ final class Schema
         foreach ([self::EQUIPMENT, self::MATERIALS] as $table) {
             $add = [];
             foreach (['image_url' => 'string:300', 'wiki_url' => 'string:300', 'summary' => 'text', 'facts' => 'text', 'specs' => 'text', 'homepage_url' => 'string:500',
-                'note' => 'string:500', 'detail' => 'text', 'issues' => 'text', 'memo' => 'text', 'source' => 'string:20', 'ai_photo_at' => 'ts', 'ai_fill_at' => 'ts'] as $col => $kind) {
+                'note' => 'string:500', 'detail' => 'text', 'issues' => 'text', 'memo' => 'text', 'source' => 'string:20', 'ai_photo_at' => 'ts', 'ai_fill_at' => 'ts', 'ai_sds_at' => 'ts'] as $col => $kind) {
                 if (! S::hasColumn($table, $col)) {
                     $add[$col] = $kind;
                 }

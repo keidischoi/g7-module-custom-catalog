@@ -292,6 +292,45 @@ namespace {
     $c2 = $col->photoCandidates('Bambu Lab', 'P1S', 'https://bambulab.com', 'equipment');
     t(count($c2) === 1 && $c2[0]['from'] === '위키미디어 공용' && $c2[0]['credit'] === 'Wikimedia Commons · Kim · CC BY-SA 4.0', '첫 화면 주소는 건너뛰고 위키미디어 공용에서 (저작자 · 라이선스)');
 
+    echo "■ 안전 자료 (MSDS) 찾기 (0.2.8)\n";
+    DB::table('cat_suggestions')->delete();
+    $mk = $svc->save('materials', ['kind' => 'fdm', 'brand' => 'Polymaker', 'title' => 'PolyLite PETG', 'homepage_url' => 'https://polymaker.com/product/polylite-petg/', 'values' => ['material' => 'PETG']])['key'];
+    $mk2 = $svc->save('materials', ['kind' => 'resin', 'brand' => 'Elegoo', 'title' => 'Standard Resin 2.0', 'values' => ['material' => 'RESIN']])['key'];
+    DB::table('cat_materials')->whereNotIn('key', [$mk, $mk2])->update(['ai_sds_at' => now()]);
+    DB::table('cat_materials')->where('key', $mk2)->update(['ai_sds_at' => now()->subDays(40)]);
+    Collector::$pager = function (string $url) {
+        return match (true) {
+            str_contains($url, 'polymaker.com/product/') => '<html><body><a href="/downloads/brochure.pdf">Brochure</a> <a href="mailto:sds@polymaker.com">SDS by mail</a> <a href="/wp-content/uploads/PolyLite-PETG.pdf"> Safety Data Sheet </a></body></html>',
+            str_contains($url, 'PolyLite-PETG.pdf') => '%PDF-1.7 ...',
+            str_contains($url, 'elegoo.com/pages/sds') => '<html><head><title>Safety Data Sheets | ELEGOO</title></head></html>',
+            str_contains($url, 'elegoo.com/pages/resin') => '<html><head><title>ELEGOO Resin</title></head><body><a href="/sds">SDS</a></body></html>',
+            str_contains($url, 'nosds.pdf') => '%PDF-1.4 brochure',
+            default => null,
+        };
+    };
+    $asked = [];
+    $line = $col->taskSds();
+    $sg = $col->suggestions();
+    t($sg['pending'] === 1 && $sg['items'][0]['task'] === 'sds' && $sg['items'][0]['page_url'] === 'https://polymaker.com/wp-content/uploads/PolyLite-PETG.pdf' && str_contains($sg['items'][0]['source'], '제품 페이지') && $asked === [] && str_contains($line, 'PolyLite PETG'),
+        '안전 자료 찾기 — 제품 공식 페이지의 「Safety Data Sheet」 링크 (메일 주소는 건너뜀 · AI 는 묻지 않음)');
+    t(in_array('안전 자료 (MSDS)', array_column($sg['items'][0]['lines'], 'label'), true), '제안함에 MSDS 주소가 보임');
+    $col->apply($sg['items'][0]['id']);
+    t(DB::table('cat_materials')->where('key', $mk)->value('sds_url') === 'https://polymaker.com/wp-content/uploads/PolyLite-PETG.pdf', '반영 → MSDS 칸');
+    $reply = json_encode(['sds_url' => 'https://www.elegoo.com/pages/resin']);
+    $line = $col->taskSds();
+    t($col->suggestions()['pending'] === 0 && str_contains($line, '찾지 못했어요') && $asked !== [], 'AI 가 준 주소라도 열어서 SDS 문서가 아니면(제품 페이지) 올리지 않음');
+    DB::table('cat_materials')->where('key', $mk2)->update(['ai_sds_at' => null]);
+    $reply = json_encode(['sds_url' => 'https://www.elegoo.com/pages/sds']);
+    $line = $col->taskSds();
+    $sg = $col->suggestions();
+    t($sg['pending'] === 1 && $sg['items'][0]['page_url'] === 'https://www.elegoo.com/pages/sds' && str_contains($sg['items'][0]['source'], 'AI') && str_contains($line, 'Elegoo Standard Resin 2.0'), '공식 페이지가 없으면 AI — 열어 보니 SDS 모음 페이지라 올림');
+    t(! Collector::isSds('https://bambulab.com') && ! Collector::isSds('https://x.com/nosds.pdf') && Collector::isSds('https://x.com/nosds.pdf', true) && str_contains($col->taskSds(), '없어요'),
+        '첫 화면 주소는 SDS 아님 · SDS 라는 말이 없는 PDF 는 링크 글이 SDS 일 때만 · 다 찬 뒤엔 쉼');
+    DB::table('cat_materials')->where('key', $mk2)->update(['sds_url' => 'https://www.elegoo.com']);
+    (require dirname(__DIR__).'/database/migrations/2026_10_09_000020_clear_homepage_sds.php')->up();
+    t(DB::table('cat_materials')->where('key', $mk2)->value('sds_url') === null && DB::table('cat_materials')->where('key', $mk)->value('sds_url') !== null, '업데이트 — 홈페이지 주소만 있던 MSDS 칸은 비움 (진짜 SDS 주소는 그대로)');
+    DB::table('cat_suggestions')->delete();
+
     echo "■ 한 번 돌기\n";
     DB::table('cat_suggestions')->delete();
     Settings::save(['auto_from' => 0, 'auto_to' => 0, 'auto_per_run' => 2, 'auto_per_day' => 3, 'auto_every' => 10, 'apply' => 'auto', 'task_fill' => false]);

@@ -1,4 +1,4 @@
-/*! custom-catalog 0.2.7 — 관리자 (항목 · 제안함 · 자동 수집 · AI 연결 · 설정) */
+/*! custom-catalog 0.2.8 — 관리자 (항목 · 제안함 · 자동 수집 · AI 연결 · 설정) */
 (function () {
   'use strict';
   if (window.__cctAdmin) { try { window.__cctAdmin(); } catch (e) {} return; }
@@ -6,7 +6,7 @@
   function C() { return window.CCT; }
   function need(cb) {
     if (window.CCT) return cb();
-    if (!document.getElementById('cct-app-js')) { var s = document.createElement('script'); s.id = 'cct-app-js'; s.src = '/api/modules/custom-catalog/assets/catalog-app.js?v=0.2.7'; document.head.appendChild(s); }
+    if (!document.getElementById('cct-app-js')) { var s = document.createElement('script'); s.id = 'cct-app-js'; s.src = '/api/modules/custom-catalog/assets/catalog-app.js?v=0.2.8'; document.head.appendChild(s); }
     var n = 0, t = setInterval(function () { if (window.CCT || ++n > 100) { clearInterval(t); if (window.CCT) cb(); } }, 60);
   }
   function page() {
@@ -73,12 +73,12 @@
   /* ───────── 제안함 ───────── */
   function suggestPage(root) {
     var esc = C().esc, api = C().api, body = frame(root, 'suggest'), st = 'pending';
-    var NAME = { 'new': '새 항목', fill: '제원 채우기', photo: '사진' };
+    var NAME = { 'new': '새 항목', fill: '제원 채우기', photo: '사진', sds: '안전 자료' };
     var draw = function () {
       api('GET', '/admin/suggestions?status=' + st).then(function (r) {
         pending = r.pending;
         var nb = root.querySelector('[data-p="suggest"]'); if (nb) nb.innerHTML = '💡 제안함' + (pending ? '<b>' + pending + '</b>' : '');
-        body.innerHTML = '<div class="cct-panel"><h3>💡 AI 가 찾아온 것</h3><p>자동 수집이 찾은 새 모델 · 제원 · 사진이 여기 쌓여요. 맞는지 보고 「반영」을 누르면 카탈로그에 들어가요. AI 는 틀릴 수 있으니 숫자는 한 번 확인해 주세요. 「제원 채우기」는 비어 있던 칸만 채워요.</p>' +
+        body.innerHTML = '<div class="cct-panel"><h3>💡 AI 가 찾아온 것</h3><p>자동 수집이 찾은 새 모델 · 제원 · 사진 · 안전 자료가 여기 쌓여요. 맞는지 보고 「반영」을 누르면 카탈로그에 들어가요. AI 는 틀릴 수 있으니 숫자는 한 번 확인해 주세요. 「제원 채우기」는 비어 있던 칸만 채워요.</p>' +
           '<div class="cct-bar">' + [['pending', '기다리는 것 ' + r.pending], ['applied', '반영한 것'], ['rejected', '버린 것']].map(function (x) { return '<button type="button" class="cct-chip' + (st === x[0] ? ' on' : '') + '" data-st="' + x[0] + '">' + x[1] + '</button>'; }).join('') +
           '<span style="flex:1"></span>' + (st === 'pending' && r.items.length > 1 ? '<button type="button" class="cct-btn cct-btn--s" data-all>보이는 것 모두 반영</button>' : '') + '</div></div>' +
           (r.items.length ? '<div class="cct-sg">' + r.items.map(function (s) {
@@ -87,6 +87,7 @@
               (s.image_url ? '<img alt="" loading="lazy" referrerpolicy="no-referrer" src="' + esc(s.image_url) + '"><small>출처: ' + (s.page_url ? '<a target="_blank" rel="noopener" style="text-decoration:underline" href="' + esc(s.page_url) + '">' + esc(s.credit || s.page_url) + '</a>' : esc(s.credit)) + '</small>' : '') +
               (s.summary ? '<p style="font-size:13.5px">' + esc(s.summary) + '</p>' : '') +
               (s.lines.length ? '<dl>' + s.lines.map(function (l) { return '<div><dt>' + esc(l.label) + '</dt><dd>' + esc(l.value) + '</dd></div>'; }).join('') + '</dl>' : '') +
+              (s.task === 'sds' && s.page_url ? '<a class="cct-btn cct-btn--s" target="_blank" rel="noopener" href="' + esc(s.page_url) + '">🧾 열어서 확인</a>' : '') +
               '<small>' + esc(s.at) + (s.source ? ' · ' + esc(s.source) : '') + '</small>' +
               (s.status === 'pending' ? '<div class="cct-bar" style="margin:4px 0 0"><button type="button" class="cct-btn cct-btn--p cct-btn--s" data-ok>✔ 반영</button><button type="button" class="cct-btn cct-btn--s cct-btn--d" data-no>버리기</button>' +
                 (s.key ? '<a class="cct-btn cct-btn--s" target="_blank" rel="noopener" href="/catalog/' + esc(s.key) + '">지금 항목 보기</a>' : '') + '</div>' :
@@ -134,12 +135,13 @@
         row('🆕 새 모델 · 재료 찾기', '제조사를 돌아가며 「목록에 없는 제품」을 AI 에게 물어요', sw(S.task_new, 'data-b="task_new"') ) +
         row('📝 빈 제원 채우기', '제원이 덜 찬 항목의 빈 칸만 물어요 (적혀 있는 값은 건드리지 않아요)', sw(S.task_fill, 'data-b="task_fill"')) +
         row('🖼️ 사진 찾기', '사진 없는 항목 — 제품 공식 페이지의 대표 사진 → 위키미디어 공용 순서로 (검색 키가 있으면 검색 먼저)', sw(S.task_photo, 'data-b="task_photo"')) +
+        row('🧾 안전 자료(MSDS) 찾기', 'MSDS 가 빈 필라멘트 · 레진 · 분말 — 제품 공식 페이지의 SDS 링크 → 검색(키가 있으면) → AI 순서로. 주소를 열어 SDS 가 맞는지 확인한 것만 올려요', sw(S.task_sds, 'data-b="task_sds"')) +
         row('찾은 것을', '「확인 후 반영」을 권해요 — AI 는 없는 모델이나 틀린 숫자를 지어낼 수 있어요', '<select class="cct-sel" data-s="apply"><option value="review"' + (S.apply === 'review' ? ' selected' : '') + '>💡 제안함에 쌓기 (확인 후 반영)</option><option value="auto"' + (S.apply === 'auto' ? ' selected' : '') + '>⚡ 바로 반영</option></select>') +
         '</div><div class="cct-panel"><h3>🔎 사진 검색 (선택)</h3><p>검색 키가 없어도 돌아요 (공식 페이지 · 위키미디어 공용). Brave Search API 키를 넣으면 사진을 훨씬 잘 찾아요 — 키는 api.search.brave.com 에서 받아요. 제품 사진은 제조사에 저작권이 있으니, 출처가 같이 저장돼요.</p>' +
         row('검색', '', '<select class="cct-sel" data-s="search"><option value="none"' + (S.search === 'none' ? ' selected' : '') + '>쓰지 않음</option><option value="brave"' + (S.search === 'brave' ? ' selected' : '') + '>Brave Search</option></select>') +
         row('Brave API 키', S.brave_key_set ? '저장됨 · ' + esc(S.brave_key_hint) + ' (비워 두면 그대로)' : '없음', '<span class="cct-num"><input class="cct-in" style="width:220px;text-align:left" type="password" autocomplete="new-password" data-key placeholder="' + (S.brave_key_set ? '바꿀 때만 입력' : '키 입력') + '">' + (S.brave_key_set ? '<label style="font-size:12.5px"><input type="checkbox" data-key-clear> 지우기</label>' : '') + '</span>') +
         '</div><div class="cct-bar" style="margin-bottom:16px"><button type="button" class="cct-btn cct-btn--p" data-save>저장</button><span style="flex:1"></span>' +
-        '<button type="button" class="cct-btn" data-run="members">🏢 회원 등록 가져오기</button><button type="button" class="cct-btn" data-run="new">🆕 새 항목 찾기 한 번</button><button type="button" class="cct-btn" data-run="fill">📝 제원 채우기 한 번</button><button type="button" class="cct-btn" data-run="photo">🖼️ 사진 찾기 한 번</button></div>' +
+        '<button type="button" class="cct-btn" data-run="members">🏢 회원 등록 가져오기</button><button type="button" class="cct-btn" data-run="new">🆕 새 항목 찾기 한 번</button><button type="button" class="cct-btn" data-run="fill">📝 제원 채우기 한 번</button><button type="button" class="cct-btn" data-run="photo">🖼️ 사진 찾기 한 번</button><button type="button" class="cct-btn" data-run="sds">🧾 안전 자료 찾기 한 번</button></div>' +
         '<div class="cct-out" data-run-out></div>' +
         '<div class="cct-panel"><h3>📜 한 일</h3>' + (c.log.length ? '<div class="cct-log">' + c.log.map(function (l) { return '<div><time>' + esc(l.at) + '</time>' + esc(l.text) + '</div>'; }).join('') + '</div>' : '<p>아직 없어요.</p>') + '</div>' +
         '<p class="cct-note">서버 스케줄(크론)이 돌고 있으면 10분마다 알아서 살펴봐요. 스케줄이 없는 서버에서는 누가 카탈로그 화면을 열 때 살펴봐요. 직접 돌리려면: <code>php artisan catalog:collect --force</code></p>';

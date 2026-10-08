@@ -14,6 +14,7 @@ use Modules\Custom\Catalog\Support\Settings;
  *  새 모델 · 재료 찾기(new): 제조사를 돌아가며 「목록에 없는 제품」을 물음
  *  빈 제원 채우기(fill)   : 제원이 덜 찬 항목의 빈 칸만 물음 (이미 적힌 값은 건드리지 않음)
  *  사진 찾기(photo)       : 사진 없는 항목 — ① 검색(Brave 키가 있으면) ② 제품 공식 페이지의 대표 사진 ③ 위키미디어 공용
+ *  안전 자료 찾기(sds)    : MSDS 가 빈 재료 — ① 제품 공식 페이지의 SDS 링크 ② 검색(Brave 키가 있으면) ③ AI. 어느 것이든 주소를 열어 SDS 가 맞는지 확인한 것만
  *
  * 결과는 「제안」으로 쌓임. 설정이 review 면 관리자가 확인해서 반영, auto 면 바로 반영(제안함에는 「반영함」으로 남음).
  * 조용할 때 = 설정한 시간대 + 서버 부하가 기준 아래. 한 번에 몇 개 · 하루 몇 개까지인지도 설정.
@@ -24,6 +25,12 @@ final class Collector
     public static ?float $loadOverride = null;
 
     public static ?int $hourOverride = null;
+
+    /** 할 일 (차례대로 돌아감) */
+    public const TASKS = ['members', 'new', 'fill', 'photo', 'sds'];
+
+    /** 안전 자료(SDS · MSDS)를 알아보는 말 — 주소 · 링크 글 · 문서 제목에 */
+    public const SDS_RE = '/(?<![a-z])m?sds(?![a-z])|safety[\s_\-]*data[\s_\-]*sheet|sicherheitsdatenblatt|fiche[\s_\-]*de[\s_\-]*donn|물질\s*안전|안전\s*보건\s*자료/i';
 
     /** 테스트용: fn(string $url, array $headers): ?string  (웹 문서 · JSON 글) */
     public static $pager = null;
@@ -55,7 +62,7 @@ final class Collector
         if (! $s['auto']) {
             return ['ok' => false, 'reason' => '자동 수집이 꺼져 있어요.'];
         }
-        if (! $s['task_members'] && ! $s['task_new'] && ! $s['task_fill'] && ! $s['task_photo']) {
+        if (! $s['task_members'] && ! $s['task_new'] && ! $s['task_fill'] && ! $s['task_photo'] && ! $s['task_sds']) {
             return ['ok' => false, 'reason' => '할 일이 모두 꺼져 있어요.'];
         }
         $h = self::$hourOverride ?? (int) date('G');
@@ -112,7 +119,7 @@ final class Collector
             }
             $st['last'] = time();
             Settings::saveState($st);
-            $tasks = array_values(array_filter(['members', 'new', 'fill', 'photo'], static fn ($t) => $only ? $t === $only : $s['task_'.$t]));
+            $tasks = array_values(array_filter(self::TASKS, static fn ($t) => $only ? $t === $only : $s['task_'.$t]));
             $ran = [];
             $n = $only ? 1 : $s['auto_per_run'];
             for ($i = 0; $i < $n && $tasks; $i++) {
@@ -126,10 +133,11 @@ final class Collector
                         'members' => $this->taskMembers(),
                         'new' => $this->taskNew(),
                         'fill' => $this->taskFill(),
+                        'sds' => $this->taskSds(),
                         default => $this->taskPhoto(),
                     };
                 } catch (\Throwable $e) {
-                    $line = '⚠ '.['members' => '회원 등록 가져오기', 'new' => '새 항목 찾기', 'fill' => '제원 채우기', 'photo' => '사진 찾기'][$task].': '.mb_substr($e->getMessage(), 0, 200);
+                    $line = '⚠ '.['members' => '회원 등록 가져오기', 'new' => '새 항목 찾기', 'fill' => '제원 채우기', 'photo' => '사진 찾기', 'sds' => '안전 자료 찾기'][$task].': '.mb_substr($e->getMessage(), 0, 200);
                 }
                 Settings::log($line);
                 $ran[] = $line;
@@ -471,6 +479,134 @@ final class Collector
         return array_values(array_filter($out, static fn ($c) => $c['image_url'] !== '' && PhotoService::safeUrl($c['image_url'])));
     }
 
+    /* ───────── 안전 자료 (MSDS) ───────── */
+
+    public function taskSds(): string
+    {
+        $table = Schema::table('materials');
+        $r = DB::table($table)->where('status', 'active')->whereNotIn('brand', ['종류', '기타'])
+            ->where(static fn ($w) => $w->whereNull('sds_url')->orWhere('sds_url', ''))
+            ->where(static fn ($w) => $w->whereNull('ai_sds_at')->orWhere('ai_sds_at', '<', now()->subDays(30)))
+            ->orderByRaw('case when ai_sds_at is null then 0 else 1 end')->orderBy('ai_sds_at')->orderByDesc('id')->first();
+        if (! $r) {
+            return '안전 자료 찾기: MSDS 가 빈 재료가 없어요.';
+        }
+        DB::table($table)->where('id', $r->id)->update(['ai_sds_at' => now()]);
+        $name = (string) $r->{CatalogService::titleCol('materials')};
+        $title = $r->brand.' '.$name;
+        if (DB::table(Schema::SUGGEST)->where('task', 'sds')->where('item_key', $r->key)->where('status', 'pending')->exists()) {
+            return '안전 자료 찾기 · '.$title.': 확인을 기다리는 제안이 이미 있어요.';
+        }
+        $found = null;
+        foreach ($this->sdsCandidates((string) $r->brand, $name, (string) ($r->homepage_url ?? '')) as $c) {
+            if (self::isSds($c['url'], $c['hint'])) {
+                $found = $c;
+                break;
+            }
+        }
+        // 못 찾았으면 AI 에게 — 알려 준 주소도 열어서 확인한 것만
+        $ai = '';
+        if (! $found) {
+            try {
+                $j = $this->ai->json("제품 「{$title}」 (".Fields::kindLabel('materials', (string) $r->kind).")의 제조사 공식 안전보건자료(SDS · MSDS) 주소를 알려 줘.\n"
+                    ."- 실제로 있는 주소만. 확실하지 않으면 빈 문자열 (추측 · 지어내기 금지).\n- 이 제품만의 SDS 가 없으면 제조사의 SDS 모음 페이지도 괜찮아.\n\n[답 모양]\n".'{"sds_url":""}');
+                $u = trim((string) (is_string($j['sds_url'] ?? null) ? $j['sds_url'] : ''));
+                $ai = ' — '.$this->ai->last;
+                if (preg_match('#^https?://#i', $u) && self::isSds($u)) {
+                    $found = ['url' => $u, 'from' => 'AI'];
+                }
+            } catch (\Throwable $e) {
+                $ai = ' — AI: '.mb_substr($e->getMessage(), 0, 80);
+            }
+        }
+        if (! $found) {
+            return '안전 자료 찾기 · '.$title.': 찾지 못했어요'.$ai;
+        }
+        $this->suggest('sds', 'materials', (string) $r->key, $title, ['values' => ['sds_url' => $found['url']], 'page_url' => $found['url']], '안전 자료 · '.$found['from']);
+
+        return '안전 자료 찾기 · '.$title.': '.$found['from'].'에서 찾음';
+    }
+
+    /**
+     * SDS 일 듯한 주소 — ① 제품 공식 페이지에 걸린 SDS 링크 ② 검색 (Brave 키가 있으면)
+     *
+     * @return list<array{url: string, from: string, hint: bool}>  hint = 링크 글 · 검색 제목에 SDS 라고 적혀 있었음
+     */
+    public function sdsCandidates(string $brand, string $name, string $homepage): array
+    {
+        $out = [];
+        $add = static function (string $url, string $from) use (&$out): void {
+            if (preg_match('#^https?://#i', $url) && ! in_array($url, array_column($out, 'url'), true) && count($out) < 6) {
+                $out[] = ['url' => $url, 'from' => $from, 'hint' => true];
+            }
+        };
+        if ($homepage !== '' && trim((string) parse_url($homepage, PHP_URL_PATH), '/') !== '') {
+            $html = (string) self::page($homepage, ['Accept' => 'text/html']);
+            preg_match_all('#<a\b[^>]*\bhref=["\']([^"\'\#]+)["\'][^>]*>(.*?)</a>#si', $html, $m, PREG_SET_ORDER);
+            foreach ($m as $a) {
+                $href = html_entity_decode(trim($a[1]));
+                if (preg_match(self::SDS_RE, trim(html_entity_decode(strip_tags($a[2])))) || preg_match(self::SDS_RE, rawurldecode($href))) {
+                    $add(self::absUrl($href, $homepage), '제품 페이지');
+                }
+            }
+        }
+        $s = Settings::all();
+        if ($s['search'] === 'brave' && $s['brave_key'] !== '') {
+            $j = json_decode((string) self::page('https://api.search.brave.com/res/v1/web/search?count=10&safesearch=strict&q='.rawurlencode($brand.' '.$name.' safety data sheet SDS'),
+                ['X-Subscription-Token' => $s['brave_key'], 'Accept' => 'application/json']), true);
+            foreach (is_array($j['web']['results'] ?? null) ? $j['web']['results'] : [] as $it) {
+                $u = (string) ($it['url'] ?? '');
+                $t = (string) ($it['title'] ?? '').' '.rawurldecode($u);
+                if ($u !== '' && preg_match(self::SDS_RE, $t) && self::matches($t, (string) (preg_split('/[\s(]+/u', trim($brand))[0] ?? ''))) {
+                    $add($u, '검색');
+                }
+            }
+        }
+
+        return $out;
+    }
+
+    /**
+     * 열어 봐서 안전 자료가 맞는지 — 첫 화면 주소(경로 없음)는 아님.
+     * PDF 면 링크 글 · 주소 · 내용 중 하나에 SDS 라는 말, 웹 문서면 제목(title · h1)에.
+     */
+    public static function isSds(string $url, bool $hint = false): bool
+    {
+        if (trim((string) parse_url($url, PHP_URL_PATH), '/') === '') {
+            return false;
+        }
+        $body = (string) self::page($url, ['Accept' => 'application/pdf,text/html;q=0.9,*/*;q=0.5']);
+        if ($body === '') {
+            return false;
+        }
+        if (str_starts_with(ltrim($body), '%PDF')) {
+            return $hint || preg_match(self::SDS_RE, rawurldecode($url)) === 1 || preg_match('/Safety\s*Data\s*Sheet|\(\s*M?SDS\s*\)/i', $body) === 1;
+        }
+        $head = (preg_match('#<title[^>]*>(.*?)</title>#si', $body, $m) ? $m[1] : '').' '.(preg_match('#<h1[^>]*>(.*?)</h1>#si', $body, $m) ? $m[1] : '');
+
+        return preg_match(self::SDS_RE, html_entity_decode(strip_tags($head))) === 1;
+    }
+
+    private static function absUrl(string $href, string $base): string
+    {
+        if (preg_match('#^https?://#i', $href)) {
+            return $href;
+        }
+        $scheme = (string) (parse_url($base, PHP_URL_SCHEME) ?: 'https');
+        $host = (string) parse_url($base, PHP_URL_HOST);
+        if (str_starts_with($href, '//')) {
+            return $scheme.':'.$href;
+        }
+        if (str_starts_with($href, '/')) {
+            return $scheme.'://'.$host.$href;
+        }
+        if (preg_match('#^[a-z][a-z0-9+.\-]*:#i', $href)) {
+            return '';   // mailto: · javascript: …
+        }
+
+        return $scheme.'://'.$host.preg_replace('#/[^/]*$#', '/', (string) (parse_url($base, PHP_URL_PATH) ?: '/')).$href;
+    }
+
     /** 웹 문서 받기 (글) */
     public static function page(string $url, array $headers = []): ?string
     {
@@ -519,7 +655,7 @@ final class Collector
         $type = (string) $sg->item_type;
         if ($sg->task === 'new') {
             $key = $this->catalog->save($type, $p, true, str_starts_with((string) ($sg->source ?? ''), '회원') ? 'members' : 'ai')['key'];
-        } elseif ($sg->task === 'fill') {
+        } elseif ($sg->task === 'fill' || $sg->task === 'sds') {
             $key = $this->catalog->save($type, ['key' => (string) $sg->item_key] + $p, true)['key'];
         } else {
             $key = (string) $sg->item_key;
