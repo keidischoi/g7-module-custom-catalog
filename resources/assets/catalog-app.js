@@ -1,8 +1,8 @@
-/*! custom-catalog 0.2.5 — 3D 카탈로그 (목록 · 상세 · 편집) */
+/*! custom-catalog 0.2.7 — 3D 카탈로그 (목록 · 상세 · 편집) */
 (function () {
   'use strict';
   if (window.CCT) { try { window.CCT.tick(); } catch (e) {} return; }
-  var VERSION = '0.2.5', API = '/api/modules/custom-catalog', BASE = '/catalog';
+  var VERSION = '0.2.7', API = '/api/modules/custom-catalog', BASE = '/catalog';
 
   /* ───────── 도구 ───────── */
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
@@ -116,6 +116,22 @@
     try { if (typeof window.__cpsRecord === 'function') { window.__cpsRecord(term, 'catalog'); return; } } catch (e) {}
     try { fetch('/api/plugins/custom-popular_search/record', { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify({ scope: 'catalog', term: term }) }).catch(function () {}); } catch (e2) {}
   }
+  // 가로로 넘치는 줄에 작은 ‹ › 스크롤 버튼을 붙여요.
+  function scroller(el) {
+    if (!el || el.parentNode.classList.contains('cct-scr')) return;
+    var w = document.createElement('div'); w.className = 'cct-scr' + (el.classList.contains('cct-brands') ? ' cct-scr--brands' : '');
+    el.parentNode.insertBefore(w, el); w.appendChild(el);
+    w.insertAdjacentHTML('afterbegin', '<button type="button" class="cct-scr__b cct-scr__b--l" aria-label="왼쪽으로 넘기기">‹</button>');
+    w.insertAdjacentHTML('beforeend', '<button type="button" class="cct-scr__b cct-scr__b--r" aria-label="오른쪽으로 넘기기">›</button>');
+    var l = w.firstChild, r = w.lastChild;
+    var upd = function () { var max = el.scrollWidth - el.clientWidth; w.classList.toggle('can-l', el.scrollLeft > 2); w.classList.toggle('can-r', el.scrollLeft < max - 2); };
+    var by = function (d) { el.scrollBy({ left: d * Math.max(160, el.clientWidth * 0.7), behavior: 'smooth' }); };
+    l.onclick = function () { by(-1); }; r.onclick = function () { by(1); };
+    el.addEventListener('scroll', upd, { passive: true });
+    if (window.ResizeObserver) new ResizeObserver(upd).observe(el); else window.addEventListener('resize', upd);
+    var on = el.querySelector('.on'); if (on && on.offsetLeft + on.offsetWidth > el.clientWidth) el.scrollLeft = on.offsetLeft - 40;
+    upd(); setTimeout(upd, 300);
+  }
   function listPage(root) {
     var S = readState(), can = !!META.can_edit;
     if (!S.q && !tabOf(S.tab)) S.tab = (META.tabs[0] || {}).key || '';
@@ -132,6 +148,7 @@
     var nav = function (patch) { var n = {}; Object.keys(S).forEach(function (k) { n[k] = S[k]; }); Object.keys(patch).forEach(function (k) { n[k] = patch[k]; }); go(urlOf(n)); };
     box.querySelector('[data-search]').onsubmit = function (e) { e.preventDefault(); var q = this.q.value.trim(); if (q) record(q); nav({ q: q, brand: '' }); };
     Array.prototype.forEach.call(box.querySelectorAll('[data-tab]'), function (b) { b.onclick = function () { nav({ tab: b.getAttribute('data-tab'), brand: '', flags: [], q: '' }); }; });
+    scroller(box.querySelector('.cct-tabs'));
     bindCards(box, function () { meta(true).then(function () { listPage(root); }); });
 
     var types = S.q && !tab ? ['equipment', 'materials'] : [tab ? tab.type : 'equipment'], page = 1, pages = 1, shown = 0, sum = 0;
@@ -147,7 +164,7 @@
         return '<button type="button" class="cct-chip' + (S.flags.indexOf(k) >= 0 ? ' on' : '') + '" data-flag="' + k + '">' + label + '</button>'; };
       bar.innerHTML = (brands.length > 1 || S.brand ? '<div class="cct-bar"><div class="cct-brands" data-brands><button type="button" class="cct-chip' + (S.brand ? '' : ' on') + '" data-brand="">전체</button>' +
         brands.map(function (b) { return '<button type="button" class="cct-chip' + (S.brand === b.name ? ' on' : '') + '" data-brand="' + esc(b.name) + '">' + logoImg(b.name) + esc(b.name) + ' <small>' + b.n + '</small></button>'; }).join('') +
-        '</div>' + (brands.length > 14 ? '<button type="button" class="cct-btn cct-btn--s" data-brands-more>제조사 더 보기</button>' : '') + '</div>' : '') +
+        '</div></div>' : '') +
         '<div class="cct-bar">' + (tab && tab.key === 'fdm' ? flag('multicolor', '🌈 다색') : '') + (isPrinter ? flag('enclosed', '📦 밀폐형') : '') + flag('photo', '🖼️ 사진 있는 것') +
         (S.q ? '<button type="button" class="cct-chip on" data-clear-q>「' + esc(S.q) + '」 ✕</button>' : '') +
         '<span style="flex:1"></span>' + (can ? '<button type="button" class="cct-chip' + (S.status === 'archived' ? ' on' : '') + '" data-arch>🗄️ 보관한 것</button><button type="button" class="cct-btn cct-btn--s cct-btn--p" data-new>➕ 새 항목</button>' : '') +
@@ -155,7 +172,7 @@
         (tab && tab.type === 'equipment' ? '<option value="size"' + (S.sort === 'size' ? ' selected' : '') + '>출력 크기 큰 순</option>' : '') + '<option value="updated"' + (S.sort === 'updated' ? ' selected' : '') + '>최근 고친 순</option></select></div>';
       Array.prototype.forEach.call(bar.querySelectorAll('[data-brand]'), function (b) { b.onclick = function () { nav({ brand: b.getAttribute('data-brand') }); }; });
       Array.prototype.forEach.call(bar.querySelectorAll('[data-flag]'), function (b) { b.onclick = function () { var k = b.getAttribute('data-flag'), f = S.flags.slice(), i = f.indexOf(k); if (i >= 0) f.splice(i, 1); else f.push(k); nav({ flags: f }); }; });
-      var bm = bar.querySelector('[data-brands-more]'); if (bm) bm.onclick = function () { var el = bar.querySelector('[data-brands]'); el.classList.toggle('open'); bm.textContent = el.classList.contains('open') ? '접기' : '제조사 더 보기'; };
+      scroller(bar.querySelector('[data-brands]'));
       var cq = bar.querySelector('[data-clear-q]'); if (cq) cq.onclick = function () { nav({ q: '', tab: S.tab || (META.tabs[0] || {}).key }); };
       var ar = bar.querySelector('[data-arch]'); if (ar) ar.onclick = function () { nav({ status: S.status === 'archived' ? '' : 'archived' }); };
       var nw = bar.querySelector('[data-new]'); if (nw) nw.onclick = function () { openEditor({ type: tab ? tab.type : 'equipment', kind: tab ? tab.kinds[0] : 'fdm' }, function (key) { meta(true); go(BASE + '/' + key); }); };
