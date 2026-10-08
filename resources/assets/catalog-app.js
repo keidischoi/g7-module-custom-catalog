@@ -1,4 +1,4 @@
-/*! custom-catalog 0.1.39 */
+/*! custom-catalog 0.1.40 */
 (function () {
   "use strict";
   function boot() {
@@ -22,10 +22,10 @@
     }
     function esc(s) {
       return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) {
-        if (c === "&") return "&";
-        if (c === "<") return "<";
-        if (c === ">") return ">";
-        return """;
+        if (c === "&") return "&amp;";
+        if (c === "<") return "&lt;";
+        if (c === ">") return "&gt;";
+        return "&quot;";
       });
     }
     function show(row, can) {
