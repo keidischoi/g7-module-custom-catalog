@@ -1,0 +1,7 @@
+{
+  "version": "1.0.0",
+  "routes": [
+    {"path": "*/catalog", "layout": "cct_catalog", "auth_required": false, "meta": {"title": "3D 카탈로그"}},
+    {"path": "*/catalog/:key", "layout": "cct_catalog", "auth_required": false, "meta": {"title": "3D 카탈로그"}}
+  ]
+}
