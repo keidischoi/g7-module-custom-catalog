@@ -83,18 +83,21 @@ class CatalogController extends Controller
             });
         }
 
-        return ['ready' => true, 'items' => $query->orderBy('brand')->limit(50)->get()];
+        try {
+            return ['ready' => true, 'items' => $query->orderBy('brand')->limit(80)->get()];
+        } catch (\Throwable) {
+            return ['items' => [], 'ready' => false];
+        }
     }
-}
-
 
     public function image(string $file)
     {
         $name = basename($file);
-        $path = "modules/custom-catalog/images/".$name;
-        if (! Storage::disk("local")->exists($path)) {
+        $path = 'modules/custom-catalog/images/'.$name;
+        if (! Storage::disk('local')->exists($path)) {
             abort(404);
         }
 
-        return Storage::disk("local")->response($path);
+        return Storage::disk('local')->response($path);
     }
+}
