@@ -1,4 +1,4 @@
-/*! custom-catalog 0.1.17 */
+/*! custom-catalog 0.1.18 */
 (function () {
   "use strict";
   function boot() {
