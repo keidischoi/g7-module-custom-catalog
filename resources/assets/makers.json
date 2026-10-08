@@ -4,7 +4,9 @@
     "name": "Anycubic",
     "homepage": "https://www.anycubic.com",
     "note": "제조사 홈에서 최신 판매 여부를 확인하세요.",
-    "logo": "/api/modules/custom-catalog/assets/logo-anycubic.jpg"
+    "logo": "/api/modules/custom-catalog/assets/logo-anycubic.jpg",
+    "support": "https://support.anycubic.com",
+    "contact": "https://support.anycubic.com"
   },
   {
     "match": "artec 3d",
@@ -25,7 +27,9 @@
     "name": "Bambu Lab",
     "homepage": "https://bambulab.com",
     "note": "제조사 홈에서 최신 판매 여부를 확인하세요.",
-    "logo": "/api/modules/custom-catalog/assets/logo-bambu-lab.jpg"
+    "logo": "/api/modules/custom-catalog/assets/logo-bambu-lab.jpg",
+    "support": "https://bambulab.com/en/support",
+    "contact": "https://bambulab.com/en/support"
   },
   {
     "match": "bantam tools",
@@ -46,14 +50,18 @@
     "name": "Creality",
     "homepage": "https://www.creality.com",
     "note": "제조사 홈에서 최신 판매 여부를 확인하세요.",
-    "logo": "/api/modules/custom-catalog/assets/logo-creality.jpg"
+    "logo": "/api/modules/custom-catalog/assets/logo-creality.jpg",
+    "support": "https://www.creality.com/support",
+    "contact": "https://www.creality.com/support"
   },
   {
     "match": "cricut",
     "name": "Cricut",
     "homepage": "",
     "note": "Cricut 공개 자료 기준",
-    "logo": "/api/modules/custom-catalog/assets/logo-cricut.jpg"
+    "logo": "/api/modules/custom-catalog/assets/logo-cricut.jpg",
+    "support": "https://help.cricut.com",
+    "contact": "https://help.cricut.com"
   },
   {
     "match": "desktop metal",
@@ -67,14 +75,18 @@
     "name": "EOS",
     "homepage": "",
     "note": "EOS 공개 자료 기준",
-    "logo": "/api/modules/custom-catalog/assets/logo-eos.jpg"
+    "logo": "/api/modules/custom-catalog/assets/logo-eos.jpg",
+    "support": "https://www.eos.info/en/contact",
+    "contact": "https://www.eos.info/en/contact"
   },
   {
     "match": "elegoo",
     "name": "Elegoo",
     "homepage": "https://www.elegoo.com",
     "note": "제조사 홈에서 최신 판매 여부를 확인하세요.",
-    "logo": "/api/modules/custom-catalog/assets/logo-elegoo.jpg"
+    "logo": "/api/modules/custom-catalog/assets/logo-elegoo.jpg",
+    "support": "https://www.elegoo.com/pages/contact-us",
+    "contact": "https://www.elegoo.com/pages/contact-us"
   },
   {
     "match": "epilog",
@@ -88,21 +100,27 @@
     "name": "Flashforge",
     "homepage": "https://www.flashforge.com",
     "note": "제조사 홈에서 최신 판매 여부를 확인하세요.",
-    "logo": "/api/modules/custom-catalog/assets/logo-flashforge.jpg"
+    "logo": "/api/modules/custom-catalog/assets/logo-flashforge.jpg",
+    "support": "https://www.flashforge.com/support",
+    "contact": "https://www.flashforge.com/support"
   },
   {
     "match": "formlabs",
     "name": "Formlabs",
     "homepage": "https://formlabs.com",
     "note": "제조사 홈에서 최신 판매 여부를 확인하세요.",
-    "logo": "/api/modules/custom-catalog/assets/logo-formlabs.jpg"
+    "logo": "/api/modules/custom-catalog/assets/logo-formlabs.jpg",
+    "support": "https://support.formlabs.com",
+    "contact": "https://support.formlabs.com"
   },
   {
     "match": "gsi creos (mr.hobby)",
     "name": "GSI Creos (Mr.Hobby)",
     "homepage": "",
     "note": "GSI Creos (Mr.Hobby) 공개 자료 기준",
-    "logo": "/api/modules/custom-catalog/assets/logo-gsi-creos-mr-hobby.jpg"
+    "logo": "/api/modules/custom-catalog/assets/logo-gsi-creos-mr-hobby.jpg",
+    "support": "https://www.eos.info/en/contact",
+    "contact": "https://www.eos.info/en/contact"
   },
   {
     "match": "galomb",
@@ -116,7 +134,9 @@
     "name": "Glowforge",
     "homepage": "",
     "note": "Glowforge 공개 자료 기준",
-    "logo": "/api/modules/custom-catalog/assets/logo-glowforge.jpg"
+    "logo": "/api/modules/custom-catalog/assets/logo-glowforge.jpg",
+    "support": "https://glowforge.com/support",
+    "contact": "https://glowforge.com/support"
   },
   {
     "match": "graphtec",
@@ -130,7 +150,9 @@
     "name": "HP",
     "homepage": "",
     "note": "HP 공개 자료 기준",
-    "logo": "/api/modules/custom-catalog/assets/logo-hp.jpg"
+    "logo": "/api/modules/custom-catalog/assets/logo-hp.jpg",
+    "support": "https://support.hp.com",
+    "contact": "https://support.hp.com"
   },
   {
     "match": "harder & steenbeck",
@@ -179,14 +201,18 @@
     "name": "Markforged",
     "homepage": "",
     "note": "Markforged 공개 자료 기준",
-    "logo": "/api/modules/custom-catalog/assets/logo-markforged.jpg"
+    "logo": "/api/modules/custom-catalog/assets/logo-markforged.jpg",
+    "support": "https://support.markforged.com",
+    "contact": "https://support.markforged.com"
   },
   {
     "match": "mayku",
     "name": "Mayku",
     "homepage": "",
     "note": "Mayku 공개 자료 기준",
-    "logo": "/api/modules/custom-catalog/assets/logo-mayku.jpg"
+    "logo": "/api/modules/custom-catalog/assets/logo-mayku.jpg",
+    "support": "https://mayku.me/pages/support",
+    "contact": "https://mayku.me/pages/support"
   },
   {
     "match": "mimaki",
@@ -207,63 +233,81 @@
     "name": "Phrozen",
     "homepage": "https://phrozen3d.com",
     "note": "제조사 홈에서 최신 판매 여부를 확인하세요.",
-    "logo": "/api/modules/custom-catalog/assets/logo-phrozen.jpg"
+    "logo": "/api/modules/custom-catalog/assets/logo-phrozen.jpg",
+    "support": "https://phrozen3d.com/pages/contact",
+    "contact": "https://phrozen3d.com/pages/contact"
   },
   {
     "match": "polymaker",
     "name": "Polymaker",
     "homepage": "https://polymaker.com",
     "note": "제조사 홈에서 최신 판매 여부를 확인하세요.",
-    "logo": "/api/modules/custom-catalog/assets/logo-polymaker.jpg"
+    "logo": "/api/modules/custom-catalog/assets/logo-polymaker.jpg",
+    "support": "https://polymaker.com/contact-us/",
+    "contact": "https://polymaker.com/contact-us/"
   },
   {
     "match": "prusa research",
     "name": "Prusa Research",
     "homepage": "https://www.prusa3d.com",
     "note": "제조사 홈에서 최신 판매 여부를 확인하세요.",
-    "logo": "/api/modules/custom-catalog/assets/logo-prusa-research.jpg"
+    "logo": "/api/modules/custom-catalog/assets/logo-prusa-research.jpg",
+    "support": "https://help.prusa3d.com",
+    "contact": "https://www.prusa3d.com/support"
   },
   {
     "match": "qidi tech",
     "name": "QIDI Tech",
     "homepage": "https://qidi3d.com",
     "note": "제조사 홈에서 최신 판매 여부를 확인하세요.",
-    "logo": "/api/modules/custom-catalog/assets/logo-qidi-tech.jpg"
+    "logo": "/api/modules/custom-catalog/assets/logo-qidi-tech.jpg",
+    "support": "https://qidi3d.com/pages/contact-us",
+    "contact": "https://qidi3d.com/pages/contact-us"
   },
   {
     "match": "raise3d",
     "name": "Raise3D",
     "homepage": "https://www.raise3d.com",
     "note": "제조사 홈에서 최신 판매 여부를 확인하세요.",
-    "logo": "/api/modules/custom-catalog/assets/logo-raise3d.jpg"
+    "logo": "/api/modules/custom-catalog/assets/logo-raise3d.jpg",
+    "support": "https://www.raise3d.com/support/",
+    "contact": "https://www.raise3d.com/support/"
   },
   {
     "match": "revopoint",
     "name": "Revopoint",
     "homepage": "",
     "note": "Revopoint 공개 자료 기준",
-    "logo": "/api/modules/custom-catalog/assets/logo-revopoint.jpg"
+    "logo": "/api/modules/custom-catalog/assets/logo-revopoint.jpg",
+    "support": "https://www.revopoint3d.com/pages/support",
+    "contact": "https://www.revopoint3d.com/pages/support"
   },
   {
     "match": "roland dg",
     "name": "Roland DG",
     "homepage": "",
     "note": "Roland DG 공개 자료 기준",
-    "logo": "/api/modules/custom-catalog/assets/logo-roland-dg.jpg"
+    "logo": "/api/modules/custom-catalog/assets/logo-roland-dg.jpg",
+    "support": "https://www.rolanddg.com/support",
+    "contact": "https://www.rolanddg.com/support"
   },
   {
     "match": "shining 3d",
     "name": "SHINING 3D",
     "homepage": "",
     "note": "SHINING 3D 공개 자료 기준",
-    "logo": "/api/modules/custom-catalog/assets/logo-shining-3d.jpg"
+    "logo": "/api/modules/custom-catalog/assets/logo-shining-3d.jpg",
+    "support": "https://www.shining3d.com/support",
+    "contact": "https://www.shining3d.com/support"
   },
   {
     "match": "sunlu",
     "name": "SUNLU",
     "homepage": "https://www.sunlu.com",
     "note": "제조사 홈에서 최신 판매 여부를 확인하세요.",
-    "logo": "/api/modules/custom-catalog/assets/logo-sunlu.jpg"
+    "logo": "/api/modules/custom-catalog/assets/logo-sunlu.jpg",
+    "support": "https://www.sunlu.com/pages/contact-us",
+    "contact": "https://www.sunlu.com/pages/contact-us"
   },
   {
     "match": "sainsmart",
@@ -291,7 +335,9 @@
     "name": "Snapmaker",
     "homepage": "https://www.snapmaker.com",
     "note": "제조사 홈에서 최신 판매 여부를 확인하세요.",
-    "logo": "/api/modules/custom-catalog/assets/logo-snapmaker.jpg"
+    "logo": "/api/modules/custom-catalog/assets/logo-snapmaker.jpg",
+    "support": "https://support.snapmaker.com",
+    "contact": "https://support.snapmaker.com"
   },
   {
     "match": "sprintray",
@@ -305,7 +351,9 @@
     "name": "Stratasys",
     "homepage": "",
     "note": "Stratasys 공개 자료 기준",
-    "logo": "/api/modules/custom-catalog/assets/logo-stratasys.jpg"
+    "logo": "/api/modules/custom-catalog/assets/logo-stratasys.jpg",
+    "support": "https://support.stratasys.com",
+    "contact": "https://support.stratasys.com"
   },
   {
     "match": "trotec",
@@ -319,7 +367,9 @@
     "name": "UltiMaker",
     "homepage": "https://ultimaker.com",
     "note": "제조사 홈에서 최신 판매 여부를 확인하세요.",
-    "logo": "/api/modules/custom-catalog/assets/logo-ultimaker.jpg"
+    "logo": "/api/modules/custom-catalog/assets/logo-ultimaker.jpg",
+    "support": "https://support.ultimaker.com",
+    "contact": "https://support.ultimaker.com"
   },
   {
     "match": "uniformation",
@@ -347,7 +397,9 @@
     "name": "eSUN",
     "homepage": "https://www.esun3d.com",
     "note": "제조사 홈에서 최신 판매 여부를 확인하세요.",
-    "logo": "/api/modules/custom-catalog/assets/logo-esun.jpg"
+    "logo": "/api/modules/custom-catalog/assets/logo-esun.jpg",
+    "support": "https://www.esun3d.com/contact/",
+    "contact": "https://www.esun3d.com/contact/"
   },
   {
     "match": "eufymake",
@@ -361,13 +413,17 @@
     "name": "xTool",
     "homepage": "https://www.xtool.com",
     "note": "제조사 홈에서 최신 판매 여부를 확인하세요.",
-    "logo": "/api/modules/custom-catalog/assets/logo-xtool.jpg"
+    "logo": "/api/modules/custom-catalog/assets/logo-xtool.jpg",
+    "support": "https://support.xtool.com",
+    "contact": "https://support.xtool.com"
   },
   {
     "match": "신도리코 (sindoh)",
     "name": "신도리코 (Sindoh)",
     "homepage": "",
     "note": "신도리코 (Sindoh) 공개 자료 기준",
-    "logo": "/api/modules/custom-catalog/assets/logo-sindoh.jpg"
+    "logo": "/api/modules/custom-catalog/assets/logo-sindoh.jpg",
+    "support": "https://www.sindoh.com",
+    "contact": "https://www.sindoh.com"
   }
 ]
