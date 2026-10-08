@@ -1,14 +1,71 @@
 {
-  "version": "0.1.3",
+  "version": "0.1.4",
   "layout_name": "cct_catalog",
   "extends": "_user_base",
   "meta": {"title": "3D 카탈로그"},
-  "scripts": [
-    {"id": "cct_app", "src": "/api/modules/custom-catalog/assets/catalog-app.js?v=0.1.3", "async": true, "optional": true, "required": false, "failOnError": false, "onError": {"handler": "suppress"}}
+  "data_sources": [
+    {
+      "id": "equipment",
+      "type": "api",
+      "endpoint": "/api/modules/custom-catalog/equipment",
+      "method": "GET",
+      "auto_fetch": true,
+      "errorHandling": {"default": {"handler": "suppress"}},
+      "fallback": {"data": {"ready": false, "items": []}}
+    },
+    {
+      "id": "materials",
+      "type": "api",
+      "endpoint": "/api/modules/custom-catalog/materials",
+      "method": "GET",
+      "auto_fetch": true,
+      "errorHandling": {"default": {"handler": "suppress"}},
+      "fallback": {"data": {"ready": false, "items": []}}
+    }
   ],
   "slots": {
     "content": [
-      {"id": "cct_root", "type": "basic", "name": "Div", "props": {"className": "cct w-full", "data-cct": "1"}}
+      {
+        "type": "basic",
+        "name": "Div",
+        "props": {"className": "max-w-4xl mx-auto px-4 py-8 space-y-4"},
+        "children": [
+          {"type": "basic", "name": "H1", "props": {"className": "text-2xl font-bold"}, "text": "3D 카탈로그"},
+          {"type": "basic", "name": "P", "props": {"className": "text-gray-500"}, "text": "장비 · 필라멘트 · 레진 자료. 다른 모듈은 catalog_key 로 이 카드를 가져갑니다."},
+          {"type": "basic", "name": "H2", "props": {"className": "text-lg font-semibold"}, "text": "장비"},
+          {"type": "basic", "name": "P", "props": {"className": "text-gray-500"}, "text": "등록된 장비가 없습니다.", "if": "{{!(equipment?.data?.items?.length)}}"},
+          {
+            "type": "basic",
+            "name": "Div",
+            "if": "{{equipment?.data?.items?.length}}",
+            "props": {"className": "space-y-2"},
+            "children": [
+              {
+                "type": "basic",
+                "name": "P",
+                "for": "{{equipment.data.items}}",
+                "text": "{{item.brand}} {{item.model}}"
+              }
+            ]
+          },
+          {"type": "basic", "name": "H2", "props": {"className": "text-lg font-semibold"}, "text": "재료"},
+          {"type": "basic", "name": "P", "props": {"className": "text-gray-500"}, "text": "등록된 재료가 없습니다.", "if": "{{!(materials?.data?.items?.length)}}"},
+          {
+            "type": "basic",
+            "name": "Div",
+            "if": "{{materials?.data?.items?.length}}",
+            "props": {"className": "space-y-2"},
+            "children": [
+              {
+                "type": "basic",
+                "name": "P",
+                "for": "{{materials.data.items}}",
+                "text": "{{item.brand}} {{item.name}} · {{item.material}}"
+              }
+            ]
+          }
+        ]
+      }
     ]
   }
 }
