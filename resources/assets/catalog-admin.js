@@ -1,4 +1,4 @@
-/*! custom-catalog 0.2.2 — 관리자 (항목 · 제안함 · 자동 수집 · AI 연결 · 설정) */
+/*! custom-catalog 0.2.3 — 관리자 (항목 · 제안함 · 자동 수집 · AI 연결 · 설정) */
 (function () {
   'use strict';
   if (window.__cctAdmin) { try { window.__cctAdmin(); } catch (e) {} return; }
@@ -6,7 +6,7 @@
   function C() { return window.CCT; }
   function need(cb) {
     if (window.CCT) return cb();
-    if (!document.getElementById('cct-app-js')) { var s = document.createElement('script'); s.id = 'cct-app-js'; s.src = '/api/modules/custom-catalog/assets/catalog-app.js?v=0.2.2'; document.head.appendChild(s); }
+    if (!document.getElementById('cct-app-js')) { var s = document.createElement('script'); s.id = 'cct-app-js'; s.src = '/api/modules/custom-catalog/assets/catalog-app.js?v=0.2.3'; document.head.appendChild(s); }
     var n = 0, t = setInterval(function () { if (window.CCT || ++n > 100) { clearInterval(t); if (window.CCT) cb(); } }, 60);
   }
   function page() {
@@ -251,6 +251,8 @@
         '<div class="cct-row"><div><b>한 번에 보이는 개수</b><small>목록에서 「더 보기」 전까지</small></div><span class="cct-num"><input class="cct-in" type="number" min="8" max="96" data-n="per_page" value="' + S.per_page + '"> 개</span></div>' +
         '<div class="cct-row"><div><b>사진 크기</b><small>올리거나 가져온 사진은 이 크기(긴 변)로 줄여 JPEG 로 저장해요. 목록에는 더 작은 사진(480px)을 따로 만들어 써요</small></div><span class="cct-num"><input class="cct-in" type="number" min="480" max="2400" step="20" data-n="photo_px" value="' + S.photo_px + '"> px</span></div>' +
         '<div class="cct-row"><div><b>사진 품질</b><small>낮을수록 파일이 작아요 (권장 78 ~ 85)</small></div><span class="cct-num"><input class="cct-in" type="number" min="50" max="95" data-n="photo_quality" value="' + S.photo_quality + '"></span></div></div>' +
+        '<div class="cct-panel"><h3>🏷️ 제조사 로고</h3><p>카드 · 상세 · 제조사 칩에 보이는 로고예요. 로고가 없는 제조사는 머리글자 배지로 보여요. 🌐 는 그 제조사 홈페이지의 아이콘을 받아 오고, 📁 는 직접 올려요 (작게 줄여 저장). 로고는 각 회사의 상표예요.</p>' +
+        '<div class="cct-bar"><button type="button" class="cct-btn cct-btn--s" data-logo-all>🌐 없는 로고 모두 홈페이지에서 가져오기</button><span class="cct-out" style="margin:0" data-logo-out></span></div><div class="cct-lg" data-logos><div class="cct-skel" style="height:60px"></div></div></div>' +
         '<div class="cct-panel"><h3>🗂️ 보이는 탭</h3><p>끄면 사이트 카탈로그 화면에서 그 탭이 안 보여요 (자료는 그대로).</p>' + M0.map(function (t) {
           return '<div class="cct-row"><div><b>' + t[2] + ' ' + esc(t[1]) + '</b></div>' + sw(S.tabs_off.indexOf(t[0]) < 0, 'data-tab="' + t[0] + '"') + '</div>'; }).join('') + '</div>' +
         '<div class="cct-panel"><h3>🔗 다른 모듈과 잇기</h3><p>카탈로그는 목록의 주인이에요. 다른 모듈은 여기서 목록만 뽑아 가요.</p>' +
@@ -263,7 +265,41 @@
       Array.prototype.forEach.call(body.querySelectorAll('[name="cct-imode"]'), function (i) { i.onchange = function () { if (i.checked) S.image_mode = i.value; }; });
       Array.prototype.forEach.call(body.querySelectorAll('[data-tab]'), function (b) { b.onclick = function () {
         var k = b.getAttribute('data-tab'), i = S.tabs_off.indexOf(k); if (i >= 0) S.tabs_off.splice(i, 1); else S.tabs_off.push(k); b.classList.toggle('on', i >= 0); }; });
-      body.querySelector('[data-save]').onclick = function () { var b = this; b.disabled = true; var out = JSON.parse(JSON.stringify(S)); delete out.brave_key;
+      var drawLogos = function (items) {
+        var box = body.querySelector('[data-logos]'); if (!box) return;
+        box.innerHTML = items.map(function (x, i) {
+          return '<div class="cct-lg__i">' + (x.logo ? '<img class="cct-logo" alt="" loading="lazy" src="' + esc(x.logo) + '">' : C().logoImg(x.brand)) + '<b title="' + esc(x.brand) + '">' + esc(x.brand) + '</b>' +
+            (x.home ? '<button type="button" class="cct-btn cct-btn--s" title="홈페이지(' + esc(x.home) + ')에서 가져오기" data-logo-web="' + i + '">🌐</button>' : '') +
+            '<label class="cct-btn cct-btn--s" title="로고 올리기">📁<input type="file" accept="image/*" hidden data-logo-up="' + i + '"></label>' +
+            (x.logo ? '<button type="button" class="cct-btn cct-btn--s cct-btn--d" title="로고 지우기" data-logo-del="' + i + '">✕</button>' : '') + '</div>';
+        }).join('') || '<p>제조사가 아직 없어요.</p>';
+        Array.prototype.forEach.call(box.querySelectorAll('[data-logo-up]'), function (inp) { inp.onchange = function () {
+          if (!inp.files.length) return;
+          var fd = new FormData(); fd.append('brand', items[+inp.getAttribute('data-logo-up')].brand); fd.append('logo', inp.files[0]);
+          api('POST', '/admin/logos', fd).then(function (r) { C().toast('로고를 넣었어요.'); C().meta(true); drawLogos(r.items); }).catch(function (e) { C().toast(e.message); });
+        }; });
+        Array.prototype.forEach.call(box.querySelectorAll('[data-logo-web]'), function (b) { b.onclick = function () {
+          b.disabled = true; b.textContent = '⏳';
+          api('POST', '/admin/logos/fetch', { brand: items[+b.getAttribute('data-logo-web')].brand }).then(function (r) { C().toast('로고를 가져왔어요.'); C().meta(true); drawLogos(r.items); }).catch(function (e) { b.disabled = false; b.textContent = '🌐'; C().toast(e.message); });
+        }; });
+        var allBtn = body.querySelector('[data-logo-all]'), out = body.querySelector('[data-logo-out]');
+        if (allBtn) allBtn.onclick = function () {
+          var todo = items.filter(function (x) { return !x.logo && x.home; }), ok = 0, bad = 0, last = items;
+          if (!todo.length) { out.textContent = '가져올 곳이 없어요 (홈페이지 주소를 아는 제조사는 모두 로고가 있어요).'; return; }
+          allBtn.disabled = true;
+          (function next() {
+            var x = todo.shift();
+            if (!x) { allBtn.disabled = false; out.textContent = '끝 — ' + ok + '곳 가져옴' + (bad ? ' · ' + bad + '곳은 못 찾음 (직접 올려 주세요)' : ''); C().meta(true); drawLogos(last); return; }
+            out.textContent = '⏳ ' + x.brand + ' … (' + (ok + bad + 1) + ' / ' + (ok + bad + 1 + todo.length) + ')';
+            api('POST', '/admin/logos/fetch', { brand: x.brand }).then(function (r) { ok++; last = r.items; next(); }, function () { bad++; next(); });
+          })();
+        };
+        Array.prototype.forEach.call(box.querySelectorAll('[data-logo-del]'), function (b) { b.onclick = function () {
+          api('POST', '/admin/logos/delete', { brand: items[+b.getAttribute('data-logo-del')].brand }).then(function (r) { C().toast('로고를 지웠어요.'); C().meta(true); drawLogos(r.items); }).catch(function (e) { C().toast(e.message); });
+        }; });
+      };
+      api('GET', '/admin/logos').then(function (r) { drawLogos(r.items); }).catch(function () {});
+      body.querySelector('[data-save]').onclick = function () { var b = this; b.disabled = true; var out = JSON.parse(JSON.stringify(S)); delete out.brave_key; delete out.logos;
         api('POST', '/admin/settings', { settings: out }).then(function (r) { C().toast('저장했어요.'); C().meta(true); draw(r); }).catch(function (e) { b.disabled = false; C().toast(e.message); }); };
     };
     var M0 = [['fdm', 'FDM 프린터', '🖨️'], ['resin_printer', '레진 프린터', '💡'], ['industrial', '산업용 프린터', '🏭'], ['maker', '가공 장비', '⚙️'], ['tools', '주변 장비', '🧰'], ['filament', '필라멘트', '🧵'], ['resin', '레진', '🧪'], ['powder', '분말 · 금속', '⚗️']];

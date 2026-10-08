@@ -225,6 +225,12 @@ final class PhotoService
         return $jpeg !== '' ? $jpeg : null;
     }
 
+    /** 파일 하나 저장 (로고 등) */
+    public static function store(string $name, string $body): void
+    {
+        self::put(basename($name), $body);
+    }
+
     private static function put(string $name, string $body): void
     {
         if (self::$dirOverride !== null) {

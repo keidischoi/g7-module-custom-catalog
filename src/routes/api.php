@@ -22,6 +22,10 @@ Route::middleware(['auth:sanctum', 'throttle:120,1'])->prefix('admin')->group(fu
     Route::post('items/{key}/photos', [AdminController::class, 'photos'])->where('key', '[a-z0-9][a-z0-9_-]{1,79}');
     Route::post('photos/{id}/delete', [AdminController::class, 'photoDelete'])->whereNumber('id');
     Route::post('photos/{id}/main', [AdminController::class, 'photoMain'])->whereNumber('id');
+    Route::get('logos', [AdminController::class, 'logos']);
+    Route::post('logos', [AdminController::class, 'logoSave']);
+    Route::post('logos/delete', [AdminController::class, 'logoDelete']);
+    Route::post('logos/fetch', [AdminController::class, 'logoFetch'])->middleware('throttle:60,1');
     Route::get('settings', [AdminController::class, 'settings']);
     Route::post('settings', [AdminController::class, 'saveSettings']);
     Route::post('collect/run', [AdminController::class, 'collectRun'])->middleware('throttle:12,1');

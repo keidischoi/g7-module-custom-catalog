@@ -16,6 +16,7 @@ final class Settings
         return [
             'per_page' => 24,
             'tabs_off' => [],                 // 숨길 탭 키
+            'logos' => [],                    // 관리자가 올린 제조사 로고: 정리한 제조사 이름 → 주소 (Logos)
             'image_mode' => 'auto',           // 보여 줄 사진: auto · company · catalog · icon (CatalogService::imageOf)
             'photo_px' => 1100,               // 사진 긴 변
             'photo_quality' => 82,            // JPEG 품질
@@ -98,6 +99,7 @@ final class Settings
         return [
             'per_page' => $int('per_page', 8, 96),
             'tabs_off' => array_values(array_intersect($tabs, is_array($raw['tabs_off'] ?? null) ? $raw['tabs_off'] : [])),
+            'logos' => array_slice(array_filter(array_map('strval', is_array($raw['logos'] ?? null) ? $raw['logos'] : []), static fn ($u) => str_starts_with($u, '/api/modules/custom-catalog/')), 0, 400, true),
             'image_mode' => in_array($raw['image_mode'] ?? '', ['company', 'catalog', 'icon'], true) ? $raw['image_mode'] : 'auto',
             'photo_px' => $int('photo_px', 480, 2400),
             'photo_quality' => $int('photo_quality', 50, 95),
