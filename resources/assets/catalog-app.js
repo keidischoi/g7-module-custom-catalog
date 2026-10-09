@@ -1,8 +1,8 @@
-/*! custom-catalog 0.2.12 — 3D 카탈로그 (목록 · 상세 · 편집) */
+/*! custom-catalog 0.2.13 — 3D 카탈로그 (목록 · 상세 · 편집) */
 (function () {
   'use strict';
   if (window.CCT) { try { window.CCT.tick(); } catch (e) {} return; }
-  var VERSION = '0.2.12', API = '/api/modules/custom-catalog', BASE = '/catalog';
+  var VERSION = '0.2.13', API = '/api/modules/custom-catalog', BASE = '/catalog';
 
   /* ───────── 도구 ───────── */
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
@@ -414,7 +414,23 @@
             aipText = ta.value.trim();
             if (!aipText) { am.textContent = '붙여 넣을 글이 없어요.'; ta.focus(); return; }
             collect(); go2.disabled = true; aip.classList.add('busy'); am.textContent = '⏳ AI 가 정리하는 중… (모델에 따라 1분쯤)';
-            api('POST', '/admin/ai/extract', { type: type, kind: kind, text: aipText, brand: base.brand, title: base.title }).then(function (r) {
+            // 0.2.13 바로 일 번호를 받고 2초마다 확인 (AI 가 오래 걸려도 504 로 끊기지 않게)
+            var t0 = Date.now();
+            var wait = function (job) {
+              return new Promise(function (ok, no) {
+                (function poll() {
+                  if (!document.body.contains(m)) return no(new Error('창을 닫았어요.'));
+                  var s = Math.round((Date.now() - t0) / 1000), am3 = m.querySelector('[data-aip-msg]'); if (am3) am3.textContent = '⏳ AI 가 정리하는 중… ' + s + '초 (모델에 따라 1 ~ 3분)';
+                  api('GET', '/admin/ai/extract/' + job).then(function (st) {
+                    if (st.status === 'done') return ok(st.data);
+                    if (st.status === 'fail') return no(new Error(st.message || 'AI 가 정리하지 못했어요.'));
+                    if (Date.now() - t0 > 450000) return no(new Error('너무 오래 걸려요 — 글을 줄이거나 더 빠른 모델로 바꿔 주세요.'));
+                    setTimeout(poll, 2000);
+                  }, function (e) { if (e.status && e.status !== 404 && Date.now() - t0 < 450000) setTimeout(poll, 3000); else no(e); });
+                })();
+              });
+            };
+            api('POST', '/admin/ai/extract', { type: type, kind: kind, text: aipText, brand: base.brand, title: base.title }).then(function (r0) { return r0 && r0.job ? wait(r0.job) : r0; }).then(function (r) {
               collect(); var n = put(r, true); aipText = ''; draw();
               var am2 = m.querySelector('[data-aip-msg]'); if (am2) am2.textContent = n ? '✅ ' + n + '칸을 채웠어요 (💡) — 맞는지 보고 저장해 주세요.' + (r.source_url ? ' · 📄 출처: ' + r.source_url : ' · 📄 출처: 붙여 넣은 글') + (r.from ? ' · 🤖 ' + r.from : '') : '글에서 채울 값을 찾지 못했어요.';
             }).catch(function (e) { go2.disabled = false; aip.classList.remove('busy'); am.textContent = '❌ ' + e.message; });

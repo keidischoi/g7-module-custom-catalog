@@ -291,17 +291,30 @@ class AdminController extends Controller
         if (! Settings::get('ai_paste')) {
             return self::fail('「AI 로 정리해 넣기」가 꺼져 있어요 (⚙️ 설정).');
         }
-        @set_time_limit(180);
-        try {
-            $res = $this->collector->extract((string) $r->input('type', ''), (string) $r->input('kind', ''), mb_substr((string) $r->input('text', ''), 0, 60000),
-                mb_substr((string) $r->input('brand', ''), 0, 80), mb_substr((string) $r->input('title', ''), 0, 80));
-        } catch (\InvalidArgumentException $e) {
-            return self::fail($e->getMessage());
-        } catch (\Throwable $e) {
-            return self::fail('AI 가 정리하지 못했어요 — '.mb_substr($e->getMessage(), 0, 200));
+        $args = ['type' => (string) $r->input('type', ''), 'kind' => (string) $r->input('kind', ''), 'text' => mb_substr(trim((string) $r->input('text', '')), 0, 60000),
+            'brand' => mb_substr((string) $r->input('brand', ''), 0, 80), 'title' => mb_substr((string) $r->input('title', ''), 0, 80)];
+        if (mb_strlen($args['text']) < 8) {
+            return self::fail('정리할 글이 없어요 — 제품 페이지의 제원 · 소개 글을 붙여 넣거나 끌어 놓아 주세요.');
         }
+        // 0.2.13 바로 답하고(일 번호) AI 는 응답을 보낸 뒤에 — 오래 걸려도 504 로 끊기지 않음
+        $id = Collector::jobStart();
+        $col = $this->collector;
+        app()->terminating(static function () use ($col, $id, $args) {
+            $col->jobRun($id, $args);
+        });
 
-        return self::ok($res, count($res['values']) + count($res['facts']).'칸을 채웠어요 — 맞는지 보고 저장해 주세요.');
+        return self::ok(['job' => $id], 'AI 가 정리하고 있어요…');
+    }
+
+    /** 0.2.13 AI 로 정리해 넣기 — 진행 상태 (run · done · fail) */
+    public function aiExtractJob(Request $r, string $id): JsonResponse
+    {
+        if ($g = $this->guard($r)) {
+            return $g;
+        }
+        $j = Collector::job($id);
+
+        return $j === null ? self::fail('이 일을 찾지 못했어요 — 다시 눌러 주세요.', 404) : self::ok($j);
     }
 
     /* ───────── AI 서버 연결 (구인구직 AiController 와 같음) ───────── */
