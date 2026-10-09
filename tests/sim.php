@@ -519,6 +519,19 @@ namespace {
     AiClient::$sender = function (string $url, array $h, array $body) { if ($body['model'] === 'bad') { throw new \RuntimeException('x'); } return ['message' => ['content' => '{"a":1}']]; };
     $ai2->json('hi');
     t($seen === ['PC/bad', 'PC/qwen2.5:14b'], 'AI 물어보기 직전마다 알림 (진행 상태)');
+    echo "■ Ollama 문맥 크기 · 정리하기 온도 (0.2.17)\n";
+    $msg = fn (int $n) => [['role' => 'user', 'content' => str_repeat('가', $n)]];
+    t(\Modules\Custom\Catalog\Support\AiProvider::ctxFor($msg(1000), 1500) === 4096 && \Modules\Custom\Catalog\Support\AiProvider::ctxFor($msg(5000), 1500) === 8192
+        && \Modules\Custom\Catalog\Support\AiProvider::ctxFor($msg(12000), 1500) === 16384 && \Modules\Custom\Catalog\Support\AiProvider::ctxFor($msg(40000), 1500) === 32768, '문맥 크기를 물음 길이에 맞춤 (늘 32K 아님)');
+    $bodies = [];
+    AiClient::$sender = function (string $url, array $h, array $body) use (&$bodies) { $bodies[] = $body; return ['message' => ['content' => '{"values":{"build_x_mm":192}}']]; };
+    AiClient::$settingsOverride = ['enabled' => true, 'max_tokens' => 4000, 'servers' => [['id' => 's1', 'name' => 'Ollama', 'enabled' => true, 'provider' => 'ollama', 'url' => 'http://127.0.0.1:11434', 'models' => ['qwen2.5:0.5b']]]];
+    $col->extract('equipment', 'dlp', str_repeat("출력 크기: 192 x 121 x 220 mm\n\n\n", 400));
+    $b0 = end($bodies);
+    t($b0['options']['temperature'] === 0.0 && $b0['options']['num_predict'] === 1500 && $b0['options']['num_ctx'] <= 16384 && mb_strlen($b0['messages'][1]['content']) < 9000, '정리하기: 온도 0 · 답 1500 토큰 · 글 6000 자까지 (빈 줄 줄임)');
+    (new AiClient())->json('x');
+    $b1 = end($bodies);
+    t($b1['options']['temperature'] === 0.4 && $b1['options']['num_predict'] === 4000 && $b1['options']['num_ctx'] === 8192, '다른 물음은 설정 그대로 (온도 0.4) · 문맥만 맞춤');
     array_map('unlink', glob($tmp.'/img/*') ?: []);
     array_map('unlink', glob($tmp.'/*.*') ?: []);
     echo "\n통과 {$pass} · 실패 {$fail}\n";

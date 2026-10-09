@@ -1,4 +1,4 @@
-/*! custom-catalog 0.2.16 — 관리자 (항목 · 제안함 · 자동 수집 · AI 연결 · 설정) */
+/*! custom-catalog 0.2.17 — 관리자 (항목 · 제안함 · 자동 수집 · AI 연결 · 설정) */
 (function () {
   'use strict';
   if (window.__cctAdmin) { try { window.__cctAdmin(); } catch (e) {} return; }
@@ -6,7 +6,7 @@
   function C() { return window.CCT; }
   function need(cb) {
     if (window.CCT) return cb();
-    if (!document.getElementById('cct-app-js')) { var s = document.createElement('script'); s.id = 'cct-app-js'; s.src = '/api/modules/custom-catalog/assets/catalog-app.js?v=0.2.16'; document.head.appendChild(s); }
+    if (!document.getElementById('cct-app-js')) { var s = document.createElement('script'); s.id = 'cct-app-js'; s.src = '/api/modules/custom-catalog/assets/catalog-app.js?v=0.2.17'; document.head.appendChild(s); }
     var n = 0, t = setInterval(function () { if (window.CCT || ++n > 100) { clearInterval(t); if (window.CCT) cb(); } }, 60);
   }
   function page() {

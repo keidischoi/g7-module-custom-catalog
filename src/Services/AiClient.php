@@ -26,6 +26,9 @@ final class AiClient
     /** 마지막으로 답한 곳 「서버 · 모델」 */
     public string $last = '';
 
+    /** 0.2.17 물음 설정 — temperature(정리하기 0) · max_tokens(답 길이 한도). 비우면 설정 그대로 */
+    public array $opt = [];
+
     /** 0.2.14 물어보기 직전에 부름: fn(string $server, string $model, int $timeout, list<string> $errors) — 진행 상태 보이기 */
     public $onTry = null;
 
@@ -68,7 +71,7 @@ final class AiClient
             }
             try {
                 $text = $this->ask($o['server'], $o['model'], [['role' => 'system', 'content' => self::SYSTEM], ['role' => 'user', 'content' => $prompt]],
-                    $s['max_tokens'], AiSettings::timeoutFor($o['server'], $s), true);
+                    isset($this->opt['max_tokens']) ? min((int) $s['max_tokens'], (int) $this->opt['max_tokens']) : $s['max_tokens'], AiSettings::timeoutFor($o['server'], $s), true);
                 $j = self::parseJson($text);
                 if ($j === null) {
                     throw new \RuntimeException('JSON 이 아닌 답');
@@ -126,7 +129,7 @@ final class AiClient
     private function ask(array $server, string $model, array $messages, int $maxTokens, int $timeout, bool $json): string
     {
         $url = AiSettings::url($server);
-        $req = AiProvider::buildRequest($server['provider'], $url, (string) $server['api_key'], $model, $messages, $maxTokens, $json);
+        $req = AiProvider::buildRequest($server['provider'], $url, (string) $server['api_key'], $model, $messages, $maxTokens, $json, [], $this->opt);
         try {
             $res = $this->send($req['url'], $req['headers'], $req['body'], $timeout);
         } catch (\RuntimeException $e) {

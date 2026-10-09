@@ -673,7 +673,8 @@ final class Collector
             }
             $text = self::plain($html);
         }
-        $text = mb_substr($text, 0, 14000);
+        // 0.2.17 빈 줄 · 겹친 띄어쓰기 줄이고 6000 자까지 (긴 글은 작은 모델을 몇 분씩 붙잡음)
+        $text = mb_substr(trim(preg_replace("/[ \t]+/u", ' ', preg_replace("/\n\s*\n+/u", "\n", $text) ?? $text) ?? $text), 0, 6000);
         if (mb_strlen($text) < 8) {
             throw new \InvalidArgumentException('정리할 글이 없어요 — 제품 페이지의 제원 · 소개 글을 붙여 넣거나 끌어 놓아 주세요.');
         }
@@ -687,7 +688,9 @@ final class Collector
             $keys[] = $d['key'].': '.$d['label'].($d['unit'] ? ' ('.$d['unit'].', 숫자만)' : '').($d['options'] && $d['type'] === 'sel' ? ' ['.implode('|', $d['options']).']' : '')
                 .($d['type'] === 'bool' ? ' [true|false]' : '').($d['type'] === 'tags' ? ' [배열]' : '');
         }
-        $j = $this->ai->json("아래 [글]은 관리자가 붙여 넣은 제품 자료다. 이 글에 **적혀 있는 것만** 골라 칸에 맞게 정리해 줘.\n"
+        $this->ai->opt = ['temperature' => 0, 'max_tokens' => 1500];   // 0.2.17 정리하기: 지어내지 않게 · 답은 짧게
+        try {
+            $j = $this->ai->json("아래 [글]은 관리자가 붙여 넣은 제품 자료다. 이 글에 **적혀 있는 것만** 골라 칸에 맞게 정리해 줘.\n"
             ."- 글에 없는 값은 넣지 않는다 (기억 · 추측 금지). 단위는 칸 단위로 바꿔 숫자만 (예: 0.25 m/s → 250, 1 kg → 1000).\n"
             ."- 선택 칸은 보기 중 하나로만. 칸에 없는 제원은 facts 에 「이름: 값」으로 (한국어 이름).\n"
             ."- summary 는 글 내용으로 한국어 두세 문장. issues 는 글에 적힌 주의 · 알려진 문제만 (배열).\n"
@@ -696,6 +699,9 @@ final class Collector
             ."\n[칸]\n".implode("\n", $keys)
             ."\n\n[답 모양]\n".'{"kind":"","brand":"","title":"","summary":"","homepage_url":"","issues":[],"values":{"칸 키":값},"facts":{"이름":"값"}}'
             ."\n\n[글]\n".$text);
+        } finally {
+            $this->ai->opt = [];
+        }
         $k2 = in_array($j['kind'] ?? '', $kinds, true) ? (string) $j['kind'] : $kind;
         $vals = [];
         $in = is_array($j['values'] ?? null) ? $j['values'] : [];
