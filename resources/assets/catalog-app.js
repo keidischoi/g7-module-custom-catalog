@@ -1,8 +1,8 @@
-/*! custom-catalog 0.2.9 — 3D 카탈로그 (목록 · 상세 · 편집) */
+/*! custom-catalog 0.2.11 — 3D 카탈로그 (목록 · 상세 · 편집) */
 (function () {
   'use strict';
   if (window.CCT) { try { window.CCT.tick(); } catch (e) {} return; }
-  var VERSION = '0.2.10', API = '/api/modules/custom-catalog', BASE = '/catalog';
+  var VERSION = '0.2.11', API = '/api/modules/custom-catalog', BASE = '/catalog';
 
   /* ───────── 도구 ───────── */
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
@@ -334,6 +334,23 @@
       var V = d ? JSON.parse(JSON.stringify(d.values || {})) : {}, facts = d ? Object.keys(d.facts_raw || {}).map(function (k) { return [k, d.facts_raw[k]]; }) : [];
       var base = { brand: d ? d.brand : (opt.brand || ''), title: d ? d.title : '', summary: d ? d.summary : '', note: d ? d.note : '', homepage_url: d ? d.homepage_url : '', wiki_url: d ? d.wiki_url : '',
         detail: d ? d.detail || '' : '', issues: d ? (d.issues || []).join('\n') : '', memo: d ? d.memo || '' : '' };
+      /* 0.2.11 미리 채울 값(opt.draft — 제안함 「고쳐서 반영」) · 🤖 AI 로 정리해 넣기 — 채운 칸은 💡 표시 */
+      var AIK = {}, aipText = '';
+      var put = function (dr, keepName) {
+        if (!dr) return 0;
+        var n = 0;
+        if (dr.kind && META.kinds[type].some(function (k) { return k.key === dr.kind; })) kind = dr.kind;
+        ['brand', 'title', 'summary', 'homepage_url', 'wiki_url', 'note', 'detail', 'issues', 'memo'].forEach(function (k) {
+          var v = dr[k]; if (Array.isArray(v)) v = v.join('\n');
+          if (v == null || String(v).trim() === '') return;
+          if (keepName && (k === 'brand' || k === 'title') && String(base[k] || '').trim() !== '') return;
+          base[k] = String(v); AIK['b:' + k] = 1; n++;
+        });
+        Object.keys(dr.values || {}).forEach(function (k) { var v = dr.values[k]; if (v === null || v === '' || (Array.isArray(v) && !v.length)) return; V[k] = v; AIK[k] = 1; n++; });
+        Object.keys(dr.facts || {}).forEach(function (nm) { var i = -1; facts.forEach(function (f, j) { if (f[0] === nm) i = j; }); if (i >= 0) facts[i][1] = dr.facts[nm]; else facts.push([nm, dr.facts[nm]]); AIK['f:' + nm] = 1; n++; });
+        return n;
+      };
+      put(opt.draft, false);
       var m = document.createElement('div'); m.className = 'cct cct-modal'; document.body.appendChild(m);
       var close = function () { m.remove(); document.removeEventListener('keydown', onKey); };
       var onKey = function (e) { if (e.key === 'Escape') close(); };
@@ -358,8 +375,14 @@
       var draw = function () {
         var groups = META.fields[type].map(function (g) { return { group: g.group, fields: g.fields.filter(function (f) { return !f.kinds.length || f.kinds.indexOf(kind) >= 0; }) }; }).filter(function (g) { return g.fields.length; });
         var has = function (g) { return g.fields.filter(function (f) { var v = V[f.key]; return v !== undefined && v !== null && v !== '' && !(Array.isArray(v) && !v.length); }).length; };
-        m.innerHTML = '<div class="cct-modal__box"><div class="cct-modal__head"><h3>' + (d ? '✏️ ' + esc(d.brand + ' ' + d.title) + ' 고치기' : '➕ 새 항목') + '</h3><button type="button" class="cct-x" data-close aria-label="닫기">✕</button></div>' +
-          '<div class="cct-modal__body"><div class="cct-form">' +
+        m.innerHTML = '<div class="cct-modal__box"><div class="cct-modal__head"><h3>' + (opt.head ? esc(opt.head) : d ? '✏️ ' + esc(d.brand + ' ' + d.title) + ' 고치기' : '➕ 새 항목') + '</h3><button type="button" class="cct-x" data-close aria-label="닫기">✕</button></div>' +
+          '<div class="cct-modal__body">' + (opt.note ? '<p class="cct-aip__note">' + esc(opt.note) + '</p>' : '') +
+          (opt.sources ? '<div class="cct-src' + (opt.sources.length ? '' : ' none') + '"><b>🔗 출처</b>' + (opt.sources.length ? opt.sources.map(function (x) { return '<a target="_blank" rel="noopener noreferrer" href="' + esc(x.url) + '">' + (x.ok ? '✅ ' : '⚠️ ') + esc(x.url.replace(/^https?:\/\/(www\.)?/i, '').slice(0, 70)) + '</a>'; }).join('') : '<span>⚠️ 출처 없음 — AI 기억</span>') + '</div>' : '') +
+          (META.ai_paste ? '<div class="cct-aip" data-aip><div class="cct-aip__h"><span class="cct-aip__i">🤖</span><b>AI 로 정리해 넣기</b><small>제품 페이지의 제원 · 소개 글을 복사해 <b>붙여 넣거나 끌어 놓으면</b> 칸에 맞게 정리해 채워요 · 주소만 넣으면 그 페이지를 열어 읽어요 · 글에 없는 값은 넣지 않아요</small></div>' +
+            '<textarea class="cct-in" data-aip-t placeholder="여기에 붙여 넣기 · 끌어 놓기 (글 · 주소 · .txt 파일)">' + esc(aipText) + '</textarea>' +
+            '<div class="cct-bar" style="margin:6px 0 0"><button type="button" class="cct-btn cct-btn--p cct-btn--s" data-aip-go>✨ 정리해서 칸 채우기</button><span class="cct-msg" data-aip-msg></span></div></div>' : '') +
+          (Object.keys(AIK).length ? '<p class="cct-aip__note">💡 표시한 칸은 AI · 제안이 채운 값이에요 — 맞는지 보고 고친 뒤 저장해 주세요.</p>' : '') +
+          '<div class="cct-form">' +
           (d ? '' : '<label class="cct-f"><span>무엇</span><select class="cct-in" data-type><option value="equipment"' + (type === 'equipment' ? ' selected' : '') + '>장비 · 프린터</option><option value="materials"' + (type === 'materials' ? ' selected' : '') + '>재료 (필라멘트 · 레진 …)</option></select></label>') +
           '<label class="cct-f"><span>종류</span><select class="cct-in" data-kind>' + META.kinds[type].map(function (k) { return '<option value="' + k.key + '"' + (k.key === kind ? ' selected' : '') + '>' + k.icon + ' ' + esc(k.label) + '</option>'; }).join('') + '</select></label>' +
           '<label class="cct-f"><span>제조사</span><input class="cct-in" data-b="brand" value="' + esc(base.brand) + '" placeholder="예: Bambu Lab"></label>' +
@@ -378,6 +401,46 @@
           '</div><button type="button" class="cct-btn cct-btn--s" style="margin-top:8px" data-fact-add>➕ 줄 더하기</button></div></details></div>' +
           '<div class="cct-modal__foot"><span class="cct-msg" data-msg></span><button type="button" class="cct-btn" data-close>닫기</button><button type="button" class="cct-btn cct-btn--p" data-save>저장</button></div></div>';
         Array.prototype.forEach.call(m.querySelectorAll('[data-close]'), function (b) { b.onclick = close; });
+        Object.keys(AIK).forEach(function (k) {
+          var el = k.indexOf('b:') === 0 ? m.querySelector('[data-b="' + k.slice(2) + '"]') : k.indexOf('f:') === 0 ? null : m.querySelector('[data-k="' + k + '"],[data-yn="' + k + '"]');
+          var f = el && el.closest('.cct-f'); if (f) f.classList.add('cct-f--ai');
+        });
+        Array.prototype.forEach.call(m.querySelectorAll('[data-fact]'), function (r) { var i = r.querySelector('input'); if (i && AIK['f:' + i.value]) r.classList.add('cct-f--ai'); });
+        var aip = m.querySelector('[data-aip]');
+        if (aip) {
+          var ta = aip.querySelector('[data-aip-t]'), go2 = aip.querySelector('[data-aip-go]'), am = aip.querySelector('[data-aip-msg]');
+          ta.oninput = function () { aipText = ta.value; };
+          var run = function () {
+            aipText = ta.value.trim();
+            if (!aipText) { am.textContent = '붙여 넣을 글이 없어요.'; ta.focus(); return; }
+            collect(); go2.disabled = true; aip.classList.add('busy'); am.textContent = '⏳ AI 가 정리하는 중… (모델에 따라 1분쯤)';
+            api('POST', '/admin/ai/extract', { type: type, kind: kind, text: aipText, brand: base.brand, title: base.title }).then(function (r) {
+              collect(); var n = put(r, true); aipText = ''; draw();
+              var am2 = m.querySelector('[data-aip-msg]'); if (am2) am2.textContent = n ? '✅ ' + n + '칸을 채웠어요 (💡) — 맞는지 보고 저장해 주세요.' + (r.source_url ? ' · 📄 출처: ' + r.source_url : ' · 📄 출처: 붙여 넣은 글') + (r.from ? ' · 🤖 ' + r.from : '') : '글에서 채울 값을 찾지 못했어요.';
+            }).catch(function (e) { go2.disabled = false; aip.classList.remove('busy'); am.textContent = '❌ ' + e.message; });
+          };
+          go2.onclick = run;
+          ta.onpaste = function () { setTimeout(function () { if (ta.value.trim().length > 20 || /^https?:\/\/\S+$/i.test(ta.value.trim())) run(); }, 30); };
+          var drop = function (e) {
+            var dt = e.dataTransfer; if (!dt) return;
+            var file = dt.files && dt.files[0];
+            var txt = dt.getData('text/plain') || dt.getData('text/uri-list') || '';
+            if (!file && !txt) return;
+            e.preventDefault(); aip.classList.remove('over');
+            if (file) {
+              if (!/^text\/|\.(txt|md|html?|csv|json)$/i.test(file.type + ' ' + file.name)) { am.textContent = '글 파일(.txt · .html · .md)만 읽을 수 있어요 — PDF 는 글을 복사해 붙여 넣어 주세요.'; return; }
+              var fr = new FileReader(); fr.onload = function () { ta.value = String(fr.result || '').slice(0, 60000); run(); }; fr.readAsText(file); return;
+            }
+            ta.value = txt; run();
+          };
+          // 상자 · 창 아무 데나 끌어 놓아도 (입력칸 위는 그 칸에 들어가게 둠)
+          aip.ondragover = function (e) { e.preventDefault(); aip.classList.add('over'); };
+          aip.ondragleave = function () { aip.classList.remove('over'); };
+          aip.ondrop = drop;
+          var box = m.querySelector('.cct-modal__box');
+          box.ondragover = function (e) { if (!e.target.closest('input,textarea,select')) { e.preventDefault(); aip.classList.add('over'); } };
+          box.ondrop = function (e) { if (!e.target.closest('input,textarea,select') || e.target === ta) drop(e); };
+        }
         var ts = m.querySelector('[data-type]'); if (ts) ts.onchange = function () { collect(); type = ts.value; kind = META.kinds[type][0].key; draw(); };
         m.querySelector('[data-kind]').onchange = function () { collect(); kind = this.value; draw(); };
         Array.prototype.forEach.call(m.querySelectorAll('[data-yn]'), function (box) { Array.prototype.forEach.call(box.querySelectorAll('button'), function (b) { b.onclick = function () {
@@ -395,7 +458,7 @@
           var body = { type: type, kind: kind, brand: base.brand, title: base.title, summary: base.summary, note: base.note, homepage_url: base.homepage_url, wiki_url: base.wiki_url, detail: base.detail, issues: base.issues, memo: base.memo, values: V, facts: fo };
           if (d) body.key = d.key;
           b.disabled = true; msg.textContent = '';
-          api('POST', '/admin/items', body).then(function (r) { close(); toast(api.last || '저장했어요.'); if (done) done(r.key); }).catch(function (e) { b.disabled = false; msg.textContent = e.message; });
+          (opt.save ? opt.save(body) : api('POST', '/admin/items', body)).then(function (r) { close(); toast(api.last || '저장했어요.'); if (done) done(r && r.key); }).catch(function (e) { b.disabled = false; msg.textContent = e.message; });
         };
       };
       draw();

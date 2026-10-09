@@ -264,7 +264,7 @@ class AdminController extends Controller
             return $g;
         }
         try {
-            $res = $this->collector->apply($id);
+            $res = $this->collector->apply($id, is_array($r->input('edited')) ? (array) $r->input('edited') : null);   // 0.2.11 고쳐서 반영
         } catch (\InvalidArgumentException $e) {
             return self::fail($e->getMessage());
         }
@@ -280,6 +280,28 @@ class AdminController extends Controller
         $this->collector->reject($id);
 
         return self::ok(null, '버렸어요.');
+    }
+
+    /** 0.2.11 🤖 AI 로 정리해 넣기 — 붙여 넣은 글 · 주소 → 편집 창 칸 */
+    public function aiExtract(Request $r): JsonResponse
+    {
+        if ($g = $this->guard($r)) {
+            return $g;
+        }
+        if (! Settings::get('ai_paste')) {
+            return self::fail('「AI 로 정리해 넣기」가 꺼져 있어요 (⚙️ 설정).');
+        }
+        @set_time_limit(180);
+        try {
+            $res = $this->collector->extract((string) $r->input('type', ''), (string) $r->input('kind', ''), mb_substr((string) $r->input('text', ''), 0, 60000),
+                mb_substr((string) $r->input('brand', ''), 0, 80), mb_substr((string) $r->input('title', ''), 0, 80));
+        } catch (\InvalidArgumentException $e) {
+            return self::fail($e->getMessage());
+        } catch (\Throwable $e) {
+            return self::fail('AI 가 정리하지 못했어요 — '.mb_substr($e->getMessage(), 0, 200));
+        }
+
+        return self::ok($res, count($res['values']) + count($res['facts']).'칸을 채웠어요 — 맞는지 보고 저장해 주세요.');
     }
 
     /* ───────── AI 서버 연결 (구인구직 AiController 와 같음) ───────── */

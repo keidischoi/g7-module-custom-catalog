@@ -1,4 +1,4 @@
-/*! custom-catalog 0.2.9 — 관리자 (항목 · 제안함 · 자동 수집 · AI 연결 · 설정) */
+/*! custom-catalog 0.2.11 — 관리자 (항목 · 제안함 · 자동 수집 · AI 연결 · 설정) */
 (function () {
   'use strict';
   if (window.__cctAdmin) { try { window.__cctAdmin(); } catch (e) {} return; }
@@ -6,7 +6,7 @@
   function C() { return window.CCT; }
   function need(cb) {
     if (window.CCT) return cb();
-    if (!document.getElementById('cct-app-js')) { var s = document.createElement('script'); s.id = 'cct-app-js'; s.src = '/api/modules/custom-catalog/assets/catalog-app.js?v=0.2.10'; document.head.appendChild(s); }
+    if (!document.getElementById('cct-app-js')) { var s = document.createElement('script'); s.id = 'cct-app-js'; s.src = '/api/modules/custom-catalog/assets/catalog-app.js?v=0.2.11'; document.head.appendChild(s); }
     var n = 0, t = setInterval(function () { if (window.CCT || ++n > 100) { clearInterval(t); if (window.CCT) cb(); } }, 60);
   }
   function page() {
@@ -74,6 +74,16 @@
   function suggestPage(root) {
     var esc = C().esc, api = C().api, body = frame(root, 'suggest'), st = 'pending';
     var NAME = { 'new': '새 항목', fill: '제원 채우기', photo: '사진', sds: '안전 자료' };
+    // 0.2.11 🔗 출처 — AI 가 댄 주소(✅ 열림 · ⚠️ 안 열림) · 없으면 「AI 기억」 경고 · 누가(서버 · 모델) 찾았는지
+    var srcHtml = function (s) {
+      if (s.task === 'photo') return '';
+      var by = s.source ? '<small class="cct-src__by">' + (/회원|안전 자료/.test(s.source) ? '📥 ' : '🤖 ') + esc(s.source) + '</small>' : '';
+      if (!s.sources || !s.sources.length) return '<div class="cct-src none"><b>🔗 출처</b>' + (/회원/.test(s.source || '') ? '<span>업체검색 회원 등록</span>' : '<span>⚠️ 출처 없음 — AI 가 기억으로 적은 값이에요 (틀릴 수 있어요)</span>') + by + '</div>';
+      return '<div class="cct-src"><b>🔗 출처</b>' + s.sources.map(function (x) {
+        var h = x.url.replace(/^https?:\/\/(www\.)?/i, '').slice(0, 60);
+        return '<a target="_blank" rel="noopener noreferrer" href="' + esc(x.url) + '" title="' + esc(x.url) + '">' + (x.ok ? '✅ ' : '⚠️ ') + esc(h) + '</a>';
+      }).join('') + (s.sources.some(function (x) { return !x.ok; }) ? '<small>⚠️ 는 열리지 않은 주소 — AI 가 지어냈을 수 있어요</small>' : '') + by + '</div>';
+    };
     var draw = function () {
       api('GET', '/admin/suggestions?status=' + st).then(function (r) {
         pending = r.pending;
@@ -87,9 +97,10 @@
               (s.image_url ? '<img alt="" loading="lazy" referrerpolicy="no-referrer" src="' + esc(s.image_url) + '"><small>출처: ' + (s.page_url ? '<a target="_blank" rel="noopener" style="text-decoration:underline" href="' + esc(s.page_url) + '">' + esc(s.credit || s.page_url) + '</a>' : esc(s.credit)) + '</small>' : '') +
               (s.summary ? '<p style="font-size:13.5px">' + esc(s.summary) + '</p>' : '') +
               (s.lines.length ? '<dl>' + s.lines.map(function (l) { return '<div><dt>' + esc(l.label) + '</dt><dd>' + esc(l.value) + '</dd></div>'; }).join('') + '</dl>' : '') +
+              srcHtml(s) +
               (s.task === 'sds' && s.page_url ? '<a class="cct-btn cct-btn--s" target="_blank" rel="noopener" href="' + esc(s.page_url) + '">🧾 열어서 확인</a>' : '') +
-              '<small>' + esc(s.at) + (s.source ? ' · ' + esc(s.source) : '') + '</small>' +
-              (s.status === 'pending' ? '<div class="cct-bar" style="margin:4px 0 0"><button type="button" class="cct-btn cct-btn--p cct-btn--s" data-ok>✔ 반영</button><button type="button" class="cct-btn cct-btn--s cct-btn--d" data-no>버리기</button>' +
+              '<small>' + esc(s.at) + '</small>' +
+              (s.status === 'pending' ? '<div class="cct-bar" style="margin:4px 0 0">' + (s.draft ? '<button type="button" class="cct-btn cct-btn--p cct-btn--s" data-fix>✏️ 고쳐서 반영</button>' : '') + '<button type="button" class="cct-btn cct-btn--s" data-ok>✔ 그대로 반영</button><button type="button" class="cct-btn cct-btn--s cct-btn--d" data-no>버리기</button>' +
                 (s.key ? '<a class="cct-btn cct-btn--s" target="_blank" rel="noopener" href="/catalog/' + esc(s.key) + '">지금 항목 보기</a>' : '') + '</div>' :
                 (s.key ? '<a class="cct-btn cct-btn--s" target="_blank" rel="noopener" href="/catalog/' + esc(s.key) + '">항목 보기</a>' : '')) + '</div>';
           }).join('') + '</div>' : '<div class="cct-empty"><b>🌙</b>' + (st === 'pending' ? '기다리는 제안이 없어요. 「🌙 자동 수집」에서 켜거나 「지금 한 번 돌리기」를 눌러 보세요.' : '없어요.') + '</div>');
@@ -99,6 +110,15 @@
           var ok = card.querySelector('[data-ok]'), no = card.querySelector('[data-no]');
           if (ok) ok.onclick = function () { ok.disabled = true; act(card, 'apply').then(function () { C().toast('반영했어요.'); C().meta(true); draw(); }).catch(function (e) { ok.disabled = false; C().toast(e.message); }); };
           if (no) no.onclick = function () { act(card, 'reject').then(draw).catch(function (e) { C().toast(e.message); }); };
+          // 0.2.11 편집 창에서 고친 뒤 반영 (새 항목 · 제원 · 안전 자료) — 이름 말고 틀린 값이 많아서
+          var fx = card.querySelector('[data-fix]'), sg = r.items.filter(function (x) { return String(x.id) === card.getAttribute('data-sg'); })[0];
+          if (fx && sg) fx.onclick = function () {
+            var save = function (body) { return api('POST', '/admin/suggestions/' + sg.id + '/apply', { edited: body }); };
+            var note = '💡 AI 가 가져온 값이에요 — 틀린 것은 고치고, 아래 「🤖 AI 로 정리해 넣기」에 제조사 페이지 글을 붙여 넣으면 진짜 값으로 채워져요.';
+            var after = function () { C().toast('반영했어요.'); C().meta(true); draw(); };
+            if (sg.task === 'new') C().openEditor({ type: sg.type, kind: (sg.draft || {}).kind, draft: sg.draft, head: '💡 ' + sg.title + ' — 고쳐서 반영', note: note, sources: sg.sources, save: save }, after);
+            else C().openEditor({ key: sg.key, draft: sg.draft, head: '💡 ' + sg.title + ' — 고쳐서 반영', note: note, sources: sg.sources, save: save }, after);
+          };
         });
         var all = body.querySelector('[data-all]');
         if (all) all.onclick = function () {
@@ -136,6 +156,8 @@
         row('📝 빈 제원 채우기', '제원이 덜 찬 항목의 빈 칸만 물어요 (적혀 있는 값은 건드리지 않아요)', sw(S.task_fill, 'data-b="task_fill"')) +
         row('🖼️ 사진 찾기', '사진 없는 항목 — 제품 공식 페이지의 대표 사진 → 위키미디어 공용 순서로 (검색 키가 있으면 검색 먼저)', sw(S.task_photo, 'data-b="task_photo"')) +
         row('🧾 안전 자료(MSDS) 찾기', 'MSDS 가 빈 필라멘트 · 레진 · 분말 — 제품 공식 페이지의 SDS 링크 → 검색(키가 있으면) → AI 순서로. 주소를 열어 SDS 가 맞는지 확인한 것만 올려요', sw(S.task_sds, 'data-b="task_sds"')) +
+        row('🆕 새 항목에 제원도 넣기', '끄면(권장) 새 항목 제안은 <b>이름 · 종류만</b> — AI 가 기억으로 적는 제원 · 소개 · 주소는 틀린 것이 많아요. 「✏️ 고쳐서 반영」 창의 「🤖 AI 로 정리해 넣기」로 진짜 자료를 붙여 넣어 채우세요', sw(S.new_values, 'data-b="new_values"')) +
+        row('🤖 AI 로 정리해 넣기', '항목 편집 창 위에 상자 — 제품 페이지 글 · 주소를 붙여 넣거나 끌어 놓으면 AI 가 칸에 맞게 정리해 채워요 (글에 없는 값은 안 넣음)', sw(S.ai_paste, 'data-b="ai_paste"')) +
         row('찾은 것을', '「확인 후 반영」을 권해요 — AI 는 없는 모델이나 틀린 숫자를 지어낼 수 있어요', '<select class="cct-sel" data-s="apply"><option value="review"' + (S.apply === 'review' ? ' selected' : '') + '>💡 제안함에 쌓기 (확인 후 반영)</option><option value="auto"' + (S.apply === 'auto' ? ' selected' : '') + '>⚡ 바로 반영</option></select>') +
         '</div><div class="cct-panel"><h3>🔎 사진 검색 (선택)</h3><p>검색 키가 없어도 돌아요 (공식 페이지 · 위키미디어 공용). Brave Search API 키를 넣으면 사진을 훨씬 잘 찾아요 — 키는 api.search.brave.com 에서 받아요. 제품 사진은 제조사에 저작권이 있으니, 출처가 같이 저장돼요.</p>' +
         row('검색', '', '<select class="cct-sel" data-s="search"><option value="none"' + (S.search === 'none' ? ' selected' : '') + '>쓰지 않음</option><option value="brave"' + (S.search === 'brave' ? ' selected' : '') + '>Brave Search</option></select>') +

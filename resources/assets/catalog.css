@@ -265,3 +265,25 @@ textarea.cct-in{height:auto;min-height:84px;padding:10px 12px;resize:vertical;li
   .cct-search button{padding:0 14px}
 }
 @media print{.cct-edbar,.cct-photo-tools,.cct-back,.cct-links{display:none!important}}
+
+/* 0.2.11 🤖 AI 로 정리해 넣기 · 💡 AI · 제안이 채운 칸 */
+.cct-aip{margin:0 0 14px;padding:12px 14px;border:2px dashed color-mix(in srgb,var(--accent,#6366f1) 45%,transparent);border-radius:16px;background:color-mix(in srgb,var(--accent,#6366f1) 6%,var(--card));transition:border-color .15s,background .15s}
+.cct-aip.over{border-color:var(--accent,#6366f1);background:color-mix(in srgb,var(--accent,#6366f1) 14%,var(--card))}
+.cct-aip.busy .cct-aip__i{animation:cct-aip-spin 1.2s linear infinite}
+.cct-aip__h{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin-bottom:8px}
+.cct-aip__h small{flex-basis:100%;color:var(--mute);font-size:12.5px;line-height:1.5}
+.cct-aip__i{display:inline-block;font-size:20px;animation:cct-aip-bob 2.4s ease-in-out infinite}
+.cct-aip textarea{width:100%;min-height:76px;resize:vertical}
+.cct-aip__note{margin:0 0 12px;padding:8px 12px;border-radius:12px;background:color-mix(in srgb,#f59e0b 12%,var(--card));font-size:13px}
+.cct-f--ai>span::after,.cct-facts .cct-f--ai::before{content:"💡";margin-left:4px;font-size:12px}
+.cct-f--ai .cct-in,.cct-f--ai .cct-yn,.cct-facts .cct-f--ai .cct-in{box-shadow:0 0 0 2px color-mix(in srgb,#f59e0b 55%,transparent)}
+@keyframes cct-aip-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes cct-aip-spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.cct-aip__i{animation:none!important}}
+.cct-src{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:6px 0;padding:8px 10px;border-radius:12px;background:color-mix(in srgb,#10b981 8%,var(--card));font-size:12.5px}
+.cct-src.none{background:color-mix(in srgb,#f59e0b 12%,var(--card))}
+.cct-src>b{font-size:12.5px}
+.cct-src a{padding:2px 8px;border-radius:999px;background:var(--card);border:1px solid var(--line);text-decoration:none;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cct-src a:hover{text-decoration:underline}
+.cct-src small{flex-basis:100%;color:var(--mute)}
+.cct-modal__body>.cct-src{margin:0 0 12px}

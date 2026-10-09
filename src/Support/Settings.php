@@ -35,6 +35,8 @@ final class Settings
             'task_photo' => true,             // 사진 찾기
             'task_sds' => true,               // 안전 자료(MSDS) 찾기 — 재료
             'apply' => 'review',              // review = 제안함에 쌓고 관리자가 확인 · auto = 바로 반영
+            'new_values' => false,            // 0.2.11 새 항목 제안에 AI 가 기억으로 적은 제원 · 소개 · 주소도 넣기 (끄면 이름 · 종류만 — 틀린 값이 많아서)
+            'ai_paste' => true,               // 0.2.11 편집 창 「🤖 AI 로 정리해 넣기」 — 붙여 넣은(끌어 놓은) 글 · 주소에서 칸을 채움
             'search' => 'none',               // 사진 · 자료 검색: none · brave
             'brave_key' => '',
         ];
@@ -121,6 +123,8 @@ final class Settings
             'task_photo' => $bool('task_photo'),
             'task_sds' => $bool('task_sds'),
             'apply' => ($raw['apply'] ?? '') === 'auto' ? 'auto' : 'review',
+            'new_values' => $bool('new_values'),
+            'ai_paste' => $bool('ai_paste'),
             'search' => ($raw['search'] ?? '') === 'brave' ? 'brave' : 'none',
             'brave_key' => mb_substr(preg_replace('/\s/', '', (string) ($raw['brave_key'] ?? '')) ?? '', 0, 200),
         ];
