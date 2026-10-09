@@ -720,6 +720,62 @@ final class Collector
             'values' => $vals, 'facts' => $facts, 'from' => $this->ai->last, 'source_url' => $from];
     }
 
+    /*
+     * 0.2.13 AI 로 정리해 넣기를 응답 뒤에 돌림 — AI 가 1분을 넘기면 앞단(nginx · 역방향 프록시)이 504 로 끊어서.
+     * 상태는 설정 폴더의 extract-{id}.json: run · done(data) · fail(message). 화면은 GET 으로 2초마다 확인.
+     */
+    public static function jobStart(): string
+    {
+        foreach (glob(Settings::file('extract-*.json')) ?: [] as $f) {
+            if (@filemtime($f) < time() - 3600) {
+                @unlink($f);
+            }
+        }
+        $id = bin2hex(random_bytes(8));
+        self::jobPut($id, ['status' => 'run', 'at' => time()]);
+
+        return $id;
+    }
+
+    /** @param array<string, mixed> $res */
+    private static function jobPut(string $id, array $res): void
+    {
+        @file_put_contents(Settings::file('extract-'.$id.'.json'), json_encode($res, JSON_UNESCAPED_UNICODE), LOCK_EX);
+    }
+
+    /** @return array<string, mixed>|null */
+    public static function job(string $id): ?array
+    {
+        if (! preg_match('/^[a-f0-9]{16}$/', $id)) {
+            return null;
+        }
+        $f = Settings::file('extract-'.$id.'.json');
+        $j = is_file($f) ? json_decode((string) file_get_contents($f), true) : null;
+        if (! is_array($j)) {
+            return null;
+        }
+        if (($j['status'] ?? '') === 'run' && (int) ($j['at'] ?? 0) < time() - 420) {
+            return ['status' => 'fail', 'message' => 'AI 가 7분 안에 답하지 못했어요 — 글을 줄이거나 🤖 AI 연결에서 더 빠른 모델을 위로 올려 주세요.'];
+        }
+
+        return $j;
+    }
+
+    /** @param array{type?: string, kind?: string, text?: string, brand?: string, title?: string} $a */
+    public function jobRun(string $id, array $a): void
+    {
+        @set_time_limit(400);
+        @ignore_user_abort(true);
+        try {
+            $res = $this->extract((string) ($a['type'] ?? ''), (string) ($a['kind'] ?? ''), (string) ($a['text'] ?? ''), (string) ($a['brand'] ?? ''), (string) ($a['title'] ?? ''));
+            self::jobPut($id, ['status' => 'done', 'data' => $res, 'message' => count($res['values']) + count($res['facts']).'칸을 채웠어요 — 맞는지 보고 저장해 주세요.']);
+        } catch (\InvalidArgumentException $e) {
+            self::jobPut($id, ['status' => 'fail', 'message' => $e->getMessage()]);
+        } catch (\Throwable $e) {
+            self::jobPut($id, ['status' => 'fail', 'message' => 'AI 가 정리하지 못했어요 — '.mb_substr($e->getMessage(), 0, 200)]);
+        }
+    }
+
     /** HTML → 읽을 글 (스크립트 · 꾸밈 빼고, 표는 칸 사이 「 : 」) */
     public static function plain(string $html): string
     {

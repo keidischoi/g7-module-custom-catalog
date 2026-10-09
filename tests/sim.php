@@ -494,6 +494,15 @@ namespace {
         && str_contains($hv['slicer'], 'Blueprint Studio') && str_contains($hv['print_speed_h'], '27 mm/h') && str_contains($hv['voltage'], '100–240'), 'Reflex 제원 23칸 — 예전 값(999 · DLP) 위에 덮어씀');
     $cd = array_values(array_filter(Fields::forKind('equipment', 'dlp'), static fn ($d) => $d['key'] === 'connect'))[0];
     t(Fields::clean($cd, 'USB · Wi-Fi · Ethernet') === ['USB', 'Wi-Fi', 'LAN'] && Fields::clean($cd, ['이더넷', 'WiFi', 'TF 카드', 'lan']) === ['LAN', 'Wi-Fi', 'SD'], '연결: Ethernet · 이더넷 → LAN, WiFi → Wi-Fi (겹치면 하나)');
+    echo "■ AI 로 정리해 넣기 — 뒤에서 돌기 (0.2.13)\n";
+    $jid = Collector::jobStart();
+    t(Collector::job($jid)['status'] === 'run' && Collector::job('zz') === null, '일 번호 → 처음엔 「도는 중」');
+    $col->jobRun($jid, ['type' => 'equipment', 'kind' => 'fdm', 'text' => "Build volume : 256 x 256 x 256 mm\nWi-Fi : 2.4GHz"]);
+    $jd = Collector::job($jid);
+    t($jd['status'] === 'done' && $jd['data']['values'] === ['build_x_mm' => 256] && str_contains($jd['message'], '칸을 채웠어요'), '끝나면 결과 (화면이 2초마다 받아 감)');
+    $jid2 = Collector::jobStart();
+    $col->jobRun($jid2, ['type' => 'equipment', 'kind' => 'fdm', 'text' => '짧음']);
+    t(Collector::job($jid2)['status'] === 'fail' && str_contains(Collector::job($jid2)['message'], '없어요'), '안 되면 까닭');
     array_map('unlink', glob($tmp.'/img/*') ?: []);
     array_map('unlink', glob($tmp.'/*.*') ?: []);
     echo "\n통과 {$pass} · 실패 {$fail}\n";

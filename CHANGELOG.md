@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.13 — 2026-10-09
+
+- 🩹 **「🤖 AI 로 정리해 넣기」가 504 로 끊기던 것** — AI 가 1분을 넘기면 앞단(nginx · 역방향 프록시)이 기다리다 끊었음. 이제 누르면 바로 일 번호를 받고, AI 는 응답을 보낸 뒤 서버에서 계속 돌며, 화면은 2초마다 「⏳ … n초」로 확인해 끝나면 칸을 채움 (최대 7분). API: `POST admin/ai/extract` → `{job}`, `GET admin/ai/extract/{job}` → run · done · fail.
+- 검사 `tests/sim.php` 91.
+
+배포: DB 변경 없음.
+
+
 ## 0.2.12 — 2026-10-09
 
 - **HeyGears UltraCraft Reflex 제원** (관리자가 확인한 값으로 덮어씀, 없으면 새로 넣음) — 출시 2023-06 · 판매 중 · 중국 · 192 × 121 × 220 mm · 최소 층 20 µm · XY 33 µm · 평균 27 mm/h (층 50 µm) · LCD (MSLA) 6K Mono (5760×3600) · 레진 통 가열 · 레진 자동 공급 · 카메라 · AI 출력 감지 · 공기 필터 · USB · Wi-Fi · LAN · 오픈소스 아님 · Blueprint Studio · 본체 400 × 420 × 572 mm · 25 kg · 350 W · 100–240 V AC, 50/60 Hz.
