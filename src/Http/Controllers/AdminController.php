@@ -297,10 +297,10 @@ class AdminController extends Controller
             return self::fail('정리할 글이 없어요 — 제품 페이지의 제원 · 소개 글을 붙여 넣거나 끌어 놓아 주세요.');
         }
         // 0.2.13 바로 답하고(일 번호) AI 는 응답을 보낸 뒤에 — 오래 걸려도 504 로 끊기지 않음
-        $id = Collector::jobStart();
+        $id = Collector::jobStart($args);
         $col = $this->collector;
-        app()->terminating(static function () use ($col, $id, $args) {
-            $col->jobRun($id, $args);
+        app()->terminating(static function () use ($col, $id) {
+            $col->jobRun($id);
         });
 
         return self::ok(['job' => $id], 'AI 가 정리하고 있어요…');
@@ -311,6 +311,11 @@ class AdminController extends Controller
     {
         if ($g = $this->guard($r)) {
             return $g;
+        }
+        // 0.2.14 응답 뒤 일이 8초 넘게 시작 안 됐으면(서버가 응답 뒤 작업을 안 돌리는 경우) 이 요청이 맡아 돌림
+        //  — 이 요청은 오래 걸려 앞단이 끊을 수 있지만 PHP 는 끝까지 돌고, 화면은 다음 확인에서 결과를 받음
+        if (Collector::jobStale($id)) {
+            $this->collector->jobRun($id);
         }
         $j = Collector::job($id);
 
