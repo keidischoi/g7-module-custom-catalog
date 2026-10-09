@@ -240,10 +240,22 @@ namespace {
     Collector::$hourOverride = 3;
 
     $reply = "생각해 보면…\n```json\n".json_encode(['items' => [
-        ['model' => 'Bambu Lab H2D', 'kind' => 'fdm', 'summary' => '듀얼 노즐 대형 프린터.', 'homepage_url' => 'https://bambulab.com/en/h2d', 'values' => ['build_x_mm' => 350, 'build_y_mm' => 320, 'build_z_mm' => 325, 'multicolor' => true, 'structure' => '없는값', 'speed_max' => 600]],
+        ['model' => 'Bambu Lab H2D', 'kind' => 'fdm', 'summary' => '듀얼 노즐 대형 프린터.', 'homepage_url' => 'https://bambulab.com/en/h2d', 'values' => ['build_x_mm' => 350, 'build_y_mm' => 320, 'build_z_mm' => 325, 'multicolor' => true, 'structure' => '없는값', 'speed_max' => 600],
+            'sources' => ['https://bambulab.com/en/h2d', 'https://made.up/h2d-specs', 'ftp://x']],
         ['model' => 'P1S', 'kind' => 'fdm'],
         ['model' => 'x1 carbon', 'kind' => 'fdm'],
     ]], JSON_UNESCAPED_UNICODE)."\n```";
+    // 0.2.11 기본은 이름 · 종류만 (AI 기억 제원은 틀린 것이 많음) · 출처는 열어 보고 남김
+    Collector::$pager = fn (string $u) => str_contains($u, 'bambulab.com/en/h2d') ? '<html>H2D</html>' : null;
+    $st0 = Settings::state();
+    $col->taskNew();
+    $s0 = $col->suggestions()['items'][0] ?? [];
+    t(($s0['title'] ?? '') === 'Bambu Lab H2D' && $s0['lines'] === [] && $s0['summary'] === '' && $s0['draft']['values'] === [] && count($s0['sources']) === 2 && $s0['sources'][0]['ok'] && ! $s0['sources'][1]['ok'],
+        '새 항목 제안: 기본은 이름 · 종류만 · 출처(✅ 열림 · ⚠️ 안 열림)는 남김');
+    DB::table('cat_suggestions')->delete();
+    Settings::saveState($st0);
+    Settings::save(['new_values' => true]);
+    $asked = [];
     $line = $col->taskNew();
     $sg = $col->suggestions();
     t($sg['pending'] === 1 && $sg['items'][0]['title'] === 'Bambu Lab H2D' && $asked === ['bad', 'qwen2.5:14b'] && str_contains($line, 'PC · qwen2.5:14b'), '새 항목 찾기 — 안 되는 모델은 넘기고, 이미 있는 것(P1S · X1 Carbon)은 빼고 제안');
@@ -441,6 +453,36 @@ namespace {
     t($home[0]['key'] === 'catalog' && count($home[0]['items']) >= 4 && $home[0]['items'][0]['image'] !== '', '홈 칸 — 사진 있는 것부터');
     t(count(Fields::forKind('equipment', 'fdm')) >= 40 && count(Fields::forKind('materials', 'fdm')) >= 30 && count(Fields::meta()['tabs']) === 8, '칸 정의 (FDM 장비 '.count(Fields::forKind('equipment', 'fdm')).'칸 · 필라멘트 '.count(Fields::forKind('materials', 'fdm')).'칸)');
 
+    echo "■ 고쳐서 반영 · AI 로 정리해 넣기 · 출처 (0.2.11)\n";
+    DB::table('cat_suggestions')->delete();
+    $sid = $col->suggest('new', 'equipment', null, 'Bambu Lab Z9', ['brand' => 'Bambu Lab', 'title' => 'Z9', 'kind' => 'fdm', 'values' => ['build_x_mm' => 999]]);
+    $k9 = $col->apply($sid, ['type' => 'equipment', 'brand' => 'Bambu Lab', 'title' => 'Z9 Pro', 'kind' => 'fdm', 'summary' => '고친 소개', 'values' => ['build_x_mm' => 300]])['key'];
+    $d9 = $svc->detail(...array_merge($svc->find($k9), [true]));
+    t($d9['title'] === 'Z9 Pro' && $d9['values']['build_x_mm'] === 300 && $d9['summary'] === '고친 소개' && DB::table('cat_suggestions')->find($sid)->status === 'applied', '고쳐서 반영 — 고친 값으로 새 항목');
+    $sid2 = $col->suggest('fill', 'equipment', $k9, 'Bambu Lab Z9 Pro', ['values' => ['build_y_mm' => 1]]);
+    $col->apply($sid2, ['brand' => 'Bambu Lab', 'title' => 'Z9 Pro', 'kind' => 'fdm', 'summary' => '고친 소개', 'values' => ['build_x_mm' => 310, 'build_y_mm' => 290]]);
+    $d9 = $svc->detail(...array_merge($svc->find($k9), [true]));
+    t($d9['values']['build_x_mm'] === 310 && $d9['values']['build_y_mm'] === 290, '제원 제안도 고쳐서 반영 — 적혀 있던 값도 고칠 수 있음');
+    $sent = '';
+    AiClient::$sender = function (string $url, array $h, array $body) use (&$reply, &$sent) {
+        $sent = json_encode($body, JSON_UNESCAPED_UNICODE);
+
+        return ['message' => ['content' => $reply]];
+    };
+    $reply = json_encode(['kind' => 'fdm', 'brand' => 'Bambu Lab', 'title' => 'Z9 Pro', 'summary' => '글로 쓴 소개.', 'values' => ['build_x_mm' => '256', 'structure' => '없는값'], 'facts' => ['Wi-Fi' => '2.4GHz'], 'issues' => ['팬 소음']], JSON_UNESCAPED_UNICODE);
+    $x = $col->extract('equipment', 'fdm', "Build volume : 256 x 256 x 256 mm\nWi-Fi : 2.4GHz");
+    t($x['values'] === ['build_x_mm' => 256] && $x['facts'] === ['Wi-Fi' => '2.4GHz'] && $x['issues'] === '팬 소음' && $x['source_url'] === '' && str_contains($sent, 'Build volume') && str_contains($sent, '적혀 있는 것만'),
+        'AI 로 정리해 넣기 — 붙여 넣은 글에서 칸 값만 (보기에 없는 값은 버림 · 나머지는 기타 제원)');
+    Collector::$pager = fn (string $u) => str_contains($u, 'spec.test') ? '<html><script>var x=1</script><table><tr><td>Build volume</td><td>256 mm</td></tr></table></html>' : null;
+    $x2 = $col->extract('equipment', 'fdm', 'https://spec.test/z9');
+    t($x2['source_url'] === 'https://spec.test/z9' && $x2['homepage_url'] === 'https://spec.test/z9' && str_contains($sent, 'Build volume : 256 mm') && ! str_contains($sent, 'var x'), '주소만 넣으면 그 페이지 글로 (표는 「 : 」 · 스크립트 빼고) · 출처 주소');
+    $e1 = $e2 = '';
+    try { $col->extract('equipment', 'fdm', 'https://nope.test/z'); } catch (\InvalidArgumentException $e) { $e1 = $e->getMessage(); }
+    try { $col->extract('equipment', 'fdm', '짧음'); } catch (\InvalidArgumentException $e) { $e2 = $e->getMessage(); }
+    t(str_contains($e1, '열지 못했어요') && str_contains($e2, '없어요'), '못 여는 주소 · 너무 짧은 글은 알려 줌');
+    $so = $col->sources(['https://spec.test/a', 'javascript:x', 'https://spec.test/a', ['url' => 'https://nope.test/b']]);
+    t($so === [['url' => 'https://spec.test/a', 'ok' => true], ['url' => 'https://nope.test/b', 'ok' => false]], '출처 정리 — 주소만 · 겹침 빼고 · 열어 봄');
+    t(Settings::normalize([])['new_values'] === false && Settings::normalize([])['ai_paste'] === true, '설정 기본 — 새 항목은 이름만 · AI 정리 켜짐');
     array_map('unlink', glob($tmp.'/img/*') ?: []);
     array_map('unlink', glob($tmp.'/*.*') ?: []);
     echo "\n통과 {$pass} · 실패 {$fail}\n";

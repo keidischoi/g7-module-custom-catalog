@@ -277,9 +277,10 @@ final class Collector
         $j = $this->ai->json("제조사 「{$brand}」의 {$tab[1]} {$what} 중에서, 아래 「이미 있는 목록」에 없는 실제 제품을 최대 6개 알려 줘.\n"
             ."- 확실히 아는 실제 제품만. 없거나 잘 모르면 items 를 빈 배열로.\n- 같은 제품을 다른 표기로 다시 적지 않는다.\n"
             ."- kind 는 다음 중 하나: {$kinds}\n- values 는 아래 칸 중 확실한 것만 (모르면 넣지 않음).\n"
+            ."- sources 에는 이 제품 · 값을 확인할 수 있는 실제 페이지 주소(제조사 공식 페이지 우선)를 최대 3개. 모르면 빈 배열 — 주소를 지어내지 않는다.\n"
             .'- summary 는 한국어 한두 문장.'."\n\n[이미 있는 목록]\n".($have ? implode(', ', array_slice($have, 0, 150)) : '(없음)')
             ."\n\n[칸]\n".implode("\n", $keys)
-            ."\n\n[답 모양]\n".'{"items":[{"'.($type === 'materials' ? 'name' : 'model').'":"","kind":"'.$tab[4][0].'","homepage_url":"","summary":"","values":{}}]}');
+            ."\n\n[답 모양]\n".'{"items":[{"'.($type === 'materials' ? 'name' : 'model').'":"","kind":"'.$tab[4][0].'","homepage_url":"","summary":"","values":{},"sources":[]}]}');
         $items = is_array($j['items'] ?? null) ? $j['items'] : (array_is_list($j) ? $j : []);
         $known = [];
         foreach ($have as $h) {
@@ -309,6 +310,11 @@ final class Collector
             }
             $payload = ['brand' => $brand, 'title' => $title, 'kind' => $kind, 'values' => $vals, 'summary' => mb_substr(trim(strip_tags((string) ($it['summary'] ?? ''))), 0, 600),
                 'homepage_url' => (string) ($it['homepage_url'] ?? '')];
+            $payload['sources'] = $this->sources($it['sources'] ?? [], $payload['homepage_url']);   // 0.2.11 출처 (열어 본 결과와 함께)
+            if (! Settings::get('new_values')) {
+                // 0.2.11 AI 가 기억으로 적은 제원 · 소개 · 주소는 틀린 것이 많아 이름 · 종류만 (관리자가 「고쳐서 반영」 · 「AI 로 정리해 넣기」로 채움) — 출처는 남김
+                $payload = ['brand' => $brand, 'title' => $title, 'kind' => $kind, 'values' => [], 'sources' => $payload['sources']];
+            }
             $this->suggest('new', $type, null, $brand.' '.$title, $payload);
             $added[] = $title;
         }
@@ -340,7 +346,8 @@ final class Collector
                     .(trim((string) ($r->summary ?? '')) === '' ? "- summary: 이 제품을 소개하는 한국어 두세 문장 (사실만).\n" : '')
                     .(trim((string) ($r->homepage_url ?? '')) === '' ? "- homepage_url: 이 제품의 제조사 공식 페이지 주소 (확실할 때만).\n" : '')
                     .(trim((string) ($r->issues ?? '')) === '' ? "- issues: 이 제품을 쓰는 사람들 사이에 널리 알려진 문제 · 고질병 · 주의할 점 (한국어 짧은 문장 2~5개의 배열 · 확실한 것만 · 모르면 빈 배열).\n" : '')
-                    ."\n[칸]\n".implode("\n", $keys)."\n\n[답 모양]\n".'{"values":{"칸 키":값},"summary":"","homepage_url":"","issues":[]}');
+                    ."- sources: 이 값들을 확인할 수 있는 실제 페이지 주소(제조사 공식 제원 페이지 우선) 최대 3개. 모르면 빈 배열 — 주소를 지어내지 않는다.\n"
+                    ."\n[칸]\n".implode("\n", $keys)."\n\n[답 모양]\n".'{"values":{"칸 키":값},"summary":"","homepage_url":"","issues":[],"sources":[]}');
                 $in = is_array($j['values'] ?? null) ? $j['values'] : $j;
                 $vals = [];
                 foreach ($empty as $d) {
@@ -365,6 +372,7 @@ final class Collector
                 if (! $vals && count($payload) === 1) {
                     return '제원 채우기 · '.$title.': AI 가 아는 값이 없어요 — '.$this->ai->last;
                 }
+                $payload['sources'] = $this->sources($j['sources'] ?? [], (string) ($payload['homepage_url'] ?? ''));   // 0.2.11 출처
                 $this->suggest('fill', $type, (string) $r->key, $title, $payload);
 
                 return '제원 채우기 · '.$title.': '.count($vals).'칸 제안 — '.$this->ai->last;
@@ -625,6 +633,105 @@ final class Collector
         }
     }
 
+    /**
+     * 0.2.11 AI 가 댄 출처 — http(s) 주소만 3개까지, 하나씩 열어 봄 (ok: 열림 · 지어낸 주소는 대개 안 열림)
+     *
+     * @return list<array{url: string, ok: bool}>
+     */
+    public function sources(mixed $list, string $extra = ''): array
+    {
+        $urls = [];
+        foreach (array_merge(is_array($list) ? array_values($list) : [], $extra !== '' ? [$extra] : []) as $u) {
+            $u = is_string($u) ? trim($u) : (is_array($u) && is_string($u['url'] ?? null) ? trim($u['url']) : '');
+            if (preg_match('#^https?://[^\s<>"]+$#i', $u) && ! in_array($u, $urls, true) && count($urls) < 3) {
+                $urls[] = mb_substr($u, 0, 500);
+            }
+        }
+
+        return array_map(fn ($u) => ['url' => $u, 'ok' => self::page($u) !== null], $urls);
+    }
+
+    /* ───────── 0.2.11 AI 로 정리해 넣기 ───────── */
+
+    /**
+     * 붙여 넣은 글(또는 주소 — 열어서 글만)에서 편집 창 칸을 채울 값을 뽑음. 글에 없는 값은 넣지 않음.
+     *
+     * @return array{kind: string, brand: string, title: string, summary: string, homepage_url: string, issues: string, values: array<string, mixed>, facts: array<string, string>, from: string}
+     *
+     * @throws \InvalidArgumentException|\RuntimeException
+     */
+    public function extract(string $type, string $kind, string $text, string $brand = '', string $title = ''): array
+    {
+        $type = $type === 'materials' ? 'materials' : 'equipment';
+        $text = trim($text);
+        $from = '';
+        if (preg_match('#^https?://\S+$#i', $text)) {
+            $from = $text;
+            $html = self::page($text);
+            if ($html === null) {
+                throw new \InvalidArgumentException('주소를 열지 못했어요 — 페이지의 글을 복사해 붙여 넣어 주세요.');
+            }
+            $text = self::plain($html);
+        }
+        $text = mb_substr($text, 0, 14000);
+        if (mb_strlen($text) < 8) {
+            throw new \InvalidArgumentException('정리할 글이 없어요 — 제품 페이지의 제원 · 소개 글을 붙여 넣거나 끌어 놓아 주세요.');
+        }
+        $kinds = array_keys($type === 'materials' ? Fields::MATERIAL_KINDS : Fields::EQUIPMENT_KINDS);
+        if (! in_array($kind, $kinds, true)) {
+            $kind = $kinds[0] ?? 'fdm';
+        }
+        $kindList = implode(', ', array_map(static fn ($k) => $k.'('.Fields::kindLabel($type, $k).')', $kinds));
+        $keys = [];
+        foreach (Fields::forKind($type, $kind) as $d) {
+            $keys[] = $d['key'].': '.$d['label'].($d['unit'] ? ' ('.$d['unit'].', 숫자만)' : '').($d['options'] && $d['type'] === 'sel' ? ' ['.implode('|', $d['options']).']' : '')
+                .($d['type'] === 'bool' ? ' [true|false]' : '').($d['type'] === 'tags' ? ' [배열]' : '');
+        }
+        $j = $this->ai->json("아래 [글]은 관리자가 붙여 넣은 제품 자료다. 이 글에 **적혀 있는 것만** 골라 칸에 맞게 정리해 줘.\n"
+            ."- 글에 없는 값은 넣지 않는다 (기억 · 추측 금지). 단위는 칸 단위로 바꿔 숫자만 (예: 0.25 m/s → 250, 1 kg → 1000).\n"
+            ."- 선택 칸은 보기 중 하나로만. 칸에 없는 제원은 facts 에 「이름: 값」으로 (한국어 이름).\n"
+            ."- summary 는 글 내용으로 한국어 두세 문장. issues 는 글에 적힌 주의 · 알려진 문제만 (배열).\n"
+            ."- kind 는 다음 중 하나 (글로 알 수 없으면 \"{$kind}\"): {$kindList}\n"
+            .($brand !== '' || $title !== '' ? "- 지금 편집 중인 제품: {$brand} {$title}\n" : '')
+            ."\n[칸]\n".implode("\n", $keys)
+            ."\n\n[답 모양]\n".'{"kind":"","brand":"","title":"","summary":"","homepage_url":"","issues":[],"values":{"칸 키":값},"facts":{"이름":"값"}}'
+            ."\n\n[글]\n".$text);
+        $k2 = in_array($j['kind'] ?? '', $kinds, true) ? (string) $j['kind'] : $kind;
+        $vals = [];
+        $in = is_array($j['values'] ?? null) ? $j['values'] : [];
+        foreach (Fields::forKind($type, $k2) as $d) {
+            $v = Fields::clean($d, $in[$d['key']] ?? null);
+            if ($v !== null && ! ($d['type'] === 'sel' && $d['options'] && ! in_array((string) $v, $d['options'], true))) {
+                $vals[$d['key']] = $v;
+            }
+        }
+        $facts = [];
+        foreach (is_array($j['facts'] ?? null) ? $j['facts'] : [] as $n => $v) {
+            if (is_string($n) && is_scalar($v) && trim((string) $v) !== '' && count($facts) < 30) {
+                $facts[mb_substr(trim(strip_tags($n)), 0, 40)] = mb_substr(trim(strip_tags((string) $v)), 0, 200);
+            }
+        }
+        $s = static fn ($v, int $n) => is_string($v) ? mb_substr(trim(strip_tags($v)), 0, $n) : '';
+        $url = $s($j['homepage_url'] ?? '', 500);
+        $iss = is_array($j['issues'] ?? null) ? array_values(array_filter(array_map(static fn ($x) => is_string($x) ? mb_substr(trim(strip_tags($x)), 0, 200) : '', $j['issues']))) : [];
+
+        return ['kind' => $k2, 'brand' => $s($j['brand'] ?? '', 80), 'title' => $s($j['title'] ?? '', 80), 'summary' => $s($j['summary'] ?? '', 600),
+            'homepage_url' => preg_match('#^https?://#i', $url) ? $url : ($from !== '' ? $from : ''), 'issues' => implode("\n", array_slice($iss, 0, 8)),
+            'values' => $vals, 'facts' => $facts, 'from' => $this->ai->last, 'source_url' => $from];
+    }
+
+    /** HTML → 읽을 글 (스크립트 · 꾸밈 빼고, 표는 칸 사이 「 : 」) */
+    public static function plain(string $html): string
+    {
+        $html = preg_replace('#<(script|style|noscript|svg|nav|footer|header)\b[^>]*>.*?</\1>#is', ' ', $html) ?? $html;
+        $html = preg_replace('#</(td|th)>\s*<(td|th)\b[^>]*>#i', ' : ', $html) ?? $html;
+        $html = preg_replace('#<(br|/p|/div|/li|/tr|/h[1-6])\b[^>]*>#i', "\n", $html) ?? $html;
+        $t = html_entity_decode(strip_tags($html), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $t = preg_replace('/[ \t\x{00A0}]+/u', ' ', $t) ?? $t;
+
+        return trim(preg_replace('/\s*\n\s*(\n\s*)*/u', "\n", $t) ?? $t);
+    }
+
     /* ───────── 제안함 ───────── */
 
     /** @param array<string, mixed> $payload */
@@ -644,7 +751,7 @@ final class Collector
         return $id;
     }
 
-    /** 제안 반영 @return array{key: string} */
+    /** 제안 반영 — $edited: 0.2.11 관리자가 편집 창에서 고친 값 (그대로 저장 · 빈 칸만이 아니라 전부) @return array{key: string} */
     public function apply(int $id, ?array $edited = null): array
     {
         $sg = DB::table(Schema::SUGGEST)->where('id', $id)->first();
@@ -653,7 +760,11 @@ final class Collector
         }
         $p = is_array($edited) ? $edited : Schema::json($sg->payload);
         $type = (string) $sg->item_type;
-        if ($sg->task === 'new') {
+        if (is_array($edited) && $sg->task !== 'photo') {
+            unset($edited['type']);
+            $key = $sg->task === 'new' ? $this->catalog->save($type, ['key' => null] + $edited, false, str_starts_with((string) ($sg->source ?? ''), '회원') ? 'members' : 'ai')['key']
+                : $this->catalog->save($type, ['key' => (string) $sg->item_key] + $edited)['key'];
+        } elseif ($sg->task === 'new') {
             $key = $this->catalog->save($type, $p, true, str_starts_with((string) ($sg->source ?? ''), '회원') ? 'members' : 'ai')['key'];
         } elseif ($sg->task === 'fill' || $sg->task === 'sds') {
             $key = $this->catalog->save($type, ['key' => (string) $sg->item_key] + $p, true)['key'];
@@ -703,7 +814,11 @@ final class Collector
             $items[] = ['id' => (int) $r->id, 'task' => (string) $r->task, 'type' => $type, 'key' => (string) ($r->item_key ?? ''), 'title' => (string) $r->title,
                 'kind_label' => isset($p['kind']) ? Fields::kindLabel($type, (string) $p['kind']) : '', 'summary' => (string) ($p['summary'] ?? ''), 'lines' => $lines,
                 'image_url' => (string) ($p['image_url'] ?? ''), 'page_url' => (string) ($p['page_url'] ?? ''), 'credit' => (string) ($p['credit'] ?? ''),
-                'source' => (string) ($r->source ?? ''), 'status' => (string) $r->status, 'at' => substr((string) $r->created_at, 0, 16)];
+                'source' => (string) ($r->source ?? ''), 'status' => (string) $r->status, 'at' => substr((string) $r->created_at, 0, 16),
+                // 0.2.11 출처 — AI 가 댄 주소(열어 본 결과) · 안전 자료 · 사진은 그 페이지
+                'sources' => array_values(array_filter(is_array($p['sources'] ?? null) ? $p['sources'] : (! empty($p['page_url']) ? [['url' => (string) $p['page_url'], 'ok' => true]] : []), static fn ($x) => is_array($x) && is_string($x['url'] ?? null))),
+                // 0.2.11 「✏️ 고쳐서 반영」 편집 창에 채울 값
+                'draft' => $r->task === 'photo' ? null : array_intersect_key($p, array_flip(['brand', 'title', 'kind', 'values', 'summary', 'homepage_url', 'issues', 'msds_url']))];
         }
 
         return ['items' => $items, 'pending' => (int) DB::table(Schema::SUGGEST)->where('status', 'pending')->count()];

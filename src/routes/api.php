@@ -35,6 +35,7 @@ Route::middleware(['auth:sanctum', 'throttle:120,1'])->prefix('admin')->group(fu
     Route::get('ai', [AdminController::class, 'ai']);
     Route::post('ai', [AdminController::class, 'aiSave']);
     Route::post('ai/import-jobs', [AdminController::class, 'aiImportJobs']);
+    Route::post('ai/extract', [AdminController::class, 'aiExtract'])->middleware('throttle:20,1');   // 0.2.11 AI 로 정리해 넣기
     Route::post('ai/live', [AdminController::class, 'aiLive'])->middleware('throttle:10,1');
     Route::post('ai/test', [AdminController::class, 'aiTest'])->middleware('throttle:20,1');
     Route::post('ai/models', [AdminController::class, 'aiModels'])->middleware('throttle:20,1');
