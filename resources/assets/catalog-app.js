@@ -1,8 +1,8 @@
-/*! custom-catalog 0.2.15 — 3D 카탈로그 (목록 · 상세 · 편집) */
+/*! custom-catalog 0.2.16 — 3D 카탈로그 (목록 · 상세 · 편집) */
 (function () {
   'use strict';
   if (window.CCT) { try { window.CCT.tick(); } catch (e) {} return; }
-  var VERSION = '0.2.15', API = '/api/modules/custom-catalog', BASE = '/catalog';
+  var VERSION = '0.2.16', API = '/api/modules/custom-catalog', BASE = '/catalog';
 
   /* ───────── 도구 ───────── */
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
@@ -335,20 +335,52 @@
       var base = { brand: d ? d.brand : (opt.brand || ''), title: d ? d.title : '', summary: d ? d.summary : '', note: d ? d.note : '', homepage_url: d ? d.homepage_url : '', wiki_url: d ? d.wiki_url : '',
         detail: d ? d.detail || '' : '', issues: d ? (d.issues || []).join('\n') : '', memo: d ? d.memo || '' : '' };
       /* 0.2.11 미리 채울 값(opt.draft — 제안함 「고쳐서 반영」) · 🤖 AI 로 정리해 넣기 — 채운 칸은 💡 표시 */
-      var AIK = {}, aipText = '';
+      /* 0.2.16 바뀐 칸 표시 · 이전 값 — PREV 에 처음 값(고치기 전)을 남기고, 값이 실제로 달라진 칸만 AIK 로 표시 */
+      var AIK = {}, PREV = {}, aipText = '';
+      var BL = { brand: '제조사', title: '이름', summary: '소개', homepage_url: '제품 공식 페이지', wiki_url: '더 알아보기 주소', note: '한 줄 메모', detail: '자세한 설명', issues: '알려진 문제', memo: '메모', kind: '종류' };
+      var same = function (a, b) { var n = function (x) { return x === undefined || x === null || (Array.isArray(x) && !x.length) ? '' : Array.isArray(x) ? x.map(String).join(',') : String(x).trim(); }; return n(a) === n(b); };   // 입력칸에서 다시 읽으면 숫자가 글이 되므로 글로 견줌
+      var mark = function (id, old, now) {
+        if (!(id in PREV)) PREV[id] = old === undefined ? null : JSON.parse(JSON.stringify(old));
+        if (same(PREV[id], now)) { delete AIK[id]; return 0; }
+        AIK[id] = 1; return 1;
+      };
       var put = function (dr, keepName) {
         if (!dr) return 0;
         var n = 0;
-        if (dr.kind && META.kinds[type].some(function (k) { return k.key === dr.kind; })) kind = dr.kind;
+        if (dr.kind && dr.kind !== kind && META.kinds[type].some(function (k) { return k.key === dr.kind; })) { n += mark('kind', kind, dr.kind); kind = dr.kind; }
         ['brand', 'title', 'summary', 'homepage_url', 'wiki_url', 'note', 'detail', 'issues', 'memo'].forEach(function (k) {
           var v = dr[k]; if (Array.isArray(v)) v = v.join('\n');
           if (v == null || String(v).trim() === '') return;
           if (keepName && (k === 'brand' || k === 'title') && String(base[k] || '').trim() !== '') return;
-          base[k] = String(v); AIK['b:' + k] = 1; n++;
+          n += mark('b:' + k, base[k], String(v)); base[k] = String(v);
         });
-        Object.keys(dr.values || {}).forEach(function (k) { var v = dr.values[k]; if (v === null || v === '' || (Array.isArray(v) && !v.length)) return; V[k] = v; AIK[k] = 1; n++; });
-        Object.keys(dr.facts || {}).forEach(function (nm) { var i = -1; facts.forEach(function (f, j) { if (f[0] === nm) i = j; }); if (i >= 0) facts[i][1] = dr.facts[nm]; else facts.push([nm, dr.facts[nm]]); AIK['f:' + nm] = 1; n++; });
+        Object.keys(dr.values || {}).forEach(function (k) { var v = dr.values[k]; if (v === null || v === '' || (Array.isArray(v) && !v.length)) return; n += mark(k, V[k], v); V[k] = v; });
+        Object.keys(dr.facts || {}).forEach(function (nm) {
+          var i = -1; facts.forEach(function (f, j) { if (f[0] === nm) i = j; });
+          n += mark('f:' + nm, i >= 0 ? facts[i][1] : null, dr.facts[nm]);
+          if (i >= 0) facts[i][1] = dr.facts[nm]; else facts.push([nm, dr.facts[nm]]);
+        });
         return n;
+      };
+      var fieldOf = function (k) { var hit = null; (META.fields[type] || []).forEach(function (g) { g.fields.forEach(function (f) { if (f.key === k) hit = f; }); }); return hit; };
+      var show = function (id, v) {
+        if (v === undefined || v === null || v === '' || (Array.isArray(v) && !v.length)) return '(비어 있음)';
+        if (id === 'kind') { var kk = META.kinds[type].filter(function (x) { return x.key === v; })[0]; return kk ? kk.label : v; }
+        if (v === true) return '예'; if (v === false) return '아니오';
+        var f = id.indexOf(':') < 0 ? fieldOf(id) : null;
+        var s = Array.isArray(v) ? v.join(', ') : String(v);
+        if (s.length > 80) s = s.slice(0, 80) + '…';
+        return s + (f && f.unit && /^-?\d+(\.\d+)?$/.test(s) ? ' ' + f.unit : '');
+      };
+      var nowOf = function (id) { if (id === 'kind') return kind; if (id.indexOf('b:') === 0) return base[id.slice(2)]; if (id.indexOf('f:') === 0) { var hit = null; facts.forEach(function (f) { if (f[0] === id.slice(2)) hit = f[1]; }); return hit; } return V[id]; };
+      var labelOf = function (id) { if (id === 'kind') return BL.kind; if (id.indexOf('b:') === 0) return BL[id.slice(2)] || id.slice(2); if (id.indexOf('f:') === 0) return id.slice(2) + ' (기타)'; var f = fieldOf(id); return f ? f.label : id; };
+      var undo = function (id) {
+        var o = PREV[id];
+        if (id === 'kind') kind = o || kind;
+        else if (id.indexOf('b:') === 0) base[id.slice(2)] = o == null ? '' : o;
+        else if (id.indexOf('f:') === 0) { var nm = id.slice(2); facts = facts.filter(function (f) { return f[0] !== nm || o != null; }).map(function (f) { return f[0] === nm ? [nm, o] : f; }); }
+        else if (o == null) delete V[id]; else V[id] = o;
+        delete AIK[id];
       };
       put(opt.draft, false);
       var m = document.createElement('div'); m.className = 'cct cct-modal'; document.body.appendChild(m);
@@ -371,6 +403,7 @@
           var k = el.getAttribute('data-k'); V[k] = el.hasAttribute('data-tags') ? el.value.split(/[,\n]+/).map(function (x) { return x.trim(); }).filter(Boolean) : el.value.trim(); });
         Array.prototype.forEach.call(m.querySelectorAll('[data-b]'), function (el) { base[el.getAttribute('data-b')] = el.value.trim(); });
         facts = Array.prototype.map.call(m.querySelectorAll('[data-fact]'), function (r) { var i = r.querySelectorAll('input'); return [i[0].value.trim(), i[1].value.trim()]; });
+        Object.keys(AIK).forEach(function (id) { if (same(PREV[id], nowOf(id))) delete AIK[id]; });
       };
       var draw = function () {
         var groups = META.fields[type].map(function (g) { return { group: g.group, fields: g.fields.filter(function (f) { return !f.kinds.length || f.kinds.indexOf(kind) >= 0; }) }; }).filter(function (g) { return g.fields.length; });
@@ -381,7 +414,8 @@
           (META.ai_paste ? '<div class="cct-aip" data-aip><div class="cct-aip__h"><span class="cct-aip__i">🤖</span><b>AI 로 정리해 넣기</b><small>제품 페이지의 제원 · 소개 글을 복사해 <b>붙여 넣거나 끌어 놓으면</b> 칸에 맞게 정리해 채워요 · 주소만 넣으면 그 페이지를 열어 읽어요 · 글에 없는 값은 넣지 않아요</small></div>' +
             '<textarea class="cct-in" data-aip-t placeholder="여기에 붙여 넣기 · 끌어 놓기 (글 · 주소 · .txt 파일)">' + esc(aipText) + '</textarea>' +
             '<div class="cct-bar" style="margin:6px 0 0"><button type="button" class="cct-btn cct-btn--p cct-btn--s" data-aip-go>✨ 정리해서 칸 채우기</button><span class="cct-msg" data-aip-msg></span></div></div>' : '') +
-          (Object.keys(AIK).length ? '<p class="cct-aip__note">💡 표시한 칸은 AI · 제안이 채운 값이에요 — 맞는지 보고 고친 뒤 저장해 주세요.</p>' : '') +
+          (Object.keys(AIK).length ? '<details class="cct-chg" open><summary>✏️ 바뀐 칸 <b>' + Object.keys(AIK).length + '</b>개 <small>AI · 제안이 고친 값 — 맞는지 보고 저장해 주세요</small><button type="button" class="cct-btn cct-btn--s" data-undo-all>↩ 모두 되돌리기</button></summary><ul>' +
+            Object.keys(AIK).map(function (id) { return '<li><b>' + esc(labelOf(id)) + '</b><s title="이전 값">' + esc(show(id, PREV[id])) + '</s><i>→</i><em>' + esc(show(id, nowOf(id))) + '</em><button type="button" class="cct-x" data-undo="' + esc(id) + '" title="이전 값으로">↩</button></li>'; }).join('') + '</ul></details>' : '') +
           '<div class="cct-form">' +
           (d ? '' : '<label class="cct-f"><span>무엇</span><select class="cct-in" data-type><option value="equipment"' + (type === 'equipment' ? ' selected' : '') + '>장비 · 프린터</option><option value="materials"' + (type === 'materials' ? ' selected' : '') + '>재료 (필라멘트 · 레진 …)</option></select></label>') +
           '<label class="cct-f"><span>종류</span><select class="cct-in" data-kind>' + META.kinds[type].map(function (k) { return '<option value="' + k.key + '"' + (k.key === kind ? ' selected' : '') + '>' + k.icon + ' ' + esc(k.label) + '</option>'; }).join('') + '</select></label>' +
@@ -402,10 +436,13 @@
           '<div class="cct-modal__foot"><span class="cct-msg" data-msg></span><button type="button" class="cct-btn" data-close>닫기</button><button type="button" class="cct-btn cct-btn--p" data-save>저장</button></div></div>';
         Array.prototype.forEach.call(m.querySelectorAll('[data-close]'), function (b) { b.onclick = close; });
         Object.keys(AIK).forEach(function (k) {
-          var el = k.indexOf('b:') === 0 ? m.querySelector('[data-b="' + k.slice(2) + '"]') : k.indexOf('f:') === 0 ? null : m.querySelector('[data-k="' + k + '"],[data-yn="' + k + '"]');
-          var f = el && el.closest('.cct-f'); if (f) f.classList.add('cct-f--ai');
+          var el = k === 'kind' ? m.querySelector('[data-kind]') : k.indexOf('b:') === 0 ? m.querySelector('[data-b="' + k.slice(2) + '"]') : k.indexOf('f:') === 0 ? null : m.querySelector('[data-k="' + k + '"],[data-yn="' + k + '"]');
+          var f = el && el.closest('.cct-f');
+          if (f) { f.classList.add('cct-f--ai'); f.insertAdjacentHTML('beforeend', '<small class="cct-prev">이전: <s>' + esc(show(k, PREV[k])) + '</s> <button type="button" data-undo="' + esc(k) + '">↩ 되돌리기</button></small>'); }
         });
-        Array.prototype.forEach.call(m.querySelectorAll('[data-fact]'), function (r) { var i = r.querySelector('input'); if (i && AIK['f:' + i.value]) r.classList.add('cct-f--ai'); });
+        Array.prototype.forEach.call(m.querySelectorAll('[data-fact]'), function (r) { var i = r.querySelector('input'); if (i && AIK['f:' + i.value]) { r.classList.add('cct-f--ai'); r.title = '이전: ' + show('f:' + i.value, PREV['f:' + i.value]); } });
+        Array.prototype.forEach.call(m.querySelectorAll('[data-undo]'), function (b) { b.onclick = function (e) { e.preventDefault(); e.stopPropagation(); collect(); undo(b.getAttribute('data-undo')); draw(); }; });
+        var ua = m.querySelector('[data-undo-all]'); if (ua) ua.onclick = function (e) { e.preventDefault(); collect(); Object.keys(AIK).forEach(undo); draw(); };
         var aip = m.querySelector('[data-aip]');
         if (aip) {
           var ta = aip.querySelector('[data-aip-t]'), go2 = aip.querySelector('[data-aip-go]'), am = aip.querySelector('[data-aip-msg]');

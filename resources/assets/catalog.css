@@ -287,3 +287,20 @@ textarea.cct-in{height:auto;min-height:84px;padding:10px 12px;resize:vertical;li
 .cct-src a:hover{text-decoration:underline}
 .cct-src small{flex-basis:100%;color:var(--mute)}
 .cct-modal__body>.cct-src{margin:0 0 12px}
+/* 0.2.16 바뀐 칸 · 이전 값 */
+.cct-chg{margin:0 0 12px;border:1px solid color-mix(in srgb,#f59e0b 45%,var(--line));border-radius:14px;background:color-mix(in srgb,#f59e0b 7%,var(--card))}
+.cct-chg>summary{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;padding:10px 14px;font-weight:800;cursor:pointer;list-style:none}
+.cct-chg>summary::-webkit-details-marker{display:none}
+.cct-chg>summary small{font-weight:600;color:var(--mute);font-size:12.5px}
+.cct-chg>summary .cct-btn{margin-left:auto}
+.cct-chg ul{margin:0;padding:0 14px 10px;list-style:none;display:grid;gap:4px;max-height:240px;overflow:auto}
+.cct-chg li{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;font-size:13px;padding:4px 0;border-top:1px dashed var(--line)}
+.cct-chg li b{min-width:7em}
+.cct-chg li s{color:var(--mute)}
+.cct-chg li i{font-style:normal;color:var(--mute)}
+.cct-chg li em{font-style:normal;font-weight:700;color:color-mix(in srgb,#f59e0b 70%,var(--text,#111))}
+.cct-chg li .cct-x{margin-left:auto;width:26px;height:26px;font-size:13px}
+.cct-prev{display:flex;flex-wrap:wrap;align-items:center;gap:4px;font-size:12px;color:var(--mute)}
+.cct-prev s{max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.cct-prev button{border:0;background:none;padding:0 2px;font:inherit;font-weight:700;color:var(--accent,#6366f1);cursor:pointer}
+.cct-prev button:hover{text-decoration:underline}
