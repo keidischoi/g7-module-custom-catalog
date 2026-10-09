@@ -37,8 +37,10 @@ final class AiProvider
      * @param  list<array{role: string, content: string}>  $messages  system · user
      * @return array{url: string, headers: array<string, string>, body: array<string, mixed>, family: string}
      */
-    public static function buildRequest(string $provider, string $url, string $key, string $model, array $messages, int $maxTokens, bool $json = true, array $images = []): array
+    /** @param array{temperature?: float} $opt 0.2.17 물음마다 바꿀 것 (정리하기는 0 — 지어내지 않게) */
+    public static function buildRequest(string $provider, string $url, string $key, string $model, array $messages, int $maxTokens, bool $json = true, array $images = [], array $opt = []): array
     {
+        $temp = isset($opt['temperature']) ? (float) $opt['temperature'] : 0.4;
         $family = self::family($provider);
         $base = self::apiBase($provider, $url);
         // custom-jobs 0.2.0: 사진 읽기(OCR) — 마지막 user 메시지에 그림을 붙임 [{mime, data(base64)}]
@@ -70,7 +72,7 @@ final class AiProvider
         }
         $headers = $key !== '' ? ['Authorization' => 'Bearer '.$key] : [];
         if ($family === 'openai') {
-            $body = ['model' => $model, 'stream' => false, 'messages' => array_values($messages), 'max_tokens' => $maxTokens, 'temperature' => 0.4];
+            $body = ['model' => $model, 'stream' => false, 'messages' => array_values($messages), 'max_tokens' => $maxTokens, 'temperature' => $temp];
             if ($json && $provider === 'openai') {
                 $body['response_format'] = ['type' => 'json_object'];
             }
@@ -78,12 +80,34 @@ final class AiProvider
             return ['url' => $base.'/chat/completions', 'headers' => $headers, 'body' => $body, 'family' => $family];
         }
         $body = ['model' => $model, 'stream' => false, 'messages' => array_values($messages), 'keep_alive' => '15m',
-            'options' => ['temperature' => 0.4, 'num_predict' => $maxTokens, 'num_ctx' => 32768]];
+            'options' => ['temperature' => $temp, 'num_predict' => $maxTokens, 'num_ctx' => self::ctxFor($messages, $maxTokens)]];
         if ($json) {
             $body['format'] = 'json';
         }
 
         return ['url' => $base.'/api/chat', 'headers' => $headers, 'body' => $body, 'family' => $family];
+    }
+
+    /**
+     * 0.2.17 Ollama 문맥 크기를 물음 길이에 맞춤 (4K · 8K · 16K · 32K) — 늘 32K 를 잡으면 CPU 에서는 작은 모델도 몇 분씩 걸림.
+     * 한글은 대략 글자 하나가 토큰 하나, 영어 · 숫자는 그보다 적음 → 글자 수로 넉넉히 셈.
+     *
+     * @param  list<array{role?: string, content?: string}>  $messages
+     */
+    public static function ctxFor(array $messages, int $maxTokens): int
+    {
+        $chars = 0;
+        foreach ($messages as $m) {
+            $chars += mb_strlen((string) ($m['content'] ?? ''));
+        }
+        $need = (int) ceil($chars * 1.1) + min($maxTokens, 4096) + 256;
+        foreach ([4096, 8192, 16384] as $c) {
+            if ($need <= $c) {
+                return $c;
+            }
+        }
+
+        return 32768;
     }
 
     /**
