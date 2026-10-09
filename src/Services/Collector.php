@@ -724,7 +724,7 @@ final class Collector
      * 0.2.13 AI 로 정리해 넣기를 응답 뒤에 돌림 — AI 가 1분을 넘기면 앞단(nginx · 역방향 프록시)이 504 로 끊어서.
      * 상태는 설정 폴더의 extract-{id}.json: run · done(data) · fail(message). 화면은 GET 으로 2초마다 확인.
      */
-    public static function jobStart(): string
+    public static function jobStart(array $args = []): string
     {
         foreach (glob(Settings::file('extract-*.json')) ?: [] as $f) {
             if (@filemtime($f) < time() - 3600) {
@@ -732,9 +732,29 @@ final class Collector
             }
         }
         $id = bin2hex(random_bytes(8));
-        self::jobPut($id, ['status' => 'run', 'at' => time()]);
+        self::jobPut($id, ['status' => 'run', 'at' => time(), 'args' => $args]);
 
         return $id;
+    }
+
+    /** 0.2.14 파일 그대로 (args 포함) @return array<string, mixed>|null */
+    public static function jobRaw(string $id): ?array
+    {
+        if (! preg_match('/^[a-f0-9]{16}$/', $id)) {
+            return null;
+        }
+        $f = Settings::file('extract-'.$id.'.json');
+        $j = is_file($f) ? json_decode((string) file_get_contents($f), true) : null;
+
+        return is_array($j) ? $j : null;
+    }
+
+    /** 0.2.14 응답 뒤 일이 아직 시작 안 됐으면(8초) 확인하는 쪽이 맡아도 되나 */
+    public static function jobStale(string $id): bool
+    {
+        $j = self::jobRaw($id);
+
+        return $j !== null && ($j['status'] ?? '') === 'run' && empty($j['started']) && (int) ($j['at'] ?? 0) <= time() - 8;
     }
 
     /** @param array<string, mixed> $res */
@@ -743,36 +763,58 @@ final class Collector
         @file_put_contents(Settings::file('extract-'.$id.'.json'), json_encode($res, JSON_UNESCAPED_UNICODE), LOCK_EX);
     }
 
-    /** @return array<string, mixed>|null */
+    /** 화면에 줄 상태 (args 빼고) @return array<string, mixed>|null */
     public static function job(string $id): ?array
     {
-        if (! preg_match('/^[a-f0-9]{16}$/', $id)) {
+        $j = self::jobRaw($id);
+        if ($j === null) {
             return null;
         }
-        $f = Settings::file('extract-'.$id.'.json');
-        $j = is_file($f) ? json_decode((string) file_get_contents($f), true) : null;
-        if (! is_array($j)) {
-            return null;
-        }
+        unset($j['args']);
         if (($j['status'] ?? '') === 'run' && (int) ($j['at'] ?? 0) < time() - 420) {
-            return ['status' => 'fail', 'message' => 'AI 가 7분 안에 답하지 못했어요 — 글을 줄이거나 🤖 AI 연결에서 더 빠른 모델을 위로 올려 주세요.'];
+            return ['status' => 'fail', 'message' => empty($j['started'])
+                ? '서버에서 AI 일이 시작되지 않았어요 — 관리자에게 알려 주세요 (응답 뒤 작업 · 확인 요청 모두 실패).'
+                : 'AI 가 7분 안에 답하지 못했어요 (마지막: '.($j['stage'] ?? '?').') — 글을 줄이거나 🤖 AI 연결에서 더 빠른 모델을 위로 올려 주세요.'];
         }
 
         return $j;
     }
 
     /** @param array{type?: string, kind?: string, text?: string, brand?: string, title?: string} $a */
-    public function jobRun(string $id, array $a): void
+    public function jobRun(string $id, array $a = []): void
     {
-        @set_time_limit(400);
+        $raw = self::jobRaw($id);
+        if ($raw === null || ($raw['status'] ?? '') !== 'run' || ! empty($raw['started'])) {
+            return;   // 이미 누가 맡음 · 끝남
+        }
+        $a = $a ?: (is_array($raw['args'] ?? null) ? $raw['args'] : []);
+        @set_time_limit(450);
         @ignore_user_abort(true);
+        $t0 = time();
+        $stage = function (string $s) use ($id, $raw, $t0) {
+            self::jobPut($id, ['status' => 'run', 'at' => (int) ($raw['at'] ?? $t0), 'started' => $t0, 'stage' => $s]);
+        };
+        $stage(preg_match('#^https?://\S+$#i', trim((string) ($a['text'] ?? ''))) ? '🌐 페이지 여는 중' : '📝 글 정리 중');
+        // PHP 가 시간 제한 등으로 멈추면 까닭을 남김
+        register_shutdown_function(static function () use ($id) {
+            $j = self::jobRaw($id);
+            if ($j !== null && ($j['status'] ?? '') === 'run') {
+                $e = error_get_last();
+                self::jobPut($id, ['status' => 'fail', 'message' => '서버가 일을 멈췄어요 (마지막: '.($j['stage'] ?? '?').')'.($e ? ' — '.mb_substr((string) $e['message'], 0, 200) : '')]);
+            }
+        });
+        $this->ai->onTry = function (string $sv, string $model, int $timeout, array $errors) use ($stage) {
+            $stage('🤖 '.$sv.' · '.$model.' 에게 묻는 중 (최대 '.$timeout.'초)'.($errors ? ' — 앞 서버 실패: '.mb_substr((string) end($errors), 0, 120) : ''));
+        };
         try {
             $res = $this->extract((string) ($a['type'] ?? ''), (string) ($a['kind'] ?? ''), (string) ($a['text'] ?? ''), (string) ($a['brand'] ?? ''), (string) ($a['title'] ?? ''));
             self::jobPut($id, ['status' => 'done', 'data' => $res, 'message' => count($res['values']) + count($res['facts']).'칸을 채웠어요 — 맞는지 보고 저장해 주세요.']);
         } catch (\InvalidArgumentException $e) {
             self::jobPut($id, ['status' => 'fail', 'message' => $e->getMessage()]);
         } catch (\Throwable $e) {
-            self::jobPut($id, ['status' => 'fail', 'message' => 'AI 가 정리하지 못했어요 — '.mb_substr($e->getMessage(), 0, 200)]);
+            self::jobPut($id, ['status' => 'fail', 'message' => 'AI 가 정리하지 못했어요 — '.mb_substr($e->getMessage(), 0, 300)]);
+        } finally {
+            $this->ai->onTry = null;
         }
     }
 

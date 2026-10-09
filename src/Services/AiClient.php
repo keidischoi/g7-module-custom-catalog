@@ -26,6 +26,9 @@ final class AiClient
     /** 마지막으로 답한 곳 「서버 · 모델」 */
     public string $last = '';
 
+    /** 0.2.14 물어보기 직전에 부름: fn(string $server, string $model, int $timeout, list<string> $errors) — 진행 상태 보이기 */
+    public $onTry = null;
+
     public function settings(): array
     {
         if (self::$settingsOverride !== null) {
@@ -60,6 +63,9 @@ final class AiClient
         }
         $errors = [];
         foreach (AiSettings::order($s, false) as $o) {
+            if (is_callable($this->onTry)) {
+                ($this->onTry)((string) $o['server']['name'], (string) $o['model'], (int) AiSettings::timeoutFor($o['server'], $s), $errors);
+            }
             try {
                 $text = $this->ask($o['server'], $o['model'], [['role' => 'system', 'content' => self::SYSTEM], ['role' => 'user', 'content' => $prompt]],
                     $s['max_tokens'], AiSettings::timeoutFor($o['server'], $s), true);
