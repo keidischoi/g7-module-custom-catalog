@@ -483,6 +483,17 @@ namespace {
     $so = $col->sources(['https://spec.test/a', 'javascript:x', 'https://spec.test/a', ['url' => 'https://nope.test/b']]);
     t($so === [['url' => 'https://spec.test/a', 'ok' => true], ['url' => 'https://nope.test/b', 'ok' => false]], '출처 정리 — 주소만 · 겹침 빼고 · 열어 봄');
     t(Settings::normalize([])['new_values'] === false && Settings::normalize([])['ai_paste'] === true, '설정 기본 — 새 항목은 이름만 · AI 정리 켜짐');
+    echo "■ HeyGears UltraCraft Reflex 제원 · 칸 정리 (0.2.12)\n";
+    $hg = $svc->save('equipment', ['kind' => 'dlp', 'brand' => 'HeyGears', 'title' => 'UltraCraft Reflex', 'values' => ['build_x_mm' => 999, 'light' => 'DLP']])['key'];
+    (require dirname(__DIR__).'/database/migrations/2026_10_09_000021_heygears_reflex_specs.php')->up();
+    $hd = $svc->detail(...array_merge($svc->find($hg), [true]));
+    $hv = $hd['values'];
+    t($hv['build_x_mm'] === 192 && $hv['build_y_mm'] === 121 && $hv['build_z_mm'] === 220 && $hv['min_layer_um'] === 20 && $hv['xy_um'] === 33 && $hv['light'] === 'LCD (MSLA)' && $hv['lcd_res'] === '6K Mono (5760×3600)'
+        && $hv['vat_heat'] === true && $hv['auto_feed'] === true && $hv['camera'] === true && $hv['ai_detect'] === true && $hv['air_filter'] === true && $hv['open_source'] === false
+        && $hv['connect'] === ['USB', 'Wi-Fi', 'LAN'] && $hv['size_h'] === 572 && $hv['weight_kg'] === 25 && $hv['power_w'] === 350 && $hv['sale'] === '판매 중' && $hv['origin'] === '중국' && str_starts_with((string) $hv['released_on'], '2023-06')
+        && str_contains($hv['slicer'], 'Blueprint Studio') && str_contains($hv['print_speed_h'], '27 mm/h') && str_contains($hv['voltage'], '100–240'), 'Reflex 제원 23칸 — 예전 값(999 · DLP) 위에 덮어씀');
+    $cd = array_values(array_filter(Fields::forKind('equipment', 'dlp'), static fn ($d) => $d['key'] === 'connect'))[0];
+    t(Fields::clean($cd, 'USB · Wi-Fi · Ethernet') === ['USB', 'Wi-Fi', 'LAN'] && Fields::clean($cd, ['이더넷', 'WiFi', 'TF 카드', 'lan']) === ['LAN', 'Wi-Fi', 'SD'], '연결: Ethernet · 이더넷 → LAN, WiFi → Wi-Fi (겹치면 하나)');
     array_map('unlink', glob($tmp.'/img/*') ?: []);
     array_map('unlink', glob($tmp.'/*.*') ?: []);
     echo "\n통과 {$pass} · 실패 {$fail}\n";

@@ -1,8 +1,8 @@
-/*! custom-catalog 0.2.11 — 3D 카탈로그 (목록 · 상세 · 편집) */
+/*! custom-catalog 0.2.12 — 3D 카탈로그 (목록 · 상세 · 편집) */
 (function () {
   'use strict';
   if (window.CCT) { try { window.CCT.tick(); } catch (e) {} return; }
-  var VERSION = '0.2.11', API = '/api/modules/custom-catalog', BASE = '/catalog';
+  var VERSION = '0.2.12', API = '/api/modules/custom-catalog', BASE = '/catalog';
 
   /* ───────── 도구 ───────── */
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
