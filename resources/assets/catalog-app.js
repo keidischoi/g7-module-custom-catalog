@@ -1,8 +1,8 @@
-/*! custom-catalog 0.2.14 — 3D 카탈로그 (목록 · 상세 · 편집) */
+/*! custom-catalog 0.2.15 — 3D 카탈로그 (목록 · 상세 · 편집) */
 (function () {
   'use strict';
   if (window.CCT) { try { window.CCT.tick(); } catch (e) {} return; }
-  var VERSION = '0.2.14', API = '/api/modules/custom-catalog', BASE = '/catalog';
+  var VERSION = '0.2.15', API = '/api/modules/custom-catalog', BASE = '/catalog';
 
   /* ───────── 도구 ───────── */
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
@@ -411,18 +411,23 @@
           var ta = aip.querySelector('[data-aip-t]'), go2 = aip.querySelector('[data-aip-go]'), am = aip.querySelector('[data-aip-msg]');
           ta.oninput = function () { aipText = ta.value; };
           var run = function () {
+            if (aip.classList.contains('busy')) return;   // 0.2.15 도는 중엔 한 번만 (붙여 넣기 · 단추가 겹쳐 AI 에 두 번 묻지 않게)
             aipText = ta.value.trim();
             if (!aipText) { am.textContent = '붙여 넣을 글이 없어요.'; ta.focus(); return; }
             collect(); go2.disabled = true; aip.classList.add('busy'); am.textContent = '⏳ AI 가 정리하는 중… (모델에 따라 1분쯤)';
             // 0.2.13 바로 일 번호를 받고 2초마다 확인 (AI 가 오래 걸려도 504 로 끊기지 않게)
-            var t0 = Date.now(), S2 = {};
+            var t0 = Date.now(), S2 = {}, job = '';
+            try { var rb = new Uint8Array(8); crypto.getRandomValues(rb); job = Array.prototype.map.call(rb, function (x) { return ('0' + x.toString(16)).slice(-2); }).join(''); } catch (e0) {}
+            // 0.2.15 묻는 동안 몇 초째인지
+            var tk = setInterval(function () { var am4 = m.querySelector('[data-aip-msg]'); if (!document.body.contains(m) || !aip.classList.contains('busy')) return clearInterval(tk); if (am4 && !S2.polling) am4.textContent = '⏳ AI 가 정리하는 중… ' + Math.round((Date.now() - t0) / 1000) + '초'; }, 1000);
             var wait = function (job) {
               return new Promise(function (ok, no) {
                 (function poll() {
                   if (!document.body.contains(m)) return no(new Error('창을 닫았어요.'));
                   var s = Math.round((Date.now() - t0) / 1000), am3 = m.querySelector('[data-aip-msg]'); if (am3) am3.textContent = '⏳ ' + (S2.stage || 'AI 가 정리하는 중') + '… ' + s + '초';
+                  S2.polling = true;
                   api('GET', '/admin/ai/extract/' + job).then(function (st) {
-                    S2.stage = st.stage || (st.status === 'run' && !st.started && Date.now() - t0 > 6000 ? '서버에서 시작을 기다리는 중' : '');
+                    S2.stage = st.stage || '';
                     if (st.status === 'done') return ok(st.data);
                     if (st.status === 'fail') return no(new Error(st.message || 'AI 가 정리하지 못했어요.'));
                     if (Date.now() - t0 > 450000) return no(new Error('너무 오래 걸려요 — 글을 줄이거나 더 빠른 모델로 바꿔 주세요.'));
@@ -431,7 +436,11 @@
                 })();
               });
             };
-            api('POST', '/admin/ai/extract', { type: type, kind: kind, text: aipText, brand: base.brand, title: base.title }).then(function (r0) { return r0 && r0.job ? wait(r0.job) : r0; }).then(function (r) {
+            api('POST', '/admin/ai/extract', { type: type, kind: kind, text: aipText, brand: base.brand, title: base.title, job: job }).catch(function (e) {
+              // 앞단이 기다리다 끊음(504 · 502 · 연결 끊김) — 서버는 계속 돌고 있으니 같은 번호로 결과를 받음
+              if (job && (!e.status || e.status === 502 || e.status === 503 || e.status === 504 || e.status === 524)) return wait(job);
+              throw e;
+            }).then(function (r) { clearInterval(tk);
               collect(); var n = put(r, true); aipText = ''; draw();
               var am2 = m.querySelector('[data-aip-msg]'); if (am2) am2.textContent = n ? '✅ ' + n + '칸을 채웠어요 (💡) — 맞는지 보고 저장해 주세요.' + (r.source_url ? ' · 📄 출처: ' + r.source_url : ' · 📄 출처: 붙여 넣은 글') + (r.from ? ' · 🤖 ' + r.from : '') : '글에서 채울 값을 찾지 못했어요.';
             }).catch(function (e) { go2.disabled = false; aip.classList.remove('busy'); am.textContent = '❌ ' + e.message; });

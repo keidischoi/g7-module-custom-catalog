@@ -721,17 +721,19 @@ final class Collector
     }
 
     /*
-     * 0.2.13 AI 로 정리해 넣기를 응답 뒤에 돌림 — AI 가 1분을 넘기면 앞단(nginx · 역방향 프록시)이 504 로 끊어서.
-     * 상태는 설정 폴더의 extract-{id}.json: run · done(data) · fail(message). 화면은 GET 으로 2초마다 확인.
+     * AI 로 정리해 넣기 결과를 일 번호 파일에도 남김 — 앞단이 504 로 끊어도 화면이 GET 으로 받아 감.
+     * 상태는 설정 폴더의 extract-{id}.json: run(stage) · done(data) · fail(message).
      */
-    public static function jobStart(array $args = []): string
+    public static function jobStart(array $args = [], string $id = ''): string
     {
         foreach (glob(Settings::file('extract-*.json')) ?: [] as $f) {
             if (@filemtime($f) < time() - 3600) {
                 @unlink($f);
             }
         }
-        $id = bin2hex(random_bytes(8));
+        if (! preg_match('/^[a-f0-9]{16}$/', $id) || is_file(Settings::file('extract-'.$id.'.json'))) {
+            $id = bin2hex(random_bytes(8));
+        }
         self::jobPut($id, ['status' => 'run', 'at' => time(), 'args' => $args]);
 
         return $id;
@@ -749,13 +751,7 @@ final class Collector
         return is_array($j) ? $j : null;
     }
 
-    /** 0.2.14 응답 뒤 일이 아직 시작 안 됐으면(8초) 확인하는 쪽이 맡아도 되나 */
-    public static function jobStale(string $id): bool
-    {
-        $j = self::jobRaw($id);
 
-        return $j !== null && ($j['status'] ?? '') === 'run' && empty($j['started']) && (int) ($j['at'] ?? 0) <= time() - 8;
-    }
 
     /** @param array<string, mixed> $res */
     private static function jobPut(string $id, array $res): void
@@ -772,9 +768,7 @@ final class Collector
         }
         unset($j['args']);
         if (($j['status'] ?? '') === 'run' && (int) ($j['at'] ?? 0) < time() - 420) {
-            return ['status' => 'fail', 'message' => empty($j['started'])
-                ? '서버에서 AI 일이 시작되지 않았어요 — 관리자에게 알려 주세요 (응답 뒤 작업 · 확인 요청 모두 실패).'
-                : 'AI 가 7분 안에 답하지 못했어요 (마지막: '.($j['stage'] ?? '?').') — 글을 줄이거나 🤖 AI 연결에서 더 빠른 모델을 위로 올려 주세요.'];
+            return ['status' => 'fail', 'message' => 'AI 가 7분 안에 답하지 못했어요 (마지막: '.($j['stage'] ?? '?').') — 글을 줄이거나 🤖 AI 연결에서 더 빠른 모델을 위로 올려 주세요.'];
         }
 
         return $j;
