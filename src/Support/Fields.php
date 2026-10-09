@@ -113,7 +113,7 @@ final class Fields
             ]],
             ['편의 · 연결', [
                 ['camera', '카메라', 'bool', '', $P],
-                ['ai_detect', 'AI 출력 감지', 'bool', '', ['fdm']],
+                ['ai_detect', 'AI 출력 감지', 'bool', '', $P],   // 0.2.12 레진 프린터도 (카메라 AI 오류 감지)
                 ['runout', '필라멘트 감지', 'bool', '', ['fdm']],
                 ['power_recover', '정전 복구', 'bool', '', $P],
                 ['air_filter', '공기 필터', 'bool', '', array_merge($P, ['laser'])],
@@ -288,6 +288,18 @@ final class Fields
                 $out = [];
                 foreach ($list as $t) {
                     $t = mb_substr(trim(strip_tags(is_scalar($t) ? (string) $t : '')), 0, 40);
+                    if (($d['key'] ?? '') === 'connect') {
+                        // 0.2.12 같은 뜻은 보기 이름으로 (Ethernet · 이더넷 · 유선 → LAN, WiFi → Wi-Fi …)
+                        $t = match (mb_strtolower(preg_replace('/[\s\-_]+/', '', $t) ?? $t)) {
+                            'ethernet', '이더넷', '유선', '유선lan', 'rj45', 'lan' => 'LAN',
+                            'wifi', 'wlan', '와이파이', '무선', '무선lan' => 'Wi-Fi',
+                            'usb', 'usb메모리', 'usb드라이브' => 'USB',
+                            'sd', 'sd카드', 'microsd', 'tf', 'tf카드' => 'SD',
+                            'bluetooth', '블루투스' => '블루투스',
+                            'cloud', '클라우드' => '클라우드',
+                            default => $t,
+                        };
+                    }
                     if ($t !== '' && ! in_array($t, $out, true) && count($out) < 40) {
                         $out[] = $t;
                     }
