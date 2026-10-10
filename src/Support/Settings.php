@@ -29,7 +29,7 @@ final class Settings
             'auto_every' => 10,               // 분 — 한 번 돌고 쉬는 시간
             'auto_per_run' => 2,              // 한 번에 하는 일 수
             'auto_per_day' => 40,             // 하루 최대
-            'task_members' => true,           // 업체검색에서 회원이 등록한 모델 · 재료 가져오기 (AI 안 씀)
+            'task_members' => true,           // 재고 관리에서 회원이 등록한 모델 · 재료 가져오기 (AI 안 씀)
             'task_new' => true,               // 새 모델 · 재료 찾기
             'task_fill' => true,              // 빈 제원 채우기
             'task_photo' => true,             // 사진 찾기

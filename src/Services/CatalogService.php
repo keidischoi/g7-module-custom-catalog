@@ -194,12 +194,12 @@ final class CatalogService
             'color_hex' => $type === 'materials' ? (string) ($r->color_hex ?? '') : '', 'status' => (string) $r->status];
     }
 
-    /** 업체검색(custom-companies)의 모델 대표 사진 — 관리자가 고른 것만 (ModelBook::photo) */
+    /** 재고 관리(custom-inventory)의 모델 대표 사진 — 관리자가 고른 것만 (0.3.0 업체검색에서 옮겨 감 · Api\Inventory::modelPhoto) */
     public static function companyPhoto(string $kind, string $brand, string $model): string
     {
-        $MB = '\Modules\Custom\Companies\Services\ModelBook';
+        $I = Collector::$inventory;
         try {
-            return class_exists($MB) && method_exists($MB, 'photo') ? (string) ($MB::photo($kind, $brand, $model) ?? '') : '';
+            return class_exists($I) && $I::active() ? (string) ($I::modelPhoto($kind, $brand, $model) ?? '') : '';
         } catch (\Throwable) {
             return '';
         }
@@ -207,11 +207,11 @@ final class CatalogService
 
     /**
      * 0.2.1 보여 줄 사진 — 관리자 설정(image_mode)대로:
-     *   auto    카탈로그 사진 → 업체검색 대표 사진 → 그림
-     *   company 업체검색 대표 사진 → 카탈로그 사진 → 그림
+     *   auto    카탈로그 사진 → 재고 관리 대표 사진 → 그림
+     *   company 재고 관리 대표 사진 → 카탈로그 사진 → 그림
      *   catalog 카탈로그 사진만 (없으면 그림)
      *   icon    그림만 (사진을 쓰지 않음)
-     * 「그림」은 화면이 그림 (업체검색과 같은 입체 그림) — 여기서는 빈 글.
+     * 「그림」은 화면이 그림 (재고 관리와 같은 입체 그림) — 여기서는 빈 글.
      *
      * @return array{0: string, 1: string} [주소, 어디 것(catalog|company|'')]
      */
@@ -316,7 +316,7 @@ final class CatalogService
         [$shown, $from] = self::imageOf($type, $r);
         $mode = (string) \Modules\Custom\Catalog\Support\Settings::get('image_mode');
         if ($from === 'company') {
-            array_unshift($photos, ['id' => 0, 'url' => $shown, 'thumb' => $shown, 'credit' => '업체검색 대표 사진', 'source_url' => '']);
+            array_unshift($photos, ['id' => 0, 'url' => $shown, 'thumb' => $shown, 'credit' => '재고 관리 대표 사진', 'source_url' => '']);
             if (! $edit) {
                 $photos = array_slice($photos, 0, $mode === 'company' ? 1 : 12);
             }
