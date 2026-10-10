@@ -10,7 +10,7 @@ use Modules\Custom\Catalog\Support\Settings;
 /**
  * 0.2.0 🌙 자동 수집 — 서버가 조용할 때 AI 가 카탈로그를 채움.
  *
- *  회원 등록 가져오기(members): 업체검색에서 회원이 적어 넣은 장비 모델 · 재료 — 업체검색 규칙(관리자 승인, 또는 서로 다른 업체 N곳 이상 · 숨김/합침은 빼고)을 넘은 것만. AI 를 쓰지 않음
+ *  회원 등록 가져오기(members): 재고 관리(0.3.0 업체검색에서 옮겨 감)에서 회원이 적어 넣은 장비 모델 · 재료 — 재고 관리 규칙(관리자 승인, 또는 서로 다른 업체 N곳 이상 · 숨김/합침은 빼고)을 넘은 것만. AI 를 쓰지 않음
  *  새 모델 · 재료 찾기(new): 제조사를 돌아가며 「목록에 없는 제품」을 물음
  *  빈 제원 채우기(fill)   : 제원이 덜 찬 항목의 빈 칸만 물음 (이미 적힌 값은 건드리지 않음)
  *  사진 찾기(photo)       : 사진 없는 항목 — ① 검색(Brave 키가 있으면) ② 제품 공식 페이지의 대표 사진 ③ 위키미디어 공용
@@ -150,29 +150,31 @@ final class Collector
         }
     }
 
-    /* ───────── 회원이 등록한 것 (업체검색) ───────── */
+    /* ───────── 회원이 등록한 것 (재고 관리) ───────── */
+
+    /** 재고 관리 파사드 (검사에서만 바꿈) */
+    public static string $inventory = 'Modules\\Custom\\Inventory\\Api\\Inventory';
 
     /**
-     * 업체검색에서 회원이 적어 넣은 장비 모델 · 재료를 카탈로그로 — 업체검색이 정한 규칙 그대로:
-     *  장비: ModelBook::known() 이 「다른 사람에게도 보여 주는」 모델 = 관리자가 승인했거나 서로 다른 업체 N곳(model_min_companies) 이상이 쓴 것. 숨김 · 합침은 빠짐.
-     *  재료: 재고(cmp_spools)에 서로 다른 업체 N곳 이상이 같은 제조사 · 재료로 넣은 것. 가장 많이 쓴 표기로.
-     * AI 를 쓰지 않음. 이미 카탈로그에 있거나(보관한 것 포함) 한 번 버린 제안은 다시 올리지 않음.
+     * 0.3.0 재고 관리(custom-inventory — 업체검색에서 장비 · 재고가 옮겨 감)에 회원이 적어 넣은 장비 모델 · 재료를 카탈로그로 — 그쪽 규칙 그대로:
+     *  장비: Api\Inventory::knownModels() 가 「다른 사람에게도 보여 주는」 모델 = 관리자가 승인했거나 서로 다른 업체 N곳(modelMinCompanies) 이상이 쓴 것. 숨김 · 합침은 빠짐.
+     *  재료: Api\Inventory::materialUsage() — 업체 재고에 서로 다른 업체 N곳 이상이 같은 제조사 · 재료로 넣은 것. 가장 많이 쓴 표기로.
+     * 그쪽 표(inv_* · cmp_*)를 직접 읽지 않음. AI 를 쓰지 않음. 이미 카탈로그에 있거나(보관한 것 포함) 한 번 버린 제안은 다시 올리지 않음.
      */
     public function taskMembers(int $limit = 20): string
     {
-        $MB = '\Modules\Custom\Companies\Services\ModelBook';
-        $ST = '\Modules\Custom\Companies\Support\Settings';
-        $spools = false;
+        $I = self::$inventory;
         try {
-            $spools = \Illuminate\Support\Facades\Schema::hasTable('cmp_spools');
+            $on = class_exists($I) && $I::active();
         } catch (\Throwable) {
+            $on = false;
         }
-        if (! class_exists($MB) && ! $spools) {
-            return '회원 등록 가져오기: 업체검색 모듈이 없어요.';
+        if (! $on) {
+            return '회원 등록 가져오기: 재고 관리 모듈이 없거나 꺼져 있어요.';
         }
         $min = 2;
         try {
-            $min = class_exists($ST) ? max(1, (int) $ST::get('model_min_companies')) : 2;
+            $min = max(1, (int) $I::modelMinCompanies());
         } catch (\Throwable) {
         }
         $seen = ['equipment' => [], 'materials' => []];
@@ -186,59 +188,66 @@ final class Collector
             }
         }
         $added = [];
-        if (class_exists($MB)) {
-            foreach (array_keys(Fields::EQUIPMENT_KINDS) as $kind) {
-                foreach ($MB::known($kind, 0, 300) as $m) {
-                    $brand = trim((string) ($m['b'] ?? ''));
-                    $model = trim((string) ($m['m'] ?? ''));
-                    $k = $kind.'|'.CatalogService::norm($brand).'|'.CatalogService::norm($model);
-                    if ($brand === '' || mb_strlen($model) < 2 || isset($seen['equipment'][$k]) || count($added) >= $limit) {
-                        continue;
-                    }
-                    $seen['equipment'][$k] = true;
-                    $vals = [];
-                    if (is_array($m['s'] ?? null) && count($m['s']) >= 2) {
-                        $vals = ['build_x_mm' => (int) $m['s'][0], 'build_y_mm' => (int) $m['s'][1], 'build_z_mm' => (int) ($m['s'][2] ?? 0)];
-                    }
-                    if (! empty($m['mc'])) {
-                        $vals['multicolor'] = true;
-                    }
-                    $this->suggest('new', 'equipment', null, $brand.' '.$model, ['brand' => $brand, 'title' => $model, 'kind' => $kind, 'values' => array_filter($vals)],
-                        '회원 등록 · 업체 '.(int) ($m['n'] ?? 1).'곳');
-                    $added[] = $brand.' '.$model;
+        foreach (array_keys(Fields::EQUIPMENT_KINDS) as $kind) {
+            try {
+                $known = (array) $I::knownModels($kind, 0, 300);
+            } catch (\Throwable) {
+                $known = [];
+            }
+            foreach ($known as $m) {
+                $brand = trim((string) ($m['b'] ?? ''));
+                $model = trim((string) ($m['m'] ?? ''));
+                $k = $kind.'|'.CatalogService::norm($brand).'|'.CatalogService::norm($model);
+                if ($brand === '' || mb_strlen($model) < 2 || isset($seen['equipment'][$k]) || count($added) >= $limit) {
+                    continue;
                 }
+                $seen['equipment'][$k] = true;
+                $vals = [];
+                if (is_array($m['s'] ?? null) && count($m['s']) >= 2) {
+                    $vals = ['build_x_mm' => (int) $m['s'][0], 'build_y_mm' => (int) $m['s'][1], 'build_z_mm' => (int) ($m['s'][2] ?? 0)];
+                }
+                if (! empty($m['mc'])) {
+                    $vals['multicolor'] = true;
+                }
+                $this->suggest('new', 'equipment', null, $brand.' '.$model, ['brand' => $brand, 'title' => $model, 'kind' => $kind, 'values' => array_filter($vals)],
+                    '회원 등록 · 업체 '.(int) ($m['n'] ?? 1).'곳');
+                $added[] = $brand.' '.$model;
             }
         }
-        if ($spools) {
-            $g = [];
-            foreach (DB::table('cmp_spools')->whereNull('deleted_at')->whereNotNull('brand')->where('brand', '!=', '')->where('material', '!=', '')->get() as $r) {
-                if (! Fields::validKind('materials', (string) $r->kind)) {
-                    continue;
-                }
-                $k = $r->kind.'|'.CatalogService::norm($r->brand).'|'.CatalogService::norm($r->material);
-                $x = &$g[$k];
-                $x ??= ['kind' => (string) $r->kind, 'spell' => [], 'companies' => [], 'vals' => []];
-                $sp = trim((string) $r->brand).'|'.trim((string) $r->material);
-                $x['spell'][$sp] = ($x['spell'][$sp] ?? 0) + 1;
-                $x['companies'][(int) $r->company_id] = true;
-                foreach (['diameter', 'nozzle_min', 'nozzle_max', 'bed_min', 'bed_max', 'dry_temp', 'dry_hours', 'weight_g'] as $c) {
-                    if (! isset($x['vals'][$c]) && isset($r->{$c}) && (float) $r->{$c} > 0) {
-                        $x['vals'][$c] = $r->{$c};
-                    }
-                }
-                unset($x);
+        $g = [];
+        try {
+            $usage = (array) $I::materialUsage(5000);
+        } catch (\Throwable) {
+            $usage = [];
+        }
+        foreach ($usage as $r) {
+            $r = (object) $r;
+            if (! Fields::validKind('materials', (string) $r->kind) || (int) $r->company_id <= 0) {
+                continue;
             }
-            foreach ($g as $k => $x) {
-                if (count($x['companies']) < $min || isset($seen['materials'][$k]) || count($added) >= $limit) {
-                    continue;
+            $k = $r->kind.'|'.CatalogService::norm($r->brand).'|'.CatalogService::norm($r->material);
+            $x = &$g[$k];
+            $x ??= ['kind' => (string) $r->kind, 'spell' => [], 'companies' => [], 'vals' => []];
+            $sp = trim((string) $r->brand).'|'.trim((string) $r->material);
+            $x['spell'][$sp] = ($x['spell'][$sp] ?? 0) + 1;
+            $x['companies'][(int) $r->company_id] = true;
+            foreach ((array) ($r->vals ?? []) as $c => $v) {
+                if (! isset($x['vals'][$c]) && in_array($c, ['diameter', 'nozzle_min', 'nozzle_max', 'bed_min', 'bed_max', 'dry_temp', 'dry_hours', 'weight_g'], true) && (float) $v > 0) {
+                    $x['vals'][$c] = $v;
                 }
-                arsort($x['spell']);
-                [$brand, $mat] = explode('|', (string) array_key_first($x['spell']), 2);
-                $seen['materials'][$k] = true;
-                $this->suggest('new', 'materials', null, $brand.' '.$mat, ['brand' => $brand, 'title' => $mat, 'kind' => $x['kind'], 'values' => ['material' => $mat] + $x['vals']],
-                    '회원 등록 · 업체 '.count($x['companies']).'곳');
-                $added[] = $brand.' '.$mat;
             }
+            unset($x);
+        }
+        foreach ($g as $k => $x) {
+            if (count($x['companies']) < $min || isset($seen['materials'][$k]) || count($added) >= $limit) {
+                continue;
+            }
+            arsort($x['spell']);
+            [$brand, $mat] = explode('|', (string) array_key_first($x['spell']), 2);
+            $seen['materials'][$k] = true;
+            $this->suggest('new', 'materials', null, $brand.' '.$mat, ['brand' => $brand, 'title' => $mat, 'kind' => $x['kind'], 'values' => ['material' => $mat] + $x['vals']],
+                '회원 등록 · 업체 '.count($x['companies']).'곳');
+            $added[] = $brand.' '.$mat;
         }
 
         return '회원 등록 가져오기: '.($added ? count($added).'개 ('.implode(', ', array_slice($added, 0, 4)).(count($added) > 4 ? ' …' : '').')'

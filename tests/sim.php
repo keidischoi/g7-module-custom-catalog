@@ -16,19 +16,38 @@ namespace App\Contracts\Extension {
     }
 }
 
-namespace Modules\Custom\Companies\Services {
-    /** 업체검색 ModelBook 흉내 — known() 은 규칙(승인 · 업체 수 · 숨김/합침)을 넘은 모델만 돌려줌 */
-    final class ModelBook
+namespace Modules\Custom\Inventory\Api {
+    /** 0.3.0 재고 관리 Api 흉내 — knownModels() 는 규칙(승인 · 업체 수 · 숨김/합침)을 넘은 모델만 · materialUsage() 는 업체 재고의 제조사 · 재료 */
+    final class Inventory
     {
+        public static bool $on = true;
+
         public static array $known = [];
 
-        public static function known(string $kind, int $uid = 0, int $limit = 300): array
+        public static array $usage = [];
+
+        public static function active(): bool
+        {
+            return self::$on;
+        }
+
+        public static function knownModels(string $kind, int $uid = 0, int $limit = 300): array
         {
             return self::$known[$kind] ?? [];
         }
 
+        public static function modelMinCompanies(): int
+        {
+            return 2;
+        }
+
+        public static function materialUsage(int $limit = 5000): array
+        {
+            return self::$usage;
+        }
+
         /** 관리자가 고른 모델 대표 사진 */
-        public static function photo(string $kind, ?string $brand, ?string $model): ?string
+        public static function modelPhoto(string $kind, ?string $brand, ?string $model): ?string
         {
             return $model === 'P2S' || $model === 'P1S' ? '/api/modules/custom-companies/files/'.strtolower((string) $model) : null;
         }
@@ -195,7 +214,7 @@ namespace {
     $p1s = (string) DB::table('cat_equipment')->where('key', 'bambu-lab-p1s-fdm')->value('image_url');
     $a1 = $img('xtool-p2s-laser');
     $a2 = $img('bambu-lab-p1s-fdm');
-    t($a1['image'] === '/api/modules/custom-companies/files/p2s' && $a1['photos'][0]['credit'] === '업체검색 대표 사진' && $a2['image'] === $p1s && $img('elegoo-saturn-4-ultra-sla')['image'] === '', '기본: 카탈로그 사진 → 없으면 업체검색 대표 사진 → 없으면 그림');
+    t($a1['image'] === '/api/modules/custom-companies/files/p2s' && $a1['photos'][0]['credit'] === '재고 관리 대표 사진' && $a2['image'] === $p1s && $img('elegoo-saturn-4-ultra-sla')['image'] === '', '기본: 카탈로그 사진 → 없으면 재고 관리 대표 사진 → 없으면 그림');
     Settings::save(['image_mode' => 'company']);
     t($img('bambu-lab-p1s-fdm')['image'] === '/api/modules/custom-companies/files/p1s' && count($img('bambu-lab-p1s-fdm')['photos']) === 1, '「업체검색 대표 사진 먼저」');
     Settings::save(['image_mode' => 'catalog']);
@@ -356,39 +375,35 @@ namespace {
     t(count($res['ran']) === 1 || str_contains($col->quiet()['reason'], '오늘'), '하루 최대를 넘지 않음');
     t(str_contains($col->tick(true)['ran'][0] ?? '', '') && count(Settings::state()['log']) >= 3, '「지금 돌리기」는 조건 없이 · 기록이 남음');
 
-    echo "■ 회원이 등록한 것 (업체검색 규칙 그대로)\n";
+    echo "■ 회원이 등록한 것 (재고 관리 규칙 그대로 — 0.3.0 Api\\Inventory 에 물어봄)\n";
     DB::table('cat_suggestions')->delete();
     Settings::save(['apply' => 'review']);
-    \Modules\Custom\Companies\Services\ModelBook::$known = ['fdm' => [
+    \Modules\Custom\Inventory\Api\Inventory::$known = ['fdm' => [
         ['b' => 'Bambu Lab', 'm' => 'p1s', 'n' => 5, 's' => [256, 256, 256]],           // 이미 있음 (표기만 다름)
         ['b' => 'Two Trees', 'm' => 'SK1', 'n' => 3, 's' => [256, 256, 256], 'mc' => 0],   // 업체 3곳이 씀 → 가져옴
         ['b' => '', 'm' => '이름 모를 것', 'n' => 4],                                       // 제조사 없음 → 건너뜀
     ]];
-    DB::connection()->getSchemaBuilder()->create('cmp_spools', function ($t) {
-        $t->id();
-        $t->unsignedBigInteger('company_id');
-        $t->string('kind', 12);
-        $t->string('material', 40);
-        $t->string('brand', 40)->nullable();
-        $t->unsignedSmallInteger('nozzle_min')->nullable();
-        $t->unsignedSmallInteger('nozzle_max')->nullable();
-        $t->unsignedInteger('weight_g')->nullable();
-        $t->timestamp('deleted_at')->nullable();
-    });
-    foreach ([[1, 'Kingroon', 'PETG', 230, 250], [2, 'kingroon', 'petg', null, null], [2, 'Kingroon', 'PETG', null, null], [3, 'JAYO', 'PLA+', null, null], [4, 'eSUN', 'pla+', null, null], [5, 'ESUN', 'PLA+', null, null]] as $x) {
-        DB::table('cmp_spools')->insert(['company_id' => $x[0], 'kind' => 'fdm', 'brand' => $x[1], 'material' => $x[2], 'nozzle_min' => $x[3], 'nozzle_max' => $x[4], 'weight_g' => 1000]);
+    \Modules\Custom\Inventory\Api\Inventory::$usage = [];
+    foreach ([[1, 'Kingroon', 'PETG', 230, 250], [2, 'kingroon', 'petg', null, null], [2, 'Kingroon', 'PETG', null, null], [3, 'JAYO', 'PLA+', null, null], [4, 'eSUN', 'pla+', null, null], [5, 'ESUN', 'PLA+', null, null], [0, 'Solo', 'ABS', null, null], [0, 'Solo', 'ABS', null, null]] as $x) {
+        \Modules\Custom\Inventory\Api\Inventory::$usage[] = ['kind' => 'fdm', 'brand' => $x[1], 'material' => $x[2], 'company_id' => $x[0], 'vals' => array_filter(['nozzle_min' => $x[3], 'nozzle_max' => $x[4], 'weight_g' => 1000])];
     }
     $line = $col->taskMembers();
     $sg = $col->suggestions();
     $titles = array_column($sg['items'], 'title');
     sort($titles);
-    t($titles === ['Kingroon PETG', 'Two Trees SK1'] && str_contains($line, '2개'), '업체검색 규칙을 넘은 것만 — 장비 SK1(업체 3곳) · 재료 Kingroon PETG(업체 2곳). 이미 있는 것(P1S · eSUN PLA+) · 한 곳만 쓴 것(JAYO)은 빼고');
+    t($titles === ['Kingroon PETG', 'Two Trees SK1'] && str_contains($line, '2개'), '재고 관리 규칙을 넘은 것만 — 장비 SK1(업체 3곳) · 재료 Kingroon PETG(업체 2곳). 이미 있는 것(P1S · eSUN PLA+) · 한 곳만 쓴 것(JAYO) · 개인 것(업체 0)은 빼고');
     $kp = array_values(array_filter($sg['items'], static fn ($x) => $x['title'] === 'Kingroon PETG'))[0];
     t(str_contains($kp['source'], '회원 등록 · 업체 2곳') && in_array(['label' => '노즐 최저', 'value' => '230 °C'], $kp['lines'], true), '회원이 적은 값(노즐 온도)도 같이 · 출처 「회원 등록」');
     $ak = $col->apply($kp['id'])['key'];
     t(DB::table('cat_materials')->where('key', $ak)->value('source') === 'members' && DB::table('cat_materials')->where('key', $ak)->value('nozzle_max') == 250, '반영 → 카탈로그 재료');
     $col->reject(array_values(array_filter($sg['items'], static fn ($x) => $x['title'] === 'Two Trees SK1'))[0]['id']);
     t(str_contains($col->taskMembers(), '없어요') && $col->suggestions()['pending'] === 0, '한 번 버린 것 · 이미 들어간 것은 다시 올리지 않음');
+
+    \Modules\Custom\Inventory\Api\Inventory::$on = false;
+    t(str_contains($col->taskMembers(), '재고 관리 모듈이 없거나') && CatalogService::companyPhoto('fdm', 'Bambu Lab', 'P1S') === '', '재고 관리가 꺼지면 가져오지 않음 · 대표 사진 없음');
+    \Modules\Custom\Inventory\Api\Inventory::$on = true;
+    $srcC = (string) file_get_contents(dirname(__DIR__).'/src/Services/Collector.php').(string) file_get_contents(dirname(__DIR__).'/src/Services/CatalogService.php');
+    t(! str_contains($srcC, "DB::table('cmp_") && ! str_contains($srcC, "DB::table('inv_") && ! str_contains($srcC, 'Companies\\Services\\ModelBook'), '업체검색 · 재고 관리 표를 직접 읽지 않음');
 
     echo "■ 제조사 로고 (0.2.3)\n";
     $LG = \Modules\Custom\Catalog\Support\Logos::class;

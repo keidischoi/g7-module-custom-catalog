@@ -1,4 +1,4 @@
-/*! custom-catalog 0.2.17 — 관리자 (항목 · 제안함 · 자동 수집 · AI 연결 · 설정) */
+/*! custom-catalog 0.2.18 — 관리자 (항목 · 제안함 · 자동 수집 · AI 연결 · 설정) */
 (function () {
   'use strict';
   if (window.__cctAdmin) { try { window.__cctAdmin(); } catch (e) {} return; }
@@ -6,7 +6,7 @@
   function C() { return window.CCT; }
   function need(cb) {
     if (window.CCT) return cb();
-    if (!document.getElementById('cct-app-js')) { var s = document.createElement('script'); s.id = 'cct-app-js'; s.src = '/api/modules/custom-catalog/assets/catalog-app.js?v=0.2.17'; document.head.appendChild(s); }
+    if (!document.getElementById('cct-app-js')) { var s = document.createElement('script'); s.id = 'cct-app-js'; s.src = '/api/modules/custom-catalog/assets/catalog-app.js?v=0.2.18'; document.head.appendChild(s); }
     var n = 0, t = setInterval(function () { if (window.CCT || ++n > 100) { clearInterval(t); if (window.CCT) cb(); } }, 60);
   }
   function page() {
@@ -18,7 +18,7 @@
   var pending = 0;
   function frame(root, cur, body) {
     root.innerHTML = '<div class="cct cct-adm"><div class="cct-adm__head"><h1>🧊 3D 카탈로그</h1><a class="cct-btn cct-btn--s" href="/catalog" target="_blank" rel="noopener">사이트에서 보기 ↗</a>' +
-      '<p>프린터 · 장비 · 필라멘트 · 레진 자료를 모아 두는 곳이에요. 업체검색의 장비 · 재고 등록 화면이 여기 목록을 가져다 써요 (사진은 업체검색 것을 그대로).</p></div>' +
+      '<p>프린터 · 장비 · 필라멘트 · 레진 자료를 모아 두는 곳이에요. 재고 관리의 장비 · 재고 등록 화면이 여기 목록을 가져다 써요 (사진은 재고 관리 것을 그대로).</p></div>' +
       '<div class="cct-nav">' + PAGES.map(function (p) { return '<a href="?p=' + p[0] + '" data-p="' + p[0] + '" class="' + (p[0] === cur ? 'on' : '') + '">' + p[1] + (p[0] === 'suggest' && pending ? '<b>' + pending + '</b>' : '') + '</a>'; }).join('') + '</div>' +
       '<div data-body>' + (body || '<div class="cct-skel"></div>') + '</div></div>';
     Array.prototype.forEach.call(root.querySelectorAll('[data-p]'), function (a) { a.onclick = function (e) {
@@ -78,7 +78,7 @@
     var srcHtml = function (s) {
       if (s.task === 'photo') return '';
       var by = s.source ? '<small class="cct-src__by">' + (/회원|안전 자료/.test(s.source) ? '📥 ' : '🤖 ') + esc(s.source) + '</small>' : '';
-      if (!s.sources || !s.sources.length) return '<div class="cct-src none"><b>🔗 출처</b>' + (/회원/.test(s.source || '') ? '<span>업체검색 회원 등록</span>' : '<span>⚠️ 출처 없음 — AI 가 기억으로 적은 값이에요 (틀릴 수 있어요)</span>') + by + '</div>';
+      if (!s.sources || !s.sources.length) return '<div class="cct-src none"><b>🔗 출처</b>' + (/회원/.test(s.source || '') ? '<span>재고 관리 회원 등록</span>' : '<span>⚠️ 출처 없음 — AI 가 기억으로 적은 값이에요 (틀릴 수 있어요)</span>') + by + '</div>';
       return '<div class="cct-src"><b>🔗 출처</b>' + s.sources.map(function (x) {
         var h = x.url.replace(/^https?:\/\/(www\.)?/i, '').slice(0, 60);
         return '<a target="_blank" rel="noopener noreferrer" href="' + esc(x.url) + '" title="' + esc(x.url) + '">' + (x.ok ? '✅ ' : '⚠️ ') + esc(h) + '</a>';
@@ -151,7 +151,7 @@
         row('한 번에 하는 일', 'AI 에게 묻는 횟수와 같아요', num('auto_per_run', '개', 1, 10)) +
         row('하루 최대', '', num('auto_per_day', '개', 1, 500)) + '</div>' +
         '<div class="cct-panel"><h3>🧩 할 일</h3><p>켠 것을 차례로 돌아가며 해요.</p>' +
-        row('🏢 회원이 등록한 것 가져오기', '업체검색에서 회원이 적어 넣은 장비 모델 · 재료 — 업체검색 규칙 그대로 (관리자가 승인했거나 서로 다른 업체 여러 곳이 쓴 것만 · 숨김/합침은 빼고). AI 를 쓰지 않아요', sw(S.task_members, 'data-b="task_members"')) +
+        row('🏢 회원이 등록한 것 가져오기', '재고 관리에서 회원이 적어 넣은 장비 모델 · 재료 — 재고 관리 규칙 그대로 (관리자가 승인했거나 서로 다른 업체 여러 곳이 쓴 것만 · 숨김/합침은 빼고). AI 를 쓰지 않아요', sw(S.task_members, 'data-b="task_members"')) +
         row('🆕 새 모델 · 재료 찾기', '제조사를 돌아가며 「목록에 없는 제품」을 AI 에게 물어요', sw(S.task_new, 'data-b="task_new"') ) +
         row('📝 빈 제원 채우기', '제원이 덜 찬 항목의 빈 칸만 물어요 (적혀 있는 값은 건드리지 않아요)', sw(S.task_fill, 'data-b="task_fill"')) +
         row('🖼️ 사진 찾기', '사진 없는 항목 — 제품 공식 페이지의 대표 사진 → 위키미디어 공용 순서로 (검색 키가 있으면 검색 먼저)', sw(S.task_photo, 'data-b="task_photo"')) +
@@ -265,11 +265,11 @@
     var esc = C().esc, api = C().api, body = frame(root, 'settings'), M = C().getMeta(), S = null;
     var draw = function (d) {
       S = d.settings;
-      body.innerHTML = '<div class="cct-panel"><h3>🖼️ 어떤 그림을 보여 줄까</h3><p>목록 카드와 상세 화면에 보이는 그림이에요. 「그림」은 업체검색의 장비 · 재고에서 쓰는 것과 같은 입체 그림(프린터 · 필라멘트 롤 · 레진 병 · 분말 통)이에요.</p>' +
-        [['auto', '카탈로그 사진 → 업체검색 대표 사진 → 그림', '카탈로그에 올린 사진이 있으면 그것, 없으면 업체검색에서 관리자가 고른 모델 대표 사진, 그것도 없으면 그림'],
-          ['company', '업체검색 대표 사진 먼저', '업체검색에서 고른 모델 대표 사진이 있으면 그것을 먼저 (없으면 카탈로그 사진 → 그림)'],
+      body.innerHTML = '<div class="cct-panel"><h3>🖼️ 어떤 그림을 보여 줄까</h3><p>목록 카드와 상세 화면에 보이는 그림이에요. 「그림」은 재고 관리의 장비 · 재고에서 쓰는 것과 같은 입체 그림(프린터 · 필라멘트 롤 · 레진 병 · 분말 통)이에요.</p>' +
+        [['auto', '카탈로그 사진 → 재고 관리 대표 사진 → 그림', '카탈로그에 올린 사진이 있으면 그것, 없으면 재고 관리에서 관리자가 고른 모델 대표 사진, 그것도 없으면 그림'],
+          ['company', '재고 관리 대표 사진 먼저', '재고 관리에서 고른 모델 대표 사진이 있으면 그것을 먼저 (없으면 카탈로그 사진 → 그림)'],
           ['catalog', '카탈로그 사진만', '카탈로그에 올린 사진만 쓰고, 없으면 그림'],
-          ['icon', '그림만', '사진을 쓰지 않고 모두 그림으로 — 업체검색과 똑같은 모양']].map(function (o) {
+          ['icon', '그림만', '사진을 쓰지 않고 모두 그림으로 — 재고 관리와 똑같은 모양']].map(function (o) {
           return '<label class="cct-row" style="cursor:pointer"><div><b>' + o[1] + '</b><small>' + o[2] + '</small></div><input type="radio" name="cct-imode" value="' + o[0] + '"' + (S.image_mode === o[0] ? ' checked' : '') + ' style="width:20px;height:20px"></label>'; }).join('') + '</div>' +
         '<div class="cct-panel"><h3>🧭 헤더 메뉴</h3>' +
         '<label class="cct-row" style="cursor:pointer"><div><b>헤더 메뉴 보이기</b><small>헤더 메인 메뉴에 넣어요 — 홈 디자인 › 헤더 › 메뉴 순서와 서로 맞춰져요 (메뉴 자리는 홈 디자인에서)</small></div><input type="checkbox" data-menu-on' + (S.menu_enabled !== false ? ' checked' : '') + '></label>' +
@@ -283,7 +283,7 @@
         '<div class="cct-panel"><h3>🗂️ 보이는 탭</h3><p>끄면 사이트 카탈로그 화면에서 그 탭이 안 보여요 (자료는 그대로).</p>' + M0.map(function (t) {
           return '<div class="cct-row"><div><b>' + t[2] + ' ' + esc(t[1]) + '</b></div>' + sw(S.tabs_off.indexOf(t[0]) < 0, 'data-tab="' + t[0] + '"') + '</div>'; }).join('') + '</div>' +
         '<div class="cct-panel"><h3>🔗 다른 모듈과 잇기</h3><p>카탈로그는 목록의 주인이에요. 다른 모듈은 여기서 목록만 뽑아 가요.</p>' +
-        '<div class="cct-row"><div><b>🏢 업체검색</b><small>장비 · 재고 등록 화면의 「제조사 · 모델 고르기」 목록 — 사진과 모델 추가 규칙은 업체검색 것을 그대로 써요</small></div><a class="cct-btn cct-btn--s" target="_blank" rel="noopener" href="/api/modules/custom-catalog/book">목록 보기 ↗</a></div>' +
+        '<div class="cct-row"><div><b>📦 재고 관리</b><small>장비 · 재고 등록 화면의 「제조사 · 모델 고르기」 목록 — 사진과 모델 추가 규칙은 재고 관리 것을 그대로 써요</small></div><a class="cct-btn cct-btn--s" target="_blank" rel="noopener" href="/api/modules/custom-catalog/book">목록 보기 ↗</a></div>' +
         '<div class="cct-row"><div><b>🔎 통합 검색</b><small>사이트 검색 결과에 「카탈로그」 탭으로 나와요</small></div><span class="cct-state ok">연결됨</span></div>' +
         '<div class="cct-row"><div><b>🔥 인기 검색어</b><small>카탈로그에서 찾은 말이 인기 검색어에 쌓여요 (인기 검색어 플러그인 0.3.12 이상)</small></div><span class="cct-state ok">연결됨</span></div>' +
         '<div class="cct-row"><div><b>🏠 홈 화면</b><small>홈 디자인의 칸으로 「3D 카탈로그」를 고를 수 있어요</small></div><span class="cct-state ok">연결됨</span></div></div>' +
