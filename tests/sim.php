@@ -450,6 +450,12 @@ namespace {
     $fm = Catalog::findMaterial('fdm', 'ESUN', 'pla+');
     t($fe['url'] === '/catalog/bambu-lab-p1s-fdm' && in_array('500 mm/s', $fe['chips'], true) && $fm['title'] === 'PLA+' && $fm['chips'][0] === 'PLA+' && Catalog::findMaterial('fdm', 'eSUN', 'PEEK') === null && Catalog::findEquipment('fdm', '', 'P1S') === null,
         '0.2.4 다른 모듈이 항목 하나를 찾아 감 (요약 · 그림 · 주소) — 대소문자 · 띄어쓰기 무시');
+    // 0.2.19 📥 재료 제안 (재고 관리의 태그 읽기) — 있으면 null · 없으면 승인 보류 제안 · 같은 것은 한 번
+    $sg1 = Catalog::suggestMaterial(['kind' => 'fdm', 'brand' => 'TagCo', 'material' => 'PETG-CF', 'values' => ['nozzle_min' => 240, 'weight_g' => 1000, 'x' => 9]]);
+    $sg2 = Catalog::suggestMaterial(['kind' => 'fdm', 'brand' => 'TagCo', 'material' => 'PETG-CF']);
+    $sgr = $sg1 ? DB::table('cat_suggestions')->find($sg1) : null;
+    t(Catalog::suggestMaterial(['kind' => 'fdm', 'brand' => 'ESUN', 'material' => 'pla+']) === null && is_int($sg1) && $sg1 === $sg2 && $sgr && $sgr->title === 'TagCo PETG-CF' && str_contains((string) $sgr->source, '태그')
+        && (json_decode($sgr->payload, true)['values']['nozzle_min'] ?? 0) === 240 && ! isset(json_decode($sgr->payload, true)['values']['x']) && Catalog::suggestMaterial(['brand' => '', 'material' => 'PLA']) === null, '0.2.19 재료 제안 API — 있으면 안 올림 · 승인 보류 제안 · 같은 것은 한 번');
     $sr = CatalogListener::siteSearch('bambu', 1, 3, 'relevance');
     t($sr['total'] >= 4 && count($sr['items']) === 3 && $sr['has_more_pages'] && str_contains($sr['items'][0]['title_highlighted'], '<mark>Bambu</mark>') && str_starts_with($sr['items'][0]['url'], '/catalog/'), '통합 검색 — 카탈로그 탭');
     $sr2 = CatalogListener::siteSearch('pla', 1, 10, 'relevance');
