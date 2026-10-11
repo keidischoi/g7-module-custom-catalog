@@ -17,7 +17,7 @@ use Modules\Custom\Catalog\Support\Schema;
  */
 final class Catalog
 {
-    public const VERSION = '0.2.18';
+    public const VERSION = '0.2.19';
 
     /** @return array<string, list<array<string, mixed>>> */
     public static function equipmentBook(): array
@@ -153,6 +153,45 @@ final class Catalog
         $n = \Modules\Custom\Catalog\Services\CatalogService::class;
 
         return self::index()['materials'][$kind.'|'.$n::norm($brand).'|'.$n::norm($material)] ?? null;
+    }
+
+    /**
+     * 0.2.19 📥 재료 제안 — 다른 모듈(재고 관리의 태그 읽기 등)이 카탈로그에 없는 재료를 「승인 보류」 제안으로 올림.
+     * 관리자가 제안함에서 승인해야 카탈로그에 들어감 (설정이 「바로 반영」이면 그 규칙대로). 이미 카탈로그에 있으면 null,
+     * 같은 제조사 · 재료의 승인 보류 제안이 이미 있으면 그 번호 (두 번 올리지 않음)
+     *
+     * @param  array{kind?: string, brand?: string, material?: string, values?: array<string, mixed>}  $p
+     */
+    public static function suggestMaterial(array $p, string $source = '재고 관리 · 태그 읽음'): ?int
+    {
+        $kind = (string) ($p['kind'] ?? 'fdm') ?: 'fdm';
+        $brand = trim(mb_substr((string) ($p['brand'] ?? ''), 0, 60));
+        $mat = trim(mb_substr((string) ($p['material'] ?? ''), 0, 60));
+        if ($brand === '' || $mat === '' || ! Fields::validKind('materials', $kind)) {
+            return null;
+        }
+        try {
+            if (self::findMaterial($kind, $brand, $mat) !== null) {
+                return null;
+            }
+            Schema::ensure();
+            $title = $brand.' '.$mat;
+            $have = DB::table(Schema::SUGGEST)->where('task', 'new')->where('item_type', 'materials')->where('status', 'pending')->where('title', $title)->value('id');
+            if ($have) {
+                return (int) $have;
+            }
+            $vals = ['material' => $mat];
+            foreach (['diameter', 'nozzle_min', 'nozzle_max', 'bed_min', 'bed_max', 'dry_temp', 'dry_hours', 'weight_g'] as $c) {
+                $v = $p['values'][$c] ?? null;
+                if (is_numeric($v) && (float) $v > 0) {
+                    $vals[$c] = $v + 0;
+                }
+            }
+
+            return app(\Modules\Custom\Catalog\Services\Collector::class)->suggest('new', 'materials', null, $title, ['brand' => $brand, 'title' => $mat, 'kind' => $kind, 'values' => $vals], mb_substr($source, 0, 60));
+        } catch (\Throwable) {
+            return null;
+        }
     }
 
     /** 제조사 목록 @return list<string> */
