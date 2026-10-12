@@ -1,6 +1,16 @@
-/*! custom-catalog 0.2.20 — 관리자 (항목 · 제안함 · 자동 수집 · AI 연결 · 설정) */
+/*! custom-catalog 0.2.21 — 관리자 (항목 · 제안함 · 자동 수집 · AI 연결 · 설정) */
 (function () {
   'use strict';
+
+  /* ⏹ AI 시험 중지 — 이 시험은 요청 한 번(서버가 순서대로 물음)이라 서버 쪽은 끝까지 돌 수 있지만, 화면은 그만 기다리고 결과를 받지 않아요 */
+  function stopWait(out) {
+    var st = { off: false }, b = document.createElement('button');
+    b.type = 'button'; b.className = 'cct-btn cct-btn--s cct-btn--d'; b.textContent = '⏹ 중지'; b.style.marginLeft = '6px';
+    b.onclick = function () { st.off = true; b.remove(); out.textContent = '⏹ 중지했어요 — 이 결과는 받지 않아요 (서버에서 묻던 한 번은 끝까지 돌 수 있어요)'; };
+    if (out.parentNode) out.parentNode.insertBefore(b, out.nextSibling);
+    st.cut = function () { if (b.parentNode) b.remove(); return st.off; };
+    return st;
+  }
 
   /* 🖧 서버 카드 접기 · 펴기 — 서버가 여럿이면 다 펼쳐져 찾기 힘들어서. 펼친 서버는 이 브라우저에 기억 (서버가 하나면 펼침) */
   function foldServers(root, servers, store, headSel, btnCls) {
@@ -34,7 +44,7 @@
   function C() { return window.CCT; }
   function need(cb) {
     if (window.CCT) return cb();
-    if (!document.getElementById('cct-app-js')) { var s = document.createElement('script'); s.id = 'cct-app-js'; s.src = '/api/modules/custom-catalog/assets/catalog-app.js?v=0.2.20'; document.head.appendChild(s); }
+    if (!document.getElementById('cct-app-js')) { var s = document.createElement('script'); s.id = 'cct-app-js'; s.src = '/api/modules/custom-catalog/assets/catalog-app.js?v=0.2.21'; document.head.appendChild(s); }
     var n = 0, t = setInterval(function () { if (window.CCT || ++n > 100) { clearInterval(t); if (window.CCT) cb(); } }, 60);
   }
   function page() {
@@ -267,7 +277,7 @@
           r.querySelector('[data-mdown]').onclick = function () { mv(sv.models, j, j + 1); };
           r.querySelector('[data-mrm]').onclick = function () { sv.models.splice(j, 1); draw(status); };
           r.querySelector('[data-mtest]').onclick = function () { var out = card.querySelector('[data-out]'); out.textContent = '⏳ ' + sv.models[j].name + ' 시험 중…';
-            api('POST', '/admin/ai/test', { server: serverFrom(i), model: sv.models[j].name }).then(function (x) { out.textContent = x.message + (x.answer ? '\n답: ' + x.answer : ''); }).catch(function (e) { out.textContent = '❌ ' + e.message; }); };
+            var st = stopWait(out); api('POST', '/admin/ai/test', { server: serverFrom(i), model: sv.models[j].name }).then(function (x) { if (st.cut()) return; out.textContent = x.message + (x.answer ? '\n답: ' + x.answer : ''); }).catch(function (e) { if (st.cut()) return; out.textContent = '❌ ' + e.message; }); };
         }, card);
         var addModel = function (name) { name = String(name || '').trim(); if (!name || sv.models.some(function (m) { return m.name === name; })) return; sv.models.push({ name: name, enabled: true }); draw(status); };
         card.querySelector('[data-madd-btn]').onclick = function () { addModel(card.querySelector('[data-madd]').value); };
@@ -282,7 +292,7 @@
       });
       body.querySelector('[data-sadd]').onclick = function () { var p = PROV.filter(function (x) { return x.value === 'ollama'; })[0] || PROV[0] || { value: 'ollama', name: 'Ollama' }; S.servers.push({ id: '', name: p.name + ' ' + (S.servers.length + 1), enabled: true, provider: p.value, url: '', api_key: '', models: [], timeout: 0 }); draw(status); };
       body.querySelector('[data-live]').onclick = function () { var out = body.querySelector('[data-live-out]'); out.textContent = '⏳ 순서대로 물어보는 중… (최대 25초)';
-        api('POST', '/admin/ai/live', { ai: S }).then(function (x) { out.textContent = x.message + (x.tries || []).map(function (t) { return '\n· ' + t.server + ' · ' + t.model + ' — ' + (t.ok ? t.sec + '초' : String(t.message).replace(/^❌\s*/, '')); }).join(''); }).catch(function (e) { out.textContent = '❌ ' + e.message; }); };
+        var st = stopWait(out); api('POST', '/admin/ai/live', { ai: S }).then(function (x) { if (st.cut()) return; out.textContent = x.message + (x.tries || []).map(function (t) { return '\n· ' + t.server + ' · ' + t.model + ' — ' + (t.ok ? t.sec + '초' : String(t.message).replace(/^❌\s*/, '')); }).join(''); }).catch(function (e) { if (st.cut()) return; out.textContent = '❌ ' + e.message; }); };
       body.querySelector('[data-save]').onclick = function () { var b = this; b.disabled = true;
         api('POST', '/admin/ai', { ai: S }).then(function () { C().toast('저장했어요.'); load(); }).catch(function (e) { b.disabled = false; if (e.status === 409) load('⚠ ' + e.message); else C().toast(e.message); }); };
     };
