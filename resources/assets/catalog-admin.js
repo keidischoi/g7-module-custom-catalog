@@ -1,12 +1,40 @@
-/*! custom-catalog 0.2.19 — 관리자 (항목 · 제안함 · 자동 수집 · AI 연결 · 설정) */
+/*! custom-catalog 0.2.20 — 관리자 (항목 · 제안함 · 자동 수집 · AI 연결 · 설정) */
 (function () {
   'use strict';
+
+  /* 🖧 서버 카드 접기 · 펴기 — 서버가 여럿이면 다 펼쳐져 찾기 힘들어서. 펼친 서버는 이 브라우저에 기억 (서버가 하나면 펼침) */
+  function foldServers(root, servers, store, headSel, btnCls) {
+    var cards = root.querySelectorAll('[data-sv]'); if (!cards.length) return;
+    var map = {}; try { map = JSON.parse(localStorage.getItem(store) || '{}') || {}; } catch (e) {}
+    var keyOf = function (sv, i) { return String(sv.id || sv.name || i); };
+    var save = function () { try { localStorage.setItem(store, JSON.stringify(map)); } catch (e) {} };
+    var apply = function (card, sv, i) {
+      var k = keyOf(sv, i), open = map[k] !== undefined ? !!map[k] : servers.length <= 1, head = card.querySelector(headSel); if (!head) return;
+      var fb = head.querySelector('[data-fold]');
+      if (!fb) { fb = document.createElement('button'); fb.type = 'button'; fb.className = btnCls; fb.setAttribute('data-fold', ''); fb.style.minWidth = '30px'; head.insertBefore(fb, head.firstChild);
+        fb.onclick = function (e) { e.preventDefault(); map[k] = !(map[k] !== undefined ? !!map[k] : servers.length <= 1); save(); apply(card, sv, i); }; }
+      fb.textContent = open ? '▾' : '▸'; fb.title = open ? '접기' : '펼치기'; fb.setAttribute('aria-expanded', open ? 'true' : 'false');
+      var sum = card.querySelector('[data-fold-sum]');
+      if (!sum) { sum = document.createElement('div'); sum.setAttribute('data-fold-sum', ''); sum.style.cssText = 'font-size:12.5px;opacity:.75;display:flex;flex-wrap:wrap;gap:4px 14px;margin:6px 0 0 38px'; head.parentNode.insertBefore(sum, head.nextSibling); }
+      var on = (sv.models || []).filter(function (m) { return m.enabled; });
+      sum.innerHTML = '<span>' + String(sv.provider || '') + '</span><span>모델 ' + on.length + '/' + (sv.models || []).length + (on.length ? ' — ' + on.slice(0, 3).map(function (m) { return String(m.name).replace(/[<>&"]/g, ''); }).join(', ') + (on.length > 3 ? ' …' : '') : '') + '</span>' + (sv.key_set ? '<span>🔑 키 있음</span>' : (sv.url ? '<span>' + String(sv.url).replace(/[<>&"]/g, '') + '</span>' : ''));
+      Array.prototype.forEach.call(card.children, function (c) { if (c !== head && c !== sum) c.style.display = open ? '' : 'none'; });
+      sum.style.display = open ? 'none' : 'flex';
+    };
+    Array.prototype.forEach.call(cards, function (card) { var i = Number(card.getAttribute('data-sv')); if (servers[i]) apply(card, servers[i], i); });
+    if (servers.length > 1 && !root.querySelector('[data-fold-all]')) {
+      var bar = document.createElement('div'); bar.setAttribute('data-fold-all', ''); bar.style.cssText = 'display:flex;gap:6px;justify-content:flex-end;margin:10px 0 -4px';
+      [['▾ 모두 펼치기', true], ['▸ 모두 접기', false]].forEach(function (x) { var b = document.createElement('button'); b.type = 'button'; b.className = btnCls; b.textContent = x[0];
+        b.onclick = function () { servers.forEach(function (sv, i) { map[keyOf(sv, i)] = x[1]; }); save(); Array.prototype.forEach.call(cards, function (card) { var i = Number(card.getAttribute('data-sv')); if (servers[i]) apply(card, servers[i], i); }); }; bar.appendChild(b); });
+      cards[0].parentNode.insertBefore(bar, cards[0]);
+    }
+  }
   if (window.__cctAdmin) { try { window.__cctAdmin(); } catch (e) {} return; }
   var PAGES = [['items', '📦 항목'], ['suggest', '💡 제안함'], ['auto', '🌙 자동 수집'], ['ai', '🤖 AI 연결'], ['settings', '⚙️ 설정']];
   function C() { return window.CCT; }
   function need(cb) {
     if (window.CCT) return cb();
-    if (!document.getElementById('cct-app-js')) { var s = document.createElement('script'); s.id = 'cct-app-js'; s.src = '/api/modules/custom-catalog/assets/catalog-app.js?v=0.2.19'; document.head.appendChild(s); }
+    if (!document.getElementById('cct-app-js')) { var s = document.createElement('script'); s.id = 'cct-app-js'; s.src = '/api/modules/custom-catalog/assets/catalog-app.js?v=0.2.20'; document.head.appendChild(s); }
     var n = 0, t = setInterval(function () { if (window.CCT || ++n > 100) { clearInterval(t); if (window.CCT) cb(); } }, 60);
   }
   function page() {
@@ -224,6 +252,7 @@
       var serverFrom = function (i) { return JSON.parse(JSON.stringify(S.servers[i])); };
       all('[data-top]', function (b) { b.onclick = function () { var k = b.getAttribute('data-top'); S[k] = !S[k]; b.classList.toggle('on', S[k]); }; });
       all('[data-topn]', function (el) { el.onchange = function () { S[el.getAttribute('data-topn')] = Number(el.value); }; });
+      foldServers(body, S.servers, 'cct:srv-open', '.cct-sv__h', 'cct-btn cct-btn--s');   // 서버 카드 접기 · 펴기
       all('[data-sv]', function (card) {
         var i = Number(card.getAttribute('data-sv')), sv = S.servers[i];
         all('[data-f]', function (el) { el.onchange = el.oninput = function () { var k = el.getAttribute('data-f'); sv[k] = el.type === 'checkbox' ? el.checked : (el.type === 'number' ? Number(el.value) : el.value); if (k === 'provider' && el.tagName === 'SELECT') draw(status); }; }, card);
