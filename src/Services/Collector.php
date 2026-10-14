@@ -2,6 +2,8 @@
 
 namespace Modules\Custom\Catalog\Services;
 
+use Modules\Custom\Catalog\Support\AiSettings;
+
 use Illuminate\Support\Facades\DB;
 use Modules\Custom\Catalog\Support\Fields;
 use Modules\Custom\Catalog\Support\Schema;
@@ -782,8 +784,8 @@ final class Collector
             return null;
         }
         unset($j['args']);
-        if (($j['status'] ?? '') === 'run' && (int) ($j['at'] ?? 0) < time() - 420) {
-            return ['status' => 'fail', 'message' => 'AI 가 7분 안에 답하지 못했어요 (마지막: '.($j['stage'] ?? '?').') — 글을 줄이거나 🤖 AI 연결에서 더 빠른 모델을 위로 올려 주세요.'];
+        if (($j['status'] ?? '') === 'run' && (int) ($j['at'] ?? 0) < time() - 1000) {   // 0.2.22 로컬 서버는 모델마다 최소 300초라 7분 → 16분
+            return ['status' => 'fail', 'message' => 'AI 가 16분 안에 답하지 못했어요 (마지막: '.($j['stage'] ?? '?').') — 글을 줄이거나 🤖 AI 연결에서 더 빠른 모델을 위로 올려 주세요.'];
         }
 
         return $j;
@@ -797,7 +799,7 @@ final class Collector
             return;   // 이미 누가 맡음 · 끝남
         }
         $a = $a ?: (is_array($raw['args'] ?? null) ? $raw['args'] : []);
-        @set_time_limit(450);
+        @set_time_limit(960);
         @ignore_user_abort(true);
         $t0 = time();
         $stage = function (string $s) use ($id, $raw, $t0) {
@@ -825,6 +827,45 @@ final class Collector
         } finally {
             $this->ai->onTry = null;
         }
+    }
+
+    /** 0.2.22 🎨 실제 정리 시험 — 견본 제원 글 (Bambu Lab A1) */
+    public const SAMPLE_TEXT = "Bambu Lab A1 — 제원\n출력 크기 : 256 × 256 × 256 mm\n최대 출력 속도 : 500 mm/s\n최대 가속도 : 10000 mm/s²\n노즐 최고 온도 : 300 °C\n베드 최고 온도 : 100 °C\n"
+        ."자동 레벨링 : 지원\n구조 : 베드 슬링어\n지원 필라멘트 : PLA, PETG, TPU, PVA\n무게 : 8.3 kg\nWi-Fi : 지원\n";
+
+    /**
+     * 🎨 실제 정리 시험 (0.2.22) — 「AI 로 정리해 넣기」와 똑같이 견본 제원 글을 정리해 몇 칸을 채우는지 · 어느 모델이 · 몇 초
+     *
+     * @param  array<string, mixed>  $s  AiSettings::merge 결과 (화면 값 + 저장된 키)
+     * @return array{ok: bool, message: string, text: string}
+     */
+    public function sample(array $s): array
+    {
+        if (! AiSettings::order($s, false)) {
+            $m = '❌ 물어볼 서버 · 모델이 없어요 (켜짐 · API 키 · 모델 확인).';
+
+            return ['ok' => false, 'message' => $m, 'text' => $m];
+        }
+        $keep = AiClient::$settingsOverride;
+        AiClient::$settingsOverride = array_merge($s, ['enabled' => true]);
+        $t0 = microtime(true);
+        try {
+            $x = $this->extract('equipment', 'fdm', self::SAMPLE_TEXT, 'Bambu Lab', 'A1');
+        } catch (\Throwable $e) {
+            $m = '❌ 실제 정리 시험에 모두 답하지 못했어요 ('.round(microtime(true) - $t0, 1).'초) — '.mb_substr($e->getMessage(), 0, 300);
+
+            return ['ok' => false, 'message' => $m, 'text' => $m];
+        } finally {
+            AiClient::$settingsOverride = $keep;
+        }
+        $sec = round(microtime(true) - $t0, 1);
+        $n = count($x['values']);
+        $ok = $n >= 3;
+        $show = array_slice(array_map(static fn ($k, $v) => $k.'='.(is_array($v) ? implode('/', $v) : (is_bool($v) ? ($v ? 'O' : 'X') : $v)), array_keys($x['values']), $x['values']), 0, 6);
+        $m = ($ok ? '✅ ' : '⚠️ ').'「'.$x['from'].'」 '.$sec.'초 — 칸 '.$n.'개 · 그 밖의 제원 '.count($x['facts']).'개를 채웠어요'
+            .($ok ? '' : ' — 너무 적어요. 더 큰 모델을 써 보세요.');
+
+        return ['ok' => $ok, 'message' => $m, 'text' => $m.($show ? "\n· ".implode(' · ', $show) : '').($x['summary'] !== '' ? "\n· 요약: ".mb_substr($x['summary'], 0, 160) : '')];
     }
 
     /** HTML → 읽을 글 (스크립트 · 꾸밈 빼고, 표는 칸 사이 「 : 」) */

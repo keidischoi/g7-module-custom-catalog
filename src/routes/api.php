@@ -38,6 +38,8 @@ Route::middleware(['auth:sanctum', 'throttle:120,1'])->prefix('admin')->group(fu
     Route::post('ai/extract', [AdminController::class, 'aiExtract'])->middleware('throttle:20,1');   // 0.2.11 AI 로 정리해 넣기
     Route::get('ai/extract/{id}', [AdminController::class, 'aiExtractJob'])->where('id', '[a-f0-9]{16}');   // 0.2.13 진행 상태
     Route::post('ai/live', [AdminController::class, 'aiLive'])->middleware('throttle:10,1');
+    Route::post('ai/sample', [AdminController::class, 'aiSample'])->middleware('throttle:10,1');   // 0.2.22 🎨 실제 정리 시험
+    Route::get('ai/result/{id}', [AdminController::class, 'aiResult'])->where('id', '[a-f0-9]{20}');   // 0.2.22 뒤에서 하는 시험 결과
     Route::post('ai/test', [AdminController::class, 'aiTest'])->middleware('throttle:20,1');
     Route::post('ai/models', [AdminController::class, 'aiModels'])->middleware('throttle:20,1');
 });

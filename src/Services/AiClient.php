@@ -2,6 +2,7 @@
 
 namespace Modules\Custom\Catalog\Services;
 
+use Modules\Custom\Catalog\Support\AiLang;
 use Modules\Custom\Catalog\Support\AiProvider;
 use Modules\Custom\Catalog\Support\AiSettings;
 
@@ -87,7 +88,8 @@ final class AiClient
         throw new \RuntimeException(implode(' / ', array_slice($errors, 0, 3)) ?: '물어볼 서버가 없습니다.');
     }
 
-    public function test(array $server, string $model, int $timeout = 25): array
+    /** 0.2.22 뒤에서 돌림(AiJobs) — 25초 제한 없앰 · 로컬 서버는 최소 300초 */
+    public function test(array $server, string $model, int $timeout = 120): array
     {
         $model = trim($model) !== '' ? trim($model) : (AiSettings::enabledModels($server)[0] ?? AiSettings::MODELS[$server['provider']]);
         $base = ['model' => $model, 'url' => AiSettings::url($server), 'server' => (string) $server['name']];
@@ -96,7 +98,7 @@ final class AiClient
         }
         $t0 = microtime(true);
         try {
-            $answer = $this->ask($server, $model, [['role' => 'system', 'content' => self::TEST_SYSTEM], ['role' => 'user', 'content' => '「연결 성공」이라고만 답해 줘.']], 60, max(5, min(25, $timeout)), false);
+            $answer = $this->ask($server, $model, [['role' => 'system', 'content' => self::TEST_SYSTEM], ['role' => 'user', 'content' => '「연결 성공」이라고만 답해 줘.']], 60, max(5, $timeout), false);
         } catch (\Throwable $e) {
             return $base + ['ok' => false, 'message' => '❌ '.$e->getMessage(), 'answer' => '', 'sec' => round(microtime(true) - $t0, 1)];
         }
@@ -129,6 +131,21 @@ final class AiClient
     private function ask(array $server, string $model, array $messages, int $maxTokens, int $timeout, bool $json): string
     {
         $url = AiSettings::url($server);
+        $timeout = AiLang::timeout((string) $server['provider'], $url, $timeout);   // 0.2.22 로컬 서버는 최소 300초
+        $text = $this->askOnce($server, $url, $model, $messages, $maxTokens, $timeout, $json);
+        // 0.2.22 🇰🇷 중국어 · 일본어가 섞이면 한 번 더 — 그래도면 이 모델은 실패 (json() 이 다음 순위로)
+        if (AiLang::foreign($text)) {
+            $text = $this->askOnce($server, $url, $model, AiLang::retry($messages, $text), $maxTokens, $timeout, $json);
+            if (AiLang::foreign($text)) {
+                throw new \RuntimeException('한국어가 아닌 답 (중국어 · 일본어가 섞임) — '.$model.' 대신 다른 모델을 써 보세요.');
+            }
+        }
+
+        return $text;
+    }
+
+    private function askOnce(array $server, string $url, string $model, array $messages, int $maxTokens, int $timeout, bool $json): string
+    {
         $req = AiProvider::buildRequest($server['provider'], $url, (string) $server['api_key'], $model, $messages, $maxTokens, $json, [], $this->opt);
         try {
             $res = $this->send($req['url'], $req['headers'], $req['body'], $timeout);
