@@ -11,6 +11,7 @@ use Modules\Custom\Catalog\Services\Collector;
 use Modules\Custom\Catalog\Services\PhotoService;
 use Modules\Custom\Catalog\Support\Access;
 use Modules\Custom\Catalog\Support\AiConflict;
+use Modules\Custom\Catalog\Support\AiJobs;
 use Modules\Custom\Catalog\Support\AiSettings;
 use Modules\Custom\Catalog\Support\Settings;
 
@@ -246,7 +247,8 @@ class AdminController extends Controller
         if ($g = $this->guard($r)) {
             return $g;
         }
-        @set_time_limit(300);
+        @set_time_limit(960);   // 0.2.22 로컬 AI 서버는 모델마다 최소 300초
+        @ignore_user_abort(true);
         $task = in_array($r->input('task'), Collector::TASKS, true) ? (string) $r->input('task') : null;
         $res = $this->collector->tick(true, $task);
 
@@ -299,7 +301,7 @@ class AdminController extends Controller
         // 0.2.15 0.2.11 처럼 이 요청에서 바로 AI 에게 물음 (응답 뒤 작업 · 맡기는 0.2.13~14 방식은 뺌).
         //  결과는 화면이 준 일 번호 파일에도 남김 — 앞단(nginx)이 1분에 504 로 끊어도 PHP 는 끝까지 돌고, 화면이 그 번호로 받아 감
         $id = Collector::jobStart($args, (string) $r->input('job', ''));
-        @set_time_limit(450);
+        @set_time_limit(960);
         @ignore_user_abort(true);
         $this->collector->jobRun($id);
         $j = Collector::job($id) ?? [];
@@ -369,8 +371,18 @@ class AdminController extends Controller
         }
         $in = (array) $r->input('ai', []);
         unset($in['rev']);
-        @set_time_limit(60);
         $s = AiSettings::merge($in, AiSettings::load());
+        if ($r->boolean('async')) {   // 0.2.22 뒤에서 (+ 화면이 ai/result/{id} 로 2초마다)
+            return self::ok(AiJobs::start('live', (int) ($r->user()?->id ?? 0), fn () => $this->live($s, 900)));
+        }
+        @set_time_limit(60);
+
+        return self::ok($this->live($s, 25));
+    }
+
+    /** 순위대로 물어 처음 답한 곳에서 멈춤 — 모두 합쳐 $budget 초 */
+    private function live(array $s, int $budget): array
+    {
         $order = AiSettings::order($s);
         if (! $order) {
             return self::ok(['ok' => false, 'message' => '❌ 물어볼 서버 · 모델이 없어요 (켜짐 · API 키 · 모델 확인).', 'tries' => []]);
@@ -378,18 +390,42 @@ class AdminController extends Controller
         $t0 = microtime(true);
         $tries = [];
         foreach ($order as $o) {
-            $left = (int) floor(25 - (microtime(true) - $t0));
+            $left = (int) floor($budget - (microtime(true) - $t0));
             if ($left < 3) {
                 break;
             }
-            $res = $this->ai->test($o['server'], $o['model'], $left);
+            $res = $this->ai->test($o['server'], $o['model'], min($left, AiSettings::timeoutFor($o['server'], $s)));
             $tries[] = ['server' => $o['server']['name'], 'model' => $o['model'], 'ok' => $res['ok'], 'message' => $res['message'], 'sec' => $res['sec']];
             if ($res['ok']) {
-                return self::ok(['ok' => true, 'message' => '✅ 「'.$o['server']['name'].' · '.$o['model'].'」 가 '.$res['sec'].'초 만에 답해요.', 'tries' => $tries]);
+                return ['ok' => true, 'message' => '✅ 「'.$o['server']['name'].' · '.$o['model'].'」 가 '.$res['sec'].'초 만에 답해요.', 'tries' => $tries];
             }
         }
 
-        return self::ok(['ok' => false, 'message' => '❌ 모든 서버 · 모델이 답하지 못했어요.', 'tries' => $tries]);
+        return ['ok' => false, 'message' => '❌ 모든 서버 · 모델이 답하지 못했어요.', 'tries' => $tries];
+    }
+
+    /** 🎨 0.2.22 실제 정리 시험 — 견본 제원 글을 「AI 로 정리해 넣기」처럼 · 늘 뒤에서 */
+    public function aiSample(Request $r): JsonResponse
+    {
+        if ($g = $this->guard($r)) {
+            return $g;
+        }
+        $in = (array) $r->input('ai', []);
+        unset($in['rev']);
+        $s = AiSettings::merge($in, AiSettings::load());
+
+        return self::ok(AiJobs::start('sample', (int) ($r->user()?->id ?? 0), fn () => $this->collector->sample($s)));
+    }
+
+    /** 0.2.22 뒤에서 하는 AI 시험의 결과 — 시작한 사람만 */
+    public function aiResult(Request $r, string $id): JsonResponse
+    {
+        if ($g = $this->guard($r)) {
+            return $g;
+        }
+        $res = AiJobs::get($id, (int) ($r->user()?->id ?? 0));
+
+        return $res === null ? self::fail('결과가 없어요 (30분이 지났거나 서버가 다시 시작됨).', 404) : self::ok($res);
     }
 
     public function aiTest(Request $r): JsonResponse
@@ -401,9 +437,14 @@ class AdminController extends Controller
         if (! $sv) {
             return self::fail('시험할 서버가 없어요.');
         }
+        $model = (string) $r->input('model', '');
+        $wait = AiSettings::timeoutFor($sv, AiSettings::load());
+        if ($r->boolean('async')) {   // 0.2.22
+            return self::ok(AiJobs::start('test', (int) ($r->user()?->id ?? 0), fn () => $this->ai->test($sv, $model, $wait)));
+        }
         @set_time_limit(60);
 
-        return self::ok($this->ai->test($sv, (string) $r->input('model', ''), AiSettings::timeoutFor($sv, AiSettings::load())));
+        return self::ok($this->ai->test($sv, $model, min(25, $wait)));
     }
 
     public function aiModels(Request $r): JsonResponse

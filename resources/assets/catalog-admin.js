@@ -1,8 +1,30 @@
-/*! custom-catalog 0.2.21 — 관리자 (항목 · 제안함 · 자동 수집 · AI 연결 · 설정) */
+/*! custom-catalog 0.2.22 — 관리자 (항목 · 제안함 · 자동 수집 · AI 연결 · 설정) */
 (function () {
   'use strict';
 
   /* ⏹ AI 시험 중지 — 이 시험은 요청 한 번(서버가 순서대로 물음)이라 서버 쪽은 끝까지 돌 수 있지만, 화면은 그만 기다리고 결과를 받지 않아요 */
+  /* 0.2.22 AI 시험을 뒤에서 — POST {…, async: 1} → {id} → 2초마다 GET /admin/ai/result/{id}
+   * (작은 CPU 로컬 서버는 답이 1분을 넘기도 해 한 번에 기다리면 PHP · 프록시(60초)에 끊김) · 중지(st.off)면 그만 */
+  function aiRun(api, path, body, out, st, label) {
+    var t0 = Date.now();
+    body.async = 1;
+    return api('POST', path, body).then(function (d) {
+      if (!(d && d.id && d.state === 'run')) return d;   // 예전 서버 (바로 답)
+      return new Promise(function (res, rej) {
+        function step() {
+          if (st.off) return;
+          var sec = Math.round((Date.now() - t0) / 1000);
+          if (sec > 17 * 60) { rej(new Error('17분 넘게 답이 없어요 — 더 빠른 모델로 해 보세요.')); return; }
+          out.textContent = '⏳ ' + label + ' ' + sec + '초';
+          api('GET', '/admin/ai/result/' + d.id).then(function (r) {
+            if (r && r.state === 'done') { if (r.ok) res(r.data || {}); else rej(new Error(r.message || '답하지 못했어요.')); }
+            else setTimeout(step, 2000);
+          }).catch(rej);
+        }
+        setTimeout(step, 1500);
+      });
+    });
+  }
   function stopWait(out) {
     var st = { off: false }, b = document.createElement('button');
     b.type = 'button'; b.className = 'cct-btn cct-btn--s cct-btn--d'; b.textContent = '⏹ 중지'; b.style.marginLeft = '6px';
@@ -215,6 +237,8 @@
         var cl = body.querySelector('[data-key-clear]'); if (cl && cl.checked) out.clear_brave_key = true;
         return api('POST', '/admin/settings', { settings: out });
       };
+      body.querySelector('[data-sample]').onclick = function () { var out = body.querySelector('[data-live-out]'); out.textContent = '⏳ 견본 제원 글 정리 중…';   // 0.2.22
+        var st = stopWait(out); aiRun(api, '/admin/ai/sample', { ai: S }, out, st, '견본 제원 글 정리 중…').then(function (x) { if (st.cut()) return; out.textContent = x.text || x.message; }).catch(function (e) { if (st.cut()) return; out.textContent = '❌ ' + e.message; }); };
       body.querySelector('[data-save]').onclick = function () { var b = this; b.disabled = true; save().then(function (r) { C().toast('저장했어요.'); draw(r); }).catch(function (e) { b.disabled = false; C().toast(e.message); }); };
       all('[data-run]', function (b) { b.onclick = function () {
         var out = body.querySelector('[data-run-out]'); all('[data-run]', function (x) { x.disabled = true; });
@@ -254,7 +278,7 @@
             '<div class="cct-bar" style="margin:6px 0 0"><input class="cct-in" style="max-width:220px;height:34px" data-madd placeholder="모델 이름 더하기"><button type="button" class="cct-btn cct-btn--s" data-madd-btn>➕</button><button type="button" class="cct-btn cct-btn--s" data-find>🔎 모델 찾기</button></div><div class="cct-opts" style="margin-top:6px" data-found></div><div class="cct-out" data-out></div></div></div></div>';
         }).join('') +
         '<div class="cct-bar" style="margin-top:12px"><button type="button" class="cct-btn cct-btn--s" data-sadd>➕ 서버 더하기</button></div></div>' +
-        '<div class="cct-bar"><span class="cct-out" style="flex:1;margin:0" data-live-out></span><button type="button" class="cct-btn" data-live>🧪 실제 연결 테스트</button><button type="button" class="cct-btn cct-btn--p" data-save>저장</button></div>';
+        '<div class="cct-bar"><span class="cct-out" style="flex:1;margin:0" data-live-out></span><button type="button" class="cct-btn" data-live>🧪 실제 연결 테스트</button><button type="button" class="cct-btn" data-sample title="견본 제원 글(Bambu Lab A1)을 「AI 로 정리해 넣기」처럼 정리해 칸을 몇 개 채우는지 봅니다">🎨 실제 정리 시험</button><button type="button" class="cct-btn cct-btn--p" data-save>저장</button></div>';
       var all = function (s, fn, base) { Array.prototype.forEach.call((base || body).querySelectorAll(s), fn); };
       var imp = body.querySelector('[data-import]');
       if (imp) imp.onclick = function () { if (!confirm('구인구직의 AI 연결 설정(서버 · API 키 · 모델)으로 카탈로그 AI 설정을 바꿀까요?')) return; imp.disabled = true;
@@ -277,7 +301,7 @@
           r.querySelector('[data-mdown]').onclick = function () { mv(sv.models, j, j + 1); };
           r.querySelector('[data-mrm]').onclick = function () { sv.models.splice(j, 1); draw(status); };
           r.querySelector('[data-mtest]').onclick = function () { var out = card.querySelector('[data-out]'); out.textContent = '⏳ ' + sv.models[j].name + ' 시험 중…';
-            var st = stopWait(out); api('POST', '/admin/ai/test', { server: serverFrom(i), model: sv.models[j].name }).then(function (x) { if (st.cut()) return; out.textContent = x.message + (x.answer ? '\n답: ' + x.answer : ''); }).catch(function (e) { if (st.cut()) return; out.textContent = '❌ ' + e.message; }); };
+            var st = stopWait(out); aiRun(api, '/admin/ai/test', { server: serverFrom(i), model: sv.models[j].name }, out, st, sv.models[j].name + ' 시험 중…').then(function (x) { if (st.cut()) return; out.textContent = x.message + (x.answer ? '\n답: ' + x.answer : ''); }).catch(function (e) { if (st.cut()) return; out.textContent = '❌ ' + e.message; }); };
         }, card);
         var addModel = function (name) { name = String(name || '').trim(); if (!name || sv.models.some(function (m) { return m.name === name; })) return; sv.models.push({ name: name, enabled: true }); draw(status); };
         card.querySelector('[data-madd-btn]').onclick = function () { addModel(card.querySelector('[data-madd]').value); };
@@ -291,8 +315,8 @@
         };
       });
       body.querySelector('[data-sadd]').onclick = function () { var p = PROV.filter(function (x) { return x.value === 'ollama'; })[0] || PROV[0] || { value: 'ollama', name: 'Ollama' }; S.servers.push({ id: '', name: p.name + ' ' + (S.servers.length + 1), enabled: true, provider: p.value, url: '', api_key: '', models: [], timeout: 0 }); draw(status); };
-      body.querySelector('[data-live]').onclick = function () { var out = body.querySelector('[data-live-out]'); out.textContent = '⏳ 순서대로 물어보는 중… (최대 25초)';
-        var st = stopWait(out); api('POST', '/admin/ai/live', { ai: S }).then(function (x) { if (st.cut()) return; out.textContent = x.message + (x.tries || []).map(function (t) { return '\n· ' + t.server + ' · ' + t.model + ' — ' + (t.ok ? t.sec + '초' : String(t.message).replace(/^❌\s*/, '')); }).join(''); }).catch(function (e) { if (st.cut()) return; out.textContent = '❌ ' + e.message; }); };
+      body.querySelector('[data-live]').onclick = function () { var out = body.querySelector('[data-live-out]'); out.textContent = '⏳ 순서대로 물어보는 중…';
+        var st = stopWait(out); aiRun(api, '/admin/ai/live', { ai: S }, out, st, '순서대로 물어보는 중…').then(function (x) { if (st.cut()) return; out.textContent = x.message + (x.tries || []).map(function (t) { return '\n· ' + t.server + ' · ' + t.model + ' — ' + (t.ok ? t.sec + '초' : String(t.message).replace(/^❌\s*/, '')); }).join(''); }).catch(function (e) { if (st.cut()) return; out.textContent = '❌ ' + e.message; }); };
       body.querySelector('[data-save]').onclick = function () { var b = this; b.disabled = true;
         api('POST', '/admin/ai', { ai: S }).then(function () { C().toast('저장했어요.'); load(); }).catch(function (e) { b.disabled = false; if (e.status === 409) load('⚠ ' + e.message); else C().toast(e.message); }); };
     };

@@ -531,9 +531,9 @@ namespace {
     $col->jobRun($jid3);
     $col->jobRun($jid3);
     t(Collector::job($jid3)['status'] === 'done', '끝냄 (두 번 불러도 한 번만)');
-    $f3 = ['status' => 'run', 'at' => time() - 500, 'started' => time() - 490, 'stage' => '🤖 PC · big 에게 묻는 중'];
+    $f3 = ['status' => 'run', 'at' => time() - 1100, 'started' => time() - 1090, 'stage' => '🤖 PC · big 에게 묻는 중'];
     file_put_contents(Settings::file('extract-'.$jid3.'.json'), json_encode($f3, JSON_UNESCAPED_UNICODE));
-    t(str_contains(Collector::job($jid3)['message'], 'PC · big'), '7분 넘으면 마지막 단계를 알려 줌');
+    t(str_contains(Collector::job($jid3)['message'], 'PC · big'), '16분 넘으면 마지막 단계를 알려 줌 (0.2.22 로컬 300초)');
     $ai2 = new AiClient();
     $seen = [];
     $ai2->onTry = function ($sv, $m) use (&$seen) { $seen[] = $sv.'/'.$m; };
@@ -553,6 +553,28 @@ namespace {
     (new AiClient())->json('x');
     $b1 = end($bodies);
     t($b1['options']['temperature'] === 0.4 && $b1['options']['num_predict'] === 4000 && $b1['options']['num_ctx'] === 8192, '다른 물음은 설정 그대로 (온도 0.4) · 문맥만 맞춤');
+    echo "■ 0.2.22 로컬 300초 · 한국어로만 · keep_alive 30분 · 🎨 실제 정리 시험\n";
+    $seen22 = [];
+    AiClient::$sender = function (string $url, array $h, array $body, int $timeout) use (&$seen22) {
+        $seen22[] = [parse_url($url, PHP_URL_HOST), $timeout, $body['keep_alive'] ?? '', count($body['messages'])];
+
+        return ['message' => ['content' => str_contains($url, '192.168.0.216') ? '{"summary":"之間之間之間"}' : '{"kind":"fdm","summary":"베드 슬링어 프린터예요.","values":{"build_x_mm":256,"build_y_mm":256,"build_z_mm":256,"speed_max":500,"nozzle_temp_max":300},"facts":{"무게":"8.3 kg"}}']];
+    };
+    $s22 = ['enabled' => false, 'max_tokens' => 4000, 'timeout' => 120, 'servers' => [
+        ['id' => 'a', 'name' => '집', 'enabled' => true, 'provider' => 'ollama', 'url' => 'http://192.168.0.216:11434', 'models' => ['qwen']],
+        ['id' => 'b', 'name' => '둘째', 'enabled' => true, 'provider' => 'ollama', 'url' => 'http://192.168.0.217:11434', 'models' => ['gemma']]]];
+    $keep22 = AiClient::$settingsOverride;
+    $sm22 = $col->sample(\Modules\Custom\Catalog\Support\AiSettings::normalize($s22));
+    t($seen22 === [['192.168.0.216', 300, '30m', 2], ['192.168.0.216', 300, '30m', 4], ['192.168.0.217', 300, '30m', 2]], '섞이면 같은 모델에 한 번 더 → 다음 순위 · 로컬 300초 · keep_alive 30m');
+    t($sm22['ok'] === true && str_contains($sm22['message'], '칸 5개') && str_contains($sm22['message'], '둘째 · gemma') && str_contains($sm22['text'], 'build_x_mm=256') && AiClient::$settingsOverride === $keep22, '실제 정리 시험: 꺼져 있어도 화면 값으로 · 채운 칸 · 모델 · 설정 되돌림');
+    AiClient::$sender = fn () => ['message' => ['content' => '{"values":{}}']];
+    t(str_contains($col->sample(\Modules\Custom\Catalog\Support\AiSettings::normalize($s22))['message'], '너무 적어요'), '실제 정리 시험: 칸이 적으면 알림');
+    $t22 = (new AiClient())->test(\Modules\Custom\Catalog\Support\AiSettings::normalize(['servers' => [['id' => 'f', 'provider' => 'ollama', 'url' => 'https://far.example', 'models' => ['m']]]])['servers'][0], 'm', 200);
+    $root22 = dirname(__DIR__);
+    $js22 = (string) file_get_contents($root22.'/resources/assets/catalog-admin.js');
+    $ctl22 = (string) file_get_contents($root22.'/src/Http/Controllers/AdminController.php');
+    t(str_contains($js22, "aiRun(api, '/admin/ai/test'") && str_contains($js22, "aiRun(api, '/admin/ai/live'") && str_contains($js22, "aiRun(api, '/admin/ai/sample'") && str_contains($js22, "'/admin/ai/result/' + d.id")
+        && substr_count($ctl22, "\$r->boolean('async')") === 2 && str_contains((string) file_get_contents($root22.'/src/routes/api.php'), "Route::get('ai/result/{id}'"), '시험을 뒤에서 (화면 · 길)');
     array_map('unlink', glob($tmp.'/img/*') ?: []);
     array_map('unlink', glob($tmp.'/*.*') ?: []);
     echo "\n통과 {$pass} · 실패 {$fail}\n";
