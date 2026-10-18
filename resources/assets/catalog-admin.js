@@ -1,4 +1,4 @@
-/*! custom-catalog 0.2.22 — 관리자 (항목 · 제안함 · 자동 수집 · AI 연결 · 설정) */
+/*! custom-catalog 0.2.23 — 관리자 (항목 · 제안함 · 자동 수집 · AI 연결 · 설정) */
 (function () {
   'use strict';
 
@@ -274,7 +274,7 @@
             '<label>API 키<small>' + (sv.key_set ? '저장됨 · ' + esc(sv.key_hint) + ' (비워 두면 그대로)' : (sv.provider === 'ollama' ? 'Ollama 는 없어도 돼요' : '없음')) + '</small></label><div><input class="cct-in" type="password" autocomplete="new-password" data-f="api_key" placeholder="' + (sv.key_set ? '바꿀 때만 입력' : '키 입력') + '">' + (sv.key_set ? ' <label style="font-size:12.5px"><input type="checkbox" data-f="clear_key"> 키 지우기</label>' : '') + '</div>' +
             '<label>이 서버 기다리는 시간<small>0 = 위 기본 값</small></label><span class="cct-num"><input class="cct-in" type="number" data-f="timeout" value="' + (sv.timeout || 0) + '"> 초</span>' +
             '<label>모델 순위<small>위에서부터 물어봐요 · 기본 ' + esc(pv.model) + '</small></label><div><div data-models>' + sv.models.map(function (md, j) {
-              return '<div class="cct-md" data-md="' + j + '"><input type="checkbox" data-me' + (md.enabled ? ' checked' : '') + ' title="켜기"><code>' + esc(md.name) + '</code><button type="button" class="cct-btn cct-btn--s" data-mtest>시험</button><button type="button" class="cct-btn cct-btn--s" data-mup>▲</button><button type="button" class="cct-btn cct-btn--s" data-mdown>▼</button><button type="button" class="cct-btn cct-btn--s cct-btn--d" data-mrm>✕</button></div>'; }).join('') + '</div>' +
+              return '<div class="cct-md" data-md="' + j + '"><input type="checkbox" data-me' + (md.enabled ? ' checked' : '') + ' title="켜기"><code>' + esc(md.name) + '</code><button type="button" class="cct-btn cct-btn--s" data-mtest title="서버에 있나 · 메모리에 있나 (몇 초 · AI 에게 묻지 않음)">🔌 확인</button><button type="button" class="cct-btn cct-btn--s" data-mup>▲</button><button type="button" class="cct-btn cct-btn--s" data-mdown>▼</button><button type="button" class="cct-btn cct-btn--s cct-btn--d" data-mrm>✕</button></div>'; }).join('') + '</div>' +
             '<div class="cct-bar" style="margin:6px 0 0"><input class="cct-in" style="max-width:220px;height:34px" data-madd placeholder="모델 이름 더하기"><button type="button" class="cct-btn cct-btn--s" data-madd-btn>➕</button><button type="button" class="cct-btn cct-btn--s" data-find>🔎 모델 찾기</button></div><div class="cct-opts" style="margin-top:6px" data-found></div><div class="cct-out" data-out></div></div></div></div>';
         }).join('') +
         '<div class="cct-bar" style="margin-top:12px"><button type="button" class="cct-btn cct-btn--s" data-sadd>➕ 서버 더하기</button></div></div>' +
@@ -300,7 +300,7 @@
           r.querySelector('[data-mup]').onclick = function () { mv(sv.models, j, j - 1); };
           r.querySelector('[data-mdown]').onclick = function () { mv(sv.models, j, j + 1); };
           r.querySelector('[data-mrm]').onclick = function () { sv.models.splice(j, 1); draw(status); };
-          r.querySelector('[data-mtest]').onclick = function () { var out = card.querySelector('[data-out]'); out.textContent = '⏳ ' + sv.models[j].name + ' 시험 중…';
+          r.querySelector('[data-mtest]').onclick = function () { var out = card.querySelector('[data-out]'); out.textContent = '⏳ ' + sv.models[j].name + ' 확인 중…';
             var st = stopWait(out); aiRun(api, '/admin/ai/test', { server: serverFrom(i), model: sv.models[j].name }, out, st, sv.models[j].name + ' 시험 중…').then(function (x) { if (st.cut()) return; out.textContent = x.message + (x.answer ? '\n답: ' + x.answer : ''); }).catch(function (e) { if (st.cut()) return; out.textContent = '❌ ' + e.message; }); };
         }, card);
         var addModel = function (name) { name = String(name || '').trim(); if (!name || sv.models.some(function (m) { return m.name === name; })) return; sv.models.push({ name: name, enabled: true }); draw(status); };

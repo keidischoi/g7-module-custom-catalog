@@ -438,6 +438,9 @@ class AdminController extends Controller
             return self::fail('시험할 서버가 없어요.');
         }
         $model = (string) $r->input('model', '');
+        if (! $r->boolean('real')) {   // 0.2.23 🔌 모델마다 연결 시험은 바로 — AI 에게 묻지 않음 (서버 · 모델 · 메모리만)
+            return self::ok($this->ai->probe($sv, $model));
+        }
         $wait = AiSettings::timeoutFor($sv, AiSettings::load());
         if ($r->boolean('async')) {   // 0.2.22
             return self::ok(AiJobs::start('test', (int) ($r->user()?->id ?? 0), fn () => $this->ai->test($sv, $model, $wait)));

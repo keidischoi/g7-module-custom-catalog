@@ -107,6 +107,45 @@ final class AiClient
         return $base + ['ok' => true, 'message' => '✅ '.$model.' — '.$sec.'초 만에 답했어요.', 'answer' => mb_substr($answer, 0, 80), 'sec' => $sec];
     }
 
+    /**
+     * 0.2.23 🔌 연결 확인 — AI 에게 글을 쓰게 하지 않고 몇 초 안에: 서버가 답하나 · 모델이 있나 · (Ollama) 지금 메모리에 올라와 있나.
+     * (test() 는 「연결 성공」 이라고 답하게 해서 CPU 서버에서 1~2분 — 실제로 묻는 건 🧪 실제 연결 테스트)
+     *
+     * @param  array<string, mixed>  $server
+     * @return array{ok: bool, message: string, answer: string, sec: float, model: string, url: string, server: string}
+     */
+    public function probe(array $server, string $model): array
+    {
+        $model = trim($model) !== '' ? trim($model) : (AiSettings::enabledModels($server)[0] ?? AiSettings::MODELS[$server['provider']]);
+        $url = AiSettings::url($server);
+        $base = ['model' => $model, 'url' => $url, 'server' => (string) $server['name'], 'answer' => ''];
+        if ($server['provider'] !== 'ollama' && $server['api_key'] === '') {
+            return $base + ['ok' => false, 'message' => '❌ API 키가 없습니다.', 'sec' => 0.0];
+        }
+        $t0 = microtime(true);
+        $r = $this->models($server);
+        $sec = round(microtime(true) - $t0, 1);
+        if (! $r['models']) {
+            return $base + ['ok' => false, 'message' => '❌ 서버가 모델 목록을 주지 않아요 — '.$r['message'], 'sec' => $sec];
+        }
+        $has = static fn (array $in) => in_array($model, $in, true) || in_array($model.':latest', $in, true) || in_array((string) preg_replace('/:latest$/', '', $model), $in, true);
+        if (! $has($r['models'])) {
+            return $base + ['ok' => false, 'message' => '⚠️ 서버는 답하는데 「'.$model.'」 모델이 없어요 — 모델 찾기로 골라 주세요.', 'sec' => $sec];
+        }
+        $mem = '';
+        if ($server['provider'] === 'ollama') {
+            try {
+                $ps = is_callable(self::$getter) ? (array) (self::$getter)(rtrim($url, '/').'/api/ps', [])
+                    : (array) \Illuminate\Support\Facades\Http::acceptJson()->connectTimeout(5)->timeout(8)->get(rtrim($url, '/').'/api/ps')->json();
+                $loaded = array_map(static fn ($m) => (string) ($m['name'] ?? ''), (array) ($ps['models'] ?? []));
+                $mem = $has($loaded) ? ' · 💾 메모리에 올라와 있어요 (빨리 답해요)' : ' · 💤 메모리에 없어요 (처음 물으면 올리느라 1~2분)';
+            } catch (\Throwable) {
+            }
+        }
+
+        return $base + ['ok' => true, 'message' => '✅ '.$model.' — 서버에 있어요 ('.$sec.'초)'.$mem, 'sec' => $sec];
+    }
+
     public function models(array $server): array
     {
         $req = AiProvider::modelsRequest($server['provider'], AiSettings::url($server), (string) $server['api_key']);
