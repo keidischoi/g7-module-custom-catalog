@@ -25,6 +25,20 @@ final class Fields
 
     public const MATERIAL_KINDS = ['fdm' => ['필라멘트', '🧵'], 'resin' => ['레진', '🧪'], 'powder' => ['분말 · 금속', '⚗️']];
 
+    /** 0.3.0 🔩 부품 · 업그레이드 종류 */
+    public const PART_KINDS = [
+        'nozzle' => ['노즐', '🔩'], 'hotend' => ['핫엔드', '🔥'], 'extruder' => ['익스트루더', '⚙️'], 'bed' => ['베드 판', '🛏️'],
+        'motion' => ['벨트 · 레일 · 베어링', '〰️'], 'cooling' => ['팬 · 냉각', '🌀'], 'electronics' => ['보드 · 센서 · 화면', '🔌'],
+        'enclosure' => ['챔버 · 필터', '📦'], 'resin_part' => ['레진 통 · 필름 · LCD', '🧪'], 'multi' => ['다색 장치 · 스풀', '🌈'],
+        'tool' => ['공구 · 소모품', '🧰'], 'other' => ['기타 부품', '🧩'],
+    ];
+
+    /** @return array<string, array{0: string, 1: string}> 그 표의 종류 */
+    public static function kindsOf(string $type): array
+    {
+        return match ($type) { 'materials' => self::MATERIAL_KINDS, 'parts' => self::PART_KINDS, default => self::EQUIPMENT_KINDS };
+    }
+
     /** 화면 탭 [키, 이름, 이모지, 표(equipment|materials), 종류들] */
     public const TABS = [
         ['fdm', 'FDM 프린터', '🖨️', 'equipment', ['fdm']],
@@ -35,6 +49,7 @@ final class Fields
         ['filament', '필라멘트', '🧵', 'materials', ['fdm']],
         ['resin', '레진', '🧪', 'materials', ['resin']],
         ['powder', '분말 · 금속', '⚗️', 'materials', ['powder']],
+        ['parts', '부품 · 업그레이드', '🔩', 'parts', ['nozzle', 'hotend', 'extruder', 'bed', 'motion', 'cooling', 'electronics', 'enclosure', 'resin_part', 'multi', 'tool', 'other']],   // 0.3.0
     ];
 
     private const PRINTERS = ['fdm', 'sla', 'dlp', 'sls', 'mjf', 'metal'];
@@ -199,10 +214,49 @@ final class Fields
         ];
     }
 
+    /** @return list<array{0: string, 1: list<array<int, mixed>>}> 0.3.0 🔩 부품 · 업그레이드 */
+    public static function parts(): array
+    {
+        $N = ['nozzle', 'hotend'];
+
+        return [
+            ['기본', [
+                ['part_no', '부품 번호', 'text', '', [], null, 'spec', '예: FAH004 · SKU'],
+                ['genuine', '정품 여부', 'sel', '', [], ['정품', '호환품', '자작 · 3D 출력']],
+                ['sale', '판매 상태', 'sel', '', [], ['판매 중', '단종', '출시 예정']],
+                ['price_krw', '참고 가격', 'num', '원', []],
+                ['origin', '제조국', 'text', '', []],
+            ]],
+            ['규격', [
+                ['nozzle_size', '노즐 지름', 'tags', 'mm', $N, ['0.2', '0.25', '0.4', '0.6', '0.8', '1.0']],
+                ['nozzle_material', '노즐 재질', 'sel', '', $N, ['황동', '경화강', '스테인리스', '구리 합금', '루비', '텅스텐 카바이드']],
+                ['high_flow', '고유량', 'bool', '', $N],
+                ['max_temp', '최고 온도', 'num', '°C', ['nozzle', 'hotend', 'bed', 'cooling', 'enclosure']],
+                ['thread', '나사 · 규격', 'text', '', ['nozzle', 'hotend', 'motion'], null, 'spec', '예: M6 · V6 호환 · GT2 6 mm'],
+                ['filament_dia', '필라멘트 직경', 'sel', 'mm', ['nozzle', 'hotend', 'extruder', 'multi'], ['1.75', '2.85']],
+                ['abrasive_ok', '거친 소재(CF · GF)', 'bool', '', ['nozzle', 'hotend', 'extruder']],
+                ['gear_ratio', '기어비', 'text', '', ['extruder'], null, 'spec', '예: 3:1'],
+                ['bed_surface', '베드 표면', 'sel', '', ['bed'], ['텍스처 PEI', '매끈 PEI', '쿨 플레이트', '엔지니어링 플레이트', '유리', 'G10 · 가로라이트', '카본', '기타']],
+                ['bed_size', '판 크기', 'text', '', ['bed', 'resin_part'], null, 'spec', '예: 257 × 257 mm'],
+                ['magnetic', '자석식', 'bool', '', ['bed']],
+                ['double_sided', '양면', 'bool', '', ['bed']],
+                ['slots', '칸 · 색 수', 'num', '개', ['multi']],
+                ['voltage', '전압', 'text', '', ['cooling', 'electronics', 'enclosure', 'hotend'], null, 'spec', '예: 24 V'],
+                ['size', '크기', 'text', '', [], null, 'spec', '예: 40 × 40 × 10 mm'],
+                ['weight_g', '무게', 'num', 'g', []],
+            ]],
+            ['설치', [
+                ['install', '설치', 'sel', '', [], ['그대로 끼움', '공구 필요', '펌웨어 · 설정 바꿈', '개조 필요']],
+                ['install_min', '설치 시간', 'num', '분', []],
+                ['firmware_note', '펌웨어 · 설정', 'text', '', [], null, 'spec', '예: 슬라이서 노즐 설정을 경화강으로'],
+            ]],
+        ];
+    }
+
     /** @return list<array{0: string, 1: list<array<int, mixed>>}> */
     public static function of(string $type): array
     {
-        return $type === 'materials' ? self::materials() : self::equipment();
+        return match ($type) { 'materials' => self::materials(), 'parts' => self::parts(), default => self::equipment() };
     }
 
     /** 칸 하나를 화면용 꼴로 @param array<int, mixed> $f */
@@ -236,21 +290,21 @@ final class Fields
 
         return [
             'tabs' => array_map(static fn ($t) => ['key' => $t[0], 'label' => $t[1], 'icon' => $t[2], 'type' => $t[3], 'kinds' => $t[4]], self::TABS),
-            'kinds' => ['equipment' => $kinds(self::EQUIPMENT_KINDS), 'materials' => $kinds(self::MATERIAL_KINDS)],
-            'fields' => ['equipment' => $groups('equipment'), 'materials' => $groups('materials')],
+            'kinds' => ['equipment' => $kinds(self::EQUIPMENT_KINDS), 'materials' => $kinds(self::MATERIAL_KINDS), 'parts' => $kinds(self::PART_KINDS)],
+            'fields' => ['equipment' => $groups('equipment'), 'materials' => $groups('materials'), 'parts' => $groups('parts')],
         ];
     }
 
     public static function kindLabel(string $type, string $kind): string
     {
-        $l = $type === 'materials' ? self::MATERIAL_KINDS : self::EQUIPMENT_KINDS;
+        $l = self::kindsOf($type);
 
         return $l[$kind][0] ?? $kind;
     }
 
     public static function validKind(string $type, string $kind): bool
     {
-        return isset(($type === 'materials' ? self::MATERIAL_KINDS : self::EQUIPMENT_KINDS)[$kind]);
+        return isset(self::kindsOf($type)[$kind]);
     }
 
     /** 값 정리 — 꼴에 맞지 않으면 null @param array<string, mixed> $d */

@@ -1,4 +1,4 @@
-/*! custom-catalog 0.2.23 — 관리자 (항목 · 제안함 · 자동 수집 · AI 연결 · 설정) */
+/*! custom-catalog 0.3.0 — 관리자 (항목 · 제안함 · 🔩 부품 확인 · 자동 수집 · AI 연결 · 설정) */
 (function () {
   'use strict';
 
@@ -62,7 +62,7 @@
     }
   }
   if (window.__cctAdmin) { try { window.__cctAdmin(); } catch (e) {} return; }
-  var PAGES = [['items', '📦 항목'], ['suggest', '💡 제안함'], ['auto', '🌙 자동 수집'], ['ai', '🤖 AI 연결'], ['settings', '⚙️ 설정']];
+  var PAGES = [['items', '📦 항목'], ['suggest', '💡 제안함'], ['parts', '🔩 부품 확인'], ['auto', '🌙 자동 수집'], ['ai', '🤖 AI 연결'], ['settings', '⚙️ 설정']];
   function C() { return window.CCT; }
   function need(cb) {
     if (window.CCT) return cb();
@@ -131,6 +131,46 @@
   }
 
   /* ───────── 제안함 ───────── */
+  /* ───────── 0.3.0 🔩 부품 확인 — 회원이 알려 준 「맞는 프린터」 · 신고된 구매처 · 설정 ───────── */
+  function partsPage(root) {
+    var esc = C().esc, api = C().api, body = frame(root, 'parts');
+    var draw = function () {
+      Promise.all([api('GET', '/admin/parts/pending'), api('GET', '/admin/settings')]).then(function (rr) {
+        var d = rr[0], S = (rr[1] && rr[1].settings) || {};
+        body.innerHTML = '<div class="cct-panel"><h3>⚙️ 부품 · 업그레이드 설정</h3>' +
+          '<label class="cct-row" style="cursor:pointer"><div><b>회원 부품 제안 받기</b><small>로그인한 회원이 「💡 부품 제안」으로 새 부품을 알려 줘요 — 💡 제안함에 쌓이고, 반영하면 고른 프린터가 맞는 프린터로 연결돼요</small></div><input type="checkbox" data-pm' + (S.parts_member !== false ? ' checked' : '') + '></label>' +
+          '<div class="cct-row"><div><b>회원이 알려 준 연결이 보이는 표 수</b><small>관리자가 확인하지 않아도 맞음 · 개조 · 안 맞음 표가 이만큼 쌓이면 보여요 (결과는 그 표대로 · ✔ 실사용 표는 두 배)</small></div><span class="cct-num"><input class="cct-in" type="number" min="1" max="50" data-pv value="' + (S.parts_auto_votes || 3) + '"> 표</span></div>' +
+          '<div style="margin-top:8px"><button type="button" class="cct-btn cct-btn--p cct-btn--s" data-psave>저장</button></div></div>' +
+          '<div class="cct-panel"><h3>🕓 확인 기다리는 「맞는 프린터」 <small>' + d.fits.length + '</small></h3><p>회원이 「이 부품이 이 프린터에 맞아요」라고 알려 준 것이에요. ✔ 확인하면 바로 보이고, 상태를 직접 정할 수도 있어요.</p>' +
+          (d.fits.length ? d.fits.map(function (f) {
+            return '<div class="cct-row" data-f="' + f.id + '"><div><b><a href="/catalog/' + esc(f.part.key) + '" target="_blank" rel="noopener">' + esc(f.part.title) + '</a> → ' + esc(f.printer.title) + '</b><small>맞음 ' + f.votes.fit + ' · 개조 ' + f.votes.mod + ' · 안 맞음 ' + f.votes.no + ' · ' + esc(f.at) + '</small></div>' +
+              '<span style="display:flex;gap:6px;flex-wrap:wrap"><button type="button" class="cct-btn cct-btn--s cct-btn--p" data-a="approve">✔ 확인</button><button type="button" class="cct-btn cct-btn--s" data-a="mod">🛠️ 개조 필요</button><button type="button" class="cct-btn cct-btn--s" data-a="no">⛔ 안 맞음</button><button type="button" class="cct-btn cct-btn--s cct-btn--d" data-a="delete">✕ 지우기</button></span></div>';
+          }).join('') : '<p>기다리는 것이 없어요 👍</p>') + '</div>' +
+          '<div class="cct-panel"><h3>🚩 신고된 구매처 <small>' + d.links.length + '</small></h3><p>3번 신고되면 저절로 숨겨져요. 괜찮으면 「보이기」(신고 수도 지움).</p>' +
+          (d.links.length ? d.links.map(function (l) {
+            return '<div class="cct-row" data-l="' + l.id + '"><div><b><a href="/catalog/' + esc(l.part_key) + '#buy" target="_blank" rel="noopener">' + esc(l.label || l.url) + '</a></b><small>🚩 ' + l.reports + ' · ' + (l.status === 'visible' ? '보임' : '🙈 숨김') + ' · <a href="' + esc(l.url) + '" target="_blank" rel="noopener nofollow">' + esc(l.url) + '</a></small></div>' +
+              '<span style="display:flex;gap:6px"><button type="button" class="cct-btn cct-btn--s" data-la="show">보이기</button><button type="button" class="cct-btn cct-btn--s" data-la="hide">숨기기</button><button type="button" class="cct-btn cct-btn--s cct-btn--d" data-la="delete">✕</button></span></div>';
+          }).join('') : '<p>신고된 것이 없어요.</p>') + '</div>';
+        var t = function (m) { C().toast(m); };
+        body.querySelector('[data-psave]').onclick = function () {
+          api('POST', '/admin/settings', { settings: { parts_member: body.querySelector('[data-pm]').checked, parts_auto_votes: +body.querySelector('[data-pv]').value } }).then(function () { t('저장했어요.'); }).catch(function (e) { t(e.message); });
+        };
+        Array.prototype.forEach.call(body.querySelectorAll('[data-f]'), function (row) {
+          Array.prototype.forEach.call(row.querySelectorAll('[data-a]'), function (b) { b.onclick = function () {
+            var a = b.getAttribute('data-a'), bd = a === 'approve' || a === 'delete' ? { action: a } : { action: 'status', status: a };
+            api('POST', '/admin/parts/fits/' + row.getAttribute('data-f'), bd).then(draw).catch(function (e) { t(e.message); });
+          }; });
+        });
+        Array.prototype.forEach.call(body.querySelectorAll('[data-l]'), function (row) {
+          Array.prototype.forEach.call(row.querySelectorAll('[data-la]'), function (b) { b.onclick = function () {
+            api('POST', '/parts/links/' + row.getAttribute('data-l') + '/' + b.getAttribute('data-la')).then(draw).catch(function (e) { t(e.message); });
+          }; });
+        });
+      }).catch(function (e) { fail(body, e); });
+    };
+    draw();
+  }
+
   function suggestPage(root) {
     var esc = C().esc, api = C().api, body = frame(root, 'suggest'), st = 'pending';
     var NAME = { 'new': '새 항목', fill: '제원 채우기', photo: '사진', sds: '안전 자료' };
@@ -413,7 +453,7 @@
       C().css();
       C().meta(true).then(function (m) {
         if (!m.can_edit) { root.innerHTML = '<div class="cct cct-adm"><div class="cct-empty"><b>🔒</b>카탈로그를 고칠 권한이 없어요.</div></div>'; return; }
-        ({ items: itemsPage, suggest: suggestPage, auto: autoPage, ai: aiPage, settings: settingsPage })[page()](root);
+        ({ items: itemsPage, suggest: suggestPage, parts: partsPage, auto: autoPage, ai: aiPage, settings: settingsPage })[page()](root);
         if (page() !== 'suggest' && page() !== 'auto') C().api('GET', '/admin/suggestions?status=pending').then(function (r) { pending = r.pending; var nb = root.querySelector('[data-p="suggest"]'); if (nb && pending) nb.innerHTML = '💡 제안함<b>' + pending + '</b>'; }).catch(function () {});
       }).catch(function (e) { root.innerHTML = '<div class="cct cct-adm"><div class="cct-empty"><b>⚠️</b>' + String(e.message).replace(/</g, '&lt;') + '</div></div>'; });
     });

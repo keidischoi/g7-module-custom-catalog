@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Modules\Custom\Catalog\Http\Controllers\AdminController;
 use Modules\Custom\Catalog\Http\Controllers\AssetController;
 use Modules\Custom\Catalog\Http\Controllers\CatalogController;
+use Modules\Custom\Catalog\Http\Controllers\PartsController;
 
 Route::get('assets/{file}', [AssetController::class, 'show'])->where('file', '[A-Za-z0-9_.-]+');
 Route::get('images/{file}', [CatalogController::class, 'image'])->where('file', '[A-Za-z0-9_.-]+');
@@ -15,7 +16,21 @@ Route::middleware(['throttle:180,1'])->group(function () {
     Route::get('book', [CatalogController::class, 'book']);
 });
 
+// 0.3.0 🔩 부품 · 업그레이드 — 회원
+Route::get('parts/printers', [PartsController::class, 'printers'])->middleware('throttle:120,1');
+Route::middleware(['auth:sanctum', 'throttle:60,1'])->prefix('parts')->group(function () {
+    Route::post('propose', [PartsController::class, 'propose'])->middleware('throttle:10,1');
+    Route::post('reviews/{id}/delete', [PartsController::class, 'reviewDelete'])->whereNumber('id');
+    Route::post('links/{id}/{action}', [PartsController::class, 'linkAction'])->whereNumber('id')->where('action', 'report|delete|hide|show');
+    Route::post('{key}/vote', [PartsController::class, 'vote'])->where('key', '[a-z0-9][a-z0-9_-]{1,79}');
+    Route::post('{key}/reviews', [PartsController::class, 'review'])->where('key', '[a-z0-9][a-z0-9_-]{1,79}');
+    Route::post('{key}/links', [PartsController::class, 'link'])->where('key', '[a-z0-9][a-z0-9_-]{1,79}')->middleware('throttle:20,1');
+});
+
 Route::middleware(['auth:sanctum', 'throttle:120,1'])->prefix('admin')->group(function () {
+    Route::get('parts/pending', [PartsController::class, 'pending']);   // 0.3.0
+    Route::post('parts/fits/{id}', [PartsController::class, 'fit'])->whereNumber('id');
+    Route::post('parts/reviews/{id}/hide', [PartsController::class, 'reviewHide'])->whereNumber('id');
     Route::post('items', [AdminController::class, 'save']);
     Route::post('items/{key}/delete', [AdminController::class, 'remove'])->where('key', '[a-z0-9][a-z0-9_-]{1,79}');
     Route::post('items/{key}/restore', [AdminController::class, 'restore'])->where('key', '[a-z0-9][a-z0-9_-]{1,79}');

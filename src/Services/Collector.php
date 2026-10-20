@@ -673,7 +673,7 @@ final class Collector
      */
     public function extract(string $type, string $kind, string $text, string $brand = '', string $title = ''): array
     {
-        $type = $type === 'materials' ? 'materials' : 'equipment';
+        $type = in_array($type, ['materials', 'parts'], true) ? $type : 'equipment';
         $text = trim($text);
         $from = '';
         if (preg_match('#^https?://\S+$#i', $text)) {
@@ -689,7 +689,7 @@ final class Collector
         if (mb_strlen($text) < 8) {
             throw new \InvalidArgumentException('정리할 글이 없어요 — 제품 페이지의 제원 · 소개 글을 붙여 넣거나 끌어 놓아 주세요.');
         }
-        $kinds = array_keys($type === 'materials' ? Fields::MATERIAL_KINDS : Fields::EQUIPMENT_KINDS);
+        $kinds = array_keys(Fields::kindsOf($type));
         if (! in_array($kind, $kinds, true)) {
             $kind = $kinds[0] ?? 'fdm';
         }
@@ -1016,6 +1016,10 @@ final class Collector
         } else {
             $key = (string) $sg->item_key;
             $this->photos->addFromUrl($type, $key, (string) ($p['image_url'] ?? ''), (string) ($p['credit'] ?? ''), (string) ($p['page_url'] ?? ''));
+        }
+        $pp = Schema::json($sg->payload);
+        if ($type === 'parts' && ! empty($pp['printers']) && is_array($pp['printers'])) {   // 0.3.0 회원이 고른 맞는 프린터 (고쳐서 반영해도 원래 제안의 것)
+            PartsService::fitsFromSuggestion($key, $pp['printers'], preg_match('/^회원 #(\d+)$/', (string) ($sg->source ?? ''), $mm) ? (int) $mm[1] : null);
         }
         DB::table(Schema::SUGGEST)->where('id', $id)->update(['status' => 'applied', 'item_key' => $key, 'updated_at' => now()]);
 

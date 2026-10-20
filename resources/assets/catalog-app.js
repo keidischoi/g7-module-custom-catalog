@@ -1,8 +1,8 @@
-/*! custom-catalog 0.2.23 — 3D 카탈로그 (목록 · 상세 · 편집) */
+/*! custom-catalog 0.3.0 — 3D 카탈로그 (목록 · 상세 · 편집 · 🔩 부품 호환표) */
 (function () {
   'use strict';
   if (window.CCT) { try { window.CCT.tick(); } catch (e) {} return; }
-  var VERSION = '0.2.23', API = '/api/modules/custom-catalog', BASE = '/catalog';
+  var VERSION = '0.3.0', API = '/api/modules/custom-catalog', BASE = '/catalog';
 
   /* ───────── 도구 ───────── */
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
@@ -52,10 +52,17 @@
   function art(c, px) {
     var I = window.CCTIcons;
     if (!I) return '<i>' + kindIcon(c.type, c.kind) + '</i>';
+    if (c.type === 'parts') return partArt(c, px);   // 0.3.0
     try {
       if (c.type === 'materials') return I.material({ kind: c.kind, material: c.material || c.title, color_hex: /^#[0-9a-f]{3,6}$/i.test(c.color_hex || '') || /gradient/.test(c.color_hex || '') ? c.color_hex : hueHex(hue(c.brand + c.title)) }, px);
       return I.equipment({ kind: c.kind, enclosed: c.enclosed, tint: hueHex(hue(c.brand)) }, px);
     } catch (e) { return '<i>' + kindIcon(c.type, c.kind) + '</i>'; }
+  }
+  /** 0.3.0 🔩 부품 그림 — 종류 색 타일 + 아이콘 */
+  var PART_HUE = { nozzle: 28, hotend: 8, extruder: 215, bed: 262, motion: 190, cooling: 198, electronics: 150, enclosure: 42, resin_part: 285, multi: 320, tool: 0, other: 225 };
+  function partArt(c, px) {
+    px = px || 118; var h = PART_HUE[c.kind]; if (h == null) h = 225;
+    return '<span class="cct-partart" style="--h:' + h + ';width:' + px + 'px;height:' + px + 'px;font-size:' + Math.round(px * 0.46) + 'px">' + kindIcon('parts', c.kind) + '</span>';
   }
   function hue(s) { var h = 0; s = String(s || ''); for (var i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) % 360; return h; }
   var META = null, metaP = null;
@@ -102,11 +109,12 @@
   /* ───────── 목록 ───────── */
   function readState() {
     var p = new URLSearchParams(location.search);
-    return { tab: p.get('tab') || '', brand: p.get('brand') || '', q: (p.get('q') || '').trim(), sort: p.get('sort') || '', flags: (p.get('flags') || '').split(',').filter(Boolean), status: p.get('status') || '' };
+    return { tab: p.get('tab') || '', brand: p.get('brand') || '', q: (p.get('q') || '').trim(), sort: p.get('sort') || '', flags: (p.get('flags') || '').split(',').filter(Boolean), status: p.get('status') || '',
+      printer: p.get('printer') || '', pname: p.get('pname') || '', mine: p.get('mine') || '' };   // 0.3.0 🔩 이 프린터에 맞는 부품
   }
   function urlOf(s) {
     var p = new URLSearchParams();
-    ['tab', 'brand', 'q', 'sort', 'status'].forEach(function (k) { if (s[k]) p.set(k, s[k]); });
+    ['tab', 'brand', 'q', 'sort', 'status', 'printer', 'pname', 'mine'].forEach(function (k) { if (s[k]) p.set(k, s[k]); });
     if (s.flags && s.flags.length) p.set('flags', s.flags.join(','));
     var qs = p.toString();
     return BASE + (qs ? '?' + qs : '');
@@ -137,10 +145,10 @@
     if (!S.q && !tabOf(S.tab)) S.tab = (META.tabs[0] || {}).key || '';
     var tab = tabOf(S.tab), total = 0;
     Object.keys(META.counts).forEach(function (k) { total += META.counts[k]; });
-    var eq = 0, mt = 0; META.tabs.forEach(function (t) { if (t.type === 'materials') mt += META.counts[t.key] || 0; else eq += META.counts[t.key] || 0; });
+    var eq = 0, mt = 0, pt = 0; META.tabs.forEach(function (t) { if (t.type === 'materials') mt += META.counts[t.key] || 0; else if (t.type === 'parts') pt += META.counts[t.key] || 0; else eq += META.counts[t.key] || 0; });
     root.innerHTML = '<div class="cct"><div class="cct-hero"><div class="cct-hero__grid"></div><h1>🧊 3D 카탈로그</h1><p>3D 프린터 · 장비 · 필라멘트 · 레진의 제원을 한곳에서 찾아보세요.</p>' +
       '<form class="cct-search" data-search><input type="search" name="q" autocomplete="off" placeholder="제조사 · 모델 · 재료 이름으로 찾기 (예: Bambu P1S, PETG)" value="' + esc(S.q) + '"><button type="submit">찾기</button></form>' +
-      '<div class="cct-stats"><span>장비 ' + eq.toLocaleString() + '종</span><span>재료 ' + mt.toLocaleString() + '종</span>' + (can ? '<span>✏️ 편집할 수 있어요</span>' : '') + '</div></div>' +
+      '<div class="cct-stats"><span>장비 ' + eq.toLocaleString() + '종</span><span>재료 ' + mt.toLocaleString() + '종</span><span>부품 ' + pt.toLocaleString() + '종</span>' + (can ? '<span>✏️ 편집할 수 있어요</span>' : '') + '</div></div>' +
       '<div class="cct-tabs" role="tablist">' + META.tabs.map(function (t) {
         return '<button type="button" role="tab" class="cct-tab' + (tab && t.key === tab.key ? ' on' : '') + '" data-tab="' + t.key + '"><i>' + t.icon + '</i>' + esc(t.label) + '<small>' + (META.counts[t.key] || 0) + '</small></button>';
       }).join('') + '</div><div data-bar></div><div class="cct-count" data-count></div><div class="cct-grid" data-grid>' + new Array(9).join('<div class="cct-skel"></div>') + '</div><div class="cct-more" data-more></div></div>';
@@ -151,12 +159,13 @@
     scroller(box.querySelector('.cct-tabs'));
     bindCards(box, function () { meta(true).then(function () { listPage(root); }); });
 
-    var types = S.q && !tab ? ['equipment', 'materials'] : [tab ? tab.type : 'equipment'], page = 1, pages = 1, shown = 0, sum = 0;
+    var types = S.q && !tab ? ['equipment', 'materials', 'parts'] : [tab ? tab.type : 'equipment'], page = 1, pages = 1, shown = 0, sum = 0;
     var query = function (type, pg) {
       var p = new URLSearchParams({ page: pg, per: META.per_page });
       if (tab) p.set('tab', tab.key); else p.set('type', type);
       ['brand', 'q', 'sort', 'status'].forEach(function (k) { if (S[k]) p.set(k, S[k]); });
       if (S.flags.length) p.set('flags', S.flags.join(','));
+      if (tab && tab.type === 'parts') { if (S.mine) p.set('mine', '1'); else if (S.printer) p.set('printer', S.printer); }
       return api('GET', '/items?' + p.toString());
     };
     var drawBar = function (brands) {
@@ -165,6 +174,9 @@
       bar.innerHTML = (brands.length > 1 || S.brand ? '<div class="cct-bar"><div class="cct-brands" data-brands><button type="button" class="cct-chip' + (S.brand ? '' : ' on') + '" data-brand="">전체</button>' +
         brands.map(function (b) { return '<button type="button" class="cct-chip' + (S.brand === b.name ? ' on' : '') + '" data-brand="' + esc(b.name) + '">' + logoImg(b.name) + esc(b.name) + ' <small>' + b.n + '</small></button>'; }).join('') +
         '</div></div>' : '') +
+        (tab && tab.type === 'parts' ? '<div class="cct-bar cct-pbar">' + (META.login ? '<button type="button" class="cct-chip' + (S.mine ? ' on' : '') + '" data-mine>🖨️ 내 프린터용</button>' : '') +
+          (S.printer ? '<button type="button" class="cct-chip on" data-pclear>🖨️ ' + esc(S.pname || S.printer) + ' 에 맞는 것 ✕</button>' : '<span class="cct-pick"><input class="cct-in" data-pq placeholder="🔎 프린터 이름으로 거르기 (예: P1S · MK4)" autocomplete="off"><span class="cct-pick__list" data-plist hidden></span></span>') +
+          (META.login && !can && META.parts_member ? '<span style="flex:1"></span><button type="button" class="cct-btn cct-btn--s cct-btn--p" data-propose>💡 부품 제안</button>' : '') + '</div>' : '') +   // 0.3.0
         '<div class="cct-bar">' + (tab && tab.key === 'fdm' ? flag('multicolor', '🌈 다색') : '') + (isPrinter ? flag('enclosed', '📦 밀폐형') : '') + flag('photo', '🖼️ 사진 있는 것') +
         (S.q ? '<button type="button" class="cct-chip on" data-clear-q>「' + esc(S.q) + '」 ✕</button>' : '') +
         '<span style="flex:1"></span>' + (can ? '<button type="button" class="cct-chip' + (S.status === 'archived' ? ' on' : '') + '" data-arch>🗄️ 보관한 것</button><button type="button" class="cct-btn cct-btn--s cct-btn--p" data-new>➕ 새 항목</button>' : '') +
@@ -177,6 +189,11 @@
       var ar = bar.querySelector('[data-arch]'); if (ar) ar.onclick = function () { nav({ status: S.status === 'archived' ? '' : 'archived' }); };
       var nw = bar.querySelector('[data-new]'); if (nw) nw.onclick = function () { openEditor({ type: tab ? tab.type : 'equipment', kind: tab ? tab.kinds[0] : 'fdm' }, function (key) { meta(true); go(BASE + '/' + key); }); };
       bar.querySelector('[data-sort]').onchange = function () { nav({ sort: this.value }); };
+      // 0.3.0 🔩 프린터로 거르기 · 내 프린터용 · 부품 제안
+      var mn = bar.querySelector('[data-mine]'); if (mn) mn.onclick = function () { nav({ mine: S.mine ? '' : '1', printer: '', pname: '' }); };
+      var pc = bar.querySelector('[data-pclear]'); if (pc) pc.onclick = function () { nav({ printer: '', pname: '' }); };
+      var pq = bar.querySelector('[data-pq]'); if (pq) picker(pq, bar.querySelector('[data-plist]'), function (p) { nav({ printer: p.key, pname: p.title, mine: '' }); });
+      var pp = bar.querySelector('[data-propose]'); if (pp) pp.onclick = function () { proposePart(); };
     };
     var load = function (append) {
       Promise.all(types.map(function (t) { return query(t, page); })).then(function (res) {
@@ -236,7 +253,7 @@
         '<div class="cct-links">' + (d.homepage_url ? '<a class="cct-btn cct-btn--p" target="_blank" rel="noopener" href="' + esc(d.homepage_url) + '">🌐 제조사 페이지</a>' : '') +
         (d.wiki_url && d.wiki_url !== d.homepage_url ? '<a class="cct-btn" target="_blank" rel="noopener" href="' + esc(d.wiki_url) + '">📖 더 알아보기</a>' : '') +
         (by.sds_url ? '<a class="cct-btn" target="_blank" rel="noopener" href="' + esc(by.sds_url.value) + '">🧾 안전 자료 (MSDS)</a>' : '') +
-        (d.type === 'equipment' ? '<a class="cct-btn" href="/companies?q=' + encodeURIComponent(d.title) + '">🏢 이 장비를 가진 업체 찾기</a>' : '<a class="cct-btn" href="/companies?q=' + encodeURIComponent(by.material ? by.material.value : d.title) + '">🏢 이 재료로 출력하는 업체 찾기</a>') +
+        (d.type === 'parts' ? '' : d.type === 'equipment' ? '<a class="cct-btn" href="/companies?q=' + encodeURIComponent(d.title) + '">🏢 이 장비를 가진 업체 찾기</a>' : '<a class="cct-btn" href="/companies?q=' + encodeURIComponent(by.material ? by.material.value : d.title) + '">🏢 이 재료로 출력하는 업체 찾기</a>') +
         '<a class="cct-btn" href="/wiki/search?q=' + encodeURIComponent(d.title) + '">📚 위키에서 찾아보기</a>' +
         '<button type="button" class="cct-btn" data-print>🖨️ 인쇄</button></div><div class="cct-maker" data-maker hidden></div>' +
         (can ? '<div class="cct-edbar"><div class="cct-meter" style="--p:' + Math.round(d.filled / Math.max(1, d.fields) * 100) + '%">제원 ' + d.filled + ' / ' + d.fields + '칸<i></i></div>' +
@@ -252,12 +269,14 @@
       if (d.issues.length) h += '<div class="cct-sec"><h2>⚠️ 알려진 문제 · 고질병</h2><ul class="cct-issues">' + d.issues.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' +
         '<p class="cct-note" style="margin-top:8px">쓰는 사람들 사이에 알려진 내용을 정리한 것이에요. 제품 개선판 · 펌웨어에 따라 달라졌을 수 있어요.</p></div>';
       if (d.memo) h += '<div class="cct-sec"><h2>📝 메모</h2><div class="cct-text cct-text--memo">' + esc(d.memo) + '</div></div>';
+      h += d.type === 'parts' ? partsHtml(d, can) : printerPartsHtml(d);   // 0.3.0 🔩
       if (d.related.length) h += '<div class="cct-sec"><h2>🏷️ ' + esc(d.brand) + '의 다른 제품</h2><div class="cct-grid">' + d.related.map(function (c) { return cardHtml(c, false); }).join('') + '</div></div>';
       root.innerHTML = h + '</div>';
       var box = root.querySelector('.cct'), cur = 0, q = function (s) { return box.querySelector(s); };
       bindCards(box, reload);
       try { document.title = d.brand + ' ' + d.title + ' — 3D 카탈로그'; } catch (e) {}
       q('[data-print]').onclick = function () { window.print(); };
+      if (d.type === 'parts') partsBind(box, d, reload, can);   // 0.3.0
       makerOf(d.brand).then(function (mk) {
         var el = q('[data-maker]'); if (!mk || !el) return;
         el.hidden = false;
@@ -296,6 +315,151 @@
       root.innerHTML = '<div class="cct"><div class="cct-empty"><b>🧐</b>' + esc(e.message) + '<br><br><a class="cct-btn" data-go href="' + BASE + '">카탈로그 목록으로</a></div></div>';
       bindCards(root.querySelector('.cct'), function () {});
     });
+  }
+
+  /* ───────── 0.3.0 🔩 부품 · 업그레이드 호환표 ───────── */
+  /** 프린터 이름으로 찾아 고르기 (목록 거르기 · 맞는 프린터 알려 주기 · 제안 창) */
+  function picker(input, list, onPick) {
+    if (!input || !list) return;
+    var t = 0, seq = 0;
+    var hide = function () { list.hidden = true; };
+    input.addEventListener('input', function () {
+      clearTimeout(t); var qv = input.value.trim();
+      if (qv.length < 1) { hide(); return; }
+      t = setTimeout(function () {
+        var my = ++seq;
+        api('GET', '/parts/printers?q=' + encodeURIComponent(qv)).then(function (rows) {
+          if (my !== seq) return;
+          list.innerHTML = rows.length ? rows.map(function (p, i) { return '<button type="button" data-i="' + i + '">' + logoImg(p.title.split(' ')[0]) + esc(p.title) + '</button>'; }).join('') : '<em>카탈로그에 없는 프린터예요</em>';
+          list.hidden = false;
+          Array.prototype.forEach.call(list.querySelectorAll('[data-i]'), function (b) { b.onmousedown = function (e) { e.preventDefault(); var p = rows[+b.getAttribute('data-i')]; input.value = ''; hide(); onPick(p); }; });
+        }).catch(hide);
+      }, 220);
+    });
+    input.addEventListener('blur', function () { setTimeout(hide, 150); });
+  }
+  var FIT = { fit: ['✅', '그대로 맞음', 'ok'], mod: ['🛠️', '개조 필요', 'mod'], no: ['⛔', '안 맞음', 'no'], pending: ['🕓', '확인 중', 'pend'] };
+  function fitRow(f, can, login) {
+    var p = f.printer, v = f.votes, st = FIT[f.status] || FIT.pending;
+    return '<div class="cct-fit" data-fit="' + f.id + '" data-pk="' + esc(p.key) + '"><a class="cct-fit__p" data-go href="' + BASE + '/' + esc(p.key) + '">' + (p.image ? '<img alt="" loading="lazy" src="' + esc(p.image) + '">' : '<span class="cct-fit__ic">' + art(p, 44) + '</span>') +
+      '<span><small>' + esc(p.brand) + '</small><b>' + esc(p.title) + '</b></span></a>' +
+      '<span class="cct-fitst cct-fitst--' + st[2] + '">' + st[0] + ' ' + st[1] + (f.set_by_editor ? ' <small>· 확인함</small>' : '') + (f.need ? ' <small>· ' + f.need + '표 더</small>' : '') + '</span>' +
+      '<span class="cct-fit__votes">맞음 ' + v.fit + ' · 개조 ' + v.mod + ' · 안 맞음 ' + v.no + (f.real_use ? ' · <b>✔ 실사용 ' + f.real_use + '</b>' : '') + '</span>' +
+      (f.note ? '<span class="cct-fit__note">📝 ' + esc(f.note) + '</span>' : '') +
+      (login ? '<span class="cct-fit__my">' + [['fit', '✅ 맞아요'], ['mod', '🛠️ 개조 필요'], ['no', '⛔ 안 맞아요']].map(function (o) { return '<button type="button" class="cct-chip' + (f.mine === o[0] ? ' on' : '') + '" data-vote="' + o[0] + '" title="' + (f.mine === o[0] ? '한 번 더 누르면 표를 거둬요' : '') + '">' + o[1] + '</button>'; }).join('') + '</span>' : '') +
+      (can ? '<span class="cct-fit__ed"><select class="cct-sel" data-fst><option value="">투표로 정함</option>' + [['fit', '✅ 맞음으로'], ['mod', '🛠️ 개조 필요로'], ['no', '⛔ 안 맞음으로']].map(function (o) { return '<option value="' + o[0] + '"' + (f.set_by_editor && f.status === o[0] ? ' selected' : '') + '>' + o[1] + '</option>'; }).join('') + '</select>' +
+        (!f.approved ? '<button type="button" class="cct-btn cct-btn--s" data-fapprove>✔ 확인</button>' : '') + '<button type="button" class="cct-btn cct-btn--s" data-fnote title="메모">📝</button><button type="button" class="cct-btn cct-btn--s cct-btn--d" data-fdel title="연결 지우기">✕</button></span>' : '') + '</div>';
+  }
+  function partsHtml(d, can) {
+    var F = d.fits || { items: [], pending: [] }, R = d.reviews || { items: [] }, L = d.links || [], login = !!d.login, mine = R.mine;
+    var h = '<div class="cct-sec" id="fits"><h2>🖨️ 맞는 프린터 <small>' + F.items.length + '</small></h2>' +
+      (F.items.length ? '<div class="cct-fits">' + F.items.map(function (f) { return fitRow(f, can, login); }).join('') + '</div>' : '<p class="cct-note">아직 맞는 프린터가 없어요. 써 본 분이 알려 주세요.</p>') +
+      (F.pending.length ? '<details class="cct-pend"' + (can ? ' open' : '') + '><summary>🕓 확인 중 ' + F.pending.length + '개 <small>표가 ' + (META.parts_auto_votes || 3) + '개 쌓이거나 관리자가 확인하면 위로 올라가요</small></summary><div class="cct-fits">' + F.pending.map(function (f) { return fitRow(f, can, login); }).join('') + '</div></details>' : '') +
+      (login ? '<div class="cct-addfit"><span class="cct-pick"><input class="cct-in" data-fq placeholder="➕ 이 부품이 맞는 프린터 알려 주기 — 이름으로 찾기" autocomplete="off"><span class="cct-pick__list" data-flist hidden></span></span></div>' : '<p class="cct-note">로그인하면 맞음 · 안 맞음을 알려 줄 수 있어요. 내 프린터에 등록한 프린터라면 <b>✔ 실사용</b>으로 두 배로 세요.</p>') + '</div>';
+    h += '<div class="cct-sec" id="reviews"><h2>⭐ 후기 ' + (R.avg ? '<small>★ ' + R.avg + ' · ' + R.n + '개</small>' : '') + '</h2>' +
+      (R.items.length ? R.items.map(function (r) {
+        return '<div class="cct-rv' + (r.hidden ? ' is-off' : '') + '" data-rv="' + r.id + '"><div class="cct-rv__h"><b class="cct-stars">' + new Array(r.score + 1).join('★') + '<i>' + new Array(6 - r.score).join('★') + '</i></b><span>' + esc(r.user) + '</span>' + (r.real_use ? '<em class="cct-real">✔ 실사용</em>' : '') +
+          (r.printer ? '<small>🖨️ ' + esc(r.printer) + '</small>' : '') + (r.months != null ? '<small>⏳ ' + r.months + '개월</small>' : '') + (r.materials ? '<small>🧵 ' + esc(r.materials) + '</small>' : '') + '<small class="cct-rv__at">' + esc(r.at) + '</small>' + (r.hidden ? '<small>🙈 숨김</small>' : '') +
+          (r.mine ? '<button type="button" class="cct-x" data-rvdel title="내 후기 지우기">✕</button>' : '') + (can ? '<button type="button" class="cct-btn cct-btn--s" data-rvhide="' + (r.hidden ? 0 : 1) + '">' + (r.hidden ? '보이기' : '숨기기') + '</button>' : '') + '</div>' + (r.body ? '<p>' + esc(r.body) + '</p>' : '') + '</div>';
+      }).join('') : '<p class="cct-note">아직 후기가 없어요.</p>') +
+      (login ? '<form class="cct-rvform" data-rvform><b>' + (mine ? '✏️ 내 후기 고치기' : '✍️ 후기 남기기') + '</b><div class="cct-starpick" data-score="' + (mine ? mine.score : 0) + '">' + [1, 2, 3, 4, 5].map(function (n) { return '<button type="button" data-s="' + n + '" class="' + (mine && n <= mine.score ? 'on' : '') + '" aria-label="' + n + '점">★</button>'; }).join('') + '</div>' +
+        '<div class="cct-rvrow"><select class="cct-sel" name="printer"><option value="">쓴 프린터</option>' + F.items.concat(F.pending).map(function (f) { return '<option value="' + esc(f.printer.key) + '"' + (mine && mine.printer_key === f.printer.key ? ' selected' : '') + '>' + esc(f.printer.brand + ' ' + f.printer.title) + '</option>'; }).join('') + '</select>' +
+        '<input class="cct-in" name="months" type="number" min="0" max="240" placeholder="몇 개월 썼나요" value="' + (mine && mine.months != null ? mine.months : '') + '"><input class="cct-in" name="materials" maxlength="120" placeholder="같이 쓴 소재 (예: PLA, PA-CF)" value="' + esc(mine ? mine.materials : '') + '"></div>' +
+        '<textarea class="cct-in" name="body" maxlength="2000" placeholder="써 보니 어땠나요? 좋은 점 · 주의할 점 (예: 펌웨어에서 노즐 재질을 바꿔야 해요)">' + esc(mine ? mine.body : '') + '</textarea><div><button class="cct-btn cct-btn--p cct-btn--s">저장</button></div></form>' : '') + '</div>';
+    h += '<div class="cct-sec" id="buy"><h2>🛒 어디서 사나</h2>' +
+      (L.length ? '<div class="cct-buys">' + L.map(function (l) {
+        return '<div class="cct-buy' + (l.hidden ? ' is-off' : '') + '" data-lk="' + l.id + '"><a target="_blank" rel="noopener nofollow ugc" href="' + esc(l.url) + '"><b>' + esc(l.label) + '</b>' + (l.price ? '<span>' + l.price.toLocaleString() + '원</span>' : '') + '<i>↗</i></a><small>' + esc(l.at) + '</small>' +
+          (can && l.reports ? '<small>🚩 ' + l.reports + '</small>' : '') + (l.mine || can ? '<button type="button" class="cct-x" data-lkact="delete" title="지우기">✕</button>' : (login ? '<button type="button" class="cct-x" data-lkact="report" title="잘못된 주소 · 광고 신고">🚩</button>' : '')) +
+          (can ? '<button type="button" class="cct-btn cct-btn--s" data-lkact="' + (l.hidden ? 'show' : 'hide') + '">' + (l.hidden ? '보이기' : '숨기기') + '</button>' : '') + '</div>';
+      }).join('') + '</div>' : '<p class="cct-note">아직 남긴 구매처가 없어요.</p>') +
+      (login ? '<form class="cct-buyform" data-lkform><input class="cct-in" name="url" placeholder="가게 주소 https://" required><input class="cct-in" name="label" maxlength="60" placeholder="가게 이름 (비우면 주소로)"><input class="cct-in" name="price" inputmode="numeric" placeholder="가격 (원)"><button class="cct-btn cct-btn--s">➕ 남기기</button></form>' : '') +
+      '<p class="cct-note">회원이 남긴 가게예요 — 가격은 남긴 날 기준이에요. 광고 · 잘못된 주소는 🚩 로 알려 주세요.</p></div>';
+    return h;
+  }
+  function printerPartsHtml(d) {
+    if (d.type !== 'equipment') return '';
+    var groups = d.parts || [], n = 0; groups.forEach(function (g) { n += g.items.length; });
+    var all = BASE + '?tab=parts&printer=' + encodeURIComponent(d.key) + '&pname=' + encodeURIComponent(d.brand + ' ' + d.title);
+    if (!n) return ['fdm', 'sla', 'dlp'].indexOf(d.kind) >= 0 ? '<div class="cct-sec"><h2>🔩 맞는 부품 · 업그레이드</h2><p class="cct-note">아직 연결된 부품이 없어요. <a data-go href="' + BASE + '?tab=parts">부품 목록</a>에서 쓰고 있는 부품을 찾아 「맞는 프린터」로 알려 주세요.</p></div>' : '';
+    return '<div class="cct-sec"><h2>🔩 맞는 부품 · 업그레이드 <small>' + n + '</small> <a class="cct-more" data-go href="' + all + '">모두 보기 ›</a></h2>' + groups.map(function (g) {
+      return '<h3 class="cct-pgh">' + g.icon + ' ' + esc(g.label) + '</h3><div class="cct-grid cct-grid--s">' + g.items.map(function (c) {
+        return cardHtml(c, false).replace('<div class="cct-card__body">', '<div class="cct-card__body">' + (c.fit === 'mod' ? '<span class="cct-fitst cct-fitst--mod">🛠️ 개조 필요</span>' : '') + (c.score ? '<span class="cct-score">★ ' + c.score.avg + ' <small>(' + c.score.n + ')</small></span>' : ''));
+      }).join('') + '</div>';
+    }).join('') + '</div>';
+  }
+  function partsBind(box, d, reload, can) {
+    var key = d.key, fail = function (e) { toast(e.message); };
+    Array.prototype.forEach.call(box.querySelectorAll('[data-fit]'), function (row) {
+      var id = +row.getAttribute('data-fit'), pk = row.getAttribute('data-pk');
+      Array.prototype.forEach.call(row.querySelectorAll('[data-vote]'), function (b) { b.onclick = function () {
+        var undo = b.classList.contains('on');
+        api('POST', '/parts/' + key + '/vote', { printer: pk, vote: undo ? '' : b.getAttribute('data-vote') }).then(function () { toast(undo ? '표를 거뒀어요.' : '고마워요 — 표를 남겼어요.'); reload(); }).catch(fail);
+      }; });
+      var ed = function (body) { return api('POST', '/admin/parts/fits/' + id, body).then(reload).catch(fail); };
+      var s = row.querySelector('[data-fst]'); if (s) s.onchange = function () { ed({ action: 'status', status: s.value }); };
+      var ap = row.querySelector('[data-fapprove]'); if (ap) ap.onclick = function () { ed({ action: 'approve' }); };
+      var nt = row.querySelector('[data-fnote]'); if (nt) nt.onclick = function () { var t = prompt('이 프린터에서 쓸 때 메모 (예: 브래킷을 바꿔야 해요 · 비우면 지움)', ''); if (t !== null) ed({ action: 'note', note: t }); };
+      var dl = row.querySelector('[data-fdel]'); if (dl) dl.onclick = function () { if (confirm('이 프린터 연결과 표를 지울까요?')) ed({ action: 'delete' }); };
+    });
+    picker(box.querySelector('[data-fq]'), box.querySelector('[data-flist]'), function (p) {
+      api('POST', '/parts/' + key + '/vote', { printer: p.key, vote: 'fit' }).then(function () { toast('고마워요 — 「' + p.title + '」에 맞아요로 남겼어요.'); reload(); }).catch(fail);
+    });
+    var rf = box.querySelector('[data-rvform]');
+    if (rf) {
+      var sp = rf.querySelector('.cct-starpick');
+      Array.prototype.forEach.call(sp.querySelectorAll('[data-s]'), function (b) { b.onclick = function () { var n = +b.getAttribute('data-s'); sp.setAttribute('data-score', n); Array.prototype.forEach.call(sp.querySelectorAll('[data-s]'), function (x) { x.classList.toggle('on', +x.getAttribute('data-s') <= n); }); }; });
+      rf.onsubmit = function (e) {
+        e.preventDefault();
+        var sc = +sp.getAttribute('data-score'); if (!sc) { toast('별점을 골라 주세요.'); return; }
+        api('POST', '/parts/' + key + '/reviews', { score: sc, printer: rf.printer.value, months: rf.months.value, materials: rf.materials.value, body: rf.body.value }).then(function () { toast('후기를 남겼어요.'); reload(); }).catch(fail);
+      };
+    }
+    Array.prototype.forEach.call(box.querySelectorAll('[data-rv]'), function (row) {
+      var id = row.getAttribute('data-rv');
+      var dl = row.querySelector('[data-rvdel]'); if (dl) dl.onclick = function () { if (confirm('내 후기를 지울까요?')) api('POST', '/parts/reviews/' + id + '/delete').then(reload).catch(fail); };
+      var hd = row.querySelector('[data-rvhide]'); if (hd) hd.onclick = function () { api('POST', '/admin/parts/reviews/' + id + '/hide', { hide: hd.getAttribute('data-rvhide') === '1' }).then(reload).catch(fail); };
+    });
+    var lf = box.querySelector('[data-lkform]');
+    if (lf) lf.onsubmit = function (e) { e.preventDefault(); api('POST', '/parts/' + key + '/links', { url: lf.url.value.trim(), label: lf.label.value, price: lf.price.value }).then(function () { toast('구매처를 남겼어요.'); reload(); }).catch(fail); };
+    Array.prototype.forEach.call(box.querySelectorAll('[data-lk]'), function (row) {
+      Array.prototype.forEach.call(row.querySelectorAll('[data-lkact]'), function (b) { b.onclick = function () {
+        var act = b.getAttribute('data-lkact');
+        if (act === 'delete' && !confirm('이 구매처를 지울까요?')) return;
+        if (act === 'report' && !confirm('잘못된 주소 · 광고로 신고할까요? 여러 번 신고되면 숨겨져요.')) return;
+        api('POST', '/parts/links/' + row.getAttribute('data-lk') + '/' + act).then(function () { toast(api.last || '바꿨어요.'); reload(); }).catch(fail);
+      }; });
+    });
+  }
+  /** 💡 회원 부품 제안 — 관리자가 확인하면 카탈로그에 올라감 */
+  function proposePart() {
+    css();
+    var m = document.createElement('div'); m.className = 'cct cct-modal'; document.body.appendChild(m);
+    var picked = [], close = function () { m.remove(); };
+    var gen = ['정품', '호환품', '자작 · 3D 출력'];
+    m.innerHTML = '<div class="cct-modal__box" style="width:min(620px,100%)"><div class="cct-modal__head"><h3>💡 부품 제안</h3><button type="button" class="cct-x" data-close aria-label="닫기">✕</button></div>' +
+      '<form class="cct-modal__body" data-pf><p class="cct-note" style="margin:0 0 10px">카탈로그에 없는 부품을 알려 주세요. 관리자가 확인하면 올라가고, 고른 프린터가 「맞는 프린터」로 연결돼요.</p><div class="cct-form">' +
+      '<label class="cct-f"><span>종류</span><select class="cct-in" name="kind">' + META.kinds.parts.map(function (k) { return '<option value="' + k.key + '">' + k.icon + ' ' + esc(k.label) + '</option>'; }).join('') + '</select></label>' +
+      '<label class="cct-f"><span>정품 여부</span><select class="cct-in" name="genuine"><option value="">—</option>' + gen.map(function (g) { return '<option>' + g + '</option>'; }).join('') + '</select></label>' +
+      '<label class="cct-f"><span>제조사</span><input class="cct-in" name="brand" required maxlength="60" placeholder="예: Bambu Lab · E3D · Bondtech"></label>' +
+      '<label class="cct-f"><span>부품 이름</span><input class="cct-in" name="title" required maxlength="80" placeholder="예: 경화강 노즐 0.6 mm"></label>' +
+      '<label class="cct-f"><span>부품 번호 <small>있으면</small></span><input class="cct-in" name="part_no" maxlength="60"></label>' +
+      '<label class="cct-f"><span>참고 가격 (원)</span><input class="cct-in" name="price" inputmode="numeric"></label>' +
+      '<label class="cct-f cct-f--w"><span>제품 페이지</span><input class="cct-in" name="homepage_url" placeholder="https://"></label>' +
+      '<label class="cct-f cct-f--w"><span>소개 <small>한두 문장</small></span><textarea class="cct-in" name="summary" maxlength="600"></textarea></label>' +
+      '<div class="cct-f cct-f--w"><span>🖨️ 맞는 프린터</span><div class="cct-tags" data-picked></div><span class="cct-pick"><input class="cct-in" data-pq placeholder="이름으로 찾아 더하기 (예: P1S)" autocomplete="off"><span class="cct-pick__list" data-plist hidden></span></span></div></div></form>' +
+      '<div class="cct-modal__foot"><span class="cct-msg" data-msg></span><button type="button" class="cct-btn" data-close>닫기</button><button type="button" class="cct-btn cct-btn--p" data-send>보내기</button></div></div>';
+    var f = m.querySelector('[data-pf]'), pk = m.querySelector('[data-picked]');
+    var drawPicked = function () { pk.innerHTML = picked.map(function (p, i) { return '<span>' + esc(p.title) + ' <button type="button" class="cct-x" data-un="' + i + '">✕</button></span>'; }).join(''); Array.prototype.forEach.call(pk.querySelectorAll('[data-un]'), function (b) { b.onclick = function () { picked.splice(+b.getAttribute('data-un'), 1); drawPicked(); }; }); };
+    picker(m.querySelector('[data-pq]'), m.querySelector('[data-plist]'), function (p) { if (!picked.some(function (x) { return x.key === p.key; })) picked.push(p); drawPicked(); });
+    Array.prototype.forEach.call(m.querySelectorAll('[data-close]'), function (b) { b.onclick = close; });
+    m.querySelector('[data-send]').onclick = function () {
+      var b = this, msg = m.querySelector('[data-msg]');
+      if (!f.brand.value.trim() || !f.title.value.trim()) { msg.textContent = '제조사 · 부품 이름을 적어 주세요.'; return; }
+      b.disabled = true;
+      api('POST', '/parts/propose', { kind: f.kind.value, brand: f.brand.value, title: f.title.value, homepage_url: f.homepage_url.value, summary: f.summary.value,
+        values: { genuine: f.genuine.value, part_no: f.part_no.value, price_krw: f.price.value }, printers: picked.map(function (p) { return p.key; }) })
+        .then(function () { close(); toast(api.last || '제안을 보냈어요.'); }).catch(function (e) { b.disabled = false; msg.textContent = e.message; });
+    };
   }
 
   /* ───────── 로고 바꾸기 — 제조사 하나의 로고를 바꾸면 그 제조사의 모든 항목이 같이 바뀜 ───────── */
@@ -417,10 +581,10 @@
           (Object.keys(AIK).length ? '<details class="cct-chg" open><summary>✏️ 바뀐 칸 <b>' + Object.keys(AIK).length + '</b>개 <small>AI · 제안이 고친 값 — 맞는지 보고 저장해 주세요</small><button type="button" class="cct-btn cct-btn--s" data-undo-all>↩ 모두 되돌리기</button></summary><ul>' +
             Object.keys(AIK).map(function (id) { return '<li><b>' + esc(labelOf(id)) + '</b><s title="이전 값">' + esc(show(id, PREV[id])) + '</s><i>→</i><em>' + esc(show(id, nowOf(id))) + '</em><button type="button" class="cct-x" data-undo="' + esc(id) + '" title="이전 값으로">↩</button></li>'; }).join('') + '</ul></details>' : '') +
           '<div class="cct-form">' +
-          (d ? '' : '<label class="cct-f"><span>무엇</span><select class="cct-in" data-type><option value="equipment"' + (type === 'equipment' ? ' selected' : '') + '>장비 · 프린터</option><option value="materials"' + (type === 'materials' ? ' selected' : '') + '>재료 (필라멘트 · 레진 …)</option></select></label>') +
+          (d ? '' : '<label class="cct-f"><span>무엇</span><select class="cct-in" data-type><option value="equipment"' + (type === 'equipment' ? ' selected' : '') + '>장비 · 프린터</option><option value="materials"' + (type === 'materials' ? ' selected' : '') + '>재료 (필라멘트 · 레진 …)</option><option value="parts"' + (type === 'parts' ? ' selected' : '') + '>🔩 부품 · 업그레이드</option></select></label>') +
           '<label class="cct-f"><span>종류</span><select class="cct-in" data-kind>' + META.kinds[type].map(function (k) { return '<option value="' + k.key + '"' + (k.key === kind ? ' selected' : '') + '>' + k.icon + ' ' + esc(k.label) + '</option>'; }).join('') + '</select></label>' +
           '<label class="cct-f"><span>제조사</span><input class="cct-in" data-b="brand" value="' + esc(base.brand) + '" placeholder="예: Bambu Lab"></label>' +
-          '<label class="cct-f"><span>' + (type === 'materials' ? '제품 이름' : '모델 이름') + '</span><input class="cct-in" data-b="title" value="' + esc(base.title) + '" placeholder="' + (type === 'materials' ? '예: PLA Basic' : '예: P1S') + '"></label>' +
+          '<label class="cct-f"><span>' + (type === 'materials' ? '제품 이름' : type === 'parts' ? '부품 이름' : '모델 이름') + '</span><input class="cct-in" data-b="title" value="' + esc(base.title) + '" placeholder="' + (type === 'materials' ? '예: PLA Basic' : type === 'parts' ? '예: 경화강 노즐 0.6 mm' : '예: P1S') + '"></label>' +
           '<label class="cct-f cct-f--w"><span>소개 <small>두세 문장</small></span><textarea class="cct-in" data-b="summary">' + esc(base.summary) + '</textarea></label>' +
           '<label class="cct-f"><span>제품 공식 페이지</span><input class="cct-in" data-b="homepage_url" value="' + esc(base.homepage_url) + '" placeholder="https://"></label>' +
           '<label class="cct-f"><span>더 알아보기 주소 <small>위키 등</small></span><input class="cct-in" data-b="wiki_url" value="' + esc(base.wiki_url) + '" placeholder="https://"></label>' +

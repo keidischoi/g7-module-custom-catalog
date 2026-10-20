@@ -8,7 +8,7 @@ use Modules\Custom\Catalog\Support\Schema;
 
 /**
  * 0.2.0 카탈로그 — 목록 · 상세 · 저장 · 지우기.
- * 장비(cat_equipment) · 재료(cat_materials) 를 같은 꼴로 다룸. type = equipment | materials.
+ * 장비(cat_equipment) · 재료(cat_materials) · 0.3.0 부품(cat_parts) 을 같은 꼴로 다룸. type = equipment | materials | parts.
  */
 final class CatalogService
 {
@@ -19,7 +19,7 @@ final class CatalogService
 
     public static function titleCol(string $type): string
     {
-        return $type === 'materials' ? 'name' : 'model';
+        return $type === 'equipment' ? 'model' : 'name';
     }
 
     /**
@@ -31,7 +31,7 @@ final class CatalogService
     public function list(array $p): array
     {
         Schema::ensure();
-        $type = ($p['type'] ?? '') === 'materials' ? 'materials' : 'equipment';
+        $type = in_array($p['type'] ?? '', ['materials', 'parts'], true) ? (string) $p['type'] : 'equipment';
         $table = Schema::table($type);
         $title = self::titleCol($type);
         $status = in_array($p['status'] ?? '', ['archived', 'all'], true) ? $p['status'] : 'active';
@@ -50,7 +50,7 @@ final class CatalogService
             if ($byWord !== null) {
                 $base->whereIn('kind', $byWord ?: ['-']);
             }
-            $cols = $type === 'materials' ? ['brand', 'name', 'material', 'key'] : ['brand', 'model', 'key'];
+            $cols = match ($type) { 'materials' => ['brand', 'name', 'material', 'key'], 'parts' => ['brand', 'name', 'key', 'specs'], default => ['brand', 'model', 'key'] };
             foreach (array_slice($words, 0, 5) as $word) {
                 $like = '%'.addcslashes($word, '%_\\').'%';
                 $base->where(function ($w) use ($cols, $like) {
@@ -59,6 +59,11 @@ final class CatalogService
                     }
                 });
             }
+        }
+        // 0.3.0 🔩 이 프린터(들)에 맞는 부품만 — 「안 맞음」으로 정한 것은 빼고
+        $printers = array_values(array_filter(array_map('strval', (array) ($p['printers'] ?? [])), static fn ($k) => preg_match('/^[a-z0-9][a-z0-9_-]{1,59}$/', $k) === 1));
+        if ($type === 'parts' && $printers) {
+            $base->whereIn('key', DB::table(Schema::FITS)->whereIn('printer_key', $printers)->where(fn ($w) => $w->whereNull('status')->orWhere('status', '!=', 'no'))->select('part_key'));
         }
         // 제조사 칩은 제조사를 고르기 전 숫자로
         $brands = (clone $base)->select('brand', DB::raw('count(*) as n'))->groupBy('brand')->orderByDesc('n')->orderBy('brand')->limit(80)->get()
@@ -98,6 +103,9 @@ final class CatalogService
             'fdm프린터' => ['fdm'], '레진프린터' => ['sla', 'dlp'], '광경화프린터' => ['sla', 'dlp'], 'sla' => ['sla'], 'dlp' => ['dlp'], 'lcd' => ['dlp'], 'msla' => ['dlp'],
             'sls' => ['sls'], 'mjf' => ['mjf'], 'cnc' => ['cnc'], '레이저' => ['laser'], '스캐너' => ['scanner'], '건조기' => ['dryer'], '세척경화기' => ['wash_cure']],
         'materials' => ['필라멘트' => ['fdm'], '레진' => ['resin'], '수지' => ['resin'], '분말' => ['powder'], '파우더' => ['powder'], '금속분말' => ['powder']],
+        'parts' => ['부품' => ['nozzle', 'hotend', 'extruder', 'bed', 'motion', 'cooling', 'electronics', 'enclosure', 'resin_part', 'multi', 'tool', 'other'], '업그레이드' => ['nozzle', 'hotend', 'extruder', 'bed', 'motion', 'cooling', 'electronics', 'enclosure', 'resin_part', 'multi', 'tool', 'other'],
+            '노즐' => ['nozzle', 'hotend'], '핫엔드' => ['hotend'], '익스트루더' => ['extruder'], '압출기' => ['extruder'], '베드' => ['bed'], '플레이트' => ['bed'], '빌드플레이트' => ['bed'],
+            '벨트' => ['motion'], '팬' => ['cooling'], '필터' => ['enclosure'], 'fep' => ['resin_part'], 'lcd' => ['resin_part'], '공구' => ['tool']],
     ];
 
     /**
@@ -114,10 +122,12 @@ final class CatalogService
                 $map[$n($t[1])] = $t[4];
             }
         }
-        foreach ($type === 'materials' ? Fields::MATERIAL_KINDS : Fields::EQUIPMENT_KINDS as $k => $v) {
+        foreach (Fields::kindsOf($type) as $k => $v) {
             $map[$n($v[0])] = array_values(array_unique(array_merge($map[$n($v[0])] ?? [], [$k])));
         }
-        $map += self::KIND_ALIASES[$type];
+        foreach (self::KIND_ALIASES[$type] ?? [] as $ak => $av) {   // 0.3.0 다른 이름은 종류 이름과 합침 (「노즐」 = 노즐 · 핫엔드)
+            $map[$ak] = array_values(array_unique(array_merge($map[$ak] ?? [], $av)));
+        }
         $words = array_values(array_filter(preg_split('/\s+/u', trim($q)) ?: [], static fn ($w) => $w !== '' && $w !== '·'));
         $kinds = null;
         $rest = [];
@@ -147,7 +157,7 @@ final class CatalogService
         Schema::ensure();
         $out = [];
         $by = [];
-        foreach (['equipment', 'materials'] as $type) {
+        foreach (Schema::types() as $type) {
             $by[$type] = DB::table(Schema::table($type))->where('status', 'active')->select('kind', DB::raw('count(*) as n'))->groupBy('kind')->pluck('n', 'kind')->all();
         }
         foreach (Fields::TABS as $t) {
@@ -175,6 +185,19 @@ final class CatalogService
             }
             if (! empty($r->enclosed)) {
                 $chips[] = '밀폐';
+            }
+        } elseif ($type === 'parts') {
+            $sp = Schema::json($r->specs ?? null);
+            foreach (['genuine', 'nozzle_material', 'bed_surface'] as $k) {
+                if (! empty($sp[$k])) {
+                    $chips[] = (string) $sp[$k];
+                }
+            }
+            if (! empty($sp['nozzle_size'])) {
+                $chips[] = implode(' · ', (array) $sp['nozzle_size']).' mm';
+            }
+            if (! empty($sp['price_krw'])) {
+                $chips[] = number_format((float) $sp['price_krw']).'원';
             }
         } else {
             if (trim((string) $r->material) !== '') {
@@ -234,7 +257,7 @@ final class CatalogService
     public function find(string $key, ?string $type = null, bool $any = false): ?array
     {
         Schema::ensure();
-        foreach ($type ? [$type] : ['equipment', 'materials'] as $t) {
+        foreach ($type ? [$type] : Schema::types() as $t) {
             $q = DB::table(Schema::table($t))->where('key', $key);
             if (! $any) {
                 $q->where('status', 'active');
@@ -307,7 +330,7 @@ final class CatalogService
                 $facts[] = ['label' => (string) $k, 'value' => (string) $v];
             }
         }
-        $photos = DB::table(Schema::PHOTOS)->where('item_type', $type === 'materials' ? 'material' : 'equipment')->where('item_key', $r->key)->orderBy('sort')->orderBy('id')
+        $photos = DB::table(Schema::PHOTOS)->where('item_type', match ($type) { 'materials' => 'material', 'parts' => 'part', default => 'equipment' })->where('item_key', $r->key)->orderBy('sort')->orderBy('id')
             ->get()->map(static fn ($p) => ['id' => (int) $p->id, 'url' => (string) $p->url, 'thumb' => PhotoService::thumb((string) $p->url), 'credit' => (string) ($p->credit ?? ''), 'source_url' => (string) ($p->source_url ?? '')])->all();
         if ($photos === [] && trim((string) ($r->image_url ?? '')) !== '') {
             $photos = [['id' => 0, 'url' => (string) $r->image_url, 'thumb' => (string) $r->image_url, 'credit' => '', 'source_url' => '']];
@@ -368,7 +391,7 @@ final class CatalogService
         $title = mb_substr(trim(strip_tags((string) ($in['title'] ?? ($old->{$tcol} ?? '')))), 0, 80);
         $kind = (string) ($in['kind'] ?? ($old->kind ?? ''));
         if ($brand === '' || $title === '') {
-            throw new \InvalidArgumentException('제조사와 '.($type === 'materials' ? '제품 이름' : '모델 이름').'을 적어 주세요.');
+            throw new \InvalidArgumentException('제조사와 '.(match ($type) { 'materials' => '제품 이름', 'parts' => '부품 이름', default => '모델 이름' }).'을 적어 주세요.');
         }
         if (! Fields::validKind($type, $kind)) {
             throw new \InvalidArgumentException('종류를 골라 주세요.');
@@ -463,7 +486,7 @@ final class CatalogService
 
             return ['key' => (string) $old->key, 'created' => false];
         }
-        $key = $this->newKey($table, $brand, $title, $kind, $type === 'materials' ? 80 : 60);
+        $key = $this->newKey($table, $brand, $title, $kind, $type === 'equipment' ? 60 : 80);
         DB::table($table)->insert($row + ['key' => $key, 'status' => 'active', 'source' => $source !== '' ? mb_substr($source, 0, 20) : null, 'created_at' => now()]);
 
         return ['key' => $key, 'created' => true];
