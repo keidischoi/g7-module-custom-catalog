@@ -103,9 +103,11 @@ final class CatalogService
             'fdm프린터' => ['fdm'], '레진프린터' => ['sla', 'dlp'], '광경화프린터' => ['sla', 'dlp'], 'sla' => ['sla'], 'dlp' => ['dlp'], 'lcd' => ['dlp'], 'msla' => ['dlp'],
             'sls' => ['sls'], 'mjf' => ['mjf'], 'cnc' => ['cnc'], '레이저' => ['laser'], '스캐너' => ['scanner'], '건조기' => ['dryer'], '세척경화기' => ['wash_cure']],
         'materials' => ['필라멘트' => ['fdm'], '레진' => ['resin'], '수지' => ['resin'], '분말' => ['powder'], '파우더' => ['powder'], '금속분말' => ['powder']],
-        'parts' => ['부품' => ['nozzle', 'hotend', 'extruder', 'bed', 'motion', 'cooling', 'electronics', 'enclosure', 'resin_part', 'multi', 'tool', 'other'], '업그레이드' => ['nozzle', 'hotend', 'extruder', 'bed', 'motion', 'cooling', 'electronics', 'enclosure', 'resin_part', 'multi', 'tool', 'other'],
+        'parts' => ['부품' => ['nozzle', 'hotend', 'heater', 'extruder', 'bed', 'motion', 'motor', 'cooling', 'board', 'display', 'electronics', 'enclosure', 'resin_part', 'multi', 'tool', 'other'], '업그레이드' => ['nozzle', 'hotend', 'heater', 'extruder', 'bed', 'motion', 'motor', 'cooling', 'board', 'display', 'electronics', 'enclosure', 'resin_part', 'multi', 'tool', 'other'],
+            '모터' => ['motor'], '스테핑모터' => ['motor'], '메인보드' => ['board'], '마더보드' => ['board'], '보드' => ['board'], '화면' => ['display'], '스크린' => ['display'], '터치스크린' => ['display'],
+            '히터' => ['heater'], '히트베드' => ['heater'], '서미스터' => ['heater'], '센서' => ['electronics'], '카메라' => ['electronics'], '파워' => ['electronics'], '전원' => ['electronics'],
             '노즐' => ['nozzle', 'hotend'], '핫엔드' => ['hotend'], '익스트루더' => ['extruder'], '압출기' => ['extruder'], '베드' => ['bed'], '플레이트' => ['bed'], '빌드플레이트' => ['bed'],
-            '벨트' => ['motion'], '팬' => ['cooling'], '필터' => ['enclosure'], 'fep' => ['resin_part'], 'lcd' => ['resin_part'], '공구' => ['tool']],
+            '벨트' => ['motion'], '팬' => ['cooling'], '필터' => ['enclosure'], 'fep' => ['resin_part'], 'lcd' => ['display', 'resin_part'], '공구' => ['tool'], 'pei' => ['bed']],
     ];
 
     /**

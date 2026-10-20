@@ -156,7 +156,7 @@ final class PartsService
      *
      * @return list<array{kind: string, label: string, icon: string, items: list<array<string, mixed>>}>
      */
-    public function forPrinter(string $printerKey, int $limit = 60): array
+    public function forPrinter(string $printerKey, int $limit = 300): array
     {
         Schema::ensure();
         $auto = max(1, (int) Settings::get('parts_auto_votes'));

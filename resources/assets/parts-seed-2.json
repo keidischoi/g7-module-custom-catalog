@@ -1,0 +1,4443 @@
+{
+    "_comment": "0.3.2 벨트 · 모터 · 보드 · 화면 · 팬 · 히터 · 익스트루더 · 플레이트 — Bambu Lab 국내 스토어(호환성 칸 · 원화 가격) · Prusa 스토어(호환 표시) · Creality 공식 스토어(Compatible Models · 제목)에서 2026-10 확인. fits: [제조사, 모델].",
+    "items": [
+        {
+            "kind": "bed",
+            "brand": "Bambu Lab",
+            "name": "Bambu Smooth PEI 플레이트",
+            "url": "https://kr.store.bambulab.com/products/bambu-smooth-pei-plate",
+            "image": "https://store.bblcdn.com/d1a1d42d58ac45a49b4230453940513c.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: X1 시리즈/P1 시리즈/A1용 · A1 mini · H2D/H2S.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 64000,
+                "install": "그대로 끼움",
+                "bed_surface": "매끈 PEI",
+                "magnetic": true
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "X1 Carbon"
+                ],
+                [
+                    "Bambu Lab",
+                    "X1E"
+                ],
+                [
+                    "Bambu Lab",
+                    "P1S"
+                ],
+                [
+                    "Bambu Lab",
+                    "P1P"
+                ],
+                [
+                    "Bambu Lab",
+                    "A1 mini"
+                ],
+                [
+                    "Bambu Lab",
+                    "A1"
+                ],
+                [
+                    "Bambu Lab",
+                    "H2D"
+                ],
+                [
+                    "Bambu Lab",
+                    "H2S"
+                ]
+            ]
+        },
+        {
+            "kind": "bed",
+            "brand": "Bambu Lab",
+            "name": "Bambu Textured PEI 플레이트",
+            "url": "https://kr.store.bambulab.com/products/bambu-textured-pei-plate",
+            "image": "https://store.bblcdn.com/9db36bd4c48243f8818ef0072dc862bd.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: P2SH2D/H2SX1 시리즈/P1 시리즈/A1용 · A1 mini · H2C.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 64000,
+                "install": "그대로 끼움",
+                "bed_surface": "텍스처 PEI",
+                "magnetic": true
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "X1 Carbon"
+                ],
+                [
+                    "Bambu Lab",
+                    "X1E"
+                ],
+                [
+                    "Bambu Lab",
+                    "P1S"
+                ],
+                [
+                    "Bambu Lab",
+                    "P1P"
+                ],
+                [
+                    "Bambu Lab",
+                    "P2S"
+                ],
+                [
+                    "Bambu Lab",
+                    "A1 mini"
+                ],
+                [
+                    "Bambu Lab",
+                    "A1"
+                ],
+                [
+                    "Bambu Lab",
+                    "H2D"
+                ],
+                [
+                    "Bambu Lab",
+                    "H2S"
+                ],
+                [
+                    "Bambu Lab",
+                    "H2C"
+                ]
+            ]
+        },
+        {
+            "kind": "other",
+            "brand": "Bambu Lab",
+            "name": "히트베드 노즐 와이퍼 - A1 mini",
+            "url": "https://kr.store.bambulab.com/products/heatbed-nozzle-wiper-a1-mini",
+            "image": "https://store.bblcdn.com/47ac7ad77a9249ae9be2ed1f68fb4fcc.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: A1 mini.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 10000,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "A1 mini"
+                ]
+            ]
+        },
+        {
+            "kind": "extruder",
+            "brand": "Bambu Lab",
+            "name": "압출기 유닛 - A1 시리즈",
+            "url": "https://kr.store.bambulab.com/products/extruder-unit-a1-series",
+            "image": "https://store.bblcdn.com/595ced607096412ba04185adf88f0893.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: A1 시리즈.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 54000,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "A1"
+                ],
+                [
+                    "Bambu Lab",
+                    "A1 mini"
+                ]
+            ]
+        },
+        {
+            "kind": "motion",
+            "brand": "Bambu Lab",
+            "name": "Z 벨트 - A1",
+            "url": "https://kr.store.bambulab.com/products/z-belt-a1",
+            "image": "https://store.bblcdn.com/884db52d0cf2425d85b6e6b916dd51cb.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: A1 전용.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 6300,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "A1"
+                ]
+            ]
+        },
+        {
+            "kind": "motion",
+            "brand": "Bambu Lab",
+            "name": "X 벨트 - A1",
+            "url": "https://kr.store.bambulab.com/products/x-belt-a1",
+            "image": "https://store.bblcdn.com/faf1ce629f3b4ff8a5eb9c3f95f79dd9.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: A1 전용.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 10000,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "A1"
+                ]
+            ]
+        },
+        {
+            "kind": "motion",
+            "brand": "Bambu Lab",
+            "name": "X 벨트 - A1 mini",
+            "url": "https://kr.store.bambulab.com/products/x-belt-a1-mini",
+            "image": "https://store.bblcdn.com/b331802ae4094113a913c7749fea1271.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: A1 mini.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 8000,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "A1 mini"
+                ]
+            ]
+        },
+        {
+            "kind": "motion",
+            "brand": "Bambu Lab",
+            "name": "Y 벨트 -A1 mini",
+            "url": "https://kr.store.bambulab.com/products/y-belt-a1-mini",
+            "image": "https://store.bblcdn.com/15db7a4ae2584fdaab2c786f363980ce.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: A1 mini.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 10000,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "A1 mini"
+                ]
+            ]
+        },
+        {
+            "kind": "extruder",
+            "brand": "Bambu Lab",
+            "name": "스테인리스 스틸 압출기 장치 - P1 시리즈",
+            "url": "https://kr.store.bambulab.com/products/stainless-steel-extruder-unit-p1p",
+            "image": "https://store.bblcdn.com/2dea445606e0406a8f94b161334e7b47.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: P1 시리즈.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 59000,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "P1S"
+                ],
+                [
+                    "Bambu Lab",
+                    "P1P"
+                ]
+            ]
+        },
+        {
+            "kind": "bed",
+            "brand": "Bambu Lab",
+            "name": "Bambu Dual-Texture PEI 플레이트",
+            "url": "https://kr.store.bambulab.com/products/bambu-dual-texture-pei-plate",
+            "image": "https://store.bblcdn.com/ff5df21fda3e4ee3bb0a8d67ec94edd2.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: X1 시리즈/P1 시리즈/A1용 · A1 mini.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 45000,
+                "install": "그대로 끼움",
+                "bed_surface": "텍스처 PEI",
+                "magnetic": true,
+                "double_sided": true
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "X1 Carbon"
+                ],
+                [
+                    "Bambu Lab",
+                    "X1E"
+                ],
+                [
+                    "Bambu Lab",
+                    "P1S"
+                ],
+                [
+                    "Bambu Lab",
+                    "P1P"
+                ],
+                [
+                    "Bambu Lab",
+                    "A1 mini"
+                ],
+                [
+                    "Bambu Lab",
+                    "A1"
+                ]
+            ]
+        },
+        {
+            "kind": "extruder",
+            "brand": "Bambu Lab",
+            "name": "경화강 압출기 장치 - X1 시리즈",
+            "url": "https://kr.store.bambulab.com/products/hardened-steel-extruder-unit-x1-series",
+            "image": "https://store.bblcdn.com/324de21d5e9145c5aa0a468cb9088e48.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: X1C.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 76000,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "X1 Carbon"
+                ]
+            ]
+        },
+        {
+            "kind": "motion",
+            "brand": "Bambu Lab",
+            "name": "XY 벨트",
+            "url": "https://kr.store.bambulab.com/products/xy-belt",
+            "image": "https://store.bblcdn.com/9a214580f1d04408a8c7320e4f63524e.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: X1 시리즈 및 P1 시리즈.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 19900,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "X1 Carbon"
+                ],
+                [
+                    "Bambu Lab",
+                    "X1E"
+                ],
+                [
+                    "Bambu Lab",
+                    "P1S"
+                ],
+                [
+                    "Bambu Lab",
+                    "P1P"
+                ]
+            ]
+        },
+        {
+            "kind": "motion",
+            "brand": "Bambu Lab",
+            "name": "Z 벨트",
+            "url": "https://kr.store.bambulab.com/products/z-belt",
+            "image": "https://store.bblcdn.com/f504ee70bb2d4f32a5ff403b79e5ea31.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: X1 시리즈 및 P1 시리즈.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 8000,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "X1 Carbon"
+                ],
+                [
+                    "Bambu Lab",
+                    "X1E"
+                ],
+                [
+                    "Bambu Lab",
+                    "P1S"
+                ],
+                [
+                    "Bambu Lab",
+                    "P1P"
+                ]
+            ]
+        },
+        {
+            "kind": "other",
+            "brand": "Bambu Lab",
+            "name": "히트베드 노즐 와이퍼 - A1",
+            "url": "https://kr.store.bambulab.com/products/heatbed-nozzle-wiper-a1",
+            "image": "https://store.bblcdn.com/37b5c36c9d514347b98f21b8ce84d0bc.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: A1 전용.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 5000,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "A1"
+                ]
+            ]
+        },
+        {
+            "kind": "motion",
+            "brand": "Bambu Lab",
+            "name": "Y 벨트 - A1",
+            "url": "https://kr.store.bambulab.com/products/y-belt-a1",
+            "image": "https://store.bblcdn.com/1103b04b2ac34ac0b3cf9f8d3b28e7c8.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: A1 전용.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 9391,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "A1"
+                ]
+            ]
+        },
+        {
+            "kind": "bed",
+            "brand": "Bambu Lab",
+            "name": "Bambu 3D 효과 플레이트",
+            "url": "https://kr.store.bambulab.com/products/bambu-3d-effect-plate",
+            "image": "https://store.bblcdn.com/s3/default/fdac5b98124447f58f77dba2812cc20d/carbon_-_xpa.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: X1 시리즈/P1 시리즈/A1용 · A1 mini.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 32200,
+                "install": "그대로 끼움",
+                "bed_surface": "기타",
+                "magnetic": true
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "X1 Carbon"
+                ],
+                [
+                    "Bambu Lab",
+                    "X1E"
+                ],
+                [
+                    "Bambu Lab",
+                    "P1S"
+                ],
+                [
+                    "Bambu Lab",
+                    "P1P"
+                ],
+                [
+                    "Bambu Lab",
+                    "A1 mini"
+                ],
+                [
+                    "Bambu Lab",
+                    "A1"
+                ]
+            ]
+        },
+        {
+            "kind": "bed",
+            "brand": "Bambu Lab",
+            "name": "Bambu Cool Plate SuperTack",
+            "url": "https://kr.store.bambulab.com/products/bambu-cool-plate-supertack",
+            "image": "https://store.bblcdn.com/s3/default/7177513062564b54b77662a8e4a4c18a/img_v3_02i6_4165cee5-2b24-4195-ba93-0c44b48bd60g.jpg",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: A1 mini · X1 시리즈, P1 시리즈, A1 시리즈.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 59300,
+                "install": "그대로 끼움",
+                "bed_surface": "쿨 플레이트",
+                "magnetic": true
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "X1 Carbon"
+                ],
+                [
+                    "Bambu Lab",
+                    "X1E"
+                ],
+                [
+                    "Bambu Lab",
+                    "P1S"
+                ],
+                [
+                    "Bambu Lab",
+                    "P1P"
+                ],
+                [
+                    "Bambu Lab",
+                    "A1"
+                ],
+                [
+                    "Bambu Lab",
+                    "A1 mini"
+                ]
+            ]
+        },
+        {
+            "kind": "extruder",
+            "brand": "Bambu Lab",
+            "name": "경화강 압출기 기어 어셈블리",
+            "url": "https://kr.store.bambulab.com/products/hardened-steel-extruder-gear-assembly",
+            "image": "https://store.bblcdn.com/s3/default/7c2bdcbcc35a4c488fd4a8f8e715e3fb/img_v3_02i6_57958a36-0731-4ba3-b712-e6ada1c6ac0g.jpg",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: X1 시리즈, P1 시리즈.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 33900,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "X1 Carbon"
+                ],
+                [
+                    "Bambu Lab",
+                    "X1E"
+                ],
+                [
+                    "Bambu Lab",
+                    "P1S"
+                ],
+                [
+                    "Bambu Lab",
+                    "P1P"
+                ]
+            ]
+        },
+        {
+            "kind": "heater",
+            "brand": "Bambu Lab",
+            "name": "세라믹 히터 3개 - X1C",
+            "url": "https://kr.store.bambulab.com/products/ceramic-heater-x1-series",
+            "image": "https://store.bblcdn.com/s3/default/e4470554ceb946ee9d90fd5d677c518d/img_v3_02i6_ffccbe5e-9251-429f-a783-1d7924c9567g.jpg",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: X1C.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 23700,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "X1 Carbon"
+                ]
+            ]
+        },
+        {
+            "kind": "heater",
+            "brand": "Bambu Lab",
+            "name": "서미스터 3개 - X1C",
+            "url": "https://kr.store.bambulab.com/products/thermistor-x1-series",
+            "image": "https://store.bblcdn.com/s3/default/f4f126df776c47dcb5c2246a19e83513/img_v3_02i6_a00c7e4d-7dcb-4630-998e-d6ad9bf6c1fg.jpg",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: X1C.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 23700,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "X1 Carbon"
+                ]
+            ]
+        },
+        {
+            "kind": "heater",
+            "brand": "Bambu Lab",
+            "name": "세라믹 히터와 서미스터 3개 - P1시리즈",
+            "url": "https://kr.store.bambulab.com/products/ceramic-heater-thermistor-p1",
+            "image": "https://store.bblcdn.com/s3/default/d9e171cbff4344dca9bb5e9216982d74/img_v3_02i6_d9973881-d383-4d27-b9a4-eabb9863888g.jpg",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: P1 시리즈.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 42400,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "P1S"
+                ],
+                [
+                    "Bambu Lab",
+                    "P1P"
+                ]
+            ]
+        },
+        {
+            "kind": "cooling",
+            "brand": "Bambu Lab",
+            "name": "핫엔드용 냉각팬 - X1C",
+            "url": "https://kr.store.bambulab.com/products/cooling-fan-for-hotend-x1-series",
+            "image": "https://store.bblcdn.com/s3/default/8b4099e5193c48a1b230f0c31b1008e2/img_v3_02i6_9f0fa43b-f0c4-4f44-b302-c185eac9b69g.jpg",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: X1C.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 20300,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "X1 Carbon"
+                ]
+            ]
+        },
+        {
+            "kind": "cooling",
+            "brand": "Bambu Lab",
+            "name": "핫엔드용 냉각팬 - P1시리즈",
+            "url": "https://kr.store.bambulab.com/products/cooling-fan-for-hotend-p1-series",
+            "image": "https://store.bblcdn.com/s3/default/c30127095294464cb11cf82e5ecfd657/img_v3_02i6_90567343-697e-4ae4-b404-3c1c3cee059g.jpg",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: P1 시리즈.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 20300,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "P1S"
+                ],
+                [
+                    "Bambu Lab",
+                    "P1P"
+                ]
+            ]
+        },
+        {
+            "kind": "cooling",
+            "brand": "Bambu Lab",
+            "name": "보조 부품 냉각팬",
+            "url": "https://kr.store.bambulab.com/products/auxiliary-part-cooling-fan",
+            "image": "https://store.bblcdn.com/s3/default/af1b6d7a533a457ebba3cd7854bed22f/img_v3_02i6_b292679e-091f-40e1-ac31-6aa73133620g.jpg",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: X1 시리즈, P1 시리즈.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 50800,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "X1 Carbon"
+                ],
+                [
+                    "Bambu Lab",
+                    "X1E"
+                ],
+                [
+                    "Bambu Lab",
+                    "P1S"
+                ],
+                [
+                    "Bambu Lab",
+                    "P1P"
+                ]
+            ]
+        },
+        {
+            "kind": "board",
+            "brand": "Bambu Lab",
+            "name": "AC 보드 - LV - X2D",
+            "url": "https://eu.store.bambulab.com/en/products/ac-board-lv-x2d",
+            "image": "https://store.bblcdn.com/s3/default/193b71fa77a2449b98ec9cc5eb0c4047/DLB072.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: X2D.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 44000,
+                "install": "공구 필요",
+                "voltage": "LV (100–120 V)"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "X2D"
+                ]
+            ]
+        },
+        {
+            "kind": "board",
+            "brand": "Bambu Lab",
+            "name": "TH 보드 - X2D",
+            "url": "https://kr.store.bambulab.com/products/th-board-x2d",
+            "image": "https://store.bblcdn.com/s3/default/87e41e68aef2439bbb766393db49d6b3/DLB064.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: X2D.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 78000,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "X2D"
+                ]
+            ]
+        },
+        {
+            "kind": "electronics",
+            "brand": "Bambu Lab",
+            "name": "압출기 필라멘트 센서 - 오른쪽 - X2D",
+            "url": "https://kr.store.bambulab.com/products/extruder-filament-sensor-right-x2d",
+            "image": "https://store.bblcdn.com/s3/default/2ed7633254e84874a94d85323adf78c5/DLB068.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: X2D.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 19000,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "X2D"
+                ]
+            ]
+        },
+        {
+            "kind": "heater",
+            "brand": "Bambu Lab",
+            "name": "히트베드 - LV - X2D",
+            "url": "https://kr.store.bambulab.com/products/heatbed-lv-x2d",
+            "image": "https://store.bblcdn.com/s3/default/ce1d2518a8c94f06aefc55d0cbfb1f51/FAC219.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: X2D.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 140000,
+                "install": "공구 필요",
+                "voltage": "LV (100–120 V)"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "X2D"
+                ]
+            ]
+        },
+        {
+            "kind": "heater",
+            "brand": "Bambu Lab",
+            "name": "히트베드 - HV - X2D",
+            "url": "https://kr.store.bambulab.com/products/heatbed-hv-x2d",
+            "image": "https://store.bblcdn.com/s3/default/ce1d2518a8c94f06aefc55d0cbfb1f51/FAC219.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: X2D.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 140000,
+                "install": "공구 필요",
+                "voltage": "HV (220–240 V)"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "X2D"
+                ]
+            ]
+        },
+        {
+            "kind": "cooling",
+            "brand": "Bambu Lab",
+            "name": "MC 보드 팬 - X2D",
+            "url": "https://kr.store.bambulab.com/products/mc-board-fan-x2d",
+            "image": "https://store.bblcdn.com/s3/default/f1104834321b42aea2c3c967fd90f3bb/FAF024.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: X2D.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 16000,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "X2D"
+                ]
+            ]
+        },
+        {
+            "kind": "display",
+            "brand": "Bambu Lab",
+            "name": "스크린 - X2D",
+            "url": "https://kr.store.bambulab.com/products/screen-x2d",
+            "image": "https://store.bblcdn.com/s3/default/b73159a804be45be87f7f96855e5383d/DIS010.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: X2D.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 242000,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "X2D"
+                ]
+            ]
+        },
+        {
+            "kind": "electronics",
+            "brand": "Bambu Lab",
+            "name": "라이브 뷰 카메라 - X2D",
+            "url": "https://kr.store.bambulab.com/products/live-view-camera-x2d",
+            "image": "https://store.bblcdn.com/s3/default/6f97a57914a84044babb7c57a0692d27/CAM012.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: X2D.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 80000,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "X2D"
+                ]
+            ]
+        },
+        {
+            "kind": "extruder",
+            "brand": "Bambu Lab",
+            "name": "보조 익스트루더 - X2D",
+            "url": "https://kr.store.bambulab.com/products/auxiliary-extruder-x2d",
+            "image": "https://store.bblcdn.com/s3/default/f67a9513f1394d44bcb2fa877f6167cf/FAE049.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: X2D.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 67000,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "X2D"
+                ]
+            ]
+        },
+        {
+            "kind": "cooling",
+            "brand": "Bambu Lab",
+            "name": "핫엔드 냉각 팬 - X2D",
+            "url": "https://kr.store.bambulab.com/products/cooling-fan-for-hotend-x2d",
+            "image": "https://store.bblcdn.com/s3/default/7c6ffda38f804f8489ea669d62c0d581/FAF023.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: X2D.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 19000,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "X2D"
+                ]
+            ]
+        },
+        {
+            "kind": "cooling",
+            "brand": "Bambu Lab",
+            "name": "부품 냉각 팬 - A1 시리즈",
+            "url": "https://kr.store.bambulab.com/products/part-cooling-fan-a1-series",
+            "image": "https://store.bblcdn.com/s3/default/e18332adeac448aabe83e5d3282f4da8/a7c73f2711dd489ebcf2ec3c0d4bc8e7.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: A1 시리즈 전용.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 15000,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "A1"
+                ],
+                [
+                    "Bambu Lab",
+                    "A1 mini"
+                ]
+            ]
+        },
+        {
+            "kind": "board",
+            "brand": "Bambu Lab",
+            "name": "메인보드 - A2L (HV)",
+            "url": "https://kr.store.bambulab.com/products/mainboard-a2l",
+            "image": "https://store.bblcdn.com/s3/default/641d036b36fc45ffb75ee92b3d7a4860/DLB077_or_DLB078.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: A2L.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 132700,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "A2L"
+                ]
+            ]
+        },
+        {
+            "kind": "board",
+            "brand": "Bambu Lab",
+            "name": "AC 보드 - A2L (HV)",
+            "url": "https://kr.store.bambulab.com/products/ac-board-a2l",
+            "image": "https://store.bblcdn.com/s3/default/c92749bf6c8a4a48b1b7557d63877407/DLB079.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: A2L.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 29500,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "A2L"
+                ]
+            ]
+        },
+        {
+            "kind": "heater",
+            "brand": "Bambu Lab",
+            "name": "핫엔드 히팅 어셈블리 - A2L",
+            "url": "https://kr.store.bambulab.com/products/hotend-heating-assembly-a2l",
+            "image": "https://store.bblcdn.com/s3/default/b9bc59d5273548f5acd16da5d48d9cd4/FAH070.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: A2L.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 47800,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "A2L"
+                ]
+            ]
+        },
+        {
+            "kind": "board",
+            "brand": "Bambu Lab",
+            "name": "툴헤드 보드 - A2L",
+            "url": "https://kr.store.bambulab.com/products/toolhead-board-a2l",
+            "image": "https://store.bblcdn.com/s3/default/d30366b1c7524ea18129ae64e6dde5a6/DLB074.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: A2L.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 47200,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "A2L"
+                ]
+            ]
+        },
+        {
+            "kind": "extruder",
+            "brand": "Bambu Lab",
+            "name": "익스트루더 기어 어셈블리 - A2L",
+            "url": "https://kr.store.bambulab.com/products/extruder-gear-assembly-a2l",
+            "image": "https://store.bblcdn.com/s3/default/d1bf5a6857514dbf9e0749c3f4bb5153/FAE062.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: A2L.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 15500,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "A2L"
+                ]
+            ]
+        },
+        {
+            "kind": "motor",
+            "brand": "Bambu Lab",
+            "name": "A3508 익스트루더 모터 - A2L",
+            "url": "https://kr.store.bambulab.com/products/a3508-extruder-motor-a2l",
+            "image": "https://store.bblcdn.com/s3/default/a00443d6a9e542ea9b02dff018dc3939/FAM025.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: A2L.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 71600,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "A2L"
+                ]
+            ]
+        },
+        {
+            "kind": "cooling",
+            "brand": "Bambu Lab",
+            "name": "핫엔드용 쿨링 팬 - A2L",
+            "url": "https://kr.store.bambulab.com/products/cooling-fan-for-hotend-a2l",
+            "image": "https://store.bblcdn.com/s3/default/ef6dd70a64114529b2de80294b87c197/FAF027.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: A2L.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 18900,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "A2L"
+                ]
+            ]
+        },
+        {
+            "kind": "electronics",
+            "brand": "Bambu Lab",
+            "name": "압출기 필라멘트 센서 - 왼쪽 - X2D",
+            "url": "https://kr.store.bambulab.com/products/extruder-filament-sensor-leftx2d",
+            "image": "https://store.bblcdn.com/s3/default/eb6675d166d5443ab591803fddeffd8c/DLB067.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: X2D.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 19000,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "X2D"
+                ]
+            ]
+        },
+        {
+            "kind": "heater",
+            "brand": "Bambu Lab",
+            "name": "히트베드 유닛 - A2L (HV)",
+            "url": "https://kr.store.bambulab.com/products/heatbed-unit-a2l",
+            "image": "https://store.bblcdn.com/s3/default/ea131b0d60594a639e26b3e0710671c8/FAZ066.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: A2L.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 136500,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "A2L"
+                ]
+            ]
+        },
+        {
+            "kind": "electronics",
+            "brand": "Bambu Lab",
+            "name": "파워 서플라이 - A2L",
+            "url": "https://kr.store.bambulab.com/products/power-supply-a2l",
+            "image": "https://store.bblcdn.com/s3/default/dcab096d1a4b4d978923a402bb997865/FAZ068.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: A2L.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 95600,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "A2L"
+                ]
+            ]
+        },
+        {
+            "kind": "cooling",
+            "brand": "Bambu Lab",
+            "name": "파트 쿨링 팬 - A2L",
+            "url": "https://kr.store.bambulab.com/products/part-cooling-fan-a2l",
+            "image": "https://store.bblcdn.com/s3/default/08bf5ff7a94941e8b54ff5ac92419abc/FAF026.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: A2L.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 15300,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "A2L"
+                ]
+            ]
+        },
+        {
+            "kind": "heater",
+            "brand": "Bambu Lab",
+            "name": "핫엔드 가열 어셈블리 - 왼쪽 - X2D",
+            "url": "https://kr.store.bambulab.com/products/hotend-heating-assembly-left-x2d",
+            "image": "https://store.bblcdn.com/s3/default/18684b5f0d8b446faf98951dcce3ceb0/FAH057.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: X2D.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 48000,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "X2D"
+                ]
+            ]
+        },
+        {
+            "kind": "heater",
+            "brand": "Bambu Lab",
+            "name": "보조 핫엔드 가열 어셈블리 - 우측 - X2D",
+            "url": "https://kr.store.bambulab.com/products/auxiliary-hotend-heating-assembly-right-x2d",
+            "image": "https://store.bblcdn.com/s3/default/18684b5f0d8b446faf98951dcce3ceb0/FAH057.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: X2D.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 48000,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "X2D"
+                ]
+            ]
+        },
+        {
+            "kind": "display",
+            "brand": "Bambu Lab",
+            "name": "고해상도 스크린 - X1 시리즈",
+            "url": "https://kr.store.bambulab.com/products/high-resolution-screen-x1-series",
+            "image": "https://store.bblcdn.com/s3/default/b89b03cd878f4fe2b02de878974b837e/output.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: X1 시리즈.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 254400,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "X1 Carbon"
+                ],
+                [
+                    "Bambu Lab",
+                    "X1E"
+                ]
+            ]
+        },
+        {
+            "kind": "board",
+            "brand": "Bambu Lab",
+            "name": "압출기 인터페이스 보드 - P1 시리즈",
+            "url": "https://kr.store.bambulab.com/products/extruder-interface-board-p1-series",
+            "image": "https://store.bblcdn.com/s3/default/9ecafb46c37e4722b248884abb3640ce/output_(3).png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: P1 시리즈.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 16900,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "P1S"
+                ],
+                [
+                    "Bambu Lab",
+                    "P1P"
+                ]
+            ]
+        },
+        {
+            "kind": "board",
+            "brand": "Bambu Lab",
+            "name": "TH 보드 - P1 시리즈",
+            "url": "https://kr.store.bambulab.com/products/th-board-p1-series",
+            "image": "https://store.bblcdn.com/s3/default/ed919ae5028d46fcb3e286fc96698c8d/output_(14).png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: P1 시리즈.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 67800,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "P1S"
+                ],
+                [
+                    "Bambu Lab",
+                    "P1P"
+                ]
+            ]
+        },
+        {
+            "kind": "heater",
+            "brand": "Bambu Lab",
+            "name": "히트베드 유닛 - A1 mini",
+            "url": "https://kr.store.bambulab.com/products/heatbed-unit-a1-mini",
+            "image": "https://store.bblcdn.com/s3/default/64899e2b678c49eb80e1fbadf1a0e051/output_(23).png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: A1 mini.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 67800,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "A1 mini"
+                ]
+            ]
+        },
+        {
+            "kind": "motor",
+            "brand": "Bambu Lab",
+            "name": "X 모터 - A1 mini",
+            "url": "https://kr.store.bambulab.com/products/x-motor-a1-mini",
+            "image": "https://store.bblcdn.com/s3/default/7014e8b497ae41a0bccbb4f51fc0fe1d/output_(24).png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: A1 mini.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 42400,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "A1 mini"
+                ]
+            ]
+        },
+        {
+            "kind": "motor",
+            "brand": "Bambu Lab",
+            "name": "Y 모터 - A1 mini",
+            "url": "https://kr.store.bambulab.com/products/y-motor-a1-mini",
+            "image": "https://store.bblcdn.com/s3/default/33e354aaee674fd0b51e47b060f90255/output_(26).png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: A1 mini.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 42400,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "A1 mini"
+                ]
+            ]
+        },
+        {
+            "kind": "electronics",
+            "brand": "Bambu Lab",
+            "name": "라이브 뷰 카메라 - A1 mini",
+            "url": "https://kr.store.bambulab.com/products/live-view-camera-a1-mini",
+            "image": "https://store.bblcdn.com/s3/default/bb6d514b062e4831abaa2a9f99cc5795/output_(33).png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: A1 mini.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 50800,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "A1 mini"
+                ]
+            ]
+        },
+        {
+            "kind": "display",
+            "brand": "Bambu Lab",
+            "name": "터치 스크린 - A1 mini",
+            "url": "https://kr.store.bambulab.com/products/touch-screen-a1-mini",
+            "image": "https://store.bblcdn.com/s3/default/12d2816970c44cd78a68b38dce913c6f/output_(38).png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: A1 mini.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 42400,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "A1 mini"
+                ]
+            ]
+        },
+        {
+            "kind": "heater",
+            "brand": "Bambu Lab",
+            "name": "핫엔드 가열 어셈블리",
+            "url": "https://kr.store.bambulab.com/products/hotend-heating-assembly",
+            "image": "https://store.bblcdn.com/s3/default/74659ddbb44049698a974d5420ac10f3/output_(51).png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: H2D 및 H2D Laser.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 50800,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "H2D"
+                ]
+            ]
+        },
+        {
+            "kind": "electronics",
+            "brand": "Bambu Lab",
+            "name": "버드아이 카메라",
+            "url": "https://kr.store.bambulab.com/products/birds-eye-camera",
+            "image": "https://store.bblcdn.com/s3/default/5e7b1feefde24673bb39354febea47d5/output_(83).png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: H2D 및 H2D Laser.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 84800,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "H2D"
+                ]
+            ]
+        },
+        {
+            "kind": "electronics",
+            "brand": "Bambu Lab",
+            "name": "툴헤드 카메라 - H2 시리즈",
+            "url": "https://kr.store.bambulab.com/products/toolhead-camera-h2-series",
+            "image": "https://store.bblcdn.com/s3/default/992e4dfa79d342dd80d6601b336239d7/FAC092_.jpg",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: H2D 및 H2D Laser · H2S 및 H2S Laser.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 50800,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "H2D"
+                ],
+                [
+                    "Bambu Lab",
+                    "H2S"
+                ]
+            ]
+        },
+        {
+            "kind": "board",
+            "brand": "Bambu Lab",
+            "name": "TH 보드 - H2 시리즈",
+            "url": "https://kr.store.bambulab.com/products/th-board-h2-series",
+            "image": "https://store.bblcdn.com/s3/default/1b14345fa08342f9a0cd57eb0ed84864/DLB025H2DTHBoard.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: H2D 및 H2D Laser · H2S 및 H2S Laser · H2C 및 H2C Laser.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 101700,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "H2D"
+                ],
+                [
+                    "Bambu Lab",
+                    "H2S"
+                ],
+                [
+                    "Bambu Lab",
+                    "H2C"
+                ]
+            ]
+        },
+        {
+            "kind": "board",
+            "brand": "Bambu Lab",
+            "name": "AP 보드 - H2 시리즈",
+            "url": "https://kr.store.bambulab.com/products/ap-board-h2-series",
+            "image": "https://store.bblcdn.com/s3/default/7d6ad449f9794996b2596aba06cd1862/DLB027-2.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: H2D 및 H2D Laser · H2S 및 H2S Laser · H2C 및 H2C Laser.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 252700,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "H2D"
+                ],
+                [
+                    "Bambu Lab",
+                    "H2S"
+                ],
+                [
+                    "Bambu Lab",
+                    "H2C"
+                ]
+            ]
+        },
+        {
+            "kind": "board",
+            "brand": "Bambu Lab",
+            "name": "MC 보드 - H2 시리즈",
+            "url": "https://kr.store.bambulab.com/products/mc-board-h2-series",
+            "image": "https://store.bblcdn.com/s3/default/4e33785af9ce4f669b704aada0792547/DLB029MCboard1.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: H2D 및 H2D Laser · H2S 및 H2S Laser.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 135700,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "H2D"
+                ],
+                [
+                    "Bambu Lab",
+                    "H2S"
+                ]
+            ]
+        },
+        {
+            "kind": "electronics",
+            "brand": "Bambu Lab",
+            "name": "익스트루더 필라멘트 센서 - H2S",
+            "url": "https://kr.store.bambulab.com/products/extruder-filament-sensor-h2s",
+            "image": "https://store.bblcdn.com/s3/default/1263611ffadc4dc295d0afc1b609f2d5/FAC142.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: H2S 및 H2S Laser.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 16900,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "H2S"
+                ]
+            ]
+        },
+        {
+            "kind": "motion",
+            "brand": "Bambu Lab",
+            "name": "XY 벨트 - H2 시리즈",
+            "url": "https://kr.store.bambulab.com/products/xy-belt-h2-series",
+            "image": "https://store.bblcdn.com/s3/default/99cda978a7014042bc698acf91ea4f19/FAB010.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: H2D 및 H2D Laser · H2S 및 H2S Laser.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 33900,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "H2D"
+                ],
+                [
+                    "Bambu Lab",
+                    "H2S"
+                ]
+            ]
+        },
+        {
+            "kind": "heater",
+            "brand": "Bambu Lab",
+            "name": "히트베드 유닛 - H2 시리즈",
+            "url": "https://kr.store.bambulab.com/products/heatbed-unit-h2-series",
+            "image": "https://store.bblcdn.com/s3/default/bdc97e266d2440f48cf8b5176246451f/FAC105_FAC016HeatbedUnit_2.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: H2D 및 H2D Laser · H2S 및 H2S Laser · H2C 및 H2C Laser.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 269700,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "H2D"
+                ],
+                [
+                    "Bambu Lab",
+                    "H2S"
+                ],
+                [
+                    "Bambu Lab",
+                    "H2C"
+                ]
+            ]
+        },
+        {
+            "kind": "extruder",
+            "brand": "Bambu Lab",
+            "name": "익스트루더 유닛 - H2S",
+            "url": "https://kr.store.bambulab.com/products/extruder-unit-h2s",
+            "image": "https://store.bblcdn.com/s3/default/734e8f5f6ed245bb8562b57940f9390e/20250825-160937.jpg",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: H2S 및 H2S Laser.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 135700,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "H2S"
+                ]
+            ]
+        },
+        {
+            "kind": "extruder",
+            "brand": "Bambu Lab",
+            "name": "익스트루더 기어 어셈블리 - H2S",
+            "url": "https://kr.store.bambulab.com/products/extruder-gear-assembly-h2s",
+            "image": "https://store.bblcdn.com/s3/default/e5641eeed33f497f89c1a3bfab463e27/FAE033.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: H2S 및 H2S Laser.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 20300,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "H2S"
+                ]
+            ]
+        },
+        {
+            "kind": "cooling",
+            "brand": "Bambu Lab",
+            "name": "부품 냉각 팬 - H2 시리즈",
+            "url": "https://kr.store.bambulab.com/products/part-cooling-fan-h2-series",
+            "image": "https://store.bblcdn.com/s3/default/01674af47d3c4e2db559fdd2e8571e78/FAF013.jpg",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: H2D 및 H2D Laser · H2S 및 H2S Laser.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 25400,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "H2D"
+                ],
+                [
+                    "Bambu Lab",
+                    "H2S"
+                ]
+            ]
+        },
+        {
+            "kind": "heater",
+            "brand": "Bambu Lab",
+            "name": "핫엔드 히팅 어셈블리 - H2S",
+            "url": "https://kr.store.bambulab.com/products/hotend-heating-assembly-h2s",
+            "image": "https://store.bblcdn.com/s3/default/6d8e98a558d142e29b9787e58a50536c/FAH046.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: H2S 및 H2S Laser.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 50800,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "H2S"
+                ]
+            ]
+        },
+        {
+            "kind": "motor",
+            "brand": "Bambu Lab",
+            "name": "익스트루더 모터 - H2S",
+            "url": "https://kr.store.bambulab.com/products/extruder-motor-h2s",
+            "image": "https://store.bblcdn.com/s3/default/fb98d2c5d5074a639736f7878133bd48/FAM019.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: H2S 및 H2S Laser.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 101700,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "H2S"
+                ]
+            ]
+        },
+        {
+            "kind": "heater",
+            "brand": "Bambu Lab",
+            "name": "히트베드 - HV - P2S",
+            "url": "https://kr.store.bambulab.com/products/heatbed-hv-p2s",
+            "image": "https://store.bblcdn.com/s3/default/d9e0aa15a5e243e8ade5453300f56d95/FAC164.jpg",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: P2시리즈.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 118700,
+                "install": "공구 필요",
+                "voltage": "HV (220–240 V)"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "P2S"
+                ]
+            ]
+        },
+        {
+            "kind": "heater",
+            "brand": "Bambu Lab",
+            "name": "히트베드 - LV - P2S",
+            "url": "https://kr.store.bambulab.com/products/heatbed-lv-p2s",
+            "image": "https://store.bblcdn.com/s3/default/d9e0aa15a5e243e8ade5453300f56d95/FAC164.jpg",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: P2시리즈.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 118700,
+                "install": "공구 필요",
+                "voltage": "LV (100–120 V)"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "P2S"
+                ]
+            ]
+        },
+        {
+            "kind": "electronics",
+            "brand": "Bambu Lab",
+            "name": "전원 공급 장치 - P2S",
+            "url": "https://kr.store.bambulab.com/products/power-supply-p2s",
+            "image": "https://store.bblcdn.com/s3/default/266bb4a082be456c8d6839d9fd80516a/FAC165.jpg",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: P2시리즈.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 101700,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "P2S"
+                ]
+            ]
+        },
+        {
+            "kind": "cooling",
+            "brand": "Bambu Lab",
+            "name": "핫엔드용 쿨링 팬 - P2S",
+            "url": "https://kr.store.bambulab.com/products/cooling-fan-for-hotend-p2s",
+            "image": "https://store.bblcdn.com/s3/default/a0b04906fc9541eca4989d8f154cb1c0/FAF021-1.jpg",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: P2시리즈.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 20300,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "P2S"
+                ]
+            ]
+        },
+        {
+            "kind": "display",
+            "brand": "Bambu Lab",
+            "name": "스크린 - P2S",
+            "url": "https://kr.store.bambulab.com/products/screen-p2s",
+            "image": "https://store.bblcdn.com/s3/default/956a9d20df6a4adfaa7556a1748b6f58/DIS009.jpg",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: P2시리즈.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 220500,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "P2S"
+                ]
+            ]
+        },
+        {
+            "kind": "electronics",
+            "brand": "Bambu Lab",
+            "name": "실시간 뷰 카메라 - P2S",
+            "url": "https://kr.store.bambulab.com/products/live-view-camera-p2s",
+            "image": "https://store.bblcdn.com/s3/default/0ed15170254c49f6911c68dc952994e1/CAM010.jpg",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: P2시리즈.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 50800,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "P2S"
+                ]
+            ]
+        },
+        {
+            "kind": "heater",
+            "brand": "Bambu Lab",
+            "name": "핫엔드 히팅 어셈블리 - P2S",
+            "url": "https://kr.store.bambulab.com/products/hotend-heating-assembly-p2s",
+            "image": "https://store.bblcdn.com/s3/default/1db46be40d6c459baf28b5810cb85c2b/FAH049-1.jpg",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: P2시리즈.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 50800,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "P2S"
+                ]
+            ]
+        },
+        {
+            "kind": "extruder",
+            "brand": "Bambu Lab",
+            "name": "익스트루더 기어 어셈블리 - P2S",
+            "url": "https://kr.store.bambulab.com/products/extruder-gear-assembly-p2s",
+            "image": "https://store.bblcdn.com/s3/default/3693a744e47a4b12aea05926a4b852a1/FAE035-1.jpg",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: P2시리즈.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 33900,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "P2S"
+                ]
+            ]
+        },
+        {
+            "kind": "board",
+            "brand": "Bambu Lab",
+            "name": "TH 보드 - P2S",
+            "url": "https://kr.store.bambulab.com/products/th-board-p2s",
+            "image": "https://store.bblcdn.com/s3/default/eab307e3a7a24822af7336eb60b64127/DLB057-1.jpg",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: P2시리즈.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 50800,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "P2S"
+                ]
+            ]
+        },
+        {
+            "kind": "board",
+            "brand": "Bambu Lab",
+            "name": "AC 보드 - HV - P2S",
+            "url": "https://kr.store.bambulab.com/products/ac-board-hv-p2s",
+            "image": "https://store.bblcdn.com/s3/default/652cf698a1ef456792964717899e252c/DLB054.jpg",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: P2시리즈.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 42400,
+                "install": "공구 필요",
+                "voltage": "HV (220–240 V)"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "P2S"
+                ]
+            ]
+        },
+        {
+            "kind": "board",
+            "brand": "Bambu Lab",
+            "name": "AC 보드 - LV - P2S",
+            "url": "https://kr.store.bambulab.com/products/ac-board-lv-p2s",
+            "image": "https://store.bblcdn.com/s3/default/652cf698a1ef456792964717899e252c/DLB054.jpg",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: P2시리즈.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 42400,
+                "install": "공구 필요",
+                "voltage": "LV (100–120 V)"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "P2S"
+                ]
+            ]
+        },
+        {
+            "kind": "board",
+            "brand": "Bambu Lab",
+            "name": "AP 보드 - HV - P2S",
+            "url": "https://kr.store.bambulab.com/products/ap-board-hv-p2s",
+            "image": "https://store.bblcdn.com/s3/default/f3c05d675db24cbc8868eacfb04a3946/DLB051_(4).jpg",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: P2시리즈.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 203500,
+                "install": "공구 필요",
+                "voltage": "HV (220–240 V)"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "P2S"
+                ]
+            ]
+        },
+        {
+            "kind": "board",
+            "brand": "Bambu Lab",
+            "name": "AP 보드 - LV - P2S",
+            "url": "https://kr.store.bambulab.com/products/ap-board-lv-p2s",
+            "image": "https://store.bblcdn.com/s3/default/f3c05d675db24cbc8868eacfb04a3946/DLB051_(4).jpg",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: P2시리즈.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 203500,
+                "install": "공구 필요",
+                "voltage": "LV (100–120 V)"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "P2S"
+                ]
+            ]
+        },
+        {
+            "kind": "board",
+            "brand": "Bambu Lab",
+            "name": "익스트루더 연결 보드 - P2S",
+            "url": "https://kr.store.bambulab.com/products/extruder-connection-board-p2s",
+            "image": "https://store.bblcdn.com/s3/default/d40e4a5a8b2c476fbf78cdd4460e0224/DLB056-1.jpg",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: P2시리즈.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 16900,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "P2S"
+                ]
+            ]
+        },
+        {
+            "kind": "bed",
+            "brand": "Bambu Lab",
+            "name": "쿨 플레이트 슈퍼택 프로",
+            "url": "https://kr.store.bambulab.com/products/cool-plate-supertack-pro",
+            "image": "https://store.bblcdn.com/s3/default/a0f3347124064b2c85217b06fbf79b03/11_(1).png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: P2SA1 · P1 · X1CH2DH2SH2CX2D.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 50800,
+                "install": "그대로 끼움",
+                "bed_surface": "쿨 플레이트",
+                "magnetic": true
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "X1 Carbon"
+                ],
+                [
+                    "Bambu Lab",
+                    "P1S"
+                ],
+                [
+                    "Bambu Lab",
+                    "P1P"
+                ],
+                [
+                    "Bambu Lab",
+                    "P2S"
+                ],
+                [
+                    "Bambu Lab",
+                    "A1"
+                ],
+                [
+                    "Bambu Lab",
+                    "H2D"
+                ],
+                [
+                    "Bambu Lab",
+                    "H2S"
+                ],
+                [
+                    "Bambu Lab",
+                    "H2C"
+                ],
+                [
+                    "Bambu Lab",
+                    "X2D"
+                ]
+            ]
+        },
+        {
+            "kind": "bed",
+            "brand": "Bambu Lab",
+            "name": "Bambu 엔지니어링 플레이트",
+            "url": "https://kr.store.bambulab.com/products/bambu-engineering-plate",
+            "image": "https://store.bblcdn.com/s3/default/b78ccfa45fbf4e5e92ec70c683ae2a40/111.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: P2SP1 · A1 · X1CH2SH2DH2C.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 50800,
+                "install": "그대로 끼움",
+                "bed_surface": "엔지니어링 플레이트",
+                "magnetic": true
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "X1 Carbon"
+                ],
+                [
+                    "Bambu Lab",
+                    "P1S"
+                ],
+                [
+                    "Bambu Lab",
+                    "P1P"
+                ],
+                [
+                    "Bambu Lab",
+                    "P2S"
+                ],
+                [
+                    "Bambu Lab",
+                    "A1"
+                ],
+                [
+                    "Bambu Lab",
+                    "H2D"
+                ],
+                [
+                    "Bambu Lab",
+                    "H2S"
+                ],
+                [
+                    "Bambu Lab",
+                    "H2C"
+                ]
+            ]
+        },
+        {
+            "kind": "board",
+            "brand": "Bambu Lab",
+            "name": "AC 보드",
+            "url": "https://kr.store.bambulab.com/products/ac-board-x1-series-and-p1-series",
+            "image": "https://store.bblcdn.com/s3/default/9a1eb178404e458eaea69cbd6c3d1f88/SPC002AC.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: X1 시리즈, P1 시리즈.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 42400,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "X1 Carbon"
+                ],
+                [
+                    "Bambu Lab",
+                    "X1E"
+                ],
+                [
+                    "Bambu Lab",
+                    "P1S"
+                ],
+                [
+                    "Bambu Lab",
+                    "P1P"
+                ]
+            ]
+        },
+        {
+            "kind": "motion",
+            "brand": "Bambu Lab",
+            "name": "인덕션 핫엔드 랙 벨트 어셈블리",
+            "url": "https://kr.store.bambulab.com/products/induction-hotend-rack-belt-assembly",
+            "image": "https://store.bblcdn.com/s3/default/4805dd071d20477299a5582889c8545a/FAC188.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: H2C and H2C Laser.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 16900,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "H2C"
+                ]
+            ]
+        },
+        {
+            "kind": "motor",
+            "brand": "Bambu Lab",
+            "name": "3513 인덕션 핫엔드 랙 모터",
+            "url": "https://kr.store.bambulab.com/products/3513-induction-hotend-rack-motor",
+            "image": "https://store.bblcdn.com/s3/default/ea0e21e076194314a2274d259b15d836/FAM022.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: H2C 및 H2C Laser.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 67800,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "H2C"
+                ]
+            ]
+        },
+        {
+            "kind": "cooling",
+            "brand": "Bambu Lab",
+            "name": "Auxiliary Part Cooling Fan (Left) - P2S",
+            "url": "https://kr.store.bambulab.com/products/auxiliary-part-cooling-fan-left",
+            "image": "https://store.bblcdn.com/s3/default/79b5f0c011cb41a8b71a5bd4a52d8e34/FAF022.jpg",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: P2S.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 50800,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "P2S"
+                ]
+            ]
+        },
+        {
+            "kind": "board",
+            "brand": "Bambu Lab",
+            "name": "TH 보드 세트 V9 (듀얼 레드 레이저) - X1 시리즈",
+            "url": "https://kr.store.bambulab.com/products/th-board-set-v9-dual-red-laser-x1-series",
+            "image": "https://store.bblcdn.com/s3/default/403b4c25c5e64e5a9e74ab05109934ad/20230922-101151.jpg",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: X1 및 X1C (X1E 미지원).",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 72000,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "X1 Carbon"
+                ]
+            ]
+        },
+        {
+            "kind": "board",
+            "brand": "Bambu Lab",
+            "name": "익스트루더 인터페이스 보드 V9 - X1 시리즈",
+            "url": "https://kr.store.bambulab.com/products/extruder-interface-board-v9",
+            "image": "https://store.bblcdn.com/s3/default/48602acf3ff44e209f466948c389ae01/2-1.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: X1 시리즈 전용.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 13000,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "X1 Carbon"
+                ],
+                [
+                    "Bambu Lab",
+                    "X1E"
+                ]
+            ]
+        },
+        {
+            "kind": "board",
+            "brand": "Bambu Lab",
+            "name": "인덕션 핫엔드 랙 제어 보드",
+            "url": "https://kr.store.bambulab.com/products/induction-hotend-rack-control-board",
+            "image": "https://store.bblcdn.com/s3/default/1c91bb2ae1224c4aae261c5f26bc45a6/DLB059.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: H2C 및 H2C Laser.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 42400,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "H2C"
+                ]
+            ]
+        },
+        {
+            "kind": "extruder",
+            "brand": "Bambu Lab",
+            "name": "듀얼 익스트루더 유닛",
+            "url": "https://kr.store.bambulab.com/products/dual-extruder-unit",
+            "image": "https://store.bblcdn.com/s3/default/88c15a0659ab42c09f85cbac6b31310a/DualExtruderUnit-1.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: H2D 및 H2D Laser · H2C 및 H2C Laser.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 305300,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "H2D"
+                ],
+                [
+                    "Bambu Lab",
+                    "H2C"
+                ]
+            ]
+        },
+        {
+            "kind": "cooling",
+            "brand": "Bambu Lab",
+            "name": "외부 배기 팬 키트 - P2S",
+            "url": "https://kr.store.bambulab.com/products/external-exhaust-fan-kit-p2s",
+            "image": "https://store.bblcdn.com/s3/default/e8e71ffd5f05439285f072f95705ce86/FAF025_.jpg",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: P2S.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 33900,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "P2S"
+                ]
+            ]
+        },
+        {
+            "kind": "board",
+            "brand": "Bambu Lab",
+            "name": "AP 보드 - LV - X2D",
+            "url": "https://kr.store.bambulab.com/products/ap-board-lv-x2d",
+            "image": "https://store.bblcdn.com/s3/default/ec3964a99fba4f64a75cd6d8bdaf57d2/DLB069.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: X2D.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 235000,
+                "install": "공구 필요",
+                "voltage": "LV (100–120 V)"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "X2D"
+                ]
+            ]
+        },
+        {
+            "kind": "board",
+            "brand": "Bambu Lab",
+            "name": "AP 보드-HV-X2D",
+            "url": "https://kr.store.bambulab.com/products/ap-board-hv-x2d",
+            "image": "https://store.bblcdn.com/s3/default/ec3964a99fba4f64a75cd6d8bdaf57d2/DLB069.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: X2D.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 235000,
+                "install": "공구 필요",
+                "voltage": "HV (220–240 V)"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "X2D"
+                ]
+            ]
+        },
+        {
+            "kind": "board",
+            "brand": "Bambu Lab",
+            "name": "MC 보드 - X2D",
+            "url": "https://kr.store.bambulab.com/products/mc-board-x2d",
+            "image": "https://store.bblcdn.com/s3/default/3dfb60cc397a4d1b8d97f79ed2d33cb2/DLB071.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: X2D.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 138000,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "X2D"
+                ]
+            ]
+        },
+        {
+            "kind": "board",
+            "brand": "Bambu Lab",
+            "name": "AC 보드 - HV - X2D",
+            "url": "https://kr.store.bambulab.com/products/ac-board-hv-x2d",
+            "image": "https://store.bblcdn.com/s3/default/193b71fa77a2449b98ec9cc5eb0c4047/DLB072.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: X2D.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 44000,
+                "install": "공구 필요",
+                "voltage": "HV (220–240 V)"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "X2D"
+                ]
+            ]
+        },
+        {
+            "kind": "cooling",
+            "brand": "Bambu Lab",
+            "name": "챔버 온도 조절 팬",
+            "url": "https://kr.store.bambulab.com/products/chamber-temperature-regulator-fan",
+            "image": "https://store.bblcdn.com/s3/default/10303b8464974bc58fbd7bbc2ec14c32/71ece1d3-417e-48e4-9dc2-21d1f48495f1.jpeg",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: X1 시리즈 및 P1 시리즈.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 25400,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "X1 Carbon"
+                ],
+                [
+                    "Bambu Lab",
+                    "X1E"
+                ],
+                [
+                    "Bambu Lab",
+                    "P1S"
+                ],
+                [
+                    "Bambu Lab",
+                    "P1P"
+                ]
+            ]
+        },
+        {
+            "kind": "cooling",
+            "brand": "Bambu Lab",
+            "name": "컨트롤 보드 팬",
+            "url": "https://kr.store.bambulab.com/products/control-board-fan",
+            "image": "https://store.bblcdn.com/s3/default/bb7d43a2aa5a4d3f824da14c5efc9ec8/img_v3_02i6_f53365a2-ebe0-4ee8-8848-b4913951cccg.jpg",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: X1 시리즈 및 P1 시리즈.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 16900,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "X1 Carbon"
+                ],
+                [
+                    "Bambu Lab",
+                    "X1E"
+                ],
+                [
+                    "Bambu Lab",
+                    "P1S"
+                ],
+                [
+                    "Bambu Lab",
+                    "P1P"
+                ]
+            ]
+        },
+        {
+            "kind": "electronics",
+            "brand": "Bambu Lab",
+            "name": "압출기 필라멘트 센서 - P1 시리즈",
+            "url": "https://kr.store.bambulab.com/products/extruder-filament-sensor-p1-series",
+            "image": "https://store.bblcdn.com/s3/default/83dc562a21324a20a533b83e3414f383/img_v3_00i9_f139cb8f-6653-4ba2-9584-d8cd6a26319g.jpg",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: P1 시리즈.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 20300,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "P1S"
+                ],
+                [
+                    "Bambu Lab",
+                    "P1P"
+                ]
+            ]
+        },
+        {
+            "kind": "electronics",
+            "brand": "Bambu Lab",
+            "name": "압출기 필라멘트 센서 -X1 시리즈",
+            "url": "https://kr.store.bambulab.com/products/extruder-filament-sensor-x1-series",
+            "image": "https://store.bblcdn.com/s3/default/a8eb15949bd94ec9abffa1b237a3c1ad/img_v3_02i9_1223bd5d-2b3b-4188-aa18-4a3dd999ffeg.jpg",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: X1 시리즈.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 20300,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "X1 Carbon"
+                ],
+                [
+                    "Bambu Lab",
+                    "X1E"
+                ]
+            ]
+        },
+        {
+            "kind": "extruder",
+            "brand": "Bambu Lab",
+            "name": "경화강 압출기 기어 어셈블리 - A1 시리즈",
+            "url": "https://kr.store.bambulab.com/products/hardened-steel-extruder-gear-assembly-a1-series",
+            "image": "https://store.bblcdn.com/s3/default/d8af77a5a66b4ba98bc59162ed491e43/img_v3_02i9_581557ff-11da-4394-8a33-470458eb2cbg.jpg",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: A1 시리즈.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 16900,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "A1"
+                ],
+                [
+                    "Bambu Lab",
+                    "A1 mini"
+                ]
+            ]
+        },
+        {
+            "kind": "heater",
+            "brand": "Bambu Lab",
+            "name": "핫엔드 히팅 어셈블리 - A1 시리즈",
+            "url": "https://kr.store.bambulab.com/products/hotend-heating-assembly-a1-series",
+            "image": "https://store.bblcdn.com/s3/default/9c3b3dde31a84e4d9247c3ceb3cddc91/img_v3_02i9_c7da243c-fbbd-4982-a264-a4b78c29115g.jpg",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "Bambu Lab 정품 교체 부품. 호환: A1 시리즈.",
+            "values": {
+                "genuine": "정품",
+                "price_krw": 33900,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "A1"
+                ],
+                [
+                    "Bambu Lab",
+                    "A1 mini"
+                ]
+            ]
+        },
+        {
+            "kind": "motion",
+            "brand": "Prusa Research",
+            "name": "Belt X-axis",
+            "url": "https://www.prusa3d.com/product/belt-x-axis/",
+            "image": "https://www.prusa3d.com/content/images/product/1757.jpg",
+            "credit": "Prusa Research 공식 스토어",
+            "summary": "Prusa 정품 부품 — 맞는 프린터는 Prusa 스토어의 호환 표시 그대로 (MINI+).",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Prusa Research",
+                    "MINI+"
+                ]
+            ]
+        },
+        {
+            "kind": "motion",
+            "brand": "Prusa Research",
+            "name": "Belt Y-axis",
+            "url": "https://www.prusa3d.com/product/belt-y-axis/",
+            "image": "https://www.prusa3d.com/content/images/product/1758.jpg",
+            "credit": "Prusa Research 공식 스토어",
+            "summary": "Prusa 정품 부품 — 맞는 프린터는 Prusa 스토어의 호환 표시 그대로 (MINI+).",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Prusa Research",
+                    "MINI+"
+                ]
+            ]
+        },
+        {
+            "kind": "electronics",
+            "brand": "Prusa Research",
+            "name": "SuperPINDA",
+            "url": "https://www.prusa3d.com/product/superpinda/",
+            "image": "https://www.prusa3d.com/content/images/product/285.jpg",
+            "credit": "Prusa Research 공식 스토어",
+            "summary": "Prusa 정품 부품 — 맞는 프린터는 Prusa 스토어의 호환 표시 그대로 (MK3S+ · MINI+ · MK3.5).",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Prusa Research",
+                    "MK3S+"
+                ],
+                [
+                    "Prusa Research",
+                    "MINI+"
+                ],
+                [
+                    "Prusa Research",
+                    "MK3.5"
+                ]
+            ]
+        },
+        {
+            "kind": "extruder",
+            "brand": "Prusa Research",
+            "name": "Bondtech drivegear (set)",
+            "url": "https://www.prusa3d.com/product/bondtech-drivegear-set/",
+            "image": "https://www.prusa3d.com/content/images/product/440.jpg",
+            "credit": "Prusa Research 공식 스토어",
+            "summary": "Prusa 정품 부품 — 맞는 프린터는 Prusa 스토어의 호환 표시 그대로 (MK3S+).",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Prusa Research",
+                    "MK3S+"
+                ]
+            ]
+        },
+        {
+            "kind": "cooling",
+            "brand": "Prusa Research",
+            "name": "Hotend fan MINI/+",
+            "url": "https://www.prusa3d.com/product/hotend-fan-mini/",
+            "image": "https://www.prusa3d.com/content/images/product/1708.jpg",
+            "credit": "Prusa Research 공식 스토어",
+            "summary": "Prusa 정품 부품 — 맞는 프린터는 Prusa 스토어의 호환 표시 그대로 (MINI+).",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Prusa Research",
+                    "MINI+"
+                ]
+            ]
+        },
+        {
+            "kind": "cooling",
+            "brand": "Prusa Research",
+            "name": "Print fan (MK3/S/+, MINI/+)",
+            "url": "https://www.prusa3d.com/product/print-fan-mk3-s-mini/",
+            "image": "https://www.prusa3d.com/content/images/product/284.jpg",
+            "credit": "Prusa Research 공식 스토어",
+            "summary": "Prusa 정품 부품 — 맞는 프린터는 Prusa 스토어의 호환 표시 그대로 (MK3S+ · MINI+ · MK3.5).",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Prusa Research",
+                    "MK3S+"
+                ],
+                [
+                    "Prusa Research",
+                    "MINI+"
+                ],
+                [
+                    "Prusa Research",
+                    "MK3.5"
+                ]
+            ]
+        },
+        {
+            "kind": "display",
+            "brand": "Prusa Research",
+            "name": "XL xLCD Set",
+            "url": "https://www.prusa3d.com/product/xl-xlcd-set/",
+            "image": "https://www.prusa3d.com/content/images/product/365f3fcd-fffc-4ed3-9d37-32ae0b89facb.jpg",
+            "credit": "Prusa Research 공식 스토어",
+            "summary": "Prusa 정품 부품 — 맞는 프린터는 Prusa 스토어의 호환 표시 그대로 (XL).",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Prusa Research",
+                    "XL"
+                ]
+            ]
+        },
+        {
+            "kind": "electronics",
+            "brand": "Prusa Research",
+            "name": "External PSU 24V 150W",
+            "url": "https://www.prusa3d.com/product/external-psu-24v-150w/",
+            "image": "https://www.prusa3d.com/content/images/product/5383.jpg",
+            "credit": "Prusa Research 공식 스토어",
+            "summary": "Prusa 정품 부품 — 맞는 프린터는 Prusa 스토어의 호환 표시 그대로 (MINI+).",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Prusa Research",
+                    "MINI+"
+                ]
+            ]
+        },
+        {
+            "kind": "hotend",
+            "brand": "Prusa Research",
+            "name": "Assembled hotend (for MK3 series)",
+            "url": "https://www.prusa3d.com/product/assembled-hotend-for-mk3-series/",
+            "image": "https://www.prusa3d.com/content/images/product/df643631-3b36-4ddf-8033-4673d3cebc1b.jpg",
+            "credit": "Prusa Research 공식 스토어",
+            "summary": "Prusa 정품 부품 — 맞는 프린터는 Prusa 스토어의 호환 표시 그대로 (MK3S+ · MK3.5).",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Prusa Research",
+                    "MK3S+"
+                ],
+                [
+                    "Prusa Research",
+                    "MK3.5"
+                ]
+            ]
+        },
+        {
+            "kind": "bed",
+            "brand": "Prusa Research",
+            "name": "XL PA Nylon Powder-coated Print Sheet",
+            "url": "https://www.prusa3d.com/product/xl-pa-nylon-powder-coated-print-sheet/",
+            "image": "https://www.prusa3d.com/content/images/product/cedefeb1-b665-471b-8174-84f486915946.png",
+            "credit": "Prusa Research 공식 스토어",
+            "summary": "Prusa 정품 부품 — 맞는 프린터는 Prusa 스토어의 호환 표시 그대로 (XL).",
+            "values": {
+                "genuine": "정품",
+                "install": "그대로 끼움",
+                "bed_surface": "기타",
+                "magnetic": true
+            },
+            "fits": [
+                [
+                    "Prusa Research",
+                    "XL"
+                ]
+            ]
+        },
+        {
+            "kind": "bed",
+            "brand": "Prusa Research",
+            "name": "XL PP powder-coated Print Sheet",
+            "url": "https://www.prusa3d.com/product/xl-pp-powder-coated-print-sheet/",
+            "image": "https://www.prusa3d.com/content/images/product/84636c72-1d25-4d78-b027-e8b495d397df.jpg",
+            "credit": "Prusa Research 공식 스토어",
+            "summary": "Prusa 정품 부품 — 맞는 프린터는 Prusa 스토어의 호환 표시 그대로 (XL).",
+            "values": {
+                "genuine": "정품",
+                "install": "그대로 끼움",
+                "bed_surface": "기타",
+                "magnetic": true
+            },
+            "fits": [
+                [
+                    "Prusa Research",
+                    "XL"
+                ]
+            ]
+        },
+        {
+            "kind": "bed",
+            "brand": "Prusa Research",
+            "name": "CORE One L PA Nylon Powder-coated Print Sheet",
+            "url": "https://www.prusa3d.com/product/core-one-l-pa-nylon-powder-coated-print-sheet/",
+            "image": "https://www.prusa3d.com/content/images/product/d5213776-5f57-4335-aee9-82e8c940f4c1.png",
+            "credit": "Prusa Research 공식 스토어",
+            "summary": "Prusa 정품 부품 — 맞는 프린터는 Prusa 스토어의 호환 표시 그대로 (CORE One L).",
+            "values": {
+                "genuine": "정품",
+                "install": "그대로 끼움",
+                "bed_surface": "기타",
+                "magnetic": true
+            },
+            "fits": [
+                [
+                    "Prusa Research",
+                    "CORE One L"
+                ]
+            ]
+        },
+        {
+            "kind": "bed",
+            "brand": "Prusa Research",
+            "name": "MINI Smooth PEI Print Sheet",
+            "url": "https://www.prusa3d.com/product/mini-spring-steel-sheet-with-smooth-double-sided-pei/",
+            "image": "https://www.prusa3d.com/content/images/product/314.jpg",
+            "credit": "Prusa Research 공식 스토어",
+            "summary": "Prusa 정품 부품 — 맞는 프린터는 Prusa 스토어의 호환 표시 그대로 (MINI+).",
+            "values": {
+                "genuine": "정품",
+                "install": "그대로 끼움",
+                "bed_surface": "매끈 PEI",
+                "magnetic": true
+            },
+            "fits": [
+                [
+                    "Prusa Research",
+                    "MINI+"
+                ]
+            ]
+        },
+        {
+            "kind": "bed",
+            "brand": "Prusa Research",
+            "name": "MINI Satin Powder-coated Print Sheet",
+            "url": "https://www.prusa3d.com/product/mini-double-sided-powder-coated-pei-satin-spring-steel-sheet/",
+            "image": "https://www.prusa3d.com/content/images/product/335.jpg",
+            "credit": "Prusa Research 공식 스토어",
+            "summary": "Prusa 정품 부품 — 맞는 프린터는 Prusa 스토어의 호환 표시 그대로 (MINI+).",
+            "values": {
+                "genuine": "정품",
+                "install": "그대로 끼움",
+                "bed_surface": "텍스처 PEI",
+                "magnetic": true
+            },
+            "fits": [
+                [
+                    "Prusa Research",
+                    "MINI+"
+                ]
+            ]
+        },
+        {
+            "kind": "bed",
+            "brand": "Prusa Research",
+            "name": "Satin Powder-coated Print Sheet",
+            "url": "https://www.prusa3d.com/product/satin-powder-coated-print-sheet/",
+            "image": "https://www.prusa3d.com/content/images/product/5269.jpg",
+            "credit": "Prusa Research 공식 스토어",
+            "summary": "Prusa 정품 부품 — 맞는 프린터는 Prusa 스토어의 호환 표시 그대로 (MK3S+ · MK4 · MK3.9 · MK3.5 · MK4S · CORE One).",
+            "values": {
+                "genuine": "정품",
+                "install": "그대로 끼움",
+                "bed_surface": "텍스처 PEI",
+                "magnetic": true
+            },
+            "fits": [
+                [
+                    "Prusa Research",
+                    "MK3S+"
+                ],
+                [
+                    "Prusa Research",
+                    "MK4"
+                ],
+                [
+                    "Prusa Research",
+                    "MK3.9"
+                ],
+                [
+                    "Prusa Research",
+                    "MK3.5"
+                ],
+                [
+                    "Prusa Research",
+                    "MK4S"
+                ],
+                [
+                    "Prusa Research",
+                    "CORE One"
+                ]
+            ]
+        },
+        {
+            "kind": "tool",
+            "brand": "Prusa Research",
+            "name": "Prusa CORE One Maintenance Kit",
+            "url": "https://www.prusa3d.com/product/prusa-core-one-maintenance-kit/",
+            "image": "https://www.prusa3d.com/content/images/product/205df125-c8e3-49ea-a5fe-4c1f34ec7698.jpg",
+            "credit": "Prusa Research 공식 스토어",
+            "summary": "Prusa 정품 부품 — 맞는 프린터는 Prusa 스토어의 호환 표시 그대로 (CORE One).",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Prusa Research",
+                    "CORE One"
+                ]
+            ]
+        },
+        {
+            "kind": "hotend",
+            "brand": "Prusa Research",
+            "name": "Hotend heatbreak MINI/+",
+            "url": "https://www.prusa3d.com/product/hotend-heatbreak-mini/",
+            "image": "https://www.prusa3d.com/content/images/product/5447.png",
+            "credit": "Prusa Research 공식 스토어",
+            "summary": "Prusa 정품 부품 — 맞는 프린터는 Prusa 스토어의 호환 표시 그대로 (MINI+).",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Prusa Research",
+                    "MINI+"
+                ]
+            ]
+        },
+        {
+            "kind": "bed",
+            "brand": "Prusa Research",
+            "name": "XL Satin Powder-coated Print Sheet",
+            "url": "https://www.prusa3d.com/product/satin-print-sheet-36-x-36-cm/",
+            "image": "https://www.prusa3d.com/content/images/product/5773.jpg",
+            "credit": "Prusa Research 공식 스토어",
+            "summary": "Prusa 정품 부품 — 맞는 프린터는 Prusa 스토어의 호환 표시 그대로 (XL).",
+            "values": {
+                "genuine": "정품",
+                "install": "그대로 끼움",
+                "bed_surface": "텍스처 PEI",
+                "magnetic": true
+            },
+            "fits": [
+                [
+                    "Prusa Research",
+                    "XL"
+                ]
+            ]
+        },
+        {
+            "kind": "bed",
+            "brand": "Creality",
+            "name": "Creality Hi Double Sided Black Textured PEI Build Plate",
+            "url": "https://store.creality.com/products/creality-hi-double-sided-black-textured-pei-build-plate",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/e73ac069596af64f1d96ec3cb60c455f_de96200d-471b-4bca-84c7-61127d8183c8.png?v=1762201066",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: Hi.",
+            "values": {
+                "genuine": "정품",
+                "install": "그대로 끼움",
+                "bed_surface": "텍스처 PEI",
+                "magnetic": true,
+                "double_sided": true
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "Hi"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$25.99"
+            }
+        },
+        {
+            "kind": "bed",
+            "brand": "Creality",
+            "name": "Creality Hi Epoxy Resin Build Plate",
+            "url": "https://store.creality.com/products/creality-hi-epoxy-resin-build-plate",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/hi.png?v=1754366430",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: Hi.",
+            "values": {
+                "genuine": "정품",
+                "install": "그대로 끼움",
+                "bed_surface": "기타",
+                "magnetic": true
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "Hi"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$11.58"
+            }
+        },
+        {
+            "kind": "extruder",
+            "brand": "Creality",
+            "name": "Creality Hi Extruder Kit",
+            "url": "https://store.creality.com/products/creality-hi-extruder-kit",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/3012a8aa-8e77-43b2-9314-2035016f9e78.png?v=1767861416",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: Hi.",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "Hi"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$29.99"
+            }
+        },
+        {
+            "kind": "heater",
+            "brand": "Creality",
+            "name": "Creality Hi Hot Bed Plate Kit",
+            "url": "https://store.creality.com/products/creality-hi-hot-bed-plate-kit",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/10001_1_2d32373e-814e-4dbd-88d3-3af0fb8a4d01.jpg?v=1755760193",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: Hi.",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "Hi"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$54.08"
+            }
+        },
+        {
+            "kind": "board",
+            "brand": "Creality",
+            "name": "Creality Hi Motherboard Kit",
+            "url": "https://store.creality.com/products/creality-hi-motherboard-kit",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/10004_2.jpg?v=1767861416",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: Hi.",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "Hi"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$37.99"
+            }
+        },
+        {
+            "kind": "display",
+            "brand": "Creality",
+            "name": "Creality Hi Touch Screen Kit",
+            "url": "https://store.creality.com/products/creality-hi-touchscreen-kit",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/79f5b849-4131-4cf0-8a19-db5245f59a37.jpg?v=1762201230",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: Hi.",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "Hi"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$17.99"
+            }
+        },
+        {
+            "kind": "nozzle",
+            "brand": "Creality",
+            "name": "Creality x Phaetus Silicon Carbide Nozzle 0.4/0.6mm",
+            "url": "https://store.creality.com/products/creality-x-phaetus-silicon-carbide-nozzle-0-6mm-k2plus",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/1_69c790ef-ef9d-488f-9037-2fa54aace0d8.jpg?v=1762201539",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: K2 Plus · Hi · K2 · K2 Pro.",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "K2 Plus"
+                ],
+                [
+                    "Creality",
+                    "Hi"
+                ],
+                [
+                    "Creality",
+                    "K2"
+                ],
+                [
+                    "Creality",
+                    "K2 Pro"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$27.71"
+            }
+        },
+        {
+            "kind": "hotend",
+            "brand": "Creality",
+            "name": "E3D Revo Creality Ceramic HotEnd Kit",
+            "url": "https://store.creality.com/products/e3d-revo-creality-ceramic-hotend-kit",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/fab57aacfc196d91aa7a15282c00f70c_21cfa14d-502e-4f1d-af26-78d51e15c804.jpg?v=1762200612",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: Ender-3 V2 · Ender-3 Pro · Ender-5 Pro · Ender-5 Plus · Ender-3 Max.",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "Ender-3 V2"
+                ],
+                [
+                    "Creality",
+                    "Ender-3 Pro"
+                ],
+                [
+                    "Creality",
+                    "Ender-5 Pro"
+                ],
+                [
+                    "Creality",
+                    "Ender-5 Plus"
+                ],
+                [
+                    "Creality",
+                    "Ender-3 Max"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$59"
+            }
+        },
+        {
+            "kind": "board",
+            "brand": "Creality",
+            "name": "Ender-3 V3 SE Mainboard Kit",
+            "url": "https://store.creality.com/products/ender-3-v3-se-mainboard-kit",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/90cf19218f888c6e2fa13124a0c7bc45.jpg?v=1767860644",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: Ender-3 V3 SE.",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "Ender-3 V3 SE"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$21.7"
+            }
+        },
+        {
+            "kind": "nozzle",
+            "brand": "Creality",
+            "name": "Ender-5 Max Brass Nozzle Kit-4Pcs",
+            "url": "https://store.creality.com/products/ender-5-max-brass-nozzle-kit-4pcs",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/a6c81b5e-a7d9-4f3d-87ea-fc02bb357cec.png?v=1754451178",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: Ender-5 Max.",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "Ender-5 Max"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$5.72"
+            }
+        },
+        {
+            "kind": "bed",
+            "brand": "Creality",
+            "name": "Ender-5 Max Epoxy Resin Build Plate",
+            "url": "https://store.creality.com/products/ender-5-max-epoxy-resin-build-plate",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/b8740c0f-c35b-4320-809d-738f3a9f0dec.png?v=1767859834",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: Ender-5 Max.",
+            "values": {
+                "genuine": "정품",
+                "install": "그대로 끼움",
+                "bed_surface": "기타",
+                "magnetic": true
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "Ender-5 Max"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$27.71"
+            }
+        },
+        {
+            "kind": "extruder",
+            "brand": "Creality",
+            "name": "Ender-5 Max Extruder Kit",
+            "url": "https://store.creality.com/products/ender-5-max-extruder-kit",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/c8f7c36e-1b42-4075-9e5b-e4852ebcb405.png?v=1755161526",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: Ender-5 Max.",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "Ender-5 Max"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$21.49"
+            }
+        },
+        {
+            "kind": "board",
+            "brand": "Creality",
+            "name": "Ender-5 Max mainboard kit",
+            "url": "https://store.creality.com/products/ender-5-max-mainboard-kit",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/10001_5.jpg?v=1767859834",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: Ender-5 Max.",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "Ender-5 Max"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$27.69"
+            }
+        },
+        {
+            "kind": "display",
+            "brand": "Creality",
+            "name": "Ender-5 Max Touch Screen",
+            "url": "https://store.creality.com/products/ender-5-max-touch-screen",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/10001_2.jpg?v=1767859834",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: Ender-5 Max.",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "Ender-5 Max"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$35.99"
+            }
+        },
+        {
+            "kind": "bed",
+            "brand": "Creality",
+            "name": "Epoxy Resin Build Plate-235*235mm",
+            "url": "https://store.creality.com/products/epoxy-resin-build-plate-235-235mm",
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/9beeed92bd4a6ce4886e7c4110dad732.png?v=1742443475",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: Ender-3 V3 · Ender-3 V3 SE · Ender-3 V3 KE · CR-10 SE · Ender-3 S1.",
+            "values": {
+                "genuine": "정품",
+                "install": "그대로 끼움",
+                "bed_surface": "기타",
+                "magnetic": true
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "Ender-3 V3"
+                ],
+                [
+                    "Creality",
+                    "Ender-3 V3 SE"
+                ],
+                [
+                    "Creality",
+                    "Ender-3 V3 KE"
+                ],
+                [
+                    "Creality",
+                    "CR-10 SE"
+                ],
+                [
+                    "Creality",
+                    "Ender-3 S1"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "CA$17.99"
+            }
+        },
+        {
+            "kind": "bed",
+            "brand": "Creality",
+            "name": "Epoxy Resin Build Plate-310*315mm",
+            "url": "https://store.creality.com/products/epoxy-resin-build-plate-310-315mm",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/81c14c5a4ae3df76e1b7d41ce58f7946.png?v=1754361122",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: K1 Max · Ender-3 V3 Plus.",
+            "values": {
+                "genuine": "정품",
+                "install": "그대로 끼움",
+                "bed_surface": "기타",
+                "magnetic": true
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "K1 Max"
+                ],
+                [
+                    "Creality",
+                    "Ender-3 V3 Plus"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$24.71"
+            }
+        },
+        {
+            "kind": "nozzle",
+            "brand": "Creality",
+            "name": "Genuine E3D Obxidian™ High Flow Nozzle Assembly 0.4/0.6mm-K2 Series",
+            "url": "https://store.creality.com/products/genuine-e3d-obxidian™-high-flow-nozzle-assembly-0-4-0-6mm-k2-series",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/772c3266-822d-44e2-ae32-1fdff91c3c0a.png?v=1776743788",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: K2 · K2 Pro · K2 Plus.",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "K2"
+                ],
+                [
+                    "Creality",
+                    "K2 Pro"
+                ],
+                [
+                    "Creality",
+                    "K2 Plus"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$32.99"
+            }
+        },
+        {
+            "kind": "nozzle",
+            "brand": "Creality",
+            "name": "Creality Hardened Steel Brass Nozzle",
+            "url": "https://store.creality.com/products/hardened-steel-brass-nozzle",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/4f0a5b44-7242-432e-91ef-b5247b0df7c0.png?v=1754365863",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: K1 · K1 Max · Ender-3 V3 KE.",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "K1"
+                ],
+                [
+                    "Creality",
+                    "K1 Max"
+                ],
+                [
+                    "Creality",
+                    "Ender-3 V3 KE"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$5.99"
+            }
+        },
+        {
+            "kind": "nozzle",
+            "brand": "Creality",
+            "name": "High-Speed M6 Nozzle",
+            "url": "https://store.creality.com/products/high-speed-m6-nozzle",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/423f68eecc6f65d0e70e84fffe951a3e.jpg?v=1762200523",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: Ender-3 V3 SE · Ender-5 S1 · Ender-7.",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "Ender-3 V3 SE"
+                ],
+                [
+                    "Creality",
+                    "Ender-5 S1"
+                ],
+                [
+                    "Creality",
+                    "Ender-7"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$3.99"
+            }
+        },
+        {
+            "kind": "heater",
+            "brand": "Creality",
+            "name": "Hot Bed Kit for Ender-3 V3 SE/Ender-3 V3 KE",
+            "url": "https://store.creality.com/products/hot-bed-kit-for-ender-3-v3-se-ender-3-v3-ke",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/41_1.png?v=1767860644",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: Ender-3 V3 SE · Ender-3 V3 KE.",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "Ender-3 V3 SE"
+                ],
+                [
+                    "Creality",
+                    "Ender-3 V3 KE"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$17.99"
+            }
+        },
+        {
+            "kind": "bed",
+            "brand": "Creality",
+            "name": "i7 Dual-Texture PEI Plate",
+            "url": "https://store.creality.com/products/i7-dual-texture-pei-plate",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/i7_-DTC_-1600X1600.png?v=1776743919",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: SparkX i7.",
+            "values": {
+                "genuine": "정품",
+                "install": "그대로 끼움",
+                "bed_surface": "텍스처 PEI",
+                "magnetic": true,
+                "double_sided": true
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "SparkX i7"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$9.99"
+            }
+        },
+        {
+            "kind": "extruder",
+            "brand": "Creality",
+            "name": "i7 Extruder Gear Assembly",
+            "url": "https://store.creality.com/products/i7-extruder-gear-assembly",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/i7_-DTC_-1600X1600_f421a2de-7508-4f3d-8f49-6c5f85094c78.png?v=1773644576",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: SparkX i7.",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "SparkX i7"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$5.99"
+            }
+        },
+        {
+            "kind": "hotend",
+            "brand": "Creality",
+            "name": "i7 Hotend",
+            "url": "https://store.creality.com/products/i7-hotend",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/0.2-DTC_-1600X1600.png?v=1776743919",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: SparkX i7.",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "SparkX i7"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$12.99"
+            }
+        },
+        {
+            "kind": "heater",
+            "brand": "Creality",
+            "name": "i7 Hotend Heating Assembly",
+            "url": "https://store.creality.com/products/i7-hotend-heating-assembly",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/i7_-DTC_-1600X1600_bd3e807f-1cb4-4c3c-9e6a-45a8b6a6c5be.png?v=1776157962",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: SparkX i7.",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "SparkX i7"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$7.99"
+            }
+        },
+        {
+            "kind": "heater",
+            "brand": "Creality",
+            "name": "K1 Hotbed plate kit",
+            "url": "https://store.creality.com/products/k1-hotbed-plate-kit",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/10001_11_7b2a5549-e5e3-44fd-a0cb-6569df6473a2.jpg?v=1772603678",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: K1 · K1C · K1 SE.",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "K1"
+                ],
+                [
+                    "Creality",
+                    "K1C"
+                ],
+                [
+                    "Creality",
+                    "K1 SE"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$16.34"
+            }
+        },
+        {
+            "kind": "board",
+            "brand": "Creality",
+            "name": "K1 Mainboard Kit",
+            "url": "https://store.creality.com/products/k1-mainboard-kit",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/20260323-140827.jpg?v=1774246133",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: K1.",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "K1"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$65.34"
+            }
+        },
+        {
+            "kind": "board",
+            "brand": "Creality",
+            "name": "K1 Max Mute Mainboard Kit: Silent Operation Upgrade",
+            "url": "https://store.creality.com/products/k1-max-mainboard-kit",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/754f34fa83a759951cec03cefceeed7f_5409ebe2-bb3e-4d58-ae5f-235721c931b0.jpg?v=1762200571",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: K1 Max.",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "K1 Max"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$67.71"
+            }
+        },
+        {
+            "kind": "bed",
+            "brand": "Creality",
+            "name": "K1 Max PEI Build Plate Kit 315*310mm",
+            "url": "https://store.creality.com/products/k1-max-pei-build-plate-kit-315-310mm",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/59_1.png?v=1762200421",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: K1 Max.",
+            "values": {
+                "genuine": "정품",
+                "install": "그대로 끼움",
+                "bed_surface": "텍스처 PEI",
+                "magnetic": true
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "K1 Max"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$27.99"
+            }
+        },
+        {
+            "kind": "display",
+            "brand": "Creality",
+            "name": "K1 Max Screen Kit",
+            "url": "https://store.creality.com/products/k1-max-screen-kit",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/2be46d0db34aa2d969c1cf21ee7303d5.jpg?v=1762200544",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: K1 Max.",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "K1 Max"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$27.99"
+            }
+        },
+        {
+            "kind": "bed",
+            "brand": "Creality",
+            "name": "K1 Max Smooth PEI Build Plate Kit",
+            "url": "https://store.creality.com/products/k1-max-smooth-pei-build-plate-kit-315-310mm",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/5160edd6-31ae-4255-9c6b-19ee69a27721.png?v=1776751971",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: K1 Max.",
+            "values": {
+                "genuine": "정품",
+                "install": "그대로 끼움",
+                "bed_surface": "매끈 PEI",
+                "magnetic": true
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "K1 Max"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$26.4"
+            }
+        },
+        {
+            "kind": "bed",
+            "brand": "Creality",
+            "name": "K1 PEI Build Plate Kit",
+            "url": "https://store.creality.com/products/k1-pei-build-plate-kit",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/339fe0aab98154a79d344f92cd9b07f1_07457de6-8083-49b7-b064-ae76e128bfb4.jpg?v=1776751971",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: K1 · Ender-3 S1 · Ender-3 S1 Pro · Ender-5 S1 · Ender-3 V3 SE · Ender-3 V3 KE · CR-10 SE.",
+            "values": {
+                "genuine": "정품",
+                "install": "그대로 끼움",
+                "bed_surface": "텍스처 PEI",
+                "magnetic": true
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "K1"
+                ],
+                [
+                    "Creality",
+                    "Ender-3 S1"
+                ],
+                [
+                    "Creality",
+                    "Ender-3 S1 Pro"
+                ],
+                [
+                    "Creality",
+                    "Ender-5 S1"
+                ],
+                [
+                    "Creality",
+                    "Ender-3 V3 SE"
+                ],
+                [
+                    "Creality",
+                    "Ender-3 V3 KE"
+                ],
+                [
+                    "Creality",
+                    "CR-10 SE"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$25.9"
+            }
+        },
+        {
+            "kind": "hotend",
+            "brand": "Creality",
+            "name": "K1 Series Ceramic Heating Block Kit—Quick-swap Nozzle Kit",
+            "url": "https://store.creality.com/products/k1-series-ceramic-heating-block-kit-quick-swap-nozzle-kit",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/30.png?v=1762200475",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: K1 · K1 Max · K1C.",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "K1"
+                ],
+                [
+                    "Creality",
+                    "K1 Max"
+                ],
+                [
+                    "Creality",
+                    "K1C"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$32.99"
+            }
+        },
+        {
+            "kind": "extruder",
+            "brand": "Creality",
+            "name": "K1 Series Extruder Gear Kit",
+            "url": "https://store.creality.com/products/k1-series-extruder-gear-kit",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/10001_1_e261b53a-17ee-482d-b634-15f175d79f24.jpg?v=1767865567",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: K1 · K1C · K1 Max.",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "K1"
+                ],
+                [
+                    "Creality",
+                    "K1C"
+                ],
+                [
+                    "Creality",
+                    "K1 Max"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$3.89"
+            }
+        },
+        {
+            "kind": "nozzle",
+            "brand": "Creality",
+            "name": "K1 Series Genuine E3D Brass High Flow Nozzle Assembly 0.4/0.6/0.8mm",
+            "url": "https://store.creality.com/products/k1-series-genuine-e3d-brass-high-flow-nozzle-assembly-0-4-0-6-0-8mm",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/3_c1f42c60-c03e-4f6a-a762-caf90274c661.jpg?v=1762201538",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: K1 · K1C · K1 Max.",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "K1"
+                ],
+                [
+                    "Creality",
+                    "K1C"
+                ],
+                [
+                    "Creality",
+                    "K1 Max"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$25.99"
+            }
+        },
+        {
+            "kind": "board",
+            "brand": "Creality",
+            "name": "K1C 2025 Mainboard Kit",
+            "url": "https://store.creality.com/products/k1c-2025-motherboard-kit",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/01_0e445414-0095-42b6-a8ea-92bc55507af3.png?v=1763101629",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: K1C.",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "K1C"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$26.49"
+            }
+        },
+        {
+            "kind": "bed",
+            "brand": "Creality",
+            "name": "K1C PEI Build Plate（Without soft magnetic sticker ）",
+            "url": "https://store.creality.com/products/k1c-pei-build-plate-without-soft-magnetic-sticker",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/5aa9b2d1-a86a-4f08-9001-c324a80a8a3d.png?v=1754366128",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: K1C.",
+            "values": {
+                "genuine": "정품",
+                "install": "그대로 끼움",
+                "bed_surface": "텍스처 PEI",
+                "magnetic": true
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "K1C"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$23.31"
+            }
+        },
+        {
+            "kind": "display",
+            "brand": "Creality",
+            "name": "K1C Touch Screen Kit",
+            "url": "https://store.creality.com/products/k1c-touch-screen-kit",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/01_a4a71091-dc11-47d5-b69e-9f2fc212e9c7.png?v=1776751971",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: K1C.",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "K1C"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$22.49"
+            }
+        },
+        {
+            "kind": "electronics",
+            "brand": "Creality",
+            "name": "K2/K2 Pro/Hi/M300 Power Supply",
+            "url": "https://store.creality.com/products/k2-k2-pro-hi-m300-power-supply",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/10001_6.jpg?v=1766730430",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: K2 · K2 Pro · Hi.",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "K2"
+                ],
+                [
+                    "Creality",
+                    "K2 Pro"
+                ],
+                [
+                    "Creality",
+                    "Hi"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$20.55"
+            }
+        },
+        {
+            "kind": "board",
+            "brand": "Creality",
+            "name": "K2/K2 Pro/K2 Plus Toolhead Board",
+            "url": "https://store.creality.com/products/k2-k2-pro-k2-plus-toolhead-board",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/10002_3_e6b25d73-1c29-4cdc-bf1e-6b3af2186b19.jpg?v=1770703734",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: K2 · K2 Pro · K2 Plus.",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "K2"
+                ],
+                [
+                    "Creality",
+                    "K2 Pro"
+                ],
+                [
+                    "Creality",
+                    "K2 Plus"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$10.69"
+            }
+        },
+        {
+            "kind": "display",
+            "brand": "Creality",
+            "name": "K2/K2 Pro/M300 Touchscreen Kit",
+            "url": "https://store.creality.com/products/k2-k2-pro-m300-touchscreen-kit",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/10006.jpg?v=1776743788",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: K2 · K2 Pro.",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "K2"
+                ],
+                [
+                    "Creality",
+                    "K2 Pro"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$24.99"
+            }
+        },
+        {
+            "kind": "motor",
+            "brand": "Creality",
+            "name": "K2/K2 Pro/M300 Z-axis stepper motor",
+            "url": "https://store.creality.com/products/k2-k2-pro-m300-z-axis-stepper-motor",
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/10002_1_707c1c29-3c9a-41a3-a6f4-364c91f2fbcc.jpg?v=1772692755",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: K2 · K2 Pro.",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "K2"
+                ],
+                [
+                    "Creality",
+                    "K2 Pro"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "CA$14.99"
+            }
+        },
+        {
+            "kind": "bed",
+            "brand": "Creality",
+            "name": "K2/K2 Pro PEI Double Sided Frosted Build Plate",
+            "url": "https://store.creality.com/products/k2-pei-double-sided-frosted-build-plate",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/4_3cdb2d12-c9e2-43c2-8176-fb5c2911068b.png?v=1776743788",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: K2 · K2 Pro.",
+            "values": {
+                "genuine": "정품",
+                "install": "그대로 끼움",
+                "bed_surface": "텍스처 PEI",
+                "magnetic": true,
+                "double_sided": true
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "K2"
+                ],
+                [
+                    "Creality",
+                    "K2 Pro"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$19.99"
+            }
+        },
+        {
+            "kind": "cooling",
+            "brand": "Creality",
+            "name": "K2 Plus Axial-tech Fan Kit",
+            "url": "https://store.creality.com/products/k2-plus-axial-tech-fan-kit",
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/13ead87093496e78b559f25752b2abde.png?v=1742443280",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: K2 Plus.",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "K2 Plus"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "CA$2.99"
+            }
+        },
+        {
+            "kind": "extruder",
+            "brand": "Creality",
+            "name": "K2 Plus/K2 Pro/K2 Extruder Kit",
+            "url": "https://store.creality.com/products/k2-plus-extruder-kit",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/70.png?v=1776743788",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: K2 Plus · K2 Pro · K2.",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "K2 Plus"
+                ],
+                [
+                    "Creality",
+                    "K2 Pro"
+                ],
+                [
+                    "Creality",
+                    "K2"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$36.51"
+            }
+        },
+        {
+            "kind": "board",
+            "brand": "Creality",
+            "name": "K2 Plus Filament Detection Board",
+            "url": "https://store.creality.com/products/k2-plus-filament-detection-board",
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/5bcd941646232192f728e2ee605a3295.png?v=1742443276",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: K2 Plus · K2 Pro · K2.",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "K2 Plus"
+                ],
+                [
+                    "Creality",
+                    "K2 Pro"
+                ],
+                [
+                    "Creality",
+                    "K2"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "CA$2.59"
+            }
+        },
+        {
+            "kind": "cooling",
+            "brand": "Creality",
+            "name": "K2 Plus/K2 Pro Mainboard Cooling Fan",
+            "url": "https://store.creality.com/products/k2-plus-mainboard-cooling-fan",
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/2e25a5e0c75dabbeb7ff95a32aedf354.png?v=1742443273",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: K2 Plus · K2 Pro.",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "K2 Plus"
+                ],
+                [
+                    "Creality",
+                    "K2 Pro"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "CA$2.99"
+            }
+        },
+        {
+            "kind": "cooling",
+            "brand": "Creality",
+            "name": "K2 Plus Model Fan Assembly",
+            "url": "https://store.creality.com/products/k2-plus-model-fan-assembly",
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/a842f5ca68e9481353c8f6875b49a0d8.png?v=1742443272",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: K2 Plus · K2 Pro · K2.",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "K2 Plus"
+                ],
+                [
+                    "Creality",
+                    "K2 Pro"
+                ],
+                [
+                    "Creality",
+                    "K2"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "CA$6.99"
+            }
+        },
+        {
+            "kind": "board",
+            "brand": "Creality",
+            "name": "K2 Plus Motherboard Kit",
+            "url": "https://store.creality.com/products/k2-plus-motherboard-kit",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/e764ad8f4e7b29b0671af509ad967896.png?v=1762200482",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: K2 Plus.",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "K2 Plus"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$39.26"
+            }
+        },
+        {
+            "kind": "bed",
+            "brand": "Creality",
+            "name": "K2 Plus PEI Frosted Build Plate",
+            "url": "https://store.creality.com/products/k2-plus-pei-frosted-build-plate",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/63_1.png?v=1762200640",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: K2 Plus.",
+            "values": {
+                "genuine": "정품",
+                "install": "그대로 끼움",
+                "bed_surface": "텍스처 PEI",
+                "magnetic": true
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "K2 Plus"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$23.99"
+            }
+        },
+        {
+            "kind": "motor",
+            "brand": "Creality",
+            "name": "K2 Plus Round Extruder Motor",
+            "url": "https://store.creality.com/products/k2-plus-round-extruder-motor",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/f58f3d8a583781079e8c771d2ca2541a.png?v=1762200778",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: K2 Plus.",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "K2 Plus"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$24.96"
+            }
+        },
+        {
+            "kind": "heater",
+            "brand": "Creality",
+            "name": "K2 Pro Hotbed Plate Kit",
+            "url": "https://store.creality.com/products/k2-pro-hotbed-plate-kit",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/10001_3da8d6fd-8bf1-4a59-9658-cb04adb5fc88.jpg?v=1776743788",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: K2 Pro.",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "K2 Pro"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$59.14"
+            }
+        },
+        {
+            "kind": "board",
+            "brand": "Creality",
+            "name": "K2 Pro Mainboard",
+            "url": "https://store.creality.com/products/k2-pro-mainboard",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/20251113-172116.png?v=1763027215",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: K2 Pro.",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "K2 Pro"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$19.49"
+            }
+        },
+        {
+            "kind": "motion",
+            "brand": "Creality",
+            "name": "K2 Pro Z-Axis Ring Belt",
+            "url": "https://store.creality.com/products/k2-pro-z-axis-ring-belt",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/20251113-172125.png?v=1776743788",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: K2 Pro.",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "K2 Pro"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$8.49"
+            }
+        },
+        {
+            "kind": "bed",
+            "brand": "Creality",
+            "name": "Smooth PEI Build Plate 235*235mm",
+            "url": "https://store.creality.com/products/smooth-pei-build-plate-235-235mm",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/4a29d37ecd396f67b9d8db931cca0ea2_140dba25-82e7-4a37-a5d9-b939535c4f7f-Photoroom.png?v=1762200606",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: Ender-3 S1 · Ender-3 S1 Pro · Ender-5 S1 · K1 · Ender-3 V3 SE · Ender-3 V3 KE · CR-10 SE · Ender-3 V3.",
+            "values": {
+                "genuine": "정품",
+                "install": "그대로 끼움",
+                "bed_surface": "매끈 PEI",
+                "magnetic": true
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "Ender-3 S1"
+                ],
+                [
+                    "Creality",
+                    "Ender-3 S1 Pro"
+                ],
+                [
+                    "Creality",
+                    "Ender-5 S1"
+                ],
+                [
+                    "Creality",
+                    "K1"
+                ],
+                [
+                    "Creality",
+                    "Ender-3 V3 SE"
+                ],
+                [
+                    "Creality",
+                    "Ender-3 V3 KE"
+                ],
+                [
+                    "Creality",
+                    "CR-10 SE"
+                ],
+                [
+                    "Creality",
+                    "Ender-3 V3"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$17.99"
+            }
+        },
+        {
+            "kind": "bed",
+            "brand": "Creality",
+            "name": "Spring Steel Platform Plate Kit Black  for Ender-3V3 SE",
+            "url": "https://store.creality.com/products/spring-steel-platform-plate-kit",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/24680751ec7c144b45ccd92026ef1960_bb542f5a-59cf-4773-85bd-7c0f4d7517e7.jpg?v=1739959886",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: Ender-3 V3 SE.",
+            "values": {
+                "genuine": "정품",
+                "install": "그대로 끼움",
+                "bed_surface": "기타",
+                "magnetic": true
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "Ender-3 V3 SE"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$10.11"
+            }
+        },
+        {
+            "kind": "extruder",
+            "brand": "Creality",
+            "name": "Sprite Extruder SE (NEO): Compact Powerhouse for 3D Printing",
+            "url": "https://store.creality.com/products/sprite-extruder-se-neo",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/4cd8c6673eb5cdd4323461cb9ae94aae_b8ed74c1-689b-43ef-9f3d-7775f3f639db.jpg?v=1734916570",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: Ender-3 V2 Neo · Ender-3 Neo · Ender-3 Max Neo.",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "Ender-3 V2 Neo"
+                ],
+                [
+                    "Creality",
+                    "Ender-3 Neo"
+                ],
+                [
+                    "Creality",
+                    "Ender-3 Max Neo"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$20"
+            }
+        },
+        {
+            "kind": "motor",
+            "brand": "Creality",
+            "name": "Circular Stepper Motor",
+            "url": "https://store.creality.com/products/circular-stepper-motor",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/38e9162c8d4da6ba0a2f7ca983d1f28b.png?v=1772176587",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: K1 · K1 Max · K1C · K1 SE · Ender-3 V3 · Ender-3 V3 Plus.",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "K1"
+                ],
+                [
+                    "Creality",
+                    "K1 Max"
+                ],
+                [
+                    "Creality",
+                    "K1C"
+                ],
+                [
+                    "Creality",
+                    "K1 SE"
+                ],
+                [
+                    "Creality",
+                    "Ender-3 V3"
+                ],
+                [
+                    "Creality",
+                    "Ender-3 V3 Plus"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$18.04"
+            }
+        },
+        {
+            "kind": "nozzle",
+            "brand": "Creality",
+            "name": "\"Unicorn\" K2 Pro Quick-Swap Nozzle 0.4mm",
+            "url": "https://store.creality.com/products/unicorn-k2-pro-quick-swap-nozzle-0-4mm",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/20260227-161215.png?v=1772179969",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 정품 부품. 호환: K2 Pro.",
+            "values": {
+                "genuine": "정품",
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "K2 Pro"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$13.05"
+            }
+        }
+    ]
+}
