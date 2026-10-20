@@ -641,6 +641,21 @@ namespace {
     t(str_contains($e26, '서버에 닿지 않아요') && ! str_contains($e26, '응답 시간 초과'), '연결부터 안 되면 「닿지 않아요」 (예전엔 응답 시간 초과 300초로 보임)');
     $app26 = (string) file_get_contents(dirname(__DIR__).'/resources/assets/catalog-app.js');
     t(str_contains($app26, 'Promise.race([api(\'POST\', \'/admin/ai/extract\'') && str_contains($app26, "++n4 % 3 === 0"), '화면: 묻는 동안 3초마다 상태 엿봄');
+    echo "■ 0.2.27 kg ↔ g 바로잡기 · 기타 제원 💡\n";
+    $kg = ['unit' => 'kg'];
+    $gg = ['unit' => 'g'];
+    t(Collector::kiloFix($kg, 26000, '무게: 26 kg') === 26 && Collector::kiloFix($kg, 26500, 'Weight 26.5kg') === 26.5 && Collector::kiloFix($kg, 1200, '무게 1200 kg') === 1200
+        && Collector::kiloFix($kg, 26000, '무게 미상') === 26000 && Collector::kiloFix($kg, 26, '26 kg') === 26, 'kg 칸: 글이 「26 kg」인데 26000 → 26 · 글이 맞으면 그대로');
+    t(Collector::kiloFix($gg, 1, '순중량 1 kg') === 1000 && Collector::kiloFix($gg, 1000, '1 kg') === 1000 && Collector::kiloFix($gg, 1, '1 g 샘플') === 1 && Collector::kiloFix(['unit' => 'mm'], 26000, '26 kg') === 26000, 'g 칸: 「1 kg」인데 1 → 1000 · 다른 단위는 건드리지 않음');
+    AiClient::$sender = fn () => ['message' => ['content' => '{"values":{"weight_kg":26000}}']];
+    $x27 = $col->extract('equipment', 'dlp', "본체 무게: 26 kg\n출력 크기: 192 mm");
+    t(($x27['values']['weight_kg'] ?? null) === 26, '정리하기에서 바로잡힘 (무게 26000 kg 이 들어가던 것)');
+    $p27 = '';
+    AiClient::$sender = function (string $u, array $h, array $b) use (&$p27) { $p27 = (string) $b['messages'][1]['content']; return ['message' => ['content' => '{}']]; };
+    $col->extract('equipment', 'fdm', '본체 무게는 8 kg 입니다');
+    t(! str_contains($p27, '250, 1 kg → 1000') && str_contains($p27, 'kg 칸에 26 kg → 26'), '지시 예시: kg 칸은 kg 그대로');
+    $css27 = (string) file_get_contents(dirname(__DIR__).'/resources/assets/catalog.css');
+    t(str_contains($css27, '.cct-facts .cct-f--ai::before{position:absolute') && str_contains($css27, '.cct-facts>div{position:relative;'), '기타 제원 💡 는 칸을 차지하지 않음');
     array_map('unlink', glob($tmp.'/img/*') ?: []);
     array_map('unlink', glob($tmp.'/*.*') ?: []);
     echo "\n통과 {$pass} · 실패 {$fail}\n";
