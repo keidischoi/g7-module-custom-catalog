@@ -467,9 +467,10 @@
                     S2.stage = st.stage || '';
                     if (st.status === 'done') return ok(st.data);
                     if (st.status === 'fail') return no(new Error(st.message || 'AI 가 정리하지 못했어요.'));
-                    if (Date.now() - t0 > 450000) return no(new Error('너무 오래 걸려요 — 글을 줄이거나 더 빠른 모델로 바꿔 주세요.'));
+                    // 0.2.25 서버 한도(16분)만큼 기다림 — 예전엔 화면이 7분 30초에 먼저 포기해 서버가 늦게 끝낸 결과를 버렸음
+                    if (Date.now() - t0 > 1020000) return no(new Error('너무 오래 걸려요' + (S2.stage ? ' (마지막: ' + S2.stage + ')' : '') + ' — 글을 줄이거나 🤖 AI 연결에서 더 빠른 모델을 위로 올려 주세요.'));
                     setTimeout(poll, 2000);
-                  }, function (e) { if (e.status && e.status !== 404 && Date.now() - t0 < 450000) setTimeout(poll, 3000); else no(e); });
+                  }, function (e) { if (e.status && e.status !== 404 && Date.now() - t0 < 1020000) setTimeout(poll, 3000); else no(e); });
                 })();
               });
             };

@@ -173,9 +173,10 @@ final class AiClient
         $timeout = AiLang::timeout((string) $server['provider'], $url, $timeout);   // 0.2.22 로컬 서버는 최소 300초
         $text = $this->askOnce($server, $url, $model, $messages, $maxTokens, $timeout, $json);
         // 0.2.22 🇰🇷 중국어 · 일본어가 섞이면 한 번 더 — 그래도면 이 모델은 실패 (json() 이 다음 순위로)
-        if (AiLang::foreign($text)) {
+        $asked = implode("\n", array_map(static fn ($m) => is_string($m['content'] ?? null) ? $m['content'] : '', $messages));
+        if (AiLang::foreign($text, $asked)) {
             $text = $this->askOnce($server, $url, $model, AiLang::retry($messages, $text), $maxTokens, $timeout, $json);
-            if (AiLang::foreign($text)) {
+            if (AiLang::foreign($text, $asked)) {
                 throw new \RuntimeException('한국어가 아닌 답 (중국어 · 일본어가 섞임) — '.$model.' 대신 다른 모델을 써 보세요.');
             }
         }
