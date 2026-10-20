@@ -575,6 +575,21 @@ namespace {
     $ctl22 = (string) file_get_contents($root22.'/src/Http/Controllers/AdminController.php');
     t(str_contains($js22, "aiRun(api, '/admin/ai/test'") && str_contains($js22, "aiRun(api, '/admin/ai/live'") && str_contains($js22, "aiRun(api, '/admin/ai/sample'") && str_contains($js22, "'/admin/ai/result/' + d.id")
         && substr_count($ctl22, "\$r->boolean('async')") === 2 && str_contains((string) file_get_contents($root22.'/src/routes/api.php'), "Route::get('ai/result/{id}'"), '시험을 뒤에서 (화면 · 길)');
+    echo "■ 0.2.25 정리하기 빠르게 — 긴 글은 제원 줄 먼저 · 붙여 넣은 한자는 봐줌 · 화면은 서버만큼 기다림\n";
+    $long25 = str_repeat("홈 · 제품 · 고객센터 · 로그인\n", 50).str_repeat("이 프린터는 누구나 쉽게 쓸 수 있도록 만든 제품으로 조용하고 빠릅니다 ", 80)."\n출력 크기: 256 x 256 x 256 mm\n최대 속도: 500 mm/s\n노즐 온도: 300 °C\n";
+    $b25 = Collector::brief($long25);
+    t(mb_strlen($b25) <= Collector::BRIEF_MAX && substr_count($b25, '로그인') === 1 && str_contains($b25, '출력 크기: 256') && str_contains($b25, '노즐 온도: 300') && strpos($b25, '출력 크기') > strpos($b25, '로그인'),
+        '긴 글: 같은 줄 한 번 · 제원 줄은 꼭 · 3000 자 · 원래 순서');
+    t(Collector::brief("짧은 글\n출력 크기: 1 mm") === "짧은 글\n출력 크기: 1 mm", '짧은 글은 그대로');
+    $L25 = \Modules\Custom\Catalog\Support\AiLang::class;
+    t(! $L25::foreign('{"title":"拓竹 A1","facts":{"제조사":"深圳拓竹科技"}}', "[글]\n拓竹 A1 · 深圳拓竹科技") && $L25::foreign('{"summary":"这是一台打印机"}', '拓竹')
+        && $L25::foreign('这是一台打印机'), '붙여 넣은 글의 한자를 옮긴 것은 다시 묻지 않음 · 새로 쓴 중국어는 여전히');
+    $seen25 = 0;
+    AiClient::$sender = function () use (&$seen25) { $seen25++; return ['message' => ['content' => '{"brand":"深圳拓竹","values":{}}']]; };
+    $col->extract('equipment', 'fdm', "品牌: 深圳拓竹\n출력 크기: 256 mm");
+    t($seen25 === 1, '한자 브랜드가 든 제원표 — AI 에게 한 번만 물음 (예전엔 두 번 + 다음 모델)');
+    $app25 = (string) file_get_contents(dirname(__DIR__).'/resources/assets/catalog-app.js');
+    t(! str_contains($app25, '450000') && str_contains($app25, '1020000'), '화면은 서버 한도(16분)만큼 기다림 (예전 7분 30초에 먼저 포기)');
     array_map('unlink', glob($tmp.'/img/*') ?: []);
     array_map('unlink', glob($tmp.'/*.*') ?: []);
     echo "\n통과 {$pass} · 실패 {$fail}\n";

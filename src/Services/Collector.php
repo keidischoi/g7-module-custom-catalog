@@ -684,8 +684,8 @@ final class Collector
             }
             $text = self::plain($html);
         }
-        // 0.2.17 빈 줄 · 겹친 띄어쓰기 줄이고 6000 자까지 (긴 글은 작은 모델을 몇 분씩 붙잡음)
-        $text = mb_substr(trim(preg_replace("/[ \t]+/u", ' ', preg_replace("/\n\s*\n+/u", "\n", $text) ?? $text) ?? $text), 0, 6000);
+        // 0.2.17 빈 줄 · 겹친 띄어쓰기 줄임 · 0.2.25 긴 글은 제원 줄 먼저 3000 자까지 (6000 자는 CPU 서버에서 문맥 16K → 7분을 넘김)
+        $text = self::brief(trim(preg_replace("/[ \t]+/u", ' ', preg_replace("/\n\s*\n+/u", "\n", $text) ?? $text) ?? $text));
         if (mb_strlen($text) < 8) {
             throw new \InvalidArgumentException('정리할 글이 없어요 — 제품 페이지의 제원 · 소개 글을 붙여 넣거나 끌어 놓아 주세요.');
         }
@@ -736,6 +736,55 @@ final class Collector
             'homepage_url' => preg_match('#^https?://#i', $url) ? $url : ($from !== '' ? $from : ''), 'issues' => implode("\n", array_slice($iss, 0, 8)),
             'values' => $vals, 'facts' => $facts, 'from' => $this->ai->last, 'source_url' => $from];
     }
+
+    /**
+     * 0.2.25 긴 글 줄이기 — 같은 줄(메뉴 · 바닥글 되풀이)은 한 번만, 숫자가 든 짧은 줄(제원)을 먼저 담고
+     * 남는 자리에 소개 글. 고른 줄은 원래 순서 그대로.
+     */
+    public static function brief(string $text, int $max = self::BRIEF_MAX): string
+    {
+        if (mb_strlen($text) <= $max) {
+            return $text;
+        }
+        $lines = [];
+        $seen = [];
+        foreach (preg_split("/\n/u", $text) ?: [] as $l) {
+            $l = trim($l);
+            $key = mb_strtolower($l);
+            if ($l === '' || isset($seen[$key])) {
+                continue;
+            }
+            $seen[$key] = true;
+            $lines[] = $l;
+        }
+        $spec = static fn (string $l) => mb_strlen($l) <= 200 && preg_match('/\d/u', $l) === 1;
+        $pick = [];
+        $left = $max;
+        foreach ([true, false] as $first) {
+            foreach ($lines as $i => $l) {
+                if (isset($pick[$i]) || $spec($l) !== $first) {
+                    continue;
+                }
+                $n = mb_strlen($l) + 1;
+                if ($n > $left) {
+                    if ($first) {
+                        continue;
+                    }
+                    if ($left > 80) {
+                        $pick[$i] = mb_substr($l, 0, $left - 1);
+                    }
+                    break;
+                }
+                $pick[$i] = $l;
+                $left -= $n;
+            }
+        }
+        ksort($pick);
+
+        return implode("\n", $pick);
+    }
+
+    public const BRIEF_MAX = 3000;
 
     /*
      * AI 로 정리해 넣기 결과를 일 번호 파일에도 남김 — 앞단이 504 로 끊어도 화면이 GET 으로 받아 감.

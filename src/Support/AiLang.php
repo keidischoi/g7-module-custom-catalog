@@ -15,8 +15,12 @@ final class AiLang
     public const LOCAL_MIN = 300;
 
     /** 중국어 한자 3자 이상 · 일본어 가나 2자 이상 (한국어 글의 한자 한두 개는 봐줌) */
-    public static function foreign(string $text): bool
+    public static function foreign(string $text, string $asked = ''): bool
     {
+        if ($asked !== '') {   // 0.2.25 물음(붙여 넣은 글)에 있던 한자 · 가나 덩어리를 그대로 옮긴 것은 봐줌 — 중국 업체 제원표 때문에 두 번씩 묻던 것
+            $text = (string) preg_replace_callback('/[\p{Han}\x{3040}-\x{30FF}]+/u', static fn ($m) => str_contains($asked, $m[0]) ? '' : $m[0], $text);
+        }
+
         return preg_match_all('/\p{Han}/u', $text) >= 3 || preg_match_all('/[\x{3040}-\x{30FF}]/u', $text) >= 2;
     }
 
