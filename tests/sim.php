@@ -54,6 +54,33 @@ namespace Modules\Custom\Inventory\Api {
     }
 }
 
+namespace Plugins\Custom\HelperAi\Support {
+    /** 0.2.26 도우미 AI 「지금 묻는 중」 흉내 */
+    final class AiNow
+    {
+        public static array $log = [];
+
+        public static array $busy = [];
+
+        public static function begin(string $who, string $url, string $model): string
+        {
+            self::$log[] = ['begin', $who, $url, $model];
+
+            return 'n'.count(self::$log);
+        }
+
+        public static function end(string $id, ?float $sec = null, bool $ok = true): void
+        {
+            self::$log[] = ['end', $id, $ok];
+        }
+
+        public static function asking(string $url = '', string $except = ''): array
+        {
+            return array_values(array_filter(self::$busy, static fn ($e) => $e['who'] !== $except));
+        }
+    }
+}
+
 namespace {
     use Illuminate\Database\Capsule\Manager as Capsule;
     use Illuminate\Support\Facades\DB;
@@ -590,6 +617,30 @@ namespace {
     t($seen25 === 1, '한자 브랜드가 든 제원표 — AI 에게 한 번만 물음 (예전엔 두 번 + 다음 모델)');
     $app25 = (string) file_get_contents(dirname(__DIR__).'/resources/assets/catalog-app.js');
     t(! str_contains($app25, '450000') && str_contains($app25, '1020000'), '화면은 서버 한도(16분)만큼 기다림 (예전 7분 30초에 먼저 포기)');
+    echo "■ 0.2.26 정리하기 — 묻는 동안 상태 · 같은 서버 쓰는 중 · 멈춘 일 · 닿지 않는 서버\n";
+    $N26 = \Plugins\Custom\HelperAi\Support\AiNow::class;
+    $N26::$log = [];
+    $N26::$busy = [['who' => '장비 게시판', 'host' => '127.0.0.1:11434', 'model' => 'qwen', 'at' => time() - 40, 'sec' => 40]];
+    $st26 = [];
+    AiClient::$sender = function () use (&$st26, &$jid26) { $st26[] = Collector::jobRaw($jid26); return ['message' => ['content' => '{"values":{"build_x_mm":256}}']]; };
+    $jid26 = Collector::jobStart(['type' => 'equipment', 'kind' => 'fdm', 'text' => '출력 크기: 256 mm']);
+    $col->jobRun($jid26);
+    $mid = $st26[0] ?? [];
+    t(str_contains((string) ($mid['stage'] ?? ''), '최대 300초') && str_contains((string) ($mid['stage'] ?? ''), '「장비 게시판」가 40초째') && (int) ($mid['until'] ?? 0) >= time() + 600,
+        '묻는 중 단계: 실제 기다리는 시간(로컬 300초) · 같은 서버를 다른 기능이 쓰는 중 · until');
+    t(($N26::$log[0][0] ?? '') === 'begin' && ($N26::$log[0][1] ?? '') === '3D 카탈로그' && ($N26::$log[1][0] ?? '') === 'end' && ($N26::$log[1][2] ?? null) === true, '도우미 AI 「지금 묻는 중」에 적고 지움');
+    t((Collector::job($jid26)['status'] ?? '') === 'done' && ! isset(Collector::job($jid26)['until']), '끝나면 done');
+    $N26::$busy = [];
+    $jd26 = Collector::jobStart(['text' => 'x']);
+    file_put_contents(Settings::file('extract-'.$jd26.'.json'), json_encode(['status' => 'run', 'at' => time() - 100, 'started' => time() - 100, 'stage' => '🤖 집 · qwen 에게 묻는 중', 'until' => time() - 5]));
+    $dj26 = Collector::job($jd26);
+    t($dj26['status'] === 'fail' && str_contains($dj26['message'], '멈춘 것 같아요') && str_contains($dj26['message'], 'qwen'), '단계 시간이 지나도 run 이면 바로 실패 (16분 기다리지 않음)');
+    $e26 = '';
+    AiClient::$sender = function () { throw new \Exception('cURL error 28: Connection timed out after 8001 milliseconds'); };
+    try { (new AiClient())->json('x'); } catch (\RuntimeException $e) { $e26 = $e->getMessage(); }
+    t(str_contains($e26, '서버에 닿지 않아요') && ! str_contains($e26, '응답 시간 초과'), '연결부터 안 되면 「닿지 않아요」 (예전엔 응답 시간 초과 300초로 보임)');
+    $app26 = (string) file_get_contents(dirname(__DIR__).'/resources/assets/catalog-app.js');
+    t(str_contains($app26, 'Promise.race([api(\'POST\', \'/admin/ai/extract\'') && str_contains($app26, "++n4 % 3 === 0"), '화면: 묻는 동안 3초마다 상태 엿봄');
     array_map('unlink', glob($tmp.'/img/*') ?: []);
     array_map('unlink', glob($tmp.'/*.*') ?: []);
     echo "\n통과 {$pass} · 실패 {$fail}\n";

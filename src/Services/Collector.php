@@ -786,6 +786,22 @@ final class Collector
 
     public const BRIEF_MAX = 3000;
 
+    /** 0.2.26 같은 AI 서버를 지금 다른 기능이 쓰는 중이면 한 줄 — 작은 CPU 서버는 앞 일이 끝나야 시작됨 */
+    public static function busyNote(string $url): string
+    {
+        $now = AiClient::NOW;
+        if ($url === '' || ! class_exists($now)) {
+            return '';
+        }
+        try {
+            $l = $now::asking($url, AiClient::WHO);
+        } catch (\Throwable) {
+            return '';
+        }
+
+        return $l ? ' · ⏳ 같은 서버를 「'.$l[0]['who'].'」가 '.(int) $l[0]['sec'].'초째 쓰는 중'.(count($l) > 1 ? ' 외 '.(count($l) - 1).'곳' : '').' — 끝나야 시작돼요' : '';
+    }
+
     /*
      * AI 로 정리해 넣기 결과를 일 번호 파일에도 남김 — 앞단이 504 로 끊어도 화면이 GET 으로 받아 감.
      * 상태는 설정 폴더의 extract-{id}.json: run(stage) · done(data) · fail(message).
@@ -833,6 +849,10 @@ final class Collector
             return null;
         }
         unset($j['args']);
+        if (($j['status'] ?? '') === 'run' && ! empty($j['until']) && (int) $j['until'] < time()) {   // 0.2.26
+            return ['status' => 'fail', 'message' => '서버가 일을 멈춘 것 같아요 (마지막: '.($j['stage'] ?? '?').') — PHP 시간 제한에 걸렸을 수 있어요. 다시 눌러 보고, 또 그러면 🤖 AI 연결에서 더 빠른 모델을 위로 올려 주세요.'];
+        }
+        unset($j['until']);
         if (($j['status'] ?? '') === 'run' && (int) ($j['at'] ?? 0) < time() - 1000) {   // 0.2.22 로컬 서버는 모델마다 최소 300초라 7분 → 16분
             return ['status' => 'fail', 'message' => 'AI 가 16분 안에 답하지 못했어요 (마지막: '.($j['stage'] ?? '?').') — 글을 줄이거나 🤖 AI 연결에서 더 빠른 모델을 위로 올려 주세요.'];
         }
@@ -851,8 +871,9 @@ final class Collector
         @set_time_limit(960);
         @ignore_user_abort(true);
         $t0 = time();
-        $stage = function (string $s) use ($id, $raw, $t0) {
-            self::jobPut($id, ['status' => 'run', 'at' => (int) ($raw['at'] ?? $t0), 'started' => $t0, 'stage' => $s]);
+        // 0.2.26 until = 이 단계가 늦어도 끝나야 할 때 — 지나도 run 이면 PHP 가 죽은 것 (16분을 다 기다리지 않게)
+        $stage = function (string $s, int $wait = 90) use ($id, $raw, $t0) {
+            self::jobPut($id, ['status' => 'run', 'at' => (int) ($raw['at'] ?? $t0), 'started' => $t0, 'stage' => $s, 'until' => time() + $wait]);
         };
         $stage(preg_match('#^https?://\S+$#i', trim((string) ($a['text'] ?? ''))) ? '🌐 페이지 여는 중' : '📝 글 정리 중');
         // PHP 가 시간 제한 등으로 멈추면 까닭을 남김
@@ -863,8 +884,9 @@ final class Collector
                 self::jobPut($id, ['status' => 'fail', 'message' => '서버가 일을 멈췄어요 (마지막: '.($j['stage'] ?? '?').')'.($e ? ' — '.mb_substr((string) $e['message'], 0, 200) : '')]);
             }
         });
-        $this->ai->onTry = function (string $sv, string $model, int $timeout, array $errors) use ($stage) {
-            $stage('🤖 '.$sv.' · '.$model.' 에게 묻는 중 (최대 '.$timeout.'초)'.($errors ? ' — 앞 서버 실패: '.mb_substr((string) end($errors), 0, 120) : ''));
+        $this->ai->onTry = function (string $sv, string $model, int $timeout, array $errors, string $url = '') use ($stage) {
+            $stage('🤖 '.$sv.' · '.$model.' 에게 묻는 중 (최대 '.$timeout.'초)'.self::busyNote($url).($errors ? ' — 앞 서버 실패: '.mb_substr((string) end($errors), 0, 120) : ''),
+                $timeout * 2 + 60);   // 한국어 다시 묻기까지
         };
         try {
             $res = $this->extract((string) ($a['type'] ?? ''), (string) ($a['kind'] ?? ''), (string) ($a['text'] ?? ''), (string) ($a['brand'] ?? ''), (string) ($a['title'] ?? ''));
