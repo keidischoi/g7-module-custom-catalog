@@ -13,6 +13,12 @@
 
 칸 정의는 `src/Support/Fields.php` 한 곳 — 화면(입력 · 상세)과 AI 가 모두 이것을 씁니다. 종류 키는 업체검색의 장비 종류 · 재고 종류와 같습니다.
 
+## 🔩 부품 · 업그레이드 (0.3.0)
+
+- `cat_parts` (부품) · `cat_part_fits` (맞는 프린터 — 편집자 확인 또는 표 `parts_auto_votes` 개) · `cat_part_votes` (fit · mod · no · ✔ 실사용 두 배) · `cat_part_reviews` · `cat_part_links`
+- 회원: `POST parts/{key}/vote|reviews|links` · `parts/propose` (제안함으로) · `parts/links/{id}/report` / 편집자: `GET admin/parts/pending` · `POST admin/parts/fits/{id}`
+- 목록: `items?tab=parts&printer=키` · `&mine=1` (내 프린터 · custom-my_printer) · 프린터 상세 응답에 `parts`
+
 ## API
 
 - `GET /api/modules/custom-catalog/meta` · `items?tab=&brand=&q=&sort=&flags=&page=` · `items/{key}`

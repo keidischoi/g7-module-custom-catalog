@@ -20,11 +20,28 @@ final class Schema
 
     public const SUGGEST = 'cat_suggestions';
 
+    /** 0.3.0 🔩 부품 · 맞는 프린터 · 맞음 투표 · 후기 · 구매처 */
+    public const PARTS = 'cat_parts';
+
+    public const FITS = 'cat_part_fits';
+
+    public const VOTES = 'cat_part_votes';
+
+    public const REVIEWS = 'cat_part_reviews';
+
+    public const LINKS = 'cat_part_links';
+
+    /** 0.3.0 표 이름 → 화면 · 사진의 type */
+    public static function types(): array
+    {
+        return ['equipment', 'materials', 'parts'];
+    }
+
     private static bool $done = false;
 
     public static function table(string $type): string
     {
-        return $type === 'materials' ? self::MATERIALS : self::EQUIPMENT;
+        return match ($type) { 'materials' => self::MATERIALS, 'parts' => self::PARTS, default => self::EQUIPMENT };
     }
 
     public static function reset(): void
@@ -88,7 +105,72 @@ final class Schema
                 $t->timestamps();
             });
         }
-        foreach ([self::EQUIPMENT, self::MATERIALS] as $table) {
+        if (! S::hasTable(self::PARTS)) {   // 0.3.0
+            S::create(self::PARTS, function (Blueprint $t) {
+                $t->id();
+                $t->string('key', 80)->unique();
+                $t->string('kind', 16)->index();
+                $t->string('brand', 60);
+                $t->string('name', 80);
+                $t->string('status', 12)->default('active')->index();
+                $t->timestamps();
+            });
+        }
+        if (! S::hasTable(self::FITS)) {
+            S::create(self::FITS, function (Blueprint $t) {
+                $t->id();
+                $t->string('part_key', 80)->index();
+                $t->string('printer_key', 60)->index();
+                $t->string('status', 8)->nullable();        // 편집자가 정한 것 (fit · mod · no) — 비면 투표로
+                $t->boolean('approved')->default(false);    // 편집자가 확인 (아니면 투표가 쌓여야 보임)
+                $t->string('note', 300)->nullable();
+                $t->unsignedBigInteger('created_by')->nullable();
+                $t->timestamps();
+                $t->unique(['part_key', 'printer_key']);
+            });
+        }
+        if (! S::hasTable(self::VOTES)) {
+            S::create(self::VOTES, function (Blueprint $t) {
+                $t->id();
+                $t->string('part_key', 80);
+                $t->string('printer_key', 60);
+                $t->unsignedBigInteger('user_id');
+                $t->string('vote', 4);                     // fit · mod · no
+                $t->boolean('real_use')->default(false);   // 내 프린터에 그 프린터가 있음
+                $t->timestamps();
+                $t->unique(['part_key', 'printer_key', 'user_id']);
+            });
+        }
+        if (! S::hasTable(self::REVIEWS)) {
+            S::create(self::REVIEWS, function (Blueprint $t) {
+                $t->id();
+                $t->string('part_key', 80)->index();
+                $t->unsignedBigInteger('user_id');
+                $t->string('printer_key', 60)->nullable();
+                $t->unsignedTinyInteger('score');
+                $t->text('body')->nullable();
+                $t->string('materials', 120)->nullable();   // 같이 쓴 소재
+                $t->unsignedSmallInteger('months')->nullable();
+                $t->boolean('real_use')->default(false);
+                $t->string('status', 10)->default('visible')->index();
+                $t->timestamps();
+                $t->unique(['part_key', 'user_id']);
+            });
+        }
+        if (! S::hasTable(self::LINKS)) {
+            S::create(self::LINKS, function (Blueprint $t) {
+                $t->id();
+                $t->string('part_key', 80)->index();
+                $t->unsignedBigInteger('user_id');
+                $t->string('url', 500);
+                $t->string('label', 60)->nullable();
+                $t->unsignedInteger('price_krw')->nullable();
+                $t->unsignedSmallInteger('reports')->default(0);
+                $t->string('status', 10)->default('visible')->index();
+                $t->timestamps();
+            });
+        }
+        foreach ([self::EQUIPMENT, self::MATERIALS, self::PARTS] as $table) {
             $add = [];
             foreach (['image_url' => 'string:300', 'wiki_url' => 'string:300', 'summary' => 'text', 'facts' => 'text', 'specs' => 'text', 'homepage_url' => 'string:500',
                 'note' => 'string:500', 'detail' => 'text', 'issues' => 'text', 'memo' => 'text', 'source' => 'string:20', 'ai_photo_at' => 'ts', 'ai_fill_at' => 'ts', 'ai_sds_at' => 'ts'] as $col => $kind) {

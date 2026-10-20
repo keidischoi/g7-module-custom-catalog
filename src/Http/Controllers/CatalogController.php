@@ -39,6 +39,7 @@ class CatalogController extends Controller
         $this->autoCollect();
 
         return self::ok($meta + ['counts' => $this->catalog->counts(), 'per_page' => $s['per_page'], 'can_edit' => Access::canEdit($r), 'ai_paste' => Access::canEdit($r) && $s['ai_paste'],
+            'login' => self::uid($r) > 0, 'parts_member' => (bool) $s['parts_member'], 'parts_auto_votes' => (int) $s['parts_auto_votes'],   // 0.3.0
             'logos' => \Modules\Custom\Catalog\Support\Logos::map()]);
     }
 
@@ -51,7 +52,7 @@ class CatalogController extends Controller
                 $def = $t;
             }
         }
-        $type = $def ? $def[3] : ($r->query('type') === 'materials' ? 'materials' : 'equipment');
+        $type = $def ? $def[3] : (in_array($r->query('type'), ['materials', 'parts'], true) ? (string) $r->query('type') : 'equipment');
         $kinds = $def ? $def[4] : array_filter(explode(',', (string) $r->query('kind', '')));
         $edit = Access::canEdit($r);
 
@@ -59,6 +60,7 @@ class CatalogController extends Controller
             'type' => $type, 'kinds' => $kinds, 'brand' => (string) $r->query('brand', ''), 'q' => mb_substr((string) $r->query('q', ''), 0, 60),
             'sort' => (string) $r->query('sort', ''), 'page' => (int) $r->query('page', 1), 'per' => (int) $r->query('per', Settings::get('per_page')),
             'flags' => array_filter(explode(',', (string) $r->query('flags', ''))),
+            'printers' => $r->query('mine') === '1' ? \Modules\Custom\Catalog\Services\PartsService::userPrinters(self::uid($r)) : array_filter(explode(',', (string) $r->query('printer', ''))),   // 0.3.0 🔩 이 프린터에 맞는 부품
             'status' => $edit ? (string) $r->query('status', 'active') : 'active',
         ]));
     }
@@ -71,7 +73,28 @@ class CatalogController extends Controller
             return response()->json(['success' => false, 'message' => '없는 항목이에요.'], 404);
         }
 
-        return self::ok($this->catalog->detail($hit[0], $hit[1], $edit));
+        $out = $this->catalog->detail($hit[0], $hit[1], $edit);
+        // 0.3.0 🔩 부품: 맞는 프린터 · 후기 · 구매처 / 프린터: 맞는 부품
+        $P = app(\Modules\Custom\Catalog\Services\PartsService::class);
+        $uid = self::uid($r);
+        if ($hit[0] === 'parts') {
+            $out['fits'] = $P->fitsOf($key, $uid, $edit);
+            $out['reviews'] = $P->reviews($key, $uid, $edit);
+            $out['links'] = $P->links($key, $uid, $edit);
+            $out['my_printers'] = \Modules\Custom\Catalog\Services\PartsService::userPrinters($uid);
+        } elseif ($hit[0] === 'equipment') {
+            $out['parts'] = $P->forPrinter($key);
+        }
+        $out['login'] = $uid > 0;
+
+        return self::ok($out);
+    }
+
+    public static function uid(Request $r): int
+    {
+        $u = Access::user($r);
+
+        return $u ? (int) ($u->id ?? 0) : 0;
     }
 
     /** 업체검색 등 다른 모듈용 목록 (사진은 주지 않음 — 그쪽 사진을 그대로 씀) */

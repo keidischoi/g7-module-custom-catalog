@@ -499,7 +499,7 @@ namespace {
     t($wp['total'] >= 1 && $wp['items'][0]['has_thumbnail'] === ($wp['items'][0]['thumbnail'] !== '') && array_key_exists('image_url', $wp['items'][0]) && CatalogListener::searchType('equipment', 'P1S', 9, 5)['items'] === [], '사진 주소 · 넘는 쪽은 빈 목록');
     $home = (new CatalogListener())->homeSections([]);
     t($home[0]['key'] === 'catalog' && count($home[0]['items']) >= 4 && $home[0]['items'][0]['image'] !== '', '홈 칸 — 사진 있는 것부터');
-    t(count(Fields::forKind('equipment', 'fdm')) >= 40 && count(Fields::forKind('materials', 'fdm')) >= 30 && count(Fields::meta()['tabs']) === 8, '칸 정의 (FDM 장비 '.count(Fields::forKind('equipment', 'fdm')).'칸 · 필라멘트 '.count(Fields::forKind('materials', 'fdm')).'칸)');
+    t(count(Fields::forKind('equipment', 'fdm')) >= 40 && count(Fields::forKind('materials', 'fdm')) >= 30 && count(Fields::meta()['tabs']) === 9, '칸 정의 (FDM 장비 '.count(Fields::forKind('equipment', 'fdm')).'칸 · 필라멘트 '.count(Fields::forKind('materials', 'fdm')).'칸)');
 
     echo "■ 고쳐서 반영 · AI 로 정리해 넣기 · 출처 (0.2.11)\n";
     DB::table('cat_suggestions')->delete();
@@ -656,6 +656,92 @@ namespace {
     t(! str_contains($p27, '250, 1 kg → 1000') && str_contains($p27, 'kg 칸에 26 kg → 26'), '지시 예시: kg 칸은 kg 그대로');
     $css27 = (string) file_get_contents(dirname(__DIR__).'/resources/assets/catalog.css');
     t(str_contains($css27, '.cct-facts .cct-f--ai::before{position:absolute') && str_contains($css27, '.cct-facts>div{position:relative;'), '기타 제원 💡 는 칸을 차지하지 않음');
+    echo "■ 🔩 부품 · 업그레이드 (0.3.0)\n";
+    \Modules\Custom\Catalog\Support\Schema::reset();
+    \Modules\Custom\Catalog\Support\Schema::ensure();
+    $DBf = \Illuminate\Support\Facades\DB::class;
+    if (! \Illuminate\Support\Facades\Schema::hasTable('users')) {
+        \Illuminate\Support\Facades\Schema::create('users', function ($t) { $t->id(); $t->string('name')->nullable(); $t->string('nickname')->nullable(); });
+    }
+    $DBf::table('users')->insertOrIgnore([['id' => 7, 'name' => '김노즐', 'nickname' => null], ['id' => 8, 'name' => '박베드', 'nickname' => '베드장인'], ['id' => 9, 'name' => '이세번', 'nickname' => null]]);
+    $PS = new \Modules\Custom\Catalog\Services\PartsService($svc);
+    $x1 = $svc->find('bambu-lab-x1-carbon-fdm')[1]->key ?? 'bambu-lab-x1-carbon-fdm';
+    $p1s = $svc->save('equipment', ['kind' => 'fdm', 'brand' => 'Bambu Lab', 'title' => 'P1S'])['key'];
+    $mk4 = $svc->save('equipment', ['kind' => 'fdm', 'brand' => 'Prusa Research', 'title' => 'MK4S'])['key'];
+    t(count(Fields::forKind('parts', 'nozzle')) >= 10 && Fields::validKind('parts', 'bed') && ! Fields::validKind('parts', 'fdm') && Fields::kindLabel('parts', 'hotend') === '핫엔드', '부품 칸 · 종류');
+    $np = $PS->propose(1, ['kind' => 'hotend', 'brand' => 'Bambu Lab', 'title' => 'Hotend Hardened Steel 0.6', 'values' => ['nozzle_size' => '0.6', 'nozzle_material' => '경화강', 'genuine' => '정품', 'price_krw' => '45,000'], 'printers' => [$x1, $p1s, 'no-such-printer']], true);
+    $hk = $np['key'];
+    t($np['suggested'] === false && $hk !== null && $svc->find($hk)[0] === 'parts', '편집자: 새 부품 바로 저장');
+    $fx = $PS->fitsOf($hk, 7);
+    t(count($fx['items']) === 2 && $fx['items'][0]['status'] === 'fit' && $fx['pending'] === [], '편집자가 고른 맞는 프린터는 바로 「그대로 맞음」 (없는 프린터는 뺌)');
+    $card = $svc->card('parts', $svc->find($hk)[1]);
+    t(in_array('정품', $card['chips'], true) && in_array('경화강', $card['chips'], true) && in_array('0.6 mm', $card['chips'], true) && in_array('45,000원', $card['chips'], true), '부품 카드: 정품 · 재질 · 지름 · 가격');
+    $lst = $svc->list(['type' => 'parts', 'printers' => [$p1s]]);
+    t($lst['total'] === 1 && $lst['items'][0]['key'] === $hk && $svc->list(['type' => 'parts', 'printers' => [$mk4]])['total'] === 0, '목록: 이 프린터에 맞는 부품만');
+    t($svc->list(['type' => 'parts', 'q' => '노즐'])['total'] === 1 && $svc->counts()['parts'] === 1, '「노즐」로 찾으면 노즐 · 핫엔드 · 탭 개수');
+    // 회원 제안: 맞는 프린터
+    \Modules\Custom\Catalog\Services\PartsService::$myPrinters = static fn (int $u) => $u === 8 ? [$mk4] : [];
+    $v = $PS->vote(7, $hk, $mk4, 'fit');
+    t(count($v['pending']) === 1 && $v['pending'][0]['need'] === 2 && count($v['items']) === 2, '회원이 제안한 프린터는 「확인 중」 (맞음 3표까지 2표 남음)');
+    $PS->vote(8, $hk, $mk4, 'fit');
+    $v = $PS->vote(9, $hk, $mk4, 'fit');
+    $mk = array_values(array_filter($v['items'], static fn ($x) => $x['printer']['key'] === $mk4))[0] ?? null;
+    t($mk !== null && $mk['status'] === 'fit' && $mk['real_use'] === 1 && $mk['votes']['fit'] === 3, '맞음 3표 → 보임 · ✔ 실사용 1명');
+    $PS->vote(7, $hk, $mk4, 'no');
+    $PS->vote(9, $hk, $mk4, 'no');
+    $mk = array_values(array_filter($PS->fitsOf($hk)['items'], static fn ($x) => $x['printer']['key'] === $mk4))[0];
+    t($mk['status'] === 'fit', '실사용 표는 두 배 (맞음 1실사용=2 vs 안 맞음 2 → 같으면 맞음 먼저)');
+    $PS->vote(9, $hk, $mk4, 'mod');
+    $PS->vote(7, $hk, $mk4, 'mod');
+    t(array_values(array_filter($PS->fitsOf($hk)['items'], static fn ($x) => $x['printer']['key'] === $mk4))[0]['status'] === 'fit', '맞음2 vs 개조2 → 맞음');
+    $fid = $DBf::table('cat_part_fits')->where('part_key', $hk)->where('printer_key', $mk4)->value('id');
+    $PS->editFit((int) $fid, 'status', 'mod', '압출기 브래킷 바꿔야 함');
+    $mk = array_values(array_filter($PS->fitsOf($hk)['items'], static fn ($x) => $x['printer']['key'] === $mk4))[0];
+    t($mk['status'] === 'mod' && $mk['set_by_editor'] && $mk['note'] === '압출기 브래킷 바꿔야 함', '편집자가 정한 상태가 먼저 · 메모');
+    $pd = $PS->forPrinter($p1s);
+    t(count($pd) === 1 && $pd[0]['kind'] === 'hotend' && $pd[0]['items'][0]['key'] === $hk && $pd[0]['items'][0]['fit'] === 'fit', '프린터 상세: 맞는 부품 (종류별)');
+    $PS->editFit((int) $fid, 'status', 'no');
+    t($PS->forPrinter($mk4) === [], '「안 맞음」은 프린터 쪽에 안 보임');
+    try { $PS->vote(7, $hk, $mk4, 'maybe'); $bad = false; } catch (\InvalidArgumentException) { $bad = true; }
+    t($bad, '이상한 표는 안 됨');
+    // 후기
+    $rv = $PS->review(8, $hk, ['score' => 5, 'body' => 'CF 3롤째 멀쩡', 'printer' => $mk4, 'months' => 4, 'materials' => 'PA-CF']);
+    $PS->review(7, $hk, ['score' => 3, 'body' => '<b>빡빡함</b>']);
+    $rv = $PS->reviews($hk, 7);
+    t($rv['n'] === 2 && $rv['avg'] === 4.0 && $rv['items'][0]['real_use'] === true && $rv['items'][0]['user'] === '베드장인' && $rv['mine']['body'] === '빡빡함', '후기: 평균 · ✔ 실사용 먼저 · 닉네임 · 태그 지움');
+    $PS->review(7, $hk, ['score' => 4, 'body' => '익숙해지니 괜찮음']);
+    t($PS->reviews($hk)['n'] === 2 && $PS->reviews($hk)['avg'] === 4.5, '후기는 한 사람 하나 (고치면 덮어씀)');
+    $PS->hideReview((int) $rv['mine']['id'], true);
+    t($PS->reviews($hk)['n'] === 1 && count($PS->reviews($hk, 7)['items']) === 2 && count($PS->reviews($hk, 9)['items']) === 1, '숨긴 후기: 남에겐 안 보임 (쓴 사람은 봄)');
+    try { $PS->review(7, $hk, ['score' => 9]); $bad = false; } catch (\InvalidArgumentException) { $bad = true; }
+    t($bad, '별점은 1~5');
+    // 구매처
+    $lk = $PS->addLink(8, $hk, ['url' => 'https://store.bambulab.com/x', 'price' => '45,000원']);
+    t(count($lk) === 1 && $lk[0]['label'] === 'store.bambulab.com' && $lk[0]['price'] === 45000, '구매처: 가게 이름은 주소에서 · 가격');
+    try { $PS->addLink(8, $hk, ['url' => 'javascript:alert(1)']); $bad = false; } catch (\InvalidArgumentException) { $bad = true; }
+    t($bad, 'http 주소만');
+    $lid = $lk[0]['id'];
+    $PS->linkAction(7, $lid, 'report');
+    $PS->linkAction(9, $lid, 'report');
+    t(count($PS->links($hk)) === 1, '신고 2번은 그대로');
+    $PS->linkAction(7, $lid, 'report');
+    t($PS->links($hk) === [] && count($PS->links($hk, 0, true)) === 1, '신고 3번 → 숨김 (편집자는 봄)');
+    t(count($PS->pending()['links']) === 1, '편집자 확인 목록에 신고된 구매처');
+    // 회원 새 부품 제안 → 제안함 → 반영
+    $sg = $PS->propose(9, ['kind' => 'bed', 'brand' => 'Bambu Lab', 'title' => 'Textured PEI Plate', 'values' => ['bed_surface' => '텍스처 PEI', 'magnetic' => '예'], 'printers' => [$x1, $p1s]]);
+    $sid = (int) $DBf::table('cat_suggestions')->where('item_type', 'parts')->max('id');
+    t($sg['suggested'] === true && $DBf::table('cat_suggestions')->find($sid)->source === '회원 #9', '회원 제안은 제안함으로');
+    $ap = $col->apply($sid);
+    $plate = $svc->find($ap['key']);
+    t($plate[0] === 'parts' && $plate[1]->kind === 'bed' && count($PS->fitsOf($ap['key'])['items']) === 2, '제안함에서 반영 → 부품 · 맞는 프린터 (확인됨)');
+    \Modules\Custom\Catalog\Support\Settings::save(['parts_member' => false]);
+    try { $PS->propose(9, ['kind' => 'bed', 'brand' => 'X', 'title' => 'Y']); $bad = false; } catch (\InvalidArgumentException) { $bad = true; }
+    t($bad, '설정으로 회원 제안 끄기');
+    \Modules\Custom\Catalog\Support\Settings::save(['parts_member' => true]);
+    t(count($PS->printerPick('bambu p1')) === 1 && $PS->printerPick('bambu p1')[0]['key'] === $p1s, '프린터 고르기 (이름으로 찾기)');
+    $ph = $PS->fitsOf($hk);
+    t(count($PS->pending()['fits']) === 0, '확인 기다리는 연결 목록');
+    \Modules\Custom\Catalog\Services\PartsService::$myPrinters = null;
     array_map('unlink', glob($tmp.'/img/*') ?: []);
     array_map('unlink', glob($tmp.'/*.*') ?: []);
     echo "\n통과 {$pass} · 실패 {$fail}\n";

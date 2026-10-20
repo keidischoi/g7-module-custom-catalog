@@ -35,7 +35,7 @@ final class PhotoService
 
     private static function itemType(string $type): string
     {
-        return $type === 'materials' ? 'material' : 'equipment';
+        return match ($type) { 'materials' => 'material', 'parts' => 'part', default => 'equipment' };
     }
 
     /** @return list<array<string, mixed>> */

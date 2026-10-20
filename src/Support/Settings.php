@@ -39,6 +39,8 @@ final class Settings
             'ai_paste' => true,               // 0.2.11 편집 창 「🤖 AI 로 정리해 넣기」 — 붙여 넣은(끌어 놓은) 글 · 주소에서 칸을 채움
             'search' => 'none',               // 사진 · 자료 검색: none · brave
             'brave_key' => '',
+            'parts_member' => true,           // 0.3.0 🔩 회원이 새 부품을 제안 (제안함으로 · 편집자 확인)
+            'parts_auto_votes' => 3,          // 0.3.0 회원이 제안한 「맞는 프린터」는 맞음 표가 이만큼 쌓이면 보임
         ];
     }
 
@@ -127,6 +129,8 @@ final class Settings
             'ai_paste' => $bool('ai_paste'),
             'search' => ($raw['search'] ?? '') === 'brave' ? 'brave' : 'none',
             'brave_key' => mb_substr(preg_replace('/\s/', '', (string) ($raw['brave_key'] ?? '')) ?? '', 0, 200),
+            'parts_member' => $bool('parts_member'),
+            'parts_auto_votes' => $int('parts_auto_votes', 1, 50),
         ];
     }
 

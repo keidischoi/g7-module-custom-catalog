@@ -48,7 +48,7 @@ class AdminController extends Controller
 
     private static function type(mixed $v): string
     {
-        return $v === 'materials' || $v === 'material' ? 'materials' : 'equipment';
+        return $v === 'materials' || $v === 'material' ? 'materials' : ($v === 'parts' || $v === 'part' ? 'parts' : 'equipment');
     }
 
     public function save(Request $r): JsonResponse
