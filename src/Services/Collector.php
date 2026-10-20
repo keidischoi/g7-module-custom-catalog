@@ -702,7 +702,7 @@ final class Collector
         $this->ai->opt = ['temperature' => 0, 'max_tokens' => 1500];   // 0.2.17 정리하기: 지어내지 않게 · 답은 짧게
         try {
             $j = $this->ai->json("아래 [글]은 관리자가 붙여 넣은 제품 자료다. 이 글에 **적혀 있는 것만** 골라 칸에 맞게 정리해 줘.\n"
-            ."- 글에 없는 값은 넣지 않는다 (기억 · 추측 금지). 단위는 칸 단위로 바꿔 숫자만 (예: 0.25 m/s → 250, 1 kg → 1000).\n"
+            ."- 글에 없는 값은 넣지 않는다 (기억 · 추측 금지). 단위는 [칸]의 괄호 단위로 바꿔 숫자만 (예: mm/s 칸에 0.25 m/s → 250 · kg 칸에 26 kg → 26 · g 칸에 1 kg → 1000).\n"
             ."- 선택 칸은 보기 중 하나로만. 칸에 없는 제원은 facts 에 「이름: 값」으로 (한국어 이름).\n"
             ."- summary 는 글 내용으로 한국어 두세 문장. issues 는 글에 적힌 주의 · 알려진 문제만 (배열).\n"
             ."- kind 는 다음 중 하나 (글로 알 수 없으면 \"{$kind}\"): {$kindList}\n"
@@ -719,7 +719,7 @@ final class Collector
         foreach (Fields::forKind($type, $k2) as $d) {
             $v = Fields::clean($d, $in[$d['key']] ?? null);
             if ($v !== null && ! ($d['type'] === 'sel' && $d['options'] && ! in_array((string) $v, $d['options'], true))) {
-                $vals[$d['key']] = $v;
+                $vals[$d['key']] = self::kiloFix($d, $v, $text);
             }
         }
         $facts = [];
@@ -785,6 +785,32 @@ final class Collector
     }
 
     public const BRIEF_MAX = 3000;
+
+    /**
+     * 0.2.27 kg ↔ g 헷갈림 바로잡기 — 글에 「26 kg」인데 kg 칸에 26000 (예전 지시의 「1 kg → 1000」 예시 탓),
+     * g 칸에 1 인데 글은 「1 kg」. 글에 그 숫자가 단위와 함께 적혀 있을 때만 고침.
+     */
+    public static function kiloFix(array $d, mixed $v, string $text): mixed
+    {
+        if (! is_int($v) && ! is_float($v)) {
+            return $v;
+        }
+        $has = static function (float $n, string $unit) use ($text): bool {
+            $s = rtrim(rtrim(number_format($n, 3, '.', ''), '0'), '.');
+
+            return preg_match('/(?<![\d.,])'.preg_quote($s, '/').'\s*'.$unit.'(?![a-z])/iu', $text) === 1;
+        };
+        if (($d['unit'] ?? '') === 'kg' && $v >= 1000 && $has($v / 1000, 'kg') && ! $has((float) $v, 'kg')) {
+            $n = $v / 1000;
+
+            return floor($n) == $n ? (int) $n : $n;
+        }
+        if (($d['unit'] ?? '') === 'g' && $v > 0 && $v < 100 && $has((float) $v, 'kg') && ! $has((float) $v, 'g')) {
+            return (int) round($v * 1000);
+        }
+
+        return $v;
+    }
 
     /** 0.2.26 같은 AI 서버를 지금 다른 기능이 쓰는 중이면 한 줄 — 작은 CPU 서버는 앞 일이 끝나야 시작됨 */
     public static function busyNote(string $url): string

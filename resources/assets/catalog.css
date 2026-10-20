@@ -195,7 +195,7 @@ textarea.cct-in{height:auto;min-height:84px;padding:10px 12px;resize:vertical;li
 .cct-opts{display:flex;flex-wrap:wrap;gap:5px}
 .cct-opts button{height:30px;padding:0 10px;border:1px solid var(--line);border-radius:999px;background:var(--card);font-size:13px;font-weight:600}
 .cct-opts button.on{color:#fff;border-color:var(--a);background:var(--a)}
-.cct-facts>div{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr) 36px;gap:6px;margin-top:6px}
+.cct-facts>div{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr) 36px;gap:6px;margin-top:6px}
 .cct-msg{flex:1;font-size:13.5px;font-weight:700;color:var(--bad)}
 .cct-toast{position:fixed;left:50%;bottom:28px;z-index:2147483600;transform:translateX(-50%);padding:11px 20px;border-radius:999px;font-weight:700;font-size:14px;color:#fff;background:rgba(15,23,42,.92);box-shadow:0 12px 30px -10px rgba(0,0,0,.5);animation:cct-up .25s ease-out;white-space:pre-line;max-width:calc(100vw - 32px)}
 @keyframes cct-up{from{opacity:0;transform:translate(-50%,10px)}}
@@ -276,6 +276,7 @@ textarea.cct-in{height:auto;min-height:84px;padding:10px 12px;resize:vertical;li
 .cct-aip textarea{width:100%;min-height:76px;resize:vertical}
 .cct-aip__note{margin:0 0 12px;padding:8px 12px;border-radius:12px;background:color-mix(in srgb,#f59e0b 12%,var(--card));font-size:13px}
 .cct-f--ai>span::after,.cct-facts .cct-f--ai::before{content:"💡";margin-left:4px;font-size:12px}
+.cct-facts .cct-f--ai::before{position:absolute;left:-6px;top:-7px;margin:0;z-index:1;pointer-events:none}/* 0.2.27 기타 제원 줄의 💡 가 칸 하나를 차지해 값 칸이 좁아지고 ✕ 가 밀리던 것 */
 .cct-f--ai .cct-in,.cct-f--ai .cct-yn,.cct-facts .cct-f--ai .cct-in{box-shadow:0 0 0 2px color-mix(in srgb,#f59e0b 55%,transparent)}
 @keyframes cct-aip-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
 @keyframes cct-aip-spin{to{transform:rotate(360deg)}}
