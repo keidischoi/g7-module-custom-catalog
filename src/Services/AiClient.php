@@ -33,6 +33,11 @@ final class AiClient
     /** 0.2.14 물어보기 직전에 부름: fn(string $server, string $model, int $timeout, list<string> $errors) — 진행 상태 보이기 */
     public $onTry = null;
 
+    /** 0.2.26 도우미 AI 의 「지금 묻는 중」 (없으면 건너뜀) */
+    public const NOW = 'Plugins\\Custom\\HelperAi\\Support\\AiNow';
+
+    public const WHO = '3D 카탈로그';
+
     public function settings(): array
     {
         if (self::$settingsOverride !== null) {
@@ -67,8 +72,9 @@ final class AiClient
         }
         $errors = [];
         foreach (AiSettings::order($s, false) as $o) {
-            if (is_callable($this->onTry)) {
-                ($this->onTry)((string) $o['server']['name'], (string) $o['model'], (int) AiSettings::timeoutFor($o['server'], $s), $errors);
+            if (is_callable($this->onTry)) {   // 0.2.26 실제로 기다리는 시간(로컬 300초 이상) · 서버 주소도
+                $u = AiSettings::url($o['server']);
+                ($this->onTry)((string) $o['server']['name'], (string) $o['model'], AiLang::timeout((string) $o['server']['provider'], $u, (int) AiSettings::timeoutFor($o['server'], $s)), $errors, $u);
             }
             try {
                 $text = $this->ask($o['server'], $o['model'], [['role' => 'system', 'content' => self::SYSTEM], ['role' => 'user', 'content' => $prompt]],
@@ -187,12 +193,20 @@ final class AiClient
     private function askOnce(array $server, string $url, string $model, array $messages, int $maxTokens, int $timeout, bool $json): string
     {
         $req = AiProvider::buildRequest($server['provider'], $url, (string) $server['api_key'], $model, $messages, $maxTokens, $json, [], $this->opt);
+        $now = self::NOW;   // 0.2.26 🤖 도우미 AI 의 「지금 묻는 중」에 적음 — 다른 기능이 같은 서버를 쓰는지 서로 보이게
+        $nid = class_exists($now) ? $now::begin(self::WHO, $url, $model) : '';
+        $t = microtime(true);
+        $ok = false;
         try {
             $res = $this->send($req['url'], $req['headers'], $req['body'], $timeout);
+            $ok = true;
         } catch (\RuntimeException $e) {
             throw $e;
         } catch (\Throwable $e) {
             $m = $e->getMessage();
+            if (preg_match('/connection timed out after|connect\(\) timed out|connection timeout/i', $m)) {   // 0.2.26 연결부터 안 됨 — 예전엔 「응답 시간 초과 (300초)」로 보였음
+                throw new \RuntimeException('서버에 닿지 않아요 ('.$url.') — 서버가 켜져 있는지 · 주소 · 방화벽을 확인해 주세요');
+            }
             if (preg_match('/timed out|timeout/i', $m)) {
                 throw new \RuntimeException('응답 시간 초과 ('.$timeout.'초)');
             }
@@ -203,6 +217,10 @@ final class AiClient
                 throw new \RuntimeException('서버에 연결할 수 없습니다 ('.$url.')');
             }
             throw new \RuntimeException(mb_substr($m, 0, 200));
+        } finally {
+            if ($nid !== '') {
+                $now::end($nid, microtime(true) - $t, $ok);
+            }
         }
         $text = AiProvider::parseReply($server['provider'], $res);
         if ($text === '') {

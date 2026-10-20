@@ -456,7 +456,14 @@
             var t0 = Date.now(), S2 = {}, job = '';
             try { var rb = new Uint8Array(8); crypto.getRandomValues(rb); job = Array.prototype.map.call(rb, function (x) { return ('0' + x.toString(16)).slice(-2); }).join(''); } catch (e0) {}
             // 0.2.15 묻는 동안 몇 초째인지
-            var tk = setInterval(function () { var am4 = m.querySelector('[data-aip-msg]'); if (!document.body.contains(m) || !aip.classList.contains('busy')) return clearInterval(tk); if (am4 && !S2.polling) am4.textContent = '⏳ AI 가 정리하는 중… ' + Math.round((Date.now() - t0) / 1000) + '초'; }, 1000);
+            // 0.2.26 묻는 동안에도 3초마다 일 상태를 엿봄 — 어느 서버 · 모델에 묻는지 · 앞 모델 실패 · 서버가 멈췄는지 (예전엔 ⏳ 초만 보였음)
+            var peek = new Promise(function (ok, no) { S2.ok = ok; S2.no = no; }), n4 = 0;
+            var tk = setInterval(function () { var am4 = m.querySelector('[data-aip-msg]'); if (!document.body.contains(m) || !aip.classList.contains('busy')) return clearInterval(tk);
+              if (am4 && !S2.polling) am4.textContent = '⏳ ' + (S2.stage || 'AI 가 정리하는 중') + '… ' + Math.round((Date.now() - t0) / 1000) + '초';
+              if (job && !S2.polling && !S2.peeking && ++n4 % 3 === 0) { S2.peeking = true;
+                api('GET', '/admin/ai/extract/' + job).then(function (st) { S2.peeking = false; S2.stage = st.stage || S2.stage || '';
+                  if (st.status === 'done') S2.ok(st.data); else if (st.status === 'fail') S2.no(new Error(st.message || 'AI 가 정리하지 못했어요.')); }, function () { S2.peeking = false; }); }
+            }, 1000);
             var wait = function (job) {
               return new Promise(function (ok, no) {
                 (function poll() {
@@ -474,11 +481,11 @@
                 })();
               });
             };
-            api('POST', '/admin/ai/extract', { type: type, kind: kind, text: aipText, brand: base.brand, title: base.title, job: job }).catch(function (e) {
+            Promise.race([api('POST', '/admin/ai/extract', { type: type, kind: kind, text: aipText, brand: base.brand, title: base.title, job: job }).catch(function (e) {
               // 앞단이 기다리다 끊음(504 · 502 · 연결 끊김) — 서버는 계속 돌고 있으니 같은 번호로 결과를 받음
               if (job && (!e.status || e.status === 502 || e.status === 503 || e.status === 504 || e.status === 524)) return wait(job);
               throw e;
-            }).then(function (r) { clearInterval(tk);
+            }), peek]).then(function (r) { clearInterval(tk);
               collect(); var n = put(r, true); aipText = ''; draw();
               var am2 = m.querySelector('[data-aip-msg]'); if (am2) am2.textContent = n ? '✅ ' + n + '칸을 채웠어요 (💡) — 맞는지 보고 저장해 주세요.' + (r.source_url ? ' · 📄 출처: ' + r.source_url : ' · 📄 출처: 붙여 넣은 글') + (r.from ? ' · 🤖 ' + r.from : '') : '글에서 채울 값을 찾지 못했어요.';
             }).catch(function (e) { go2.disabled = false; aip.classList.remove('busy'); am.textContent = '❌ ' + e.message; });
