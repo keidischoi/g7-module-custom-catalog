@@ -162,7 +162,9 @@
               '<small>' + esc(s.at) + '</small>' +
               (s.status === 'pending' ? '<div class="cct-bar" style="margin:4px 0 0">' + (s.draft ? '<button type="button" class="cct-btn cct-btn--p cct-btn--s" data-fix>✏️ 고쳐서 반영</button>' : '') + '<button type="button" class="cct-btn cct-btn--s" data-ok>✔ 그대로 반영</button><button type="button" class="cct-btn cct-btn--s cct-btn--d" data-no>버리기</button>' +
                 (s.key ? '<a class="cct-btn cct-btn--s" target="_blank" rel="noopener" href="/catalog/' + esc(s.key) + '">지금 항목 보기</a>' : '') + '</div>' :
-                (s.key ? '<a class="cct-btn cct-btn--s" target="_blank" rel="noopener" href="/catalog/' + esc(s.key) + '">항목 보기</a>' : '')) + '</div>';
+                // 0.2.28 반영한 것도 그 자리에서 바로 고치기 (편집 창 · AI 로 정리해 넣기 그대로)
+                (s.key && s.status === 'applied' ? '<div class="cct-bar" style="margin:4px 0 0"><button type="button" class="cct-btn cct-btn--p cct-btn--s" data-edit-now>✏️ 바로 고치기</button><a class="cct-btn cct-btn--s" target="_blank" rel="noopener" href="/catalog/' + esc(s.key) + '">항목 보기</a></div>'
+                  : s.key ? '<a class="cct-btn cct-btn--s" target="_blank" rel="noopener" href="/catalog/' + esc(s.key) + '">항목 보기</a>' : '')) + '</div>';
           }).join('') + '</div>' : '<div class="cct-empty"><b>🌙</b>' + (st === 'pending' ? '기다리는 제안이 없어요. 「🌙 자동 수집」에서 켜거나 「지금 한 번 돌리기」를 눌러 보세요.' : '없어요.') + '</div>');
         Array.prototype.forEach.call(body.querySelectorAll('[data-st]'), function (b) { b.onclick = function () { st = b.getAttribute('data-st'); draw(); }; });
         var act = function (card, what) { return api('POST', '/admin/suggestions/' + card.getAttribute('data-sg') + '/' + what).then(function () { card.remove(); }); };
@@ -172,6 +174,8 @@
           if (no) no.onclick = function () { act(card, 'reject').then(draw).catch(function (e) { C().toast(e.message); }); };
           // 0.2.11 편집 창에서 고친 뒤 반영 (새 항목 · 제원 · 안전 자료) — 이름 말고 틀린 값이 많아서
           var fx = card.querySelector('[data-fix]'), sg = r.items.filter(function (x) { return String(x.id) === card.getAttribute('data-sg'); })[0];
+          var en = card.querySelector('[data-edit-now]');
+          if (en && sg) en.onclick = function () { C().openEditor({ key: sg.key }, function () { C().toast('고쳤어요.'); C().meta(true); draw(); }); };
           if (fx && sg) fx.onclick = function () {
             var save = function (body) { return api('POST', '/admin/suggestions/' + sg.id + '/apply', { edited: body }); };
             var note = '💡 AI 가 가져온 값이에요 — 틀린 것은 고치고, 아래 「🤖 AI 로 정리해 넣기」에 제조사 페이지 글을 붙여 넣으면 진짜 값으로 채워져요.';
