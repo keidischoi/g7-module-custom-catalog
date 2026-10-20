@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.3.1 — 2026-10-21
+
+- 🔩 **노즐 · 핫엔드 36가지** — 제조사 공식 스토어 · 공식 판매처에 적힌 호환 모델만 확인해 넣음 (공식 사진 · 출처 · 제품 페이지 주소 포함):
+  - **Bambu Lab** 핫엔드 X1 · P1 · A1 · P2S / H2 · H2C 인덕션 (국내 스토어 원화 가격)
+  - **Prusa** Nextruder 노즐 (황동 · CHT · ObXidian · DiamondBack · E3D 고유량 황동 · ObXidian) · Nextruder 핫엔드 · CORE One HT 핫엔드 · V6 노즐 세트 · V6 어댑터 · 성능 노즐 키트 — Prusa 스토어의 프린터별 호환 표시 그대로
+  - **Creality** Unicorn 퀵스왑 (K2 Plus · Hi · K2 · K2 Pro / K1 시리즈 · Ender-3 V3) · K1C · K1 Max 세라믹 히팅 블록 · K1 Max 고유량 · K1 노즐 · Ender-3 V3 SE 핫엔드 (K1 Max 노즐 일체형 판 주의 메모)
+  - **Elegoo** Neptune 4 / 4 Pro 경화강 · **Anycubic** Kobra S1 Max · Kobra 3 Max · Kobra 3 / V2 · Kobra 4 / X · Kobra 2 노즐 · **QIDI** Q1 Pro · X-Max 3 · X-Plus 3 · X-Smart 3 경화강 · **Flashforge** Adventurer 5M 퀵 분리 노즐
+  - 호환품: **Micro Swiss** FlowTech (Bambu X1 · P1) · **Bondtech** CHT FIN (Mako 핫엔드 필요 → 🛠️ 개조 필요) · **E3D** Revo (Prusa MK3 시리즈 · MINI+)
+- 맞는 프린터가 카탈로그에 없으면 이름만으로 새로 넣고 이음 (제원은 자동 수집 · 관리자가 채움).
+- 0.3.0 처음 자료의 Bambu 핫엔드 3개는 더 정확한 것으로 바꿈 (회원 표 · 후기가 없을 때만).
+- 고침: 부품 사진을 지우거나 대표로 바꿀 때 대표 사진이 장비 표에 적히던 것.
+
+배포: 마이그레이션 000023 (사진을 받느라 업데이트가 1~3분 걸릴 수 있어요 — 4분이 넘으면 나머지 사진은 건너뜀).
+
 ## 0.3.0 — 2026-10-21
 
 - 🔩 **부품 · 업그레이드 호환표** — 카탈로그에 새 탭 「🔩 부품 · 업그레이드」 (노즐 · 핫엔드 · 익스트루더 · 베드 판 · 벨트 · 레일 · 팬 · 보드 · 센서 · 챔버 · 필터 · 레진 통 · 필름 · LCD · 다색 장치 · 공구 · 소모품). 제원 칸: 부품 번호 · 정품/호환품/자작 · 가격 · 노즐 지름 · 재질 · 고유량 · 최고 온도 · 나사 규격 · 거친 소재 · 베드 표면 · 판 크기 · 자석식 · 설치 난이도 · 펌웨어 설정 등. 🤖 AI 로 정리해 넣기도 부품에 그대로.

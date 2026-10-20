@@ -111,7 +111,7 @@ final class PhotoService
             self::unlink(basename((string) $p->url));
             self::unlink(substr(basename((string) $p->url), 0, -4).'-t.jpg');
         }
-        $this->sync($p->item_type === 'material' ? 'materials' : 'equipment', (string) $p->item_key);
+        $this->sync(match ($p->item_type) { 'material' => 'materials', 'part' => 'parts', default => 'equipment' }, (string) $p->item_key);
     }
 
     /** 대표로 (맨 앞으로) */
@@ -124,7 +124,7 @@ final class PhotoService
         $min = (int) DB::table(Schema::PHOTOS)->where('item_type', $p->item_type)->where('item_key', $p->item_key)->min('sort');
         DB::table(Schema::PHOTOS)->where('item_type', $p->item_type)->where('item_key', $p->item_key)->increment('sort');
         DB::table(Schema::PHOTOS)->where('id', $id)->update(['sort' => max(0, $min), 'updated_at' => now()]);
-        $this->sync($p->item_type === 'material' ? 'materials' : 'equipment', (string) $p->item_key);
+        $this->sync(match ($p->item_type) { 'material' => 'materials', 'part' => 'parts', default => 'equipment' }, (string) $p->item_key);
     }
 
     /** 항목을 아주 지울 때 */
