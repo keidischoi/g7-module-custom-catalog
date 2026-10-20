@@ -222,7 +222,9 @@ class CatalogListener implements HookListenerInterface
         } catch (\Throwable) {
             $label = '';
         }
-        $layout['scripts'][] = ['src' => '/api/modules/custom-catalog/assets/catalog-nav.js?v='.Catalog::VERSION.($label !== '' ? '&l='.rawurlencode($label) : ''), 'defer' => true];
+        // 0.2.24 ?v= 에 파일 시각까지 — 이 값이면 1년 캐시 (AssetController) · 파일이 바뀌면 주소도 바뀜
+        $v = \Modules\Custom\Catalog\Http\Controllers\AssetController::version('catalog-nav.js');
+        $layout['scripts'][] = ['src' => '/api/modules/custom-catalog/assets/catalog-nav.js?v='.rawurlencode($v).($label !== '' ? '&l='.rawurlencode($label) : ''), 'defer' => true];
 
         return $layout;
     }
