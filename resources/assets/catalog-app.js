@@ -2,7 +2,7 @@
 (function () {
   'use strict';
   if (window.CCT) { try { window.CCT.tick(); } catch (e) {} return; }
-  var VERSION = '0.3.0', API = '/api/modules/custom-catalog', BASE = '/catalog';
+  var VERSION = '0.3.2', API = '/api/modules/custom-catalog', BASE = '/catalog';
 
   /* ───────── 도구 ───────── */
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
@@ -59,7 +59,7 @@
     } catch (e) { return '<i>' + kindIcon(c.type, c.kind) + '</i>'; }
   }
   /** 0.3.0 🔩 부품 그림 — 종류 색 타일 + 아이콘 */
-  var PART_HUE = { nozzle: 28, hotend: 8, extruder: 215, bed: 262, motion: 190, cooling: 198, electronics: 150, enclosure: 42, resin_part: 285, multi: 320, tool: 0, other: 225 };
+  var PART_HUE = { nozzle: 28, hotend: 8, heater: 352, extruder: 215, bed: 262, motion: 190, motor: 172, cooling: 198, board: 140, display: 230, electronics: 150, enclosure: 42, resin_part: 285, multi: 320, tool: 0, other: 225 };
   function partArt(c, px) {
     px = px || 118; var h = PART_HUE[c.kind]; if (h == null) h = 225;
     return '<span class="cct-partart" style="--h:' + h + ';width:' + px + 'px;height:' + px + 'px;font-size:' + Math.round(px * 0.46) + 'px">' + kindIcon('parts', c.kind) + '</span>';
@@ -269,8 +269,9 @@
       if (d.issues.length) h += '<div class="cct-sec"><h2>⚠️ 알려진 문제 · 고질병</h2><ul class="cct-issues">' + d.issues.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' +
         '<p class="cct-note" style="margin-top:8px">쓰는 사람들 사이에 알려진 내용을 정리한 것이에요. 제품 개선판 · 펌웨어에 따라 달라졌을 수 있어요.</p></div>';
       if (d.memo) h += '<div class="cct-sec"><h2>📝 메모</h2><div class="cct-text cct-text--memo">' + esc(d.memo) + '</div></div>';
-      h += d.type === 'parts' ? partsHtml(d, can) : printerPartsHtml(d);   // 0.3.0 🔩
+      if (d.type === 'parts') h += partsHtml(d, can);   // 0.3.0 🔩 관련 프린터 · 후기 · 구매처
       if (d.related.length) h += '<div class="cct-sec"><h2>🏷️ ' + esc(d.brand) + '의 다른 제품</h2><div class="cct-grid">' + d.related.map(function (c) { return cardHtml(c, false); }).join('') + '</div></div>';
+      if (d.type === 'equipment') h += printerPartsHtml(d);   // 0.3.2 🔩 관련 부품 — 프린터 상세 맨 아래
       root.innerHTML = h + '</div>';
       var box = root.querySelector('.cct'), cur = 0, q = function (s) { return box.querySelector(s); };
       bindCards(box, reload);
@@ -352,8 +353,8 @@
   }
   function partsHtml(d, can) {
     var F = d.fits || { items: [], pending: [] }, R = d.reviews || { items: [] }, L = d.links || [], login = !!d.login, mine = R.mine;
-    var h = '<div class="cct-sec" id="fits"><h2>🖨️ 맞는 프린터 <small>' + F.items.length + '</small></h2>' +
-      (F.items.length ? '<div class="cct-fits">' + F.items.map(function (f) { return fitRow(f, can, login); }).join('') + '</div>' : '<p class="cct-note">아직 맞는 프린터가 없어요. 써 본 분이 알려 주세요.</p>') +
+    var h = '<div class="cct-sec" id="fits"><h2>🖨️ 관련 프린터 <small>' + F.items.length + '</small></h2>' +
+      (F.items.length ? '<div class="cct-fits">' + F.items.map(function (f) { return fitRow(f, can, login); }).join('') + '</div>' : '<p class="cct-note">아직 연결된 프린터가 없어요. 써 본 분이 알려 주세요.</p>') +
       (F.pending.length ? '<details class="cct-pend"' + (can ? ' open' : '') + '><summary>🕓 확인 중 ' + F.pending.length + '개 <small>표가 ' + (META.parts_auto_votes || 3) + '개 쌓이거나 관리자가 확인하면 위로 올라가요</small></summary><div class="cct-fits">' + F.pending.map(function (f) { return fitRow(f, can, login); }).join('') + '</div></details>' : '') +
       (login ? '<div class="cct-addfit"><span class="cct-pick"><input class="cct-in" data-fq placeholder="➕ 이 부품이 맞는 프린터 알려 주기 — 이름으로 찾기" autocomplete="off"><span class="cct-pick__list" data-flist hidden></span></span></div>' : '<p class="cct-note">로그인하면 맞음 · 안 맞음을 알려 줄 수 있어요. 내 프린터에 등록한 프린터라면 <b>✔ 실사용</b>으로 두 배로 세요.</p>') + '</div>';
     h += '<div class="cct-sec" id="reviews"><h2>⭐ 후기 ' + (R.avg ? '<small>★ ' + R.avg + ' · ' + R.n + '개</small>' : '') + '</h2>' +
@@ -380,9 +381,9 @@
     if (d.type !== 'equipment') return '';
     var groups = d.parts || [], n = 0; groups.forEach(function (g) { n += g.items.length; });
     var all = BASE + '?tab=parts&printer=' + encodeURIComponent(d.key) + '&pname=' + encodeURIComponent(d.brand + ' ' + d.title);
-    if (!n) return ['fdm', 'sla', 'dlp'].indexOf(d.kind) >= 0 ? '<div class="cct-sec"><h2>🔩 맞는 부품 · 업그레이드</h2><p class="cct-note">아직 연결된 부품이 없어요. <a data-go href="' + BASE + '?tab=parts">부품 목록</a>에서 쓰고 있는 부품을 찾아 「맞는 프린터」로 알려 주세요.</p></div>' : '';
-    return '<div class="cct-sec"><h2>🔩 맞는 부품 · 업그레이드 <small>' + n + '</small> <a class="cct-more" data-go href="' + all + '">모두 보기 ›</a></h2>' + groups.map(function (g) {
-      return '<h3 class="cct-pgh">' + g.icon + ' ' + esc(g.label) + '</h3><div class="cct-grid cct-grid--s">' + g.items.map(function (c) {
+    if (!n) return ['fdm', 'sla', 'dlp'].indexOf(d.kind) >= 0 ? '<div class="cct-sec"><h2>🔩 관련 부품</h2><p class="cct-note">아직 연결된 부품이 없어요. <a data-go href="' + BASE + '?tab=parts">부품 목록</a>에서 쓰고 있는 부품을 찾아 「맞는 프린터」로 알려 주세요.</p></div>' : '';
+    return '<div class="cct-sec" id="parts"><h2>🔩 관련 부품 <small>' + n + '</small> <a class="cct-more" data-go href="' + all + '">모두 보기 ›</a></h2>' + groups.map(function (g) {
+      return '<h3 class="cct-pgh">' + g.icon + ' ' + esc(g.label) + ' <small>' + g.items.length + '</small>' + (g.items.length > 6 ? ' <a class="cct-more" data-go href="' + all + '">더 보기 ›</a>' : '') + '</h3><div class="cct-grid cct-grid--s">' + g.items.slice(0, 6).map(function (c) {
         return cardHtml(c, false).replace('<div class="cct-card__body">', '<div class="cct-card__body">' + (c.fit === 'mod' ? '<span class="cct-fitst cct-fitst--mod">🛠️ 개조 필요</span>' : '') + (c.score ? '<span class="cct-score">★ ' + c.score.avg + ' <small>(' + c.score.n + ')</small></span>' : ''));
       }).join('') + '</div>';
     }).join('') + '</div>';

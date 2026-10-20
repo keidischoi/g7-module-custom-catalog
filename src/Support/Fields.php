@@ -27,8 +27,9 @@ final class Fields
 
     /** 0.3.0 🔩 부품 · 업그레이드 종류 */
     public const PART_KINDS = [
-        'nozzle' => ['노즐', '🔩'], 'hotend' => ['핫엔드', '🔥'], 'extruder' => ['익스트루더', '⚙️'], 'bed' => ['베드 판', '🛏️'],
-        'motion' => ['벨트 · 레일 · 베어링', '〰️'], 'cooling' => ['팬 · 냉각', '🌀'], 'electronics' => ['보드 · 센서 · 화면', '🔌'],
+        'nozzle' => ['노즐', '🔩'], 'hotend' => ['핫엔드', '🔥'], 'heater' => ['히터 · 히트베드', '🌡️'], 'extruder' => ['익스트루더', '⚙️'], 'bed' => ['베드 판 · 플레이트', '🛏️'],
+        'motion' => ['벨트 · 레일 · 베어링', '〰️'], 'motor' => ['모터', '🔄'], 'cooling' => ['팬 · 냉각', '🌀'], 'board' => ['메인보드 · 보드', '🔌'], 'display' => ['화면 · 터치', '🖥️'],
+        'electronics' => ['센서 · 카메라 · 전원', '📷'],
         'enclosure' => ['챔버 · 필터', '📦'], 'resin_part' => ['레진 통 · 필름 · LCD', '🧪'], 'multi' => ['다색 장치 · 스풀', '🌈'],
         'tool' => ['공구 · 소모품', '🧰'], 'other' => ['기타 부품', '🧩'],
     ];
@@ -49,7 +50,7 @@ final class Fields
         ['filament', '필라멘트', '🧵', 'materials', ['fdm']],
         ['resin', '레진', '🧪', 'materials', ['resin']],
         ['powder', '분말 · 금속', '⚗️', 'materials', ['powder']],
-        ['parts', '부품 · 업그레이드', '🔩', 'parts', ['nozzle', 'hotend', 'extruder', 'bed', 'motion', 'cooling', 'electronics', 'enclosure', 'resin_part', 'multi', 'tool', 'other']],   // 0.3.0
+        ['parts', '부품 · 업그레이드', '🔩', 'parts', ['nozzle', 'hotend', 'heater', 'extruder', 'bed', 'motion', 'motor', 'cooling', 'board', 'display', 'electronics', 'enclosure', 'resin_part', 'multi', 'tool', 'other']],   // 0.3.0 · 0.3.2
     ];
 
     private const PRINTERS = ['fdm', 'sla', 'dlp', 'sls', 'mjf', 'metal'];
@@ -231,17 +232,19 @@ final class Fields
                 ['nozzle_size', '노즐 지름', 'tags', 'mm', $N, ['0.2', '0.25', '0.4', '0.6', '0.8', '1.0']],
                 ['nozzle_material', '노즐 재질', 'sel', '', $N, ['황동', '경화강', '스테인리스', '구리 합금', '루비', '텅스텐 카바이드']],
                 ['high_flow', '고유량', 'bool', '', $N],
-                ['max_temp', '최고 온도', 'num', '°C', ['nozzle', 'hotend', 'bed', 'cooling', 'enclosure']],
+                ['max_temp', '최고 온도', 'num', '°C', ['nozzle', 'hotend', 'heater', 'bed', 'cooling', 'enclosure']],
                 ['thread', '나사 · 규격', 'text', '', ['nozzle', 'hotend', 'motion'], null, 'spec', '예: M6 · V6 호환 · GT2 6 mm'],
                 ['filament_dia', '필라멘트 직경', 'sel', 'mm', ['nozzle', 'hotend', 'extruder', 'multi'], ['1.75', '2.85']],
                 ['abrasive_ok', '거친 소재(CF · GF)', 'bool', '', ['nozzle', 'hotend', 'extruder']],
                 ['gear_ratio', '기어비', 'text', '', ['extruder'], null, 'spec', '예: 3:1'],
                 ['bed_surface', '베드 표면', 'sel', '', ['bed'], ['텍스처 PEI', '매끈 PEI', '쿨 플레이트', '엔지니어링 플레이트', '유리', 'G10 · 가로라이트', '카본', '기타']],
-                ['bed_size', '판 크기', 'text', '', ['bed', 'resin_part'], null, 'spec', '예: 257 × 257 mm'],
+                ['bed_size', '판 크기', 'text', '', ['bed', 'resin_part', 'heater'], null, 'spec', '예: 257 × 257 mm'],
                 ['magnetic', '자석식', 'bool', '', ['bed']],
                 ['double_sided', '양면', 'bool', '', ['bed']],
                 ['slots', '칸 · 색 수', 'num', '개', ['multi']],
-                ['voltage', '전압', 'text', '', ['cooling', 'electronics', 'enclosure', 'hotend'], null, 'spec', '예: 24 V'],
+                ['voltage', '전압', 'text', '', ['cooling', 'electronics', 'enclosure', 'hotend', 'heater', 'board', 'display', 'motor'], null, 'spec', '예: 24 V'],
+                ['screen_size', '화면 크기', 'text', '', ['display'], null, 'spec', '예: 5인치 터치'],
+                ['motor_spec', '모터 규격', 'text', '', ['motor'], null, 'spec', '예: NEMA17 · 1.8° · 0.9°'],
                 ['size', '크기', 'text', '', [], null, 'spec', '예: 40 × 40 × 10 mm'],
                 ['weight_g', '무게', 'num', 'g', []],
             ]],
