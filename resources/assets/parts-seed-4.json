@@ -1,5 +1,5 @@
 {
-    "_comment": "0.3.5 다색 장치 — 각 공식 스토어(호환성 · Compatible models) 2026-10 확인. fits: [제조사, 모델, 상태, 메모].",
+    "_comment": "0.3.5 다색 장치 — 각 공식 스토어(호환성 · Compatible models) 2026-10 확인. fits: [제조사, 모델, 상태, 메모]. unit:false = 부속품(허브 · 업그레이드 키트 · 부품) — 부품에 남음, 나머지는 주변 장비의 다색 장치.",
     "items": [
         {
             "brand": "Bambu Lab",
@@ -250,7 +250,8 @@
                     "P1P"
                 ]
             ],
-            "kind": "multi"
+            "kind": "multi",
+            "unit": false
         },
         {
             "brand": "Bambu Lab",
@@ -274,7 +275,8 @@
                     "A1 mini"
                 ]
             ],
-            "kind": "multi"
+            "kind": "multi",
+            "unit": false
         },
         {
             "brand": "Creality",
@@ -396,7 +398,8 @@
             "facts": {
                 "공식 스토어 가격": "$99.00"
             },
-            "kind": "multi"
+            "kind": "multi",
+            "unit": false
         },
         {
             "brand": "Creality",
@@ -428,7 +431,8 @@
                 "공식 스토어 가격": "$259.00",
                 "구성": "4색 팩 · 8색 팩"
             },
-            "kind": "multi"
+            "kind": "multi",
+            "unit": false
         },
         {
             "brand": "Anycubic",
@@ -541,7 +545,8 @@
             "facts": {
                 "공식 스토어 가격": "$65.00"
             },
-            "kind": "multi"
+            "kind": "multi",
+            "unit": false
         },
         {
             "brand": "Elegoo",
@@ -639,7 +644,8 @@
                 "공식 스토어 가격": "$99.00",
                 "구성": "IFS 본체 · 설치판 · 케이블 · 한 칸 부품"
             },
-            "kind": "multi"
+            "kind": "multi",
+            "unit": false
         },
         {
             "brand": "Prusa Research",

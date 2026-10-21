@@ -27,6 +27,9 @@ final class MulticolorSeed
         $eq = DB::table(Schema::EQUIPMENT)->whereIn('kind', ['fdm', 'sla', 'dlp'])->orderByRaw("case when status = 'active' then 0 else 1 end")->get(['key', 'brand', 'model']);
         $budget = microtime(true) + $seconds;
         foreach ($j['items'] as $it) {
+            if (($it['unit'] ?? true) === false) {
+                continue;   // 0.3.8 부속품은 부품 (accessories() 가 되돌림)
+            }
             $nk = CatalogService::norm($it['brand']).'|'.CatalogService::norm($it['name']);
             $same = static fn ($r, string $col) => CatalogService::norm($r->brand).'|'.CatalogService::norm($r->{$col}) === $nk;
             $key = null;
@@ -72,6 +75,49 @@ final class MulticolorSeed
         }
 
         return $out;
+    }
+
+    /** 0.3.8 부속품(unit: false — 허브 · CFS Nano Kit · IFS 부품)이 다색 장치로 가 있으면 부품(다색 장치 · 스풀)으로 되돌림 @return int 되돌린 수 */
+    public static function accessories(string $file): int
+    {
+        Schema::ensure();
+        $j = is_file($file) ? json_decode((string) file_get_contents($file), true) : null;
+        $svc = new CatalogService();
+        $n = 0;
+        foreach ($j['items'] ?? [] as $it) {
+            if (($it['unit'] ?? true) !== false) {
+                continue;
+            }
+            $nk = CatalogService::norm($it['brand']).'|'.CatalogService::norm($it['name']);
+            foreach (DB::table(Schema::EQUIPMENT)->where('kind', 'multicolor')->get() as $e) {
+                if (CatalogService::norm($e->brand).'|'.CatalogService::norm($e->model) !== $nk) {
+                    continue;
+                }
+                try {
+                    $key = $svc->save('parts', ['kind' => 'multi', 'brand' => $e->brand, 'title' => $e->model, 'summary' => (string) ($e->summary ?? ''), 'homepage_url' => (string) ($e->homepage_url ?? ''),
+                        'values' => ($it['values'] ?? []) + CatalogService::values('equipment', $e), 'facts' => Schema::json($e->facts ?? null)])['key'];
+                } catch (\Throwable) {
+                    continue;
+                }
+                DB::transaction(static function () use ($e, $key) {
+                    foreach ([Schema::FITS, Schema::VOTES, Schema::REVIEWS, Schema::LINKS] as $t) {
+                        foreach (DB::table($t)->where('part_key', $e->key)->get() as $r) {
+                            try {
+                                DB::table($t)->where('id', $r->id)->update(['part_key' => $key]);
+                            } catch (\Throwable) {
+                                DB::table($t)->where('id', $r->id)->delete();
+                            }
+                        }
+                    }
+                    DB::table(Schema::PHOTOS)->where('item_type', 'equipment')->where('item_key', $e->key)->update(['item_type' => 'part', 'item_key' => $key]);
+                    DB::table(Schema::PARTS)->where('key', $key)->update(['image_url' => $e->image_url, 'source' => $e->source ?? 'seed']);
+                    DB::table(Schema::EQUIPMENT)->where('id', $e->id)->delete();
+                });
+                $n++;
+            }
+        }
+
+        return $n;
     }
 
     /** 부품 → 다색 장치: 연결 · 표 · 후기 · 구매처 · 사진을 옮기고 부품은 지움 */

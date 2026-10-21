@@ -831,15 +831,15 @@ namespace {
     $mig5 = require dirname(__DIR__).'/database/migrations/2026_10_21_000027_multicolor_to_tools.php';
     $mig5->up();
     $ue = $DBf::table('cat_equipment')->where('kind', 'multicolor')->where('model', 'AMS lite')->first();
-    t($ue && ! $DBf::table('cat_parts')->where('name', 'AMS lite')->exists() && $DBf::table('cat_equipment')->where('kind', 'multicolor')->count() === 18
-        && $DBf::table('cat_parts')->where('name', 'like', '%ACE PRO / ACE 2 PRO signal%')->exists(), '다색 장치 18가지 → 주변 장비 (부속품은 부품에 그대로)');
+    t($ue && ! $DBf::table('cat_parts')->where('name', 'AMS lite')->exists() && $DBf::table('cat_equipment')->where('kind', 'multicolor')->count() === 12
+        && $DBf::table('cat_parts')->where('name', 'like', '%ACE PRO / ACE 2 PRO signal%')->exists(), '다색 장치 12가지 → 주변 장비 (부속품은 부품에 그대로)');
     t($DBf::table('cat_part_fits')->where('part_key', $ue->key)->count() === $nfit && $DBf::table('cat_part_reviews')->where('part_key', $ue->key)->count() === 1
         && $DBf::table('cat_photos')->where('item_type', 'equipment')->where('item_key', $ue->key)->exists() && (int) json_decode((string) $ue->specs, true)['slots'] === 4, '관련 프린터 · 후기 · 사진 · 제원이 따라감');
     $g = $PS->forPrinter('bambu-lab-a1-fdm');
     t($g[0]['kind'] === 'multicolor' && in_array('AMS lite', array_column($g[0]['items'], 'title'), true), 'A1 상세 「관련 부품」 맨 앞에 🌈 다색 장치 · AMS lite');
     $fo = $PS->fitsOf($ue->key);
     t(in_array('A2L', array_map(static fn ($x) => $x['printer']['title'], $fo['items']), true) && count($PS->vote(7, $ue->key, 'bambu-lab-a1-fdm', 'fit')['items']) >= 3, '다색 장치 상세: 관련 프린터 · 표 남기기');
-    t($svc->list(['type' => 'equipment', 'kinds' => ['multicolor']])['total'] === 18 && $svc->list(['type' => 'equipment', 'q' => 'AMS'])['total'] >= 5, '주변 장비 → 🌈 다색 장치 목록');
+    t($svc->list(['type' => 'equipment', 'kinds' => ['multicolor']])['total'] === 12 && $svc->list(['type' => 'equipment', 'q' => 'AMS'])['total'] >= 4, '주변 장비 → 🌈 다색 장치 목록');
     echo "■ 🌈 다색 장치 다시 맞추기 (0.3.7)\n";
     // NAS 처럼: AMS lite 는 다른 종류의 부품으로 남아 있고, CFS-C 는 아예 없음
     $old = $DBf::table('cat_equipment')->where('kind', 'multicolor')->where('model', 'AMS lite')->first();
@@ -859,7 +859,20 @@ namespace {
     t($nl && $nc && ! $DBf::table('cat_parts')->where('key', 'old-ams-lite')->exists() && $DBf::table('cat_part_links')->where('part_key', $nl->key)->exists(), 'AMS lite(다른 종류 부품) → 옮김 · CFS-C(없음) → 새로');
     $g6 = $PS->forPrinter('bambu-lab-a2l-fdm');
     t($g6[0]['kind'] === 'multicolor' && in_array('AMS lite', array_column($g6[0]['items'], 'title'), true) && in_array('CFS-C Multicolor Kit', array_column($PS->forPrinter($kp('Creality', 'K1C'))[0]['items'], 'title'), true), '관련 프린터 다시 이음 (A2L ↔ AMS lite · K1C ↔ CFS-C)');
-    t($r6['created'] === 0 && $r6['moved'] === 0 && $r6['fits'] === 0 && $r6['failed'] === [] && $DBf::table('cat_equipment')->where('kind', 'multicolor')->count() === 18, '다시 돌려도 그대로 (18가지)');
+    t($r6['created'] === 0 && $r6['moved'] === 0 && $r6['fits'] === 0 && $r6['failed'] === [] && $DBf::table('cat_equipment')->where('kind', 'multicolor')->count() === 12, '다시 돌려도 그대로 (12가지)');
+    echo "■ 🔩 허브 · Nano Kit · IFS 부품은 부품 (0.3.8)\n";
+    t($DBf::table('cat_parts')->where('kind', 'multi')->whereIn('name', ['AMS Hub', 'AMS Hub - A1 시리즈', 'SPARKX i7 CFS Nano Kit', 'IFS (지능형 필라멘트 시스템) 부품', 'CANVAS for Centauri Carbon', 'Creality & Co Print 다색 업그레이드 키트 (Ender-3 V3 · V3 Plus)'])->count() === 6, '처음 설치: 부속품 · 업그레이드 키트 6가지는 부품에 남음');
+    // NAS 처럼: 0.3.6 에서 주변 장비로 가 버린 AMS Hub
+    $hp = $DBf::table('cat_parts')->where('name', 'AMS Hub')->first();
+    $hk = $svc->save('equipment', ['kind' => 'multicolor', 'brand' => 'Bambu Lab', 'title' => 'AMS Hub'])['key'];
+    \Modules\Custom\Catalog\Support\MulticolorSeed::move($hp, $hk);
+    $nfh = $DBf::table('cat_part_fits')->where('part_key', $hk)->count();
+    $mig7 = require dirname(__DIR__).'/database/migrations/2026_10_21_000029_multicolor_accessories.php';
+    $mig7->up();
+    $hp2 = $DBf::table('cat_parts')->where('name', 'AMS Hub')->first();
+    t($hp2 && $hp2->kind === 'multi' && ! $DBf::table('cat_equipment')->where('key', $hk)->exists() && $nfh > 0 && $DBf::table('cat_part_fits')->where('part_key', $hp2->key)->count() === $nfh, '주변 장비로 갔던 AMS Hub → 부품으로 (관련 프린터 따라감)');
+    $gp = $PS->forPrinter('bambu-lab-p1s-fdm');
+    t($gp[0]['kind'] === 'multicolor' && ! in_array('AMS Hub', array_column($gp[0]['items'], 'title'), true) && in_array('AMS Hub', array_column(array_values(array_filter($gp, static fn ($g) => $g['kind'] === 'multi'))[0]['items'] ?? [], 'title'), true), 'P1S 상세: AMS 는 🌈 다색 장치, AMS Hub 는 부품(다색 장치 · 스풀)');
     \Modules\Custom\Catalog\Services\PhotoService::$fetcher = null;
     array_map('unlink', glob($tmp.'/img/*') ?: []);
     array_map('unlink', glob($tmp.'/*.*') ?: []);
