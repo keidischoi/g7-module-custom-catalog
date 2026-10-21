@@ -281,8 +281,6 @@
         var cl = body.querySelector('[data-key-clear]'); if (cl && cl.checked) out.clear_brave_key = true;
         return api('POST', '/admin/settings', { settings: out });
       };
-      body.querySelector('[data-sample]').onclick = function () { var out = body.querySelector('[data-live-out]'); out.textContent = '⏳ 견본 제원 글 정리 중…';   // 0.2.22
-        var st = stopWait(out); aiRun(api, '/admin/ai/sample', { ai: S }, out, st, '견본 제원 글 정리 중…').then(function (x) { if (st.cut()) return; out.textContent = x.text || x.message; }).catch(function (e) { if (st.cut()) return; out.textContent = '❌ ' + e.message; }); };
       body.querySelector('[data-save]').onclick = function () { var b = this; b.disabled = true; save().then(function (r) { C().toast('저장했어요.'); draw(r); }).catch(function (e) { b.disabled = false; C().toast(e.message); }); };
       all('[data-run]', function (b) { b.onclick = function () {
         var out = body.querySelector('[data-run-out]'); all('[data-run]', function (x) { x.disabled = true; });
@@ -361,6 +359,8 @@
       body.querySelector('[data-sadd]').onclick = function () { var p = PROV.filter(function (x) { return x.value === 'ollama'; })[0] || PROV[0] || { value: 'ollama', name: 'Ollama' }; S.servers.push({ id: '', name: p.name + ' ' + (S.servers.length + 1), enabled: true, provider: p.value, url: '', api_key: '', models: [], timeout: 0 }); draw(status); };
       body.querySelector('[data-live]').onclick = function () { var out = body.querySelector('[data-live-out]'); out.textContent = '⏳ 순서대로 물어보는 중…';
         var st = stopWait(out); aiRun(api, '/admin/ai/live', { ai: S }, out, st, '순서대로 물어보는 중…').then(function (x) { if (st.cut()) return; out.textContent = x.message + (x.tries || []).map(function (t) { return '\n· ' + t.server + ' · ' + t.model + ' — ' + (t.ok ? t.sec + '초' : String(t.message).replace(/^❌\s*/, '')); }).join(''); }).catch(function (e) { if (st.cut()) return; out.textContent = '❌ ' + e.message; }); };
+      body.querySelector('[data-sample]').onclick = function () { var out = body.querySelector('[data-live-out]'); out.textContent = '⏳ 견본 제원 글 정리 중…';   // 0.2.22
+        var st = stopWait(out); aiRun(api, '/admin/ai/sample', { ai: S }, out, st, '견본 제원 글 정리 중…').then(function (x) { if (st.cut()) return; out.textContent = x.text || x.message; }).catch(function (e) { if (st.cut()) return; out.textContent = '❌ ' + e.message; }); };
       body.querySelector('[data-save]').onclick = function () { var b = this; b.disabled = true;
         api('POST', '/admin/ai', { ai: S }).then(function () { C().toast('저장했어요.'); load(); }).catch(function (e) { b.disabled = false; if (e.status === 409) load('⚠ ' + e.message); else C().toast(e.message); }); };
     };
