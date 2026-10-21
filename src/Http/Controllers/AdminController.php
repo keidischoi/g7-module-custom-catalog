@@ -257,7 +257,7 @@ class AdminController extends Controller
 
     public function suggestions(Request $r): JsonResponse
     {
-        return $this->guard($r) ?? self::ok($this->collector->suggestions((string) $r->query('status', 'pending')));
+        return $this->guard($r) ?? self::ok($this->collector->suggestions((string) $r->query('status', 'pending'), 60, (string) $r->query('tab', '')));
     }
 
     public function suggestionApply(Request $r, int $id): JsonResponse

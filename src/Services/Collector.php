@@ -258,23 +258,70 @@ final class Collector
 
     /* ───────── 새 모델 · 재료 ───────── */
 
-    public function taskNew(): string
+    /** 0.3.11 자동 수집이 도는 탭 (사이트에서 끈 탭은 빼고) @return list<array<int, mixed>> */
+    public static function tabs(): array
     {
-        // 제조사 × 탭 을 돌아가며
-        $pairs = [];
+        $off = (array) (Settings::get('tabs_off') ?? []);
+
+        return array_values(array_filter(Fields::TABS, static fn ($t) => ! in_array($t[0], $off, true)));
+    }
+
+    /** 0.3.11 제원 채우기 · 사진 찾기도 탭을 번갈아 — 부를 때마다 다음 탭이 맨 앞 @return list<array<int, mixed>> */
+    public static function rotate(string $k): array
+    {
+        $tabs = self::tabs();
+        if (! $tabs) {
+            return [];
+        }
+        $st = Settings::state();
+        $i = $st[$k] % count($tabs);
+        $st[$k]++;
+        Settings::saveState($st);
+
+        return array_merge(array_slice($tabs, $i), array_slice($tabs, 0, $i));
+    }
+
+    /** 0.3.11 종류 → 화면 탭 키 (제안함 탭별 보기) */
+    public static function tabOf(string $type, string $kind): string
+    {
+        $first = '';
         foreach (Fields::TABS as $t) {
-            foreach (DB::table(Schema::table($t[3]))->where('status', 'active')->whereIn('kind', $t[4])->select('brand', DB::raw('count(*) as n'))->groupBy('brand')->orderByDesc('n')->limit(40)->pluck('n', 'brand') as $brand => $n) {
-                if (trim((string) $brand) !== '' && ! in_array($brand, ['종류', '기타'], true)) {
-                    $pairs[] = [$t, (string) $brand];
-                }
+            if ($t[3] !== $type) {
+                continue;
+            }
+            $first = $first !== '' ? $first : $t[0];
+            if (in_array($kind, $t[4], true)) {
+                return $t[0];
             }
         }
-        if (! $pairs) {
+
+        return $first;
+    }
+
+    public function taskNew(): string
+    {
+        // 0.3.11 탭을 번갈아 (FDM → 레진 프린터 → … → 필라멘트 → 레진 → 분말 → 부품) · 탭 안에서는 제조사를 돌아가며
+        $lists = [];
+        foreach (self::tabs() as $t) {
+            $brands = [];
+            foreach (DB::table(Schema::table($t[3]))->where('status', 'active')->whereIn('kind', $t[4])->select('brand', DB::raw('count(*) as n'))->groupBy('brand')->orderByDesc('n')->limit(40)->pluck('n', 'brand') as $brand => $n) {
+                if (trim((string) $brand) !== '' && ! in_array($brand, ['종류', '기타'], true)) {
+                    $brands[] = (string) $brand;
+                }
+            }
+            if ($brands) {
+                $lists[] = [$t, $brands];
+            }
+        }
+        if (! $lists) {
             return '새 항목 찾기: 물어볼 제조사가 아직 없어요 (항목을 몇 개 먼저 넣어 주세요).';
         }
         $st = Settings::state();
-        [$tab, $brand] = $pairs[$st['brand'] % count($pairs)];
-        $st['brand']++;
+        [$tab, $brands] = $lists[$st['tab'] % count($lists)];
+        $bi = (int) ($st['brands'][$tab[0]] ?? 0);
+        $brand = $brands[$bi % count($brands)];
+        $st['tab']++;
+        $st['brands'][$tab[0]] = $bi + 1;
         Settings::saveState($st);
         $type = $tab[3];
         $tcol = CatalogService::titleCol($type);
@@ -284,7 +331,7 @@ final class Collector
         foreach (Fields::forKind($type, $tab[4][0]) as $d) {
             $keys[] = $d['key'].': '.$d['label'].($d['unit'] ? ' ('.$d['unit'].')' : '').($d['options'] && $d['type'] === 'sel' ? ' ['.implode('|', $d['options']).']' : '').($d['type'] === 'bool' ? ' [true|false]' : '');
         }
-        $what = $type === 'materials' ? '재료 제품(필라멘트 · 레진 등)' : '장비';
+        $what = match ($type) { 'materials' => '재료 제품(필라멘트 · 레진 등)', 'parts' => '부품 · 업그레이드 제품', default => '장비' };
         $j = $this->ai->json("제조사 「{$brand}」의 {$tab[1]} {$what} 중에서, 아래 「이미 있는 목록」에 없는 실제 제품을 최대 6개 알려 줘.\n"
             ."- 확실히 아는 실제 제품만. 없거나 잘 모르면 items 를 빈 배열로.\n- 같은 제품을 다른 표기로 다시 적지 않는다.\n"
             ."- kind 는 다음 중 하나: {$kinds}\n- values 는 아래 칸 중 확실한 것만 (모르면 넣지 않음).\n"
@@ -337,9 +384,10 @@ final class Collector
 
     public function taskFill(): string
     {
-        foreach (['equipment', 'materials'] as $type) {
+        foreach (self::rotate('fill_t') as $tb) {   // 0.3.11 탭을 번갈아 (부품 포함)
+            $type = $tb[3];
             $table = Schema::table($type);
-            $rows = DB::table($table)->where('status', 'active')->whereNotIn('brand', ['종류', '기타'])
+            $rows = DB::table($table)->where('status', 'active')->whereIn('kind', $tb[4])->whereNotIn('brand', ['종류', '기타'])
                 ->where(static fn ($w) => $w->whereNull('ai_fill_at')->orWhere('ai_fill_at', '<', now()->subDays(60)))
                 ->orderByRaw('case when ai_fill_at is null then 0 else 1 end')->orderBy('ai_fill_at')->orderByDesc('id')->limit(8)->get();
             foreach ($rows as $r) {
@@ -397,9 +445,10 @@ final class Collector
 
     public function taskPhoto(): string
     {
-        foreach (['equipment', 'materials'] as $type) {
+        foreach (self::rotate('photo_t') as $tb) {   // 0.3.11 탭을 번갈아 (부품 포함)
+            $type = $tb[3];
             $table = Schema::table($type);
-            $r = DB::table($table)->where('status', 'active')->whereNotIn('brand', ['종류', '기타'])
+            $r = DB::table($table)->where('status', 'active')->whereIn('kind', $tb[4])->whereNotIn('brand', ['종류', '기타'])
                 ->where(static fn ($w) => $w->whereNull('image_url')->orWhere('image_url', ''))
                 ->where(static fn ($w) => $w->whereNull('ai_photo_at')->orWhere('ai_photo_at', '<', now()->subDays(30)))
                 ->orderByRaw('case when ai_photo_at is null then 0 else 1 end')->orderBy('ai_photo_at')->orderByDesc('id')->first();
@@ -1031,21 +1080,54 @@ final class Collector
         DB::table(Schema::SUGGEST)->where('id', $id)->where('status', 'pending')->update(['status' => 'rejected', 'updated_at' => now()]);
     }
 
-    /** @return array{items: list<array<string, mixed>>, pending: int} */
-    public function suggestions(string $status = 'pending', int $limit = 60): array
+    /** @return array{items: list<array<string, mixed>>, pending: int, tabs: list<array<string, mixed>>, total: int} */
+    public function suggestions(string $status = 'pending', int $limit = 60, string $tab = ''): array
     {
         Schema::ensure();
-        $rows = DB::table(Schema::SUGGEST)->where('status', in_array($status, ['applied', 'rejected'], true) ? $status : 'pending')->orderByDesc('id')->limit($limit)->get();
+        $all = DB::table(Schema::SUGGEST)->where('status', in_array($status, ['applied', 'rejected'], true) ? $status : 'pending')->orderByDesc('id')->limit(3000)->get();
+        // 0.3.11 탭별 — 종류는 제안에 있으면 그것, 없으면(사진 · 제원) 항목에서
+        $need = [];
+        $pay = [];
+        foreach ($all as $r) {
+            $pay[$r->id] = Schema::json($r->payload);
+            if (empty($pay[$r->id]['kind']) && $r->item_key) {
+                $need[(string) $r->item_type][] = (string) $r->item_key;
+            }
+        }
+        $kindOf = [];
+        foreach ($need as $type => $keys) {
+            if (in_array($type, Schema::types(), true)) {
+                foreach (array_chunk(array_values(array_unique($keys)), 500) as $chunk) {
+                    foreach (DB::table(Schema::table($type))->whereIn('key', $chunk)->pluck('kind', 'key') as $k => $v) {
+                        $kindOf[$type][$k] = (string) $v;
+                    }
+                }
+            }
+        }
+        $count = [];
+        $rows = [];
+        foreach ($all as $r) {
+            $type = (string) $r->item_type;
+            $kind = (string) ($pay[$r->id]['kind'] ?? '');
+            $kind = $kind !== '' ? $kind : ($kindOf[$type][(string) $r->item_key] ?? '');
+            $tk = self::tabOf($type, $kind);
+            $count[$tk] = ($count[$tk] ?? 0) + 1;
+            if (($tab === '' || $tab === $tk) && count($rows) < $limit) {
+                $rows[] = [$r, $kind];
+            }
+        }
+        $tabs = [];
+        foreach (Fields::TABS as $t) {
+            if (! empty($count[$t[0]])) {
+                $tabs[] = ['key' => $t[0], 'label' => $t[1], 'icon' => $t[2], 'n' => $count[$t[0]]];
+            }
+        }
         $items = [];
-        foreach ($rows as $r) {
-            $p = Schema::json($r->payload);
+        foreach ($rows as [$r, $kind]) {
+            $p = $pay[$r->id];
             $type = (string) $r->item_type;
             $lines = [];
             if ($r->task !== 'photo') {
-                $kind = (string) ($p['kind'] ?? '');
-                if ($kind === '' && $r->item_key) {
-                    $kind = (string) (DB::table(Schema::table($type))->where('key', $r->item_key)->value('kind') ?? '');
-                }
                 foreach (Fields::forKind($type, $kind) as $d) {
                     if (isset($p['values'][$d['key']])) {
                         $lines[] = ['label' => $d['label'], 'value' => Fields::show($d, $p['values'][$d['key']])];
@@ -1061,7 +1143,7 @@ final class Collector
                 }
             }
             $items[] = ['id' => (int) $r->id, 'task' => (string) $r->task, 'type' => $type, 'key' => (string) ($r->item_key ?? ''), 'title' => (string) $r->title,
-                'kind_label' => isset($p['kind']) ? Fields::kindLabel($type, (string) $p['kind']) : '', 'summary' => (string) ($p['summary'] ?? ''), 'lines' => $lines,
+                'kind_label' => $kind !== '' ? Fields::kindLabel($type, $kind) : '', 'tab' => self::tabOf($type, $kind), 'summary' => (string) ($p['summary'] ?? ''), 'lines' => $lines,
                 'image_url' => (string) ($p['image_url'] ?? ''), 'page_url' => (string) ($p['page_url'] ?? ''), 'credit' => (string) ($p['credit'] ?? ''),
                 'source' => (string) ($r->source ?? ''), 'status' => (string) $r->status, 'at' => substr((string) $r->created_at, 0, 16),
                 // 0.2.11 출처 — AI 가 댄 주소(열어 본 결과) · 안전 자료 · 사진은 그 페이지
@@ -1070,6 +1152,6 @@ final class Collector
                 'draft' => $r->task === 'photo' ? null : array_intersect_key($p, array_flip(['brand', 'title', 'kind', 'values', 'summary', 'homepage_url', 'issues', 'msds_url']))];
         }
 
-        return ['items' => $items, 'pending' => (int) DB::table(Schema::SUGGEST)->where('status', 'pending')->count()];
+        return ['items' => $items, 'pending' => (int) DB::table(Schema::SUGGEST)->where('status', 'pending')->count(), 'tabs' => $tabs, 'total' => count($all)];
     }
 }

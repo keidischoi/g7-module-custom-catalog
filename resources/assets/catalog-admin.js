@@ -172,7 +172,7 @@
   }
 
   function suggestPage(root) {
-    var esc = C().esc, api = C().api, body = frame(root, 'suggest'), st = 'pending';
+    var esc = C().esc, api = C().api, body = frame(root, 'suggest'), st = 'pending', tb = '';   // 0.3.11 탭별
     var NAME = { 'new': '새 항목', fill: '제원 채우기', photo: '사진', sds: '안전 자료' };
     // 0.2.11 🔗 출처 — AI 가 댄 주소(✅ 열림 · ⚠️ 안 열림) · 없으면 「AI 기억」 경고 · 누가(서버 · 모델) 찾았는지
     var srcHtml = function (s) {
@@ -185,12 +185,14 @@
       }).join('') + (s.sources.some(function (x) { return !x.ok; }) ? '<small>⚠️ 는 열리지 않은 주소 — AI 가 지어냈을 수 있어요</small>' : '') + by + '</div>';
     };
     var draw = function () {
-      api('GET', '/admin/suggestions?status=' + st).then(function (r) {
+      api('GET', '/admin/suggestions?status=' + st + (tb ? '&tab=' + encodeURIComponent(tb) : '')).then(function (r) {
         pending = r.pending;
         var nb = root.querySelector('[data-p="suggest"]'); if (nb) nb.innerHTML = '💡 제안함' + (pending ? '<b>' + pending + '</b>' : '');
         body.innerHTML = '<div class="cct-panel"><h3>💡 AI 가 찾아온 것</h3><p>자동 수집이 찾은 새 모델 · 제원 · 사진 · 안전 자료가 여기 쌓여요. 맞는지 보고 「반영」을 누르면 카탈로그에 들어가요. AI 는 틀릴 수 있으니 숫자는 한 번 확인해 주세요. 「제원 채우기」는 비어 있던 칸만 채워요.</p>' +
           '<div class="cct-bar">' + [['pending', '기다리는 것 ' + r.pending], ['applied', '반영한 것'], ['rejected', '버린 것']].map(function (x) { return '<button type="button" class="cct-chip' + (st === x[0] ? ' on' : '') + '" data-st="' + x[0] + '">' + x[1] + '</button>'; }).join('') +
-          '<span style="flex:1"></span>' + (st === 'pending' && r.items.length > 1 ? '<button type="button" class="cct-btn cct-btn--s" data-all>보이는 것 모두 반영</button>' : '') + '</div></div>' +
+          '<span style="flex:1"></span>' + (st === 'pending' && r.items.length > 1 ? '<button type="button" class="cct-btn cct-btn--s" data-all>보이는 것 모두 반영</button>' : '') + '</div>' +
+          // 0.3.11 탭별 (FDM · 레진 프린터 · … · 필라멘트 · 레진 · 분말 · 부품)
+          ((r.tabs || []).length ? '<div class="cct-bar cct-sgtabs">' + [{ key: '', icon: '📋', label: '전체', n: r.total }].concat(r.tabs).concat(tb && !r.tabs.some(function (t) { return t.key === tb; }) ? [{ key: tb, icon: '', label: tb, n: 0 }] : []).map(function (t) { return '<button type="button" class="cct-chip' + (tb === t.key ? ' on' : '') + '" data-tb="' + esc(t.key) + '">' + t.icon + ' ' + esc(t.label) + ' ' + t.n + '</button>'; }).join('') + '</div>' : '') + '</div>' +
           (r.items.length ? '<div class="cct-sg">' + r.items.map(function (s) {
             return '<div class="cct-sgc" data-sg="' + s.id + '"><div class="cct-sgc__t"><em class="' + s.task + '">' + NAME[s.task] + '</em><span>' + esc(s.title) + '</span></div>' +
               (s.kind_label ? '<small>' + esc(s.kind_label) + '</small>' : '') +
@@ -207,6 +209,7 @@
                   : s.key ? '<a class="cct-btn cct-btn--s" target="_blank" rel="noopener" href="/catalog/' + esc(s.key) + '">항목 보기</a>' : '')) + '</div>';
           }).join('') + '</div>' : '<div class="cct-empty"><b>🌙</b>' + (st === 'pending' ? '기다리는 제안이 없어요. 「🌙 자동 수집」에서 켜거나 「지금 한 번 돌리기」를 눌러 보세요.' : '없어요.') + '</div>');
         Array.prototype.forEach.call(body.querySelectorAll('[data-st]'), function (b) { b.onclick = function () { st = b.getAttribute('data-st'); draw(); }; });
+        Array.prototype.forEach.call(body.querySelectorAll('[data-tb]'), function (b) { b.onclick = function () { tb = b.getAttribute('data-tb'); draw(); }; });
         var act = function (card, what) { return api('POST', '/admin/suggestions/' + card.getAttribute('data-sg') + '/' + what).then(function () { card.remove(); }); };
         Array.prototype.forEach.call(body.querySelectorAll('[data-sg]'), function (card) {
           var ok = card.querySelector('[data-ok]'), no = card.querySelector('[data-no]');
@@ -256,9 +259,9 @@
         row('하루 최대', '', num('auto_per_day', '개', 1, 500)) + '</div>' +
         '<div class="cct-panel"><h3>🧩 할 일</h3><p>켠 것을 차례로 돌아가며 해요.</p>' +
         row('🏢 회원이 등록한 것 가져오기', '재고 관리에서 회원이 적어 넣은 장비 모델 · 재료 — 재고 관리 규칙 그대로 (관리자가 승인했거나 서로 다른 업체 여러 곳이 쓴 것만 · 숨김/합침은 빼고). AI 를 쓰지 않아요', sw(S.task_members, 'data-b="task_members"')) +
-        row('🆕 새 모델 · 재료 찾기', '제조사를 돌아가며 「목록에 없는 제품」을 AI 에게 물어요', sw(S.task_new, 'data-b="task_new"') ) +
-        row('📝 빈 제원 채우기', '제원이 덜 찬 항목의 빈 칸만 물어요 (적혀 있는 값은 건드리지 않아요)', sw(S.task_fill, 'data-b="task_fill"')) +
-        row('🖼️ 사진 찾기', '사진 없는 항목 — 제품 공식 페이지의 대표 사진 → 위키미디어 공용 순서로 (검색 키가 있으면 검색 먼저)', sw(S.task_photo, 'data-b="task_photo"')) +
+        row('🆕 새 모델 · 재료 찾기', '탭(FDM · 레진 프린터 · … · 필라멘트 · 레진 · 부품)을 번갈아, 탭 안에서는 제조사를 돌아가며 「목록에 없는 제품」을 AI 에게 물어요', sw(S.task_new, 'data-b="task_new"') ) +
+        row('📝 빈 제원 채우기', '제원이 덜 찬 항목의 빈 칸만 물어요 (적혀 있는 값은 건드리지 않아요) · 탭을 번갈아 (부품 포함)', sw(S.task_fill, 'data-b="task_fill"')) +
+        row('🖼️ 사진 찾기', '사진 없는 항목 — 탭을 번갈아 (부품 포함) · 제품 공식 페이지의 대표 사진 → 위키미디어 공용 순서로 (검색 키가 있으면 검색 먼저)', sw(S.task_photo, 'data-b="task_photo"')) +
         row('🧾 안전 자료(MSDS) 찾기', 'MSDS 가 빈 필라멘트 · 레진 · 분말 — 제품 공식 페이지의 SDS 링크 → 검색(키가 있으면) → AI 순서로. 주소를 열어 SDS 가 맞는지 확인한 것만 올려요', sw(S.task_sds, 'data-b="task_sds"')) +
         row('🆕 새 항목에 제원도 넣기', '끄면(권장) 새 항목 제안은 <b>이름 · 종류만</b> — AI 가 기억으로 적는 제원 · 소개 · 주소는 틀린 것이 많아요. 「✏️ 고쳐서 반영」 창의 「🤖 AI 로 정리해 넣기」로 진짜 자료를 붙여 넣어 채우세요', sw(S.new_values, 'data-b="new_values"')) +
         row('🤖 AI 로 정리해 넣기', '항목 편집 창 위에 상자 — 제품 페이지 글 · 주소를 붙여 넣거나 끌어 놓으면 AI 가 칸에 맞게 정리해 채워요 (글에 없는 값은 안 넣음)', sw(S.ai_paste, 'data-b="ai_paste"')) +
