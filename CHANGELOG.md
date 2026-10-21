@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.3.4 — 2026-10-21
+
+- 🔩 **부품 357가지 더함** — 이제까지 노즐 하나뿐이던 제조사:
+  - **Anycubic 78가지** — Kobra 2 · 3 · 3 Max · S1 · S1 Max · X · 4, Photon Mono 2 · 4 · M5s · M7 · P1 (스토어의 「Compatible models」 옵션)
+  - **Elegoo 79가지** — Centauri Carbon · Carbon 2 · Centauri 2, Neptune 3 · 4 시리즈, OrangeStorm Giga, Saturn · Mars · Jupiter
+  - **QIDI 172가지** — Q1 Pro · Q2 · Q2C · Plus4 · Max4 · Plus5 · X-Max 3 · X-Plus 3 · X-Smart 3 · 예전 X-Max · X-Plus · i-Fast
+  - **Flashforge 28가지** — AD5X · Adventurer 5M · 5M Pro · Creator 5 · 5 Pro
+  - 레진 프린터 부품(FEP · PFA · ACF 필름 · LCD · 판)도 — 레진 프린터는 레진 프린터 종류로 만듦
+- 🖨️ **프린터 기본 제원 · 대표 사진 214대** (카탈로그에 있는 프린터만 · 비어 있는 칸만):
+  - 출력 크기 · 구조 · 쓸 수 있는 노즐 — OrcaSlicer 프린터 설정(0.4 노즐)
+  - 밀폐 · 다색 장치 — 제조사 자료 (예: **A2L · A1 · A1 mini 는 AMS lite 로 다색**, Creality K 시리즈 CFS, QIDI BOX, Anycubic ACE, Elegoo CANVAS)
+  - 사진 — 각 제조사 공식 스토어 대표 사진 (사진이 하나도 없을 때만)
+- 0.2.2 의 속도 · 온도 · 재료 제원을 그 뒤에 생긴 프린터 항목(P1P · H2S 등)에도 채움.
+
+배포: 마이그레이션 000025.
 ## 0.3.3 — 2026-10-21
 
 - 🔩 **같은 프린터의 다른 항목에도 관련 부품** — 「A1 Combo」 · 「콤보」 · 「with AMS」 처럼 묶음 이름이거나, 같은 모델이 숨김/중복 항목으로 따로 있어서 부품이 다른 항목에만 이어졌을 때도 프린터 상세 「🔩 관련 부품」에 보임 (A1 과 A1 mini 는 다른 프린터로 봄).
