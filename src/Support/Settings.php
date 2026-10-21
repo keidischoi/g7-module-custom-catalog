@@ -168,7 +168,7 @@ final class Settings
         $s = self::read('state.json');
 
         return ['last' => (int) ($s['last'] ?? 0), 'day' => (string) ($s['day'] ?? ''), 'count' => (int) ($s['count'] ?? 0), 'turn' => (int) ($s['turn'] ?? 0),
-            'brand' => (int) ($s['brand'] ?? 0), 'log' => array_values(array_filter(is_array($s['log'] ?? null) ? $s['log'] : [], 'is_array'))];
+            'brand' => (int) ($s['brand'] ?? 0), 'tab' => (int) ($s['tab'] ?? 0), 'brands' => array_map('intval', is_array($s['brands'] ?? null) ? $s['brands'] : []), 'fill_t' => (int) ($s['fill_t'] ?? 0), 'photo_t' => (int) ($s['photo_t'] ?? 0), 'log' => array_values(array_filter(is_array($s['log'] ?? null) ? $s['log'] : [], 'is_array'))];
     }
 
     public static function saveState(array $s): void

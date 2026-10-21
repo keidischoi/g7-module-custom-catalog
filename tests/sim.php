@@ -880,6 +880,36 @@ namespace {
     $js39 = (string) file_get_contents(dirname(__DIR__).'/resources/assets/catalog-admin.js');
     $at39 = strpos($js39, "querySelector('[data-sample]').onclick");
     t($at39 > strpos($js39, "querySelector('[data-sadd]').onclick") && $at39 > strpos($js39, "'/admin/collect/run'"), '단추 연결이 단추가 있는 탭에');
+    echo "■ 🌙 자동 수집이 모든 탭을 고르게 · 제안함 탭별 (0.3.11)\n";
+    $C11 = Collector::class;
+    t($C11::tabOf('equipment', 'sla') === 'resin_printer' && $C11::tabOf('parts', 'nozzle') === 'parts' && $C11::tabOf('materials', 'resin') === 'resin' && $C11::tabOf('equipment', 'multicolor') === 'tools' && $C11::tabOf('materials', '') === 'filament', '종류 → 탭');
+    DB::table('cat_suggestions')->delete();
+    AiClient::$sender = fn () => ['message' => ['content' => '{"items":[]}']];
+    $st11 = Settings::state(); $st11['tab'] = 0; $st11['brands'] = []; Settings::saveState($st11);
+    $seen11 = [];
+    for ($i = 0; $i < 9; $i++) {
+        $seen11[] = (string) preg_replace('/^새 항목 찾기 · .*? (\S.*?): .*$/su', '$1', $col->taskNew());
+    }
+    $fdm11 = count(array_filter($seen11, static fn ($x) => str_contains($x, 'FDM 프린터')));
+    t($fdm11 <= 2 && count(array_filter($seen11, static fn ($x) => str_contains($x, '부품'))) >= 1 && count(array_filter($seen11, static fn ($x) => str_contains($x, '필라멘트'))) >= 1, '새 항목 찾기: 탭을 번갈아 (FDM '.$fdm11.'번 · 필라멘트 · 부품도) — '.implode(' / ', array_unique($seen11)));
+    $r1 = $C11::rotate('fill_t'); $r2 = $C11::rotate('fill_t');
+    t(count($r1) === count(Fields::TABS) && $r1[0][0] !== $r2[0][0] && $r2[0][0] === $r1[1][0], '제원 채우기 · 사진 찾기: 부를 때마다 다음 탭부터');
+    // 부품 하나만 비어 있으면 제원 채우기가 부품을 고름
+    foreach (['cat_equipment', 'cat_materials', 'cat_parts'] as $tb11) {
+        DB::table($tb11)->update(['ai_fill_at' => now(), 'ai_photo_at' => now()]);
+    }
+    $pt11 = DB::table('cat_parts')->where('status', 'active')->whereNotIn('brand', ['종류', '기타'])->where('kind', 'nozzle')->first();
+    DB::table('cat_parts')->where('id', $pt11->id)->update(['ai_fill_at' => null, 'ai_photo_at' => null, 'image_url' => '']);
+    AiClient::$sender = fn () => ['message' => ['content' => '{"values":{"origin":"중국","max_temp":300},"sources":[]}']];
+    $line11 = $col->taskFill();
+    $sg11 = $col->suggestions('pending', 60, 'parts');
+    t(str_contains($line11, (string) $pt11->name) && $sg11['items'] && $sg11['items'][0]['type'] === 'parts' && $sg11['items'][0]['tab'] === 'parts', '제원 채우기: 부품도 ('.$line11.')');
+    t(array_column($sg11['tabs'], 'n', 'key') === ['parts' => 1] && $sg11['total'] === 1 && $col->suggestions('pending', 60, 'fdm')['items'] === [] && count($col->suggestions()['items']) === 1, '제안함: 탭별 개수 · 걸러 보기');
+    Collector::$pager = fn () => null;
+    $line11p = $col->taskPhoto();
+    t(str_contains($line11p, (string) $pt11->name), '사진 찾기: 부품도 ('.$line11p.')');
+    $js11 = (string) file_get_contents(dirname(__DIR__).'/resources/assets/catalog-admin.js');
+    t(str_contains($js11, "'&tab=' + encodeURIComponent(tb)") && str_contains($js11, 'data-tb'), '제안함 화면: 탭 단추');
     echo "\n통과 {$pass} · 실패 {$fail}\n";
     exit($fail ? 1 : 0);
 }
