@@ -1,0 +1,3042 @@
+{
+    "_comment": "0.3.4 프린터 기본 제원 · 대표 사진. 출력 크기 · 구조 · 노즐: OrcaSlicer 프린터 설정(0.4 노즐), 밀폐 · 다색: 제조사 공개 자료, 사진: 제조사 공식 스토어. 비어 있는 칸만 채움 (다색은 「아니오」 → 「예」만).",
+    "items": [
+        {
+            "brand": "Anycubic",
+            "model": "4Max Metal",
+            "kind": "fdm",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/products/4MaxMetal_1.jpg?v=1595573404",
+            "url": "https://store.anycubic.com/products/4max-metal",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "4Max Pro",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 270,
+                "build_y_mm": 205,
+                "build_z_mm": 200,
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ]
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/products/4MAX_PRO_14.jpg?v=1558417974",
+            "url": "https://store.anycubic.com/products/anycubic-4max-pro-3d-printer",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "4Max Pro 2",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 270,
+                "build_y_mm": 210,
+                "build_z_mm": 190,
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ]
+            }
+        },
+        {
+            "brand": "Anycubic",
+            "model": "4Max Pro 2.0",
+            "kind": "fdm",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/products/4MaxPro2.0_1.jpg?v=1638072545",
+            "url": "https://store.anycubic.com/products/4max-pro-2-0",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Chiron",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 400,
+                "build_y_mm": 400,
+                "build_z_mm": 450,
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ]
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/products/Chiron_2.jpg?v=1770001967",
+            "url": "https://store.anycubic.com/products/anycubic-c-3d-printer",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Kobra",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 220,
+                "build_y_mm": 220,
+                "build_z_mm": 250,
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ]
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/files/Kobra2_1_7dc7d3e0-bb0e-4f51-9a23-ab39eab1e011.jpg?v=1770002439",
+            "url": "https://store.anycubic.com/products/kobra",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Kobra 2",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 220,
+                "build_y_mm": 220,
+                "build_z_mm": 250,
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ],
+                "enclosed": false,
+                "multicolor": false
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/files/AnycubicKobra2-_6_FDM3D_ANYCUBIC-US-1.jpg?v=1725243648",
+            "url": "https://store.anycubic.com/products/kobra-2",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Kobra 2 Max",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 420,
+                "build_y_mm": 420,
+                "build_z_mm": 500,
+                "structure": "베드슬링거",
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ],
+                "enclosed": false,
+                "multicolor": false
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/files/Kobra2Max_5.jpg?v=1764578419",
+            "url": "https://store.anycubic.com/products/kobra-2-max",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Kobra 2 Neo",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 220,
+                "build_y_mm": 220,
+                "build_z_mm": 250,
+                "structure": "베드슬링거",
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ],
+                "enclosed": false,
+                "multicolor": false
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/files/Kobra2Neo_2.jpg?v=1742526691",
+            "url": "https://store.anycubic.com/products/kobra-2-neo",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Kobra 2 Plus",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 320,
+                "build_y_mm": 320,
+                "build_z_mm": 400,
+                "structure": "베드슬링거",
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ],
+                "enclosed": false,
+                "multicolor": false
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/files/Kobra2Plus_2.jpg?v=1748419225",
+            "url": "https://store.anycubic.com/products/kobra-2-plus",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Kobra 2 Pro",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 220,
+                "build_y_mm": 220,
+                "build_z_mm": 250,
+                "structure": "베드슬링거",
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ],
+                "enclosed": false,
+                "multicolor": false
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/files/AnycubicKobra2Pro-5.jpg?v=1743671996",
+            "url": "https://store.anycubic.com/products/kobra-2-pro",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Kobra 3",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 255,
+                "build_y_mm": 255,
+                "build_z_mm": 260,
+                "structure": "베드슬링거",
+                "nozzle_sizes": [
+                    "0.2;0.4;0.6;0.8 mm"
+                ],
+                "enclosed": false,
+                "multicolor": true,
+                "ams": "ACE Pro",
+                "colors_max": 8
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/files/K3-1_9c932907-0d07-4e05-ab4e-8a0359c1499f.jpg?v=1760526479",
+            "url": "https://store.anycubic.com/products/anycubic-kobra-3",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Kobra 3 Max",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 426,
+                "build_y_mm": 420,
+                "build_z_mm": 501,
+                "structure": "베드슬링거",
+                "nozzle_sizes": [
+                    "0.4;0.6;0.8 mm"
+                ],
+                "enclosed": false,
+                "multicolor": true,
+                "ams": "ACE Pro",
+                "colors_max": 8
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/files/K3MC-3.jpg?v=1755656633",
+            "url": "https://store.anycubic.com/products/kobra-3-max",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Kobra 3 Max V2",
+            "kind": "fdm",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/files/Kobra3MaxV2Combo.jpg?v=1787835165",
+            "url": "https://store.anycubic.com/products/kobra-3-max-v2-combo-3d-printer",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Kobra 3 V2",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 255,
+                "build_y_mm": 255,
+                "build_z_mm": 260,
+                "structure": "베드슬링거",
+                "nozzle_sizes": [
+                    "0.4;0.2;0.6;0.8 mm"
+                ],
+                "enclosed": false,
+                "multicolor": true,
+                "ams": "ACE Pro",
+                "colors_max": 8
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/files/Kobra3V2_1124112f-92fd-43ff-ab67-bf01878931cc.jpg?v=1753839992",
+            "url": "https://store.anycubic.com/products/kobra-3-v2",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Kobra 4",
+            "kind": "fdm",
+            "values": {
+                "enclosed": false,
+                "multicolor": true,
+                "ams": "ACE 2 Pro",
+                "colors_max": 8
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/files/K4_e1aa4e34-f02c-4b83-80b8-611023ad8a56.jpg?v=1780454214",
+            "url": "https://store.anycubic.com/products/anycubic-kobra-4",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Kobra Go",
+            "kind": "fdm",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/products/KobraGo_2.jpg?v=1701159717",
+            "url": "https://store.anycubic.com/products/kobra-go",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Kobra Max",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 400,
+                "build_y_mm": 400,
+                "build_z_mm": 450,
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ]
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/files/Kobra_2_Max_2_70181319-661a-4401-bdc9-e70058376470.jpg?v=1770002251",
+            "url": "https://store.anycubic.com/products/kobra-max",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Kobra Neo",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 220,
+                "build_y_mm": 220,
+                "build_z_mm": 250,
+                "structure": "베드슬링거",
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ]
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/products/KobraNeo_9.jpg?v=1691045507",
+            "url": "https://store.anycubic.com/products/kobra-neo",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Kobra Plus",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 300,
+                "build_y_mm": 300,
+                "build_z_mm": 350,
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ]
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/products/KobraPlus_5.jpg?v=1712649424",
+            "url": "https://store.anycubic.com/products/kobra-plus",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Kobra S1",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 250,
+                "build_y_mm": 250,
+                "build_z_mm": 250,
+                "structure": "CoreXY",
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ],
+                "enclosed": true,
+                "multicolor": true,
+                "ams": "ACE Pro",
+                "colors_max": 8
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/files/kobra-s1_90be8ef0-0d93-4693-aaa0-8734cec93f80.jpg?v=1753858670",
+            "url": "https://store.anycubic.com/products/kobra-s1",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Kobra S1 Max",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 350,
+                "build_y_mm": 350,
+                "build_z_mm": 350,
+                "structure": "CoreXY",
+                "nozzle_sizes": [
+                    "0.4;0.25;0.6;0.8 mm"
+                ],
+                "enclosed": true,
+                "multicolor": true,
+                "ams": "ACE 2 Pro",
+                "colors_max": 8
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/files/S1M_3ff45c1a-59a6-4188-9ac8-8755658a6a06.jpg?v=1775641762",
+            "url": "https://store.anycubic.com/products/kobra-s1-max",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Kobra X",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 260,
+                "build_y_mm": 260,
+                "build_z_mm": 260,
+                "structure": "베드슬링거",
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ],
+                "enclosed": false,
+                "multicolor": true,
+                "ams": "4색 내장",
+                "colors_max": 4
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/files/Kobra_X_4-Color_3D_Printer.jpg?v=1779878854",
+            "url": "https://store.anycubic.com/products/kobra-x-3d-printer",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Kossel Plus",
+            "kind": "fdm",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/products/Kossel_Plus_1.jpg?v=1558420052",
+            "url": "https://store.anycubic.com/products/anycubic-kossel-3d-printer",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Mega Pro",
+            "kind": "fdm",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/products/MegaPro_3.jpg?v=1654067661",
+            "url": "https://store.anycubic.com/products/mega-pro",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Mega SE",
+            "kind": "fdm",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/products/MegaSE_2.jpg?v=1635318223",
+            "url": "https://store.anycubic.com/products/mega-se",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Mega X",
+            "kind": "fdm",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/products/01_ba98cb9d-2895-40c2-a0d0-c458a7bc4a3c.jpg?v=1654067392",
+            "url": "https://store.anycubic.com/products/mega-x",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Mega Zero",
+            "kind": "fdm",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/products/01_2c17504f-5954-4f7c-a230-060f528aa333.jpg?v=1581935544",
+            "url": "https://store.anycubic.com/products/mega-zero",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Mega Zero 2.0",
+            "kind": "fdm",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/products/MegaZero2_1.jpg?v=1638072764",
+            "url": "https://store.anycubic.com/products/mega-zero-2-0-fdm-3d-printer",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Photon",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/products/Photon_1_1.jpg?v=1769998613",
+            "url": "https://store.anycubic.com/products/anycubic-photon-3d-printer",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Photon D2",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/products/7_c000494c-957f-44e8-912e-de91282f31ab.jpg?v=1735197027",
+            "url": "https://store.anycubic.com/products/photon-d2-dlp-3d-printer",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Photon M3",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/products/AnycubicPhotonM3_6.jpg?v=1682831214",
+            "url": "https://store.anycubic.com/products/photon-m3",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Photon M3 Max",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/products/AnycubicPhotonM3Max_1.jpg?v=1745466069",
+            "url": "https://store.anycubic.com/products/photon-m3-max",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Photon M3 Plus",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/products/AnycubicPhotonM3Plus_1.jpg?v=1683548006",
+            "url": "https://store.anycubic.com/products/photon-m3-plus",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Photon M3 Premium",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/products/PhotonM3Premium_2.jpg?v=1682831424",
+            "url": "https://store.anycubic.com/products/photon-m3-premium-3d-printer",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Photon Mono",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/products/PhotonMono_1.jpg?v=1638072875",
+            "url": "https://store.anycubic.com/products/photon-mono-resin-3d-printer",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Photon Mono 2",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/products/PhotonMono2_2.jpg?v=1769998189",
+            "url": "https://store.anycubic.com/products/photon-mono-2-3d-printer",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Photon Mono 4 Ultra",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/files/PhotonMono4Ultra_2.jpg?v=1764930898",
+            "url": "https://store.anycubic.com/products/photon-mono-4-ultra",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Photon Mono 4K",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/products/PhotonMono4K_1.jpg?v=1700145173",
+            "url": "https://store.anycubic.com/products/photon-mono-4k",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Photon Mono M5",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/files/PhotonM5_1.jpg?v=1770001480",
+            "url": "https://store.anycubic.com/products/photon-mono-m5",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Photon Mono M5s",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/files/photon-mono-m5s-main-2.jpg?v=1769997982",
+            "url": "https://store.anycubic.com/products/photon-mono-m5s",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Photon Mono M5s Pro",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/files/M5sPro_1.jpg?v=1770001454",
+            "url": "https://store.anycubic.com/products/photon-mono-m5s-pro",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Photon Mono M7",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/files/PhotonMonoM7_8.jpg?v=1760525699",
+            "url": "https://store.anycubic.com/products/photon-mono-m7",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Photon Mono M7 Max",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/files/PhotonMonoM7Max_1.jpg?v=1772182865",
+            "url": "https://store.anycubic.com/products/photon-mono-m7-max",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Photon Mono M7 Pro",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/files/PhotonMonoM7Pro_4.jpg?v=1761208755",
+            "url": "https://store.anycubic.com/products/photon-mono-m7-pro",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Photon Mono SE",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/products/PhotonMonoSE_1.jpg?v=1638072878",
+            "url": "https://store.anycubic.com/products/photon-mono-se-lcd-3d-printer",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Photon Mono SQ",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/products/PhotonMonoSQ_1.jpg?v=1634109006",
+            "url": "https://store.anycubic.com/products/photon-mono-sq",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Photon Mono X",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/products/PhotonMonoX_1.jpg?v=1682043040",
+            "url": "https://store.anycubic.com/products/photon-mono-x-resin-printer",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Photon Mono X 6K",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/products/PhotonMonoX6K_1.jpg?v=1700989102",
+            "url": "https://store.anycubic.com/products/photon-mono-x-6k",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Photon Mono X 6Ks",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/files/PhotonMonoX6ks.png?v=1725266614",
+            "url": "https://store.anycubic.com/products/photon-mono-x-6ks",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Photon Mono X2",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/products/PhotonMonoX2_1.jpg?v=1725265078",
+            "url": "https://store.anycubic.com/products/photon-mono-x2-sla-3d-printer",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Photon P1",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/files/74b96dbb2d19db9758ba306fc55ad040.jpg?v=1780452377",
+            "url": "https://store.anycubic.com/products/photon-p1-resin-3d-printer",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Photon P1 Max",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/files/6391ace427ade714b70fb966024ae804_cfdff6be-e36d-4699-8bc1-d302ed580387.jpg?v=1783787372",
+            "url": "https://store.anycubic.com/products/photon-p1-max-best-large-resin-3d-printer",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Photon S",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/products/Photon_S-_1.jpg?v=1637378342",
+            "url": "https://store.anycubic.com/products/anycubic-photon-s",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Photon Ultra",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/products/PhotonUltra_2.jpg?v=1683548025",
+            "url": "https://store.anycubic.com/products/photon-ultra",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Photon Zero",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/products/PhotonZero_1.jpg?v=1591067167",
+            "url": "https://store.anycubic.com/products/anycubic-photon-zero",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Predator",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 370,
+                "build_y_mm": 370,
+                "build_z_mm": 455,
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ]
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/products/Predator_1.jpg?v=1562731178",
+            "url": "https://store.anycubic.com/products/anycubic-predator-fdm-printer",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "Vyper",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 250,
+                "build_y_mm": 255,
+                "build_z_mm": 265,
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ]
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/files/Vyper.png?v=1712649635",
+            "url": "https://store.anycubic.com/products/anycubic-vyper",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "i3 Mega",
+            "kind": "fdm",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/products/Mega_1.jpg?v=1558405684",
+            "url": "https://store.anycubic.com/products/anycubic-i3-mega",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Anycubic",
+            "model": "i3 Mega S",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 210,
+                "build_y_mm": 210,
+                "build_z_mm": 205,
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ]
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/products/MegaS_2.jpg?v=1659687587",
+            "url": "https://store.anycubic.com/products/anycubic-i3-mega-s",
+            "credit": "Anycubic 공식 스토어"
+        },
+        {
+            "brand": "Bambu Lab",
+            "model": "A1",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 256,
+                "build_y_mm": 256,
+                "build_z_mm": 256,
+                "structure": "베드슬링거",
+                "nozzle_sizes": [
+                    "0.4;0.2;0.6;0.8 mm"
+                ],
+                "enclosed": false,
+                "multicolor": true,
+                "ams": "AMS lite",
+                "colors_max": 4
+            },
+            "image": "https://store.bblcdn.com/s3/default/b775e8d907a24d36a6640981cee41388/A1_C-compressed.jpg",
+            "url": "https://kr.store.bambulab.com/products/a1",
+            "credit": "Bambu Lab 공식 스토어"
+        },
+        {
+            "brand": "Bambu Lab",
+            "model": "A1 mini",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 180,
+                "build_y_mm": 180,
+                "build_z_mm": 180,
+                "structure": "베드슬링거",
+                "nozzle_sizes": [
+                    "0.4;0.2;0.6;0.8 mm"
+                ],
+                "enclosed": false,
+                "multicolor": true,
+                "ams": "AMS lite",
+                "colors_max": 4
+            },
+            "image": "https://store.bblcdn.com/s3/default/9c84c07dcf24456a906127c9c8bf1273.jpg",
+            "url": "https://kr.store.bambulab.com/products/a1-mini",
+            "credit": "Bambu Lab 공식 스토어"
+        },
+        {
+            "brand": "Bambu Lab",
+            "model": "A2L",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 330,
+                "build_y_mm": 320,
+                "build_z_mm": 325,
+                "structure": "베드슬링거",
+                "nozzle_sizes": [
+                    "0.4;0.2;0.6;0.8 mm"
+                ],
+                "enclosed": false,
+                "multicolor": true,
+                "ams": "AMS lite",
+                "colors_max": 4
+            },
+            "image": "https://store.bblcdn.com/s3/default/080f913e851140a6b77c1e2722805328/8.jpg",
+            "url": "https://kr.store.bambulab.com/products/a2l",
+            "credit": "Bambu Lab 공식 스토어"
+        },
+        {
+            "brand": "Bambu Lab",
+            "model": "H2C",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 330,
+                "build_y_mm": 320,
+                "build_z_mm": 325,
+                "structure": "CoreXY",
+                "nozzle_sizes": [
+                    "0.2;0.4;0.6;0.8 mm"
+                ],
+                "enclosed": true,
+                "multicolor": true,
+                "ams": "AMS 2 Pro · AMS HT"
+            },
+            "image": "https://store.bblcdn.com/s3/default/aefe2d5f7e784ed0944a5503bcf6396b/H2CC.jpg",
+            "url": "https://kr.store.bambulab.com/products/h2c",
+            "credit": "Bambu Lab 공식 스토어"
+        },
+        {
+            "brand": "Bambu Lab",
+            "model": "H2D",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 350,
+                "build_y_mm": 320,
+                "build_z_mm": 325,
+                "structure": "CoreXY",
+                "nozzle_sizes": [
+                    "0.4;0.2;0.6;0.8 mm"
+                ],
+                "enclosed": true,
+                "multicolor": true,
+                "ams": "AMS 2 Pro · AMS HT"
+            },
+            "image": "https://store.bblcdn.com/s3/default/b2b2452c54674c9cbcc0fc19cca260b5/H2DC-compressed.jpg",
+            "url": "https://kr.store.bambulab.com/products/h2d",
+            "credit": "Bambu Lab 공식 스토어"
+        },
+        {
+            "brand": "Bambu Lab",
+            "model": "H2S",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 340,
+                "build_y_mm": 320,
+                "build_z_mm": 340,
+                "structure": "CoreXY",
+                "nozzle_sizes": [
+                    "0.2;0.4;0.6;0.8 mm"
+                ],
+                "enclosed": true,
+                "multicolor": true,
+                "ams": "AMS 2 Pro · AMS HT"
+            },
+            "image": "https://store.bblcdn.com/s3/default/b05e2bdc480b48b998c1a87dabe45c17/H2SC-compressed.jpg",
+            "url": "https://kr.store.bambulab.com/products/h2s",
+            "credit": "Bambu Lab 공식 스토어"
+        },
+        {
+            "brand": "Bambu Lab",
+            "model": "P1P",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 256,
+                "build_y_mm": 256,
+                "build_z_mm": 250,
+                "structure": "CoreXY",
+                "nozzle_sizes": [
+                    "0.4;0.2;0.6;0.8 mm"
+                ],
+                "enclosed": false,
+                "multicolor": true,
+                "ams": "AMS",
+                "colors_max": 16
+            }
+        },
+        {
+            "brand": "Bambu Lab",
+            "model": "P1S",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 256,
+                "build_y_mm": 256,
+                "build_z_mm": 250,
+                "structure": "CoreXY",
+                "nozzle_sizes": [
+                    "0.4;0.2;0.6;0.8 mm"
+                ],
+                "enclosed": true,
+                "multicolor": true,
+                "ams": "AMS",
+                "colors_max": 16
+            },
+            "image": "https://store.bblcdn.com/a6b5bd7d6dcd417ca1f6547b6b5452c4.png",
+            "url": "https://kr.store.bambulab.com/products/p1s",
+            "credit": "Bambu Lab 공식 스토어"
+        },
+        {
+            "brand": "Bambu Lab",
+            "model": "P2S",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 256,
+                "build_y_mm": 256,
+                "build_z_mm": 256,
+                "structure": "CoreXY",
+                "nozzle_sizes": [
+                    "0.4;0.2;0.6;0.8 mm"
+                ],
+                "enclosed": true,
+                "multicolor": true,
+                "ams": "AMS 2 Pro · AMS HT"
+            },
+            "image": "https://store.bblcdn.com/s3/default/63c6a5d5ff7741e39e32133e60dc6fbc/P2SC.jpg",
+            "url": "https://kr.store.bambulab.com/products/p2s",
+            "credit": "Bambu Lab 공식 스토어"
+        },
+        {
+            "brand": "Bambu Lab",
+            "model": "X1 Carbon",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 256,
+                "build_y_mm": 256,
+                "build_z_mm": 250,
+                "structure": "CoreXY",
+                "nozzle_sizes": [
+                    "0.4;0.2;0.6;0.8 mm"
+                ],
+                "enclosed": true,
+                "multicolor": true,
+                "ams": "AMS",
+                "colors_max": 16
+            }
+        },
+        {
+            "brand": "Bambu Lab",
+            "model": "X1E",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 256,
+                "build_y_mm": 256,
+                "build_z_mm": 250,
+                "structure": "CoreXY",
+                "nozzle_sizes": [
+                    "0.4;0.2;0.6;0.8 mm"
+                ],
+                "enclosed": true,
+                "multicolor": true,
+                "ams": "AMS",
+                "colors_max": 16
+            }
+        },
+        {
+            "brand": "Bambu Lab",
+            "model": "X2D",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 256,
+                "build_y_mm": 256,
+                "build_z_mm": 261,
+                "structure": "CoreXY",
+                "nozzle_sizes": [
+                    "0.4;0.2;0.6;0.8 mm"
+                ],
+                "enclosed": true,
+                "multicolor": true,
+                "ams": "AMS 2 Pro · AMS HT"
+            },
+            "image": "https://store.bblcdn.com/s3/default/3f5407ca03a740838d2fb76a8058348a/1.jpg",
+            "url": "https://kr.store.bambulab.com/products/x2d",
+            "credit": "Bambu Lab 공식 스토어"
+        },
+        {
+            "brand": "Creality",
+            "model": "CR-10",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 300,
+                "build_y_mm": 300,
+                "build_z_mm": 400,
+                "structure": "베드슬링거",
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ]
+            }
+        },
+        {
+            "brand": "Creality",
+            "model": "CR-10 Max",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 450,
+                "build_y_mm": 450,
+                "build_z_mm": 470,
+                "structure": "베드슬링거",
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ]
+            }
+        },
+        {
+            "brand": "Creality",
+            "model": "CR-10 SE",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 220,
+                "build_y_mm": 220,
+                "build_z_mm": 265,
+                "structure": "베드슬링거",
+                "nozzle_sizes": [
+                    "0.2;0.4;0.6;0.8 mm"
+                ]
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/CR-10_SE_2.png?v=1742443647",
+            "url": "https://ca.store.creality.com/products/cr-10-se-3d-printer",
+            "credit": "Creality 공식 스토어"
+        },
+        {
+            "brand": "Creality",
+            "model": "CR-10 Smart",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 300,
+                "build_y_mm": 300,
+                "build_z_mm": 400,
+                "structure": "베드슬링거",
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ]
+            }
+        },
+        {
+            "brand": "Creality",
+            "model": "CR-10 Smart Pro",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 300,
+                "build_y_mm": 300,
+                "build_z_mm": 400,
+                "structure": "베드슬링거",
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ]
+            }
+        },
+        {
+            "brand": "Creality",
+            "model": "CR-10 V2",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 300,
+                "build_y_mm": 300,
+                "build_z_mm": 400,
+                "structure": "베드슬링거",
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ]
+            }
+        },
+        {
+            "brand": "Creality",
+            "model": "CR-10 V3",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 300,
+                "build_y_mm": 300,
+                "build_z_mm": 400,
+                "structure": "베드슬링거",
+                "nozzle_sizes": [
+                    "0.4;0.6 mm"
+                ]
+            }
+        },
+        {
+            "brand": "Creality",
+            "model": "CR-10S Pro V2",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 300,
+                "build_y_mm": 300,
+                "build_z_mm": 400,
+                "structure": "베드슬링거",
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ]
+            }
+        },
+        {
+            "brand": "Creality",
+            "model": "CR-20 Pro",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 220,
+                "build_y_mm": 220,
+                "build_z_mm": 250,
+                "structure": "베드슬링거",
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ]
+            }
+        },
+        {
+            "brand": "Creality",
+            "model": "CR-30",
+            "kind": "fdm",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/Spotify__1600X1600px_a2bc802e-ee73-4bd6-aebe-63a2be83091a.png?v=1742443396",
+            "url": "https://ca.store.creality.com/products/cr-30-3d-printer",
+            "credit": "Creality 공식 스토어"
+        },
+        {
+            "brand": "Creality",
+            "model": "CR-5 Pro",
+            "kind": "fdm",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/e11485b0b833490a2829c30aa48b9c7d.jpg?v=1742443314",
+            "url": "https://ca.store.creality.com/products/cr-5-pro-3d-printer",
+            "credit": "Creality 공식 스토어"
+        },
+        {
+            "brand": "Creality",
+            "model": "CR-5 Pro (High-temp Version)",
+            "kind": "fdm",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/e70f97add472f3c74b49a4aec18ff3d6.png?v=1742443621",
+            "url": "https://ca.store.creality.com/products/cr-5-pro-high-temp-version-3d-printer",
+            "credit": "Creality 공식 스토어"
+        },
+        {
+            "brand": "Creality",
+            "model": "CR-6 Max",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 390,
+                "build_y_mm": 390,
+                "build_z_mm": 400,
+                "structure": "베드슬링거",
+                "nozzle_sizes": [
+                    "0.2;0.4;0.6;0.8 mm"
+                ]
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/de0cb86878a422f1b4698098827c5d40_a41bea3c-d3e3-46c2-9a4a-0117c40586a1.jpg?v=1742443511",
+            "url": "https://ca.store.creality.com/products/cr-6-max-3d-printer",
+            "credit": "Creality 공식 스토어"
+        },
+        {
+            "brand": "Creality",
+            "model": "CR-6 SE",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 225,
+                "build_y_mm": 235,
+                "build_z_mm": 250,
+                "structure": "베드슬링거",
+                "nozzle_sizes": [
+                    "0.2;0.4;0.6;0.8 mm"
+                ]
+            }
+        },
+        {
+            "brand": "Creality",
+            "model": "CR-M4",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 450,
+                "build_y_mm": 450,
+                "build_z_mm": 470,
+                "structure": "베드슬링거",
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ]
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/CR-M4.png?v=1742443336",
+            "url": "https://ca.store.creality.com/products/cr-m4-3d-printer-eg96",
+            "credit": "Creality 공식 스토어"
+        },
+        {
+            "brand": "Creality",
+            "model": "CR-M4 SE",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 420,
+                "build_y_mm": 420,
+                "build_z_mm": 420,
+                "structure": "베드슬링거",
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ]
+            }
+        },
+        {
+            "brand": "Creality",
+            "model": "Ender-2 Pro",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 165,
+                "build_y_mm": 165,
+                "build_z_mm": 180,
+                "structure": "베드슬링거",
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ]
+            }
+        },
+        {
+            "brand": "Creality",
+            "model": "Ender-3",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 220,
+                "build_y_mm": 220,
+                "build_z_mm": 250,
+                "structure": "베드슬링거",
+                "nozzle_sizes": [
+                    "0.2;0.4;0.6;0.8 mm"
+                ]
+            }
+        },
+        {
+            "brand": "Creality",
+            "model": "Ender-3 Max",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 300,
+                "build_y_mm": 300,
+                "build_z_mm": 340,
+                "structure": "베드슬링거",
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ]
+            }
+        },
+        {
+            "brand": "Creality",
+            "model": "Ender-3 Max Neo",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 300,
+                "build_y_mm": 300,
+                "build_z_mm": 320,
+                "structure": "베드슬링거",
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ]
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/8f48814389cf4fc403e3e3372112cc25_351cb00b-6bb7-45c6-a8ae-198cbbaf59e5.jpg?v=1742443445",
+            "url": "https://ca.store.creality.com/products/ender-3-max-neo-3d-printer",
+            "credit": "Creality 공식 스토어"
+        },
+        {
+            "brand": "Creality",
+            "model": "Ender-3 Neo",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 220,
+                "build_y_mm": 220,
+                "build_z_mm": 250,
+                "structure": "베드슬링거",
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ]
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/Ender-3_Neo.png?v=1742443627",
+            "url": "https://ca.store.creality.com/products/ender-3-neo-3d-printer",
+            "credit": "Creality 공식 스토어"
+        },
+        {
+            "brand": "Creality",
+            "model": "Ender-3 Pro",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 220,
+                "build_y_mm": 220,
+                "build_z_mm": 250,
+                "structure": "베드슬링거",
+                "nozzle_sizes": [
+                    "0.2;0.4;0.6;0.8 mm"
+                ]
+            }
+        },
+        {
+            "brand": "Creality",
+            "model": "Ender-3 S1",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 220,
+                "build_y_mm": 220,
+                "build_z_mm": 270,
+                "structure": "베드슬링거",
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ]
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/0305366fdcdcbbfd653733311d882de3_4d1d511a-c7c8-40ec-b346-b08ed949f23d.jpg?v=1742443574",
+            "url": "https://ca.store.creality.com/products/ender-3-s1-3d-printer",
+            "credit": "Creality 공식 스토어"
+        },
+        {
+            "brand": "Creality",
+            "model": "Ender-3 S1 Plus",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 300,
+                "build_y_mm": 300,
+                "build_z_mm": 300,
+                "structure": "베드슬링거",
+                "nozzle_sizes": [
+                    "0.2;0.4;0.6;0.8 mm"
+                ]
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/Ender-3_S1_plus_1-1.png?v=1742443682",
+            "url": "https://ca.store.creality.com/products/ender-3-s1-plus-3d-printer",
+            "credit": "Creality 공식 스토어"
+        },
+        {
+            "brand": "Creality",
+            "model": "Ender-3 S1 Pro",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 220,
+                "build_y_mm": 220,
+                "build_z_mm": 270,
+                "structure": "베드슬링거",
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ]
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/Ender-3_S1_Pro_1.png?v=1742443407",
+            "url": "https://ca.store.creality.com/products/ender-3-s1-pro-3d-printer",
+            "credit": "Creality 공식 스토어"
+        },
+        {
+            "brand": "Creality",
+            "model": "Ender-3 S1 Sonic",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 230,
+                "build_y_mm": 230,
+                "build_z_mm": 270,
+                "structure": "베드슬링거",
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ]
+            }
+        },
+        {
+            "brand": "Creality",
+            "model": "Ender-3 V2",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 220,
+                "build_y_mm": 220,
+                "build_z_mm": 250,
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ]
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/Ender-3_V2_a27ba6e9-1f8f-4e7b-9eb7-e65a625981eb.png?v=1742443354",
+            "url": "https://ca.store.creality.com/products/ender-3-v2-3d-printer",
+            "credit": "Creality 공식 스토어"
+        },
+        {
+            "brand": "Creality",
+            "model": "Ender-3 V2 Neo",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 220,
+                "build_y_mm": 220,
+                "build_z_mm": 250,
+                "structure": "베드슬링거",
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ]
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/ender-3_v2_neo_16403360-af87-4361-aa2a-e88a05a0e2f3.png?v=1742443666",
+            "url": "https://ca.store.creality.com/products/ender-3-v2-neo-3d-printer",
+            "credit": "Creality 공식 스토어"
+        },
+        {
+            "brand": "Creality",
+            "model": "Ender-3 V3",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 220,
+                "build_y_mm": 220,
+                "build_z_mm": 250,
+                "structure": "베드슬링거",
+                "nozzle_sizes": [
+                    "0.4;0.6;0.8 mm"
+                ],
+                "enclosed": false,
+                "multicolor": false
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/Ender-3V3Plus_1600X1600px.png?v=1742443359",
+            "url": "https://ca.store.creality.com/products/ender-3-v3-corexz-3d-printer-combo",
+            "credit": "Creality 공식 스토어"
+        },
+        {
+            "brand": "Creality",
+            "model": "Ender-3 V3 KE",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 220,
+                "build_y_mm": 220,
+                "build_z_mm": 245,
+                "structure": "베드슬링거",
+                "nozzle_sizes": [
+                    "0.2;0.4;0.6;0.8 mm"
+                ],
+                "enclosed": false,
+                "multicolor": false
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/Ender-3V3KE_1600X1600px__2_0afc44dd-67d0-4894-8073-04628d9fcbde.png?v=1742443452",
+            "url": "https://ca.store.creality.com/products/ender-3-v3-ke-3d-printer-combo",
+            "credit": "Creality 공식 스토어"
+        },
+        {
+            "brand": "Creality",
+            "model": "Ender-3 V3 Plus",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 300,
+                "build_y_mm": 300,
+                "build_z_mm": 330,
+                "structure": "베드슬링거",
+                "nozzle_sizes": [
+                    "0.4;0.6;0.8 mm"
+                ],
+                "enclosed": false,
+                "multicolor": false
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/Ender-3V3Plus_1600X1600px_e7eb11a4-55ef-4925-ace2-ec62059da577.png?v=1742443518",
+            "url": "https://ca.store.creality.com/products/ender-3-v3-plus-3d-printer-rdx5",
+            "credit": "Creality 공식 스토어"
+        },
+        {
+            "brand": "Creality",
+            "model": "Ender-3 V3 SE",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 220,
+                "build_y_mm": 220,
+                "build_z_mm": 250,
+                "structure": "베드슬링거",
+                "nozzle_sizes": [
+                    "0.2;0.4;0.6;0.8 mm"
+                ],
+                "enclosed": false,
+                "multicolor": false
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/Ender-3_V3_SE_03.png?v=1742443508",
+            "url": "https://ca.store.creality.com/products/ender-3-v3-se-3d-printer",
+            "credit": "Creality 공식 스토어"
+        },
+        {
+            "brand": "Creality",
+            "model": "Ender-3 V4",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 220,
+                "build_y_mm": 220,
+                "build_z_mm": 235,
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ]
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/Ender-3V4Combo__01.png?v=1773973902",
+            "url": "https://ca.store.creality.com/products/ender-3-v4-combo-3d-printer",
+            "credit": "Creality 공식 스토어"
+        },
+        {
+            "brand": "Creality",
+            "model": "Ender-5",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 220,
+                "build_y_mm": 220,
+                "build_z_mm": 300,
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ]
+            }
+        },
+        {
+            "brand": "Creality",
+            "model": "Ender-5 Max",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 400,
+                "build_y_mm": 400,
+                "build_z_mm": 400,
+                "structure": "베드슬링거",
+                "nozzle_sizes": [
+                    "0.8;0.6;0.4 mm"
+                ],
+                "enclosed": false,
+                "multicolor": false
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/Shopify__1600X1600px_Ender-5_Max_36256a9e-2678-41fb-893c-13ef61c52b75.png?v=1742443265",
+            "url": "https://ca.store.creality.com/products/halloween-sale-ender-5-max-3d-printer",
+            "credit": "Creality 공식 스토어"
+        },
+        {
+            "brand": "Creality",
+            "model": "Ender-5 Plus",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 350,
+                "build_y_mm": 350,
+                "build_z_mm": 400,
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ]
+            }
+        },
+        {
+            "brand": "Creality",
+            "model": "Ender-5 Pro",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 220,
+                "build_y_mm": 220,
+                "build_z_mm": 300,
+                "nozzle_sizes": [
+                    "0.2;0.25;0.3;0.4;0.5;0.6;0.8;1.0 mm"
+                ]
+            }
+        },
+        {
+            "brand": "Creality",
+            "model": "Ender-5 S1",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 220,
+                "build_y_mm": 220,
+                "build_z_mm": 300,
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ]
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/Ender-_5S1_caf84813-093f-40d9-85a5-8654ac480b2b.png?v=1742443449",
+            "url": "https://ca.store.creality.com/products/ender-5-s1-3d-printer",
+            "credit": "Creality 공식 스토어"
+        },
+        {
+            "brand": "Creality",
+            "model": "Ender-5 S1 Sonic",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 220,
+                "build_y_mm": 220,
+                "build_z_mm": 280,
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ]
+            }
+        },
+        {
+            "brand": "Creality",
+            "model": "Ender-5S",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 220,
+                "build_y_mm": 220,
+                "build_z_mm": 300,
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ]
+            }
+        },
+        {
+            "brand": "Creality",
+            "model": "Ender-6",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 250,
+                "build_y_mm": 250,
+                "build_z_mm": 400,
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ]
+            }
+        },
+        {
+            "brand": "Creality",
+            "model": "HALOT-MAGE 8K",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/Halot-mage_1-1.png?v=1742443381",
+            "url": "https://ca.store.creality.com/products/halot-mage-8k-resin-3d-printer",
+            "credit": "Creality 공식 스토어"
+        },
+        {
+            "brand": "Creality",
+            "model": "HALOT-MAGE PRO 8K",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/Halot-mage_pro_1.png?v=1742443513",
+            "url": "https://ca.store.creality.com/products/halot-mage-pro-8k-resin-3d-printer",
+            "credit": "Creality 공식 스토어"
+        },
+        {
+            "brand": "Creality",
+            "model": "HALOT-MAGE S 14K",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/Halot-mage_S.png?v=1742443341",
+            "url": "https://ca.store.creality.com/products/halot-mage-s-14k-resin-3d-printer",
+            "credit": "Creality 공식 스토어"
+        },
+        {
+            "brand": "Creality",
+            "model": "HALOT-ONE PLUS",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/0bff808d0d56cfccba67ec0b276c7235.jpg?v=1742443664",
+            "url": "https://ca.store.creality.com/products/halot-one-plus-resin-3d-printer",
+            "credit": "Creality 공식 스토어"
+        },
+        {
+            "brand": "Creality",
+            "model": "HALOT-ONE PRO",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/db337cd4c11ee1dd69c4088dbabc52b4.jpg?v=1742443575",
+            "url": "https://ca.store.creality.com/products/halot-one-pro-resin-3d-printer",
+            "credit": "Creality 공식 스토어"
+        },
+        {
+            "brand": "Creality",
+            "model": "HALOT-PLAY 8.9' 4K",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/5abca010b43b6f31c607f22420afd9bb.jpg?v=1742443495",
+            "url": "https://ca.store.creality.com/products/halot-play-resin-3d-printer-33g5",
+            "credit": "Creality 공식 스토어"
+        },
+        {
+            "brand": "Creality",
+            "model": "Hi",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 260,
+                "build_y_mm": 260,
+                "build_z_mm": 300,
+                "structure": "베드슬링거",
+                "nozzle_sizes": [
+                    "0.8;0.6;0.4;0.2 mm"
+                ],
+                "enclosed": false,
+                "multicolor": true,
+                "ams": "CFS",
+                "colors_max": 16
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/PNG.png?v=1768803576",
+            "url": "https://ca.store.creality.com/products/creality-hi-combo-3d-printer",
+            "credit": "Creality 공식 스토어"
+        },
+        {
+            "brand": "Creality",
+            "model": "K1",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 220,
+                "build_y_mm": 220,
+                "build_z_mm": 250,
+                "nozzle_sizes": [
+                    "0.4;0.6;0.8 mm"
+                ],
+                "enclosed": true,
+                "multicolor": true,
+                "ams": "CFS",
+                "colors_max": 16
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/k1MAX-03-01.png?v=1745226356",
+            "url": "https://ca.store.creality.com/products/k1-series-3d-printer",
+            "credit": "Creality 공식 스토어"
+        },
+        {
+            "brand": "Creality",
+            "model": "K1 Max",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 300,
+                "build_y_mm": 300,
+                "build_z_mm": 300,
+                "nozzle_sizes": [
+                    "0.4;0.6;0.8 mm"
+                ],
+                "enclosed": true,
+                "multicolor": true,
+                "ams": "CFS",
+                "colors_max": 16
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/K1MAX1600X1600px__4.png?v=1742443599",
+            "url": "https://ca.store.creality.com/products/k1-max-3d-printer-essential-combo",
+            "credit": "Creality 공식 스토어"
+        },
+        {
+            "brand": "Creality",
+            "model": "K1 SE",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 220,
+                "build_y_mm": 220,
+                "build_z_mm": 250,
+                "nozzle_sizes": [
+                    "0.8;0.6;0.4 mm"
+                ],
+                "enclosed": false,
+                "multicolor": true,
+                "ams": "CFS",
+                "colors_max": 16
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/c954076299237e8c719d5cd527387dfe.jpg?v=1745226356",
+            "url": "https://ca.store.creality.com/products/k1-se-corexy-3d-printer",
+            "credit": "Creality 공식 스토어"
+        },
+        {
+            "brand": "Creality",
+            "model": "K1C",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 220,
+                "build_y_mm": 220,
+                "build_z_mm": 250,
+                "nozzle_sizes": [
+                    "0.4;0.6;0.8 mm"
+                ],
+                "enclosed": true,
+                "multicolor": true,
+                "ams": "CFS",
+                "colors_max": 16
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/K1C1600X1600px__2.png?v=1742443405",
+            "url": "https://ca.store.creality.com/products/k1c-3d-printer-e5lo",
+            "credit": "Creality 공식 스토어"
+        },
+        {
+            "brand": "Creality",
+            "model": "K2",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 260,
+                "build_y_mm": 260,
+                "build_z_mm": 260,
+                "nozzle_sizes": [
+                    "0.2;0.4;0.6;0.8 mm"
+                ],
+                "enclosed": true,
+                "multicolor": true,
+                "ams": "CFS",
+                "colors_max": 16
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/K2_Pro_-_1.png?v=1769995083",
+            "url": "https://ca.store.creality.com/products/k2-combo-3d-printer",
+            "credit": "Creality 공식 스토어"
+        },
+        {
+            "brand": "Creality",
+            "model": "K2 Plus",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 350,
+                "build_y_mm": 350,
+                "build_z_mm": 350,
+                "nozzle_sizes": [
+                    "0.2;0.4;0.6;0.8 mm"
+                ],
+                "enclosed": true,
+                "multicolor": true,
+                "ams": "CFS",
+                "colors_max": 16
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/K2_plus_45_cfs.png?v=1754987877",
+            "url": "https://ca.store.creality.com/products/creality-k2-plus-combo-3d-printer",
+            "credit": "Creality 공식 스토어"
+        },
+        {
+            "brand": "Creality",
+            "model": "K2 Pro",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 300,
+                "build_y_mm": 300,
+                "build_z_mm": 300,
+                "nozzle_sizes": [
+                    "0.2;0.4;0.6;0.8 mm"
+                ],
+                "enclosed": true,
+                "multicolor": true,
+                "ams": "CFS",
+                "colors_max": 16
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/K2_Pro_-_1_049aa680-4690-4a84-a579-312bdf2900a1.png?v=1769995083",
+            "url": "https://ca.store.creality.com/products/k2-pro-combo-3d-printer",
+            "credit": "Creality 공식 스토어"
+        },
+        {
+            "brand": "Creality",
+            "model": "K2 SE",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 220,
+                "build_y_mm": 215,
+                "build_z_mm": 245,
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ]
+            }
+        },
+        {
+            "brand": "Creality",
+            "model": "SPARKX i7 Autofill",
+            "kind": "fdm",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/23_929ccda8-1ef9-4836-ba39-42d3aaa14b20.png?v=1787305371",
+            "url": "https://ca.store.creality.com/products/sparkx-i7-autofill-3d-printer",
+            "credit": "Creality 공식 스토어"
+        },
+        {
+            "brand": "Creality",
+            "model": "SPARKX i8",
+            "kind": "fdm",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/20260921-171606.jpg?v=1789982202",
+            "url": "https://ca.store.creality.com/products/sparkx-i8-3d-printer",
+            "credit": "Creality 공식 스토어"
+        },
+        {
+            "brand": "Creality",
+            "model": "Sermoon D3",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 300,
+                "build_y_mm": 250,
+                "build_z_mm": 300,
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ]
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/seemoonD3_b6486db4-4190-43e2-8197-d9ff2121ac19.png?v=1742443641",
+            "url": "https://ca.store.creality.com/products/sermoon-d3-3d-printer",
+            "credit": "Creality 공식 스토어"
+        },
+        {
+            "brand": "Creality",
+            "model": "Sermoon D3 Pro",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 290,
+                "build_y_mm": 220,
+                "build_z_mm": 300,
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ]
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/seemoonD3_pro_1c1e6e8f-490d-434b-9d55-79234f61f4ea.png?v=1742443610",
+            "url": "https://ca.store.creality.com/products/sermoon-d3-pro-3d-printer",
+            "credit": "Creality 공식 스토어"
+        },
+        {
+            "brand": "Creality",
+            "model": "Sermoon M300",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 300,
+                "build_y_mm": 300,
+                "build_z_mm": 200,
+                "nozzle_sizes": [
+                    "0.8;0.6;0.4 mm"
+                ]
+            }
+        },
+        {
+            "brand": "Creality",
+            "model": "Sermoon V1",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 175,
+                "build_y_mm": 175,
+                "build_z_mm": 165,
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ]
+            }
+        },
+        {
+            "brand": "Creality",
+            "model": "Sermoon V1 Pro",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 175,
+                "build_y_mm": 175,
+                "build_z_mm": 165,
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ]
+            }
+        },
+        {
+            "brand": "Creality",
+            "model": "SparkX i7",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 260,
+                "build_y_mm": 260,
+                "build_z_mm": 255,
+                "nozzle_sizes": [
+                    "0.8;0.6;0.4;0.2 mm"
+                ],
+                "enclosed": false,
+                "multicolor": true,
+                "ams": "CFS lite",
+                "colors_max": 4
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/b8547d2c-87fe-4153-aeaa-23ee9f41eaaa.png?v=1787303769",
+            "url": "https://ca.store.creality.com/products/sparkx-i7-3d-printer",
+            "credit": "Creality 공식 스토어"
+        },
+        {
+            "brand": "Elegoo",
+            "model": "Centauri",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 256,
+                "build_y_mm": 256,
+                "build_z_mm": 256,
+                "structure": "CoreXY",
+                "nozzle_sizes": [
+                    "0.4;0.2;0.6;0.8 mm"
+                ]
+            }
+        },
+        {
+            "brand": "Elegoo",
+            "model": "Centauri 2",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 256,
+                "build_y_mm": 256,
+                "build_z_mm": 256,
+                "structure": "CoreXY",
+                "nozzle_sizes": [
+                    "0.4;0.2;0.6;0.8 mm"
+                ],
+                "multicolor": true,
+                "ams": "CANVAS",
+                "colors_max": 4
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0684/4792/8423/files/C2C-_-260811.jpg?v=1787637268",
+            "url": "https://us.elegoo.com/products/centauri-2-combo",
+            "credit": "Elegoo 공식 스토어"
+        },
+        {
+            "brand": "Elegoo",
+            "model": "Centauri Carbon",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 256,
+                "build_y_mm": 256,
+                "build_z_mm": 256,
+                "structure": "CoreXY",
+                "nozzle_sizes": [
+                    "0.4;0.2;0.6;0.8 mm"
+                ],
+                "enclosed": true,
+                "multicolor": true,
+                "ams": "CANVAS",
+                "colors_max": 4
+            }
+        },
+        {
+            "brand": "Elegoo",
+            "model": "Centauri Carbon 2",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 256,
+                "build_y_mm": 256,
+                "build_z_mm": 256,
+                "structure": "CoreXY",
+                "nozzle_sizes": [
+                    "0.4;0.2;0.6;0.8 mm"
+                ],
+                "enclosed": true,
+                "multicolor": true,
+                "ams": "CANVAS",
+                "colors_max": 4
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0684/4792/8423/files/01._8ea84f2b-fc8a-4d2b-b9ff-83d536d4aa80.png?v=1791945132",
+            "url": "https://us.elegoo.com/products/centauri-carbon-2-combo",
+            "credit": "Elegoo 공식 스토어"
+        },
+        {
+            "brand": "Elegoo",
+            "model": "Jupiter",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0684/4792/8423/files/1Jupiter.jpg?v=1787632252",
+            "url": "https://us.elegoo.com/products/elegoo-jupiter-resin-3d-printer-6k-mono-msla-3d-printer",
+            "credit": "Elegoo 공식 스토어"
+        },
+        {
+            "brand": "Elegoo",
+            "model": "Jupiter 2",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0684/4792/8423/files/JPT2-_02.jpg?v=1787637106",
+            "url": "https://us.elegoo.com/products/elegoo-jupiter-2",
+            "credit": "Elegoo 공식 스토어"
+        },
+        {
+            "brand": "Elegoo",
+            "model": "Jupiter SE",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0684/4792/8423/files/JupiterSE_1.jpg?v=1787632588",
+            "url": "https://us.elegoo.com/products/jupiter-se",
+            "credit": "Elegoo 공식 스토어"
+        },
+        {
+            "brand": "Elegoo",
+            "model": "Mars",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0684/4792/8423/files/elegoo-mars-resin-3d-printer-1.jpg?v=1787632123",
+            "url": "https://us.elegoo.com/products/elegoo-mars-lcd-3d-printer",
+            "credit": "Elegoo 공식 스토어"
+        },
+        {
+            "brand": "Elegoo",
+            "model": "Mars 2",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0684/4792/8423/files/elegoo-mars-2-resin-3d-printer-1.jpg?v=1787632196",
+            "url": "https://us.elegoo.com/products/elegoo-mars-2-mono-lcd-3d-printer",
+            "credit": "Elegoo 공식 스토어"
+        },
+        {
+            "brand": "Elegoo",
+            "model": "Mars 2 Pro",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0684/4792/8423/files/elegoo-mars-2-pro-resin-3d-printer-1.jpg?v=1787632162",
+            "url": "https://us.elegoo.com/products/elegoo-mars-2-pro-mono-lcd-3d-printer",
+            "credit": "Elegoo 공식 스토어"
+        },
+        {
+            "brand": "Elegoo",
+            "model": "Mars 3",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0684/4792/8423/files/elegoo-mars-3-resin-3d-printer-1.jpg?v=1787632232",
+            "url": "https://us.elegoo.com/products/elegoo-mars-3-lcd-3d-printer",
+            "credit": "Elegoo 공식 스토어"
+        },
+        {
+            "brand": "Elegoo",
+            "model": "Mars 3 Pro",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0684/4792/8423/files/elegoo-mars-3-pro-resin-3d-printer-1.jpg?v=1787632285",
+            "url": "https://us.elegoo.com/products/elegoo-mars-3-pro-4k-mono-lcd-3d-printer",
+            "credit": "Elegoo 공식 스토어"
+        },
+        {
+            "brand": "Elegoo",
+            "model": "Mars 4",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0684/4792/8423/files/elegoo-mars-4-resin-3d-printer-2.jpg?v=1787632433",
+            "url": "https://us.elegoo.com/products/elegoo-mars-4-msla-resin-3d-printer-with-9k-mono-lcd",
+            "credit": "Elegoo 공식 스토어"
+        },
+        {
+            "brand": "Elegoo",
+            "model": "Mars 4 DLP",
+            "kind": "dlp",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0684/4792/8423/files/elegoo-mars-4-dlp-3d-printer-1.jpg?v=1787632405",
+            "url": "https://us.elegoo.com/products/elegoo-mars-4-dlp-resin-3d-printer",
+            "credit": "Elegoo 공식 스토어"
+        },
+        {
+            "brand": "Elegoo",
+            "model": "Mars 4 Max",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0684/4792/8423/files/elegoo-mars-4-max-resin-3d-printer-1.jpg?v=1787632401",
+            "url": "https://us.elegoo.com/products/elegoo-mars-4-max-msla-resin-3d-printer-with-6k-mono-lcd",
+            "credit": "Elegoo 공식 스토어"
+        },
+        {
+            "brand": "Elegoo",
+            "model": "Mars 4 Ultra",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0684/4792/8423/files/elegoo-mars-4-ultra-3d-printer-2.jpg?v=1787632437",
+            "url": "https://us.elegoo.com/products/elegoo-mars-4-ultra-msla-resin-3d-printer-with-9k-mono-lcd",
+            "credit": "Elegoo 공식 스토어"
+        },
+        {
+            "brand": "Elegoo",
+            "model": "Mars 5",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0684/4792/8423/files/M5-all3dp-award-logo.jpg?v=1787635184",
+            "url": "https://us.elegoo.com/products/mars-5-4k-6-6inch-monochrome-lcd-resin-3d-printer",
+            "credit": "Elegoo 공식 스토어"
+        },
+        {
+            "brand": "Elegoo",
+            "model": "Mars 5 Ultra",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0684/4792/8423/files/f91c887f39b07095c6453b328b4b84cd.jpg?v=1787635338",
+            "url": "https://us.elegoo.com/products/mars-5-ultra-9k-7inch-monochrome-lcd-resin-3d-printer",
+            "credit": "Elegoo 공식 스토어"
+        },
+        {
+            "brand": "Elegoo",
+            "model": "Mars C",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0684/4792/8423/files/elegoo-mars-c-resin-3d-printer-1.jpg?v=1787632174",
+            "url": "https://us.elegoo.com/products/elegoo-mars-c-lcd-3d-printer",
+            "credit": "Elegoo 공식 스토어"
+        },
+        {
+            "brand": "Elegoo",
+            "model": "Mars Pro",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0684/4792/8423/files/elegoo_mars_pro.jpg?v=1787632662",
+            "url": "https://us.elegoo.com/products/mars-pro",
+            "credit": "Elegoo 공식 스토어"
+        },
+        {
+            "brand": "Elegoo",
+            "model": "Neptune",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 210,
+                "build_y_mm": 210,
+                "build_z_mm": 200,
+                "nozzle_sizes": [
+                    "0.4;0.6;0.8 mm"
+                ]
+            }
+        },
+        {
+            "brand": "Elegoo",
+            "model": "Neptune 2",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 235,
+                "build_y_mm": 235,
+                "build_z_mm": 250,
+                "nozzle_sizes": [
+                    "0.4;0.6;0.8 mm"
+                ]
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0684/4792/8423/files/elegoo-neptune-2-fdm-3d-printer-with-silient-motherboard-3d-printers-elegoo-shop-906953.jpg?v=1787632204",
+            "url": "https://us.elegoo.com/products/elegoo-neptune-2-fdm-3d-printer",
+            "credit": "Elegoo 공식 스토어"
+        },
+        {
+            "brand": "Elegoo",
+            "model": "Neptune 2D",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 235,
+                "build_y_mm": 235,
+                "build_z_mm": 250,
+                "nozzle_sizes": [
+                    "0.4;0.6;0.8 mm"
+                ]
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0684/4792/8423/files/elegoo-neptune-2d-2-color-mixing-fdm-3d-printer-2-in-1-out-3d-printers-elegoo-214801.jpg?v=1787632244",
+            "url": "https://us.elegoo.com/products/neptune-2d-fdm-3d-printer",
+            "credit": "Elegoo 공식 스토어"
+        },
+        {
+            "brand": "Elegoo",
+            "model": "Neptune 2S",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 235,
+                "build_y_mm": 235,
+                "build_z_mm": 250,
+                "nozzle_sizes": [
+                    "0.4;0.6;0.8 mm"
+                ]
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0684/4792/8423/files/neptune2s-fdm-printer-elegoo-official-308088.jpg?v=1787632249",
+            "url": "https://us.elegoo.com/products/neptune2s-fdm-printer",
+            "credit": "Elegoo 공식 스토어"
+        },
+        {
+            "brand": "Elegoo",
+            "model": "Neptune 3",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 235,
+                "build_y_mm": 235,
+                "build_z_mm": 280,
+                "nozzle_sizes": [
+                    "0.4;0.6;0.8 mm"
+                ]
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0684/4792/8423/files/ELEGOO-Neptune-3-1-With-Model.jpg?v=1787632291",
+            "url": "https://us.elegoo.com/products/elegoo-neptune-3-fdm-3d-printer",
+            "credit": "Elegoo 공식 스토어"
+        },
+        {
+            "brand": "Elegoo",
+            "model": "Neptune 3 Max",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 425,
+                "build_y_mm": 425,
+                "build_z_mm": 500,
+                "nozzle_sizes": [
+                    "0.4;0.2;0.6;0.8;1.0 mm"
+                ]
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0684/4792/8423/files/ELEGOO-Neptune-3-Max-1-With-ALL3DP-Award-Icon.jpg?v=1787632378",
+            "url": "https://us.elegoo.com/products/elegoo-neptune-3-max-fdm-3d-printer-massive-printing-size-of-420x420x500mm",
+            "credit": "Elegoo 공식 스토어"
+        },
+        {
+            "brand": "Elegoo",
+            "model": "Neptune 3 Plus",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 325,
+                "build_y_mm": 325,
+                "build_z_mm": 400,
+                "nozzle_sizes": [
+                    "0.4;0.2;0.6;0.8;1.0 mm"
+                ]
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0684/4792/8423/files/ELEGOO-Neptune-3-Plus-1.jpg?v=1787632374",
+            "url": "https://us.elegoo.com/products/elegoo-neptune-3-plus-fdm-3d-printer-with-larger-build-volume-of-320x320x400mm",
+            "credit": "Elegoo 공식 스토어"
+        },
+        {
+            "brand": "Elegoo",
+            "model": "Neptune 3 Pro",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 230,
+                "build_y_mm": 230,
+                "build_z_mm": 280,
+                "nozzle_sizes": [
+                    "0.4;0.2;0.6;0.8;1.0 mm"
+                ]
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0684/4792/8423/files/ELEGOO-Neptune-3-Pro-1-With-Model.jpg?v=1787632330",
+            "url": "https://us.elegoo.com/products/elegoo-neptune-3-pro-fdm-3d-printer-225x225x280mm",
+            "credit": "Elegoo 공식 스토어"
+        },
+        {
+            "brand": "Elegoo",
+            "model": "Neptune 4",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 230,
+                "build_y_mm": 230,
+                "build_z_mm": 265,
+                "structure": "베드슬링거",
+                "nozzle_sizes": [
+                    "0.4;0.2;0.6;0.8;1.0 mm"
+                ],
+                "enclosed": false,
+                "multicolor": false
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0684/4792/8423/files/N4-1_1.jpg?v=1787635280",
+            "url": "https://us.elegoo.com/products/elegoo-neptune-4-fdm-3d-printer",
+            "credit": "Elegoo 공식 스토어"
+        },
+        {
+            "brand": "Elegoo",
+            "model": "Neptune 4 Max",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 426,
+                "build_y_mm": 426,
+                "build_z_mm": 480,
+                "structure": "베드슬링거",
+                "nozzle_sizes": [
+                    "0.4;0.2;0.6;0.8;1.0 mm"
+                ],
+                "enclosed": false,
+                "multicolor": false
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0684/4792/8423/files/Neptune-4-Max-1_1.jpg?v=1787637344",
+            "url": "https://us.elegoo.com/products/neptune-4-max-fdm-3d-printer",
+            "credit": "Elegoo 공식 스토어"
+        },
+        {
+            "brand": "Elegoo",
+            "model": "Neptune 4 Plus",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 325,
+                "build_y_mm": 325,
+                "build_z_mm": 385,
+                "structure": "베드슬링거",
+                "nozzle_sizes": [
+                    "0.4;0.2;0.6;0.8;1.0 mm"
+                ],
+                "enclosed": false,
+                "multicolor": false
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0684/4792/8423/files/N4PL-1_1.jpg?v=1787635297",
+            "url": "https://us.elegoo.com/products/neptune-4-plus-fdm-3d-printer",
+            "credit": "Elegoo 공식 스토어"
+        },
+        {
+            "brand": "Elegoo",
+            "model": "Neptune 4 Pro",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 230,
+                "build_y_mm": 230,
+                "build_z_mm": 265,
+                "structure": "베드슬링거",
+                "nozzle_sizes": [
+                    "0.4;0.2;0.6;0.8;1.0 mm"
+                ],
+                "enclosed": false,
+                "multicolor": false
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0684/4792/8423/files/Neptune-4-Pro-1_1.jpg?v=1787636517",
+            "url": "https://us.elegoo.com/products/elegoo-neptune-4-pro-fdm-3d-printer",
+            "credit": "Elegoo 공식 스토어"
+        },
+        {
+            "brand": "Elegoo",
+            "model": "Neptune X",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 235,
+                "build_y_mm": 235,
+                "build_z_mm": 300,
+                "nozzle_sizes": [
+                    "0.4;0.6;0.8 mm"
+                ]
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0684/4792/8423/files/1_73cffb52-bb74-4f5e-9097-53d2d92688c2.jpg?v=1787632223",
+            "url": "https://us.elegoo.com/products/elegoo-neptune-x-fdm-3d-printer",
+            "credit": "Elegoo 공식 스토어"
+        },
+        {
+            "brand": "Elegoo",
+            "model": "OrangeStorm Giga",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 810,
+                "build_y_mm": 805,
+                "build_z_mm": 1010,
+                "structure": "베드슬링거",
+                "nozzle_sizes": [
+                    "0.6;0.4;0.8;1.0 mm"
+                ],
+                "enclosed": false,
+                "multicolor": false
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0684/4792/8423/files/GIGA-Badage.png?v=1787634672",
+            "url": "https://us.elegoo.com/products/orangestorm-giga",
+            "credit": "Elegoo 공식 스토어"
+        },
+        {
+            "brand": "Elegoo",
+            "model": "Saturn 2",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0684/4792/8423/files/Saturn2.jpg?v=1787632282",
+            "url": "https://us.elegoo.com/products/elegoo-saturn-2-8k-10-inches-mono-lcd-3d-printer",
+            "credit": "Elegoo 공식 스토어"
+        },
+        {
+            "brand": "Elegoo",
+            "model": "Saturn 3",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0684/4792/8423/files/elegoo-saturn-3-3d-printer.jpg?v=1787632414",
+            "url": "https://us.elegoo.com/products/elegoo-saturn-3-resin-3d-printer-12k",
+            "credit": "Elegoo 공식 스토어"
+        },
+        {
+            "brand": "Elegoo",
+            "model": "Saturn 3 Ultra",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0684/4792/8423/files/S3U-all3dp-award-logo.jpg?v=1787635184",
+            "url": "https://us.elegoo.com/products/elegoo-saturn-3-ultra-resin-3d-printer-12k",
+            "credit": "Elegoo 공식 스토어"
+        },
+        {
+            "brand": "Elegoo",
+            "model": "Saturn 4",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0684/4792/8423/files/Saturn-4-front-view.jpg?v=1787634068",
+            "url": "https://us.elegoo.com/products/saturn-4-12k-10inch-monochrome-lcd-resin-3d-printer",
+            "credit": "Elegoo 공식 스토어"
+        },
+        {
+            "brand": "Elegoo",
+            "model": "Saturn 4 Ultra",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0684/4792/8423/files/S4U-all3dp-award-logo.jpg?v=1787635183",
+            "url": "https://us.elegoo.com/products/saturn-4-ultra-12k-10inch-monochrome-lcd-resin-3d-printer",
+            "credit": "Elegoo 공식 스토어"
+        },
+        {
+            "brand": "Elegoo",
+            "model": "Saturn 4 Ultra 16K",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0684/4792/8423/files/01._953f4390-fe48-42dd-9bd7-cb64dc8757d4.png?v=1792397665",
+            "url": "https://us.elegoo.com/products/saturn-4-ultra-16k-10inch-monochrome-lcd-resin-3d-printer",
+            "credit": "Elegoo 공식 스토어"
+        },
+        {
+            "brand": "Elegoo",
+            "model": "Saturn 4K",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0684/4792/8423/files/ELEGOOSaturn4KResin3DPrinter_1.jpg?v=1787632167",
+            "url": "https://us.elegoo.com/products/elegoo-saturn-4k-mono-lcd-3d-printer",
+            "credit": "Elegoo 공식 스토어"
+        },
+        {
+            "brand": "Elegoo",
+            "model": "Saturn 8K",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0684/4792/8423/files/Saturn8k.jpg?v=1787632326",
+            "url": "https://us.elegoo.com/products/elegoo-saturn-8k-msla-10inch-monochrome-lcd-resin-3d-printer",
+            "credit": "Elegoo 공식 스토어"
+        },
+        {
+            "brand": "Elegoo",
+            "model": "Saturn S",
+            "kind": "sla",
+            "values": [],
+            "image": "https://cdn.shopify.com/s/files/1/0684/4792/8423/files/ELEGOOSaturnS4KResin3DPrinter_1_a27ef643-ee37-4329-bb6b-b7cfe7f90d65.jpg?v=1787632266",
+            "url": "https://us.elegoo.com/products/elegoo-saturn-s-msla-9-1-4k-mono-lcd-3d-printer",
+            "credit": "Elegoo 공식 스토어"
+        },
+        {
+            "brand": "Flashforge",
+            "model": "AD5X",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 220,
+                "build_y_mm": 220,
+                "build_z_mm": 220,
+                "nozzle_sizes": [
+                    "0.25;0.4;0.6;0.8 mm"
+                ],
+                "enclosed": false,
+                "multicolor": true,
+                "ams": "IFS",
+                "colors_max": 4
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0591/8641/3646/files/20260509-093938.png?v=1778291961",
+            "url": "https://www.flashforge.com/products/flashforge-ad5x-3d-printer",
+            "credit": "Flashforge 공식 스토어"
+        },
+        {
+            "brand": "Flashforge",
+            "model": "Adventurer 3",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 150,
+                "build_y_mm": 150,
+                "build_z_mm": 150,
+                "nozzle_sizes": [
+                    "0.4;0.6 mm"
+                ]
+            }
+        },
+        {
+            "brand": "Flashforge",
+            "model": "Adventurer 4",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 220,
+                "build_y_mm": 200,
+                "build_z_mm": 250,
+                "nozzle_sizes": [
+                    "0.3;0.4;0.6;0.4HS mm"
+                ]
+            }
+        },
+        {
+            "brand": "Flashforge",
+            "model": "Adventurer 5M",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 220,
+                "build_y_mm": 220,
+                "build_z_mm": 220,
+                "nozzle_sizes": [
+                    "0.25;0.4;0.6;0.8 mm"
+                ],
+                "enclosed": false,
+                "multicolor": false
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0591/8641/3646/files/1_20af666d-49f8-4819-bbcd-ed868b64cc21.png?v=1778234609",
+            "url": "https://www.flashforge.com/products/adventurer-5m-3d-printer",
+            "credit": "Flashforge 공식 스토어"
+        },
+        {
+            "brand": "Flashforge",
+            "model": "Adventurer 5M Pro",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 220,
+                "build_y_mm": 220,
+                "build_z_mm": 220,
+                "nozzle_sizes": [
+                    "0.25;0.4;0.6;0.8 mm"
+                ],
+                "enclosed": true,
+                "multicolor": false
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0591/8641/3646/files/11_3ee371fb-12ea-4b12-a08c-8e284f02dd1d.png?v=1778235037",
+            "url": "https://www.flashforge.com/products/adventurer-5m-pro-3d-printer",
+            "credit": "Flashforge 공식 스토어"
+        },
+        {
+            "brand": "Flashforge",
+            "model": "Adventurer A5",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 220,
+                "build_y_mm": 220,
+                "build_z_mm": 220,
+                "nozzle_sizes": [
+                    "0.25;0.4;0.6;0.8 mm"
+                ]
+            }
+        },
+        {
+            "brand": "Flashforge",
+            "model": "Artemis",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 190,
+                "build_y_mm": 195,
+                "build_z_mm": 200,
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ]
+            }
+        },
+        {
+            "brand": "Flashforge",
+            "model": "Creator 5",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 256,
+                "build_y_mm": 256,
+                "build_z_mm": 256,
+                "structure": "CoreXY",
+                "nozzle_sizes": [
+                    "0.25;0.4;0.6;0.8 mm"
+                ],
+                "enclosed": false,
+                "multicolor": true,
+                "ams": "4 툴헤드",
+                "colors_max": 4
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0591/8641/3646/files/C5_4.png?v=1778299244",
+            "url": "https://www.flashforge.com/products/flashforge-creator-5",
+            "credit": "Flashforge 공식 스토어"
+        },
+        {
+            "brand": "Flashforge",
+            "model": "Creator 5 Pro",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 256,
+                "build_y_mm": 256,
+                "build_z_mm": 256,
+                "structure": "CoreXY",
+                "nozzle_sizes": [
+                    "0.25;0.4;0.6;0.8 mm"
+                ],
+                "enclosed": true,
+                "multicolor": true,
+                "ams": "4 툴헤드",
+                "colors_max": 4
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0591/8641/3646/files/4_--234.png?v=1778291853",
+            "url": "https://www.flashforge.com/products/flashforge-creator-5-pro",
+            "credit": "Flashforge 공식 스토어"
+        },
+        {
+            "brand": "Flashforge",
+            "model": "Guider 2s",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 280,
+                "build_y_mm": 250,
+                "build_z_mm": 300,
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ]
+            }
+        },
+        {
+            "brand": "Flashforge",
+            "model": "Guider 3 Ultra",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 300,
+                "build_y_mm": 330,
+                "build_z_mm": 600,
+                "nozzle_sizes": [
+                    "0.4;0.6;0.8 mm"
+                ]
+            }
+        },
+        {
+            "brand": "Flashforge",
+            "model": "Guider 4",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 300,
+                "build_y_mm": 300,
+                "build_z_mm": 300,
+                "nozzle_sizes": [
+                    "0.25;0.4;0.4HF;0.6;0.6HF;0.8HF mm"
+                ]
+            }
+        },
+        {
+            "brand": "Flashforge",
+            "model": "Guider 4 Pro",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 300,
+                "build_y_mm": 300,
+                "build_z_mm": 300,
+                "nozzle_sizes": [
+                    "0.25;0.4;0.4HF;0.6;0.6HF;0.8HF mm"
+                ]
+            }
+        },
+        {
+            "brand": "Prusa Research",
+            "model": "CORE One",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 250,
+                "build_y_mm": 220,
+                "build_z_mm": 270,
+                "structure": "CoreXY",
+                "nozzle_sizes": [
+                    "0.25;0.3;0.4;0.5;0.6;0.8 mm"
+                ],
+                "enclosed": true,
+                "multicolor": true,
+                "ams": "MMU3",
+                "colors_max": 5
+            },
+            "image": "https://www.prusa3d.com/content/images/product/ff1c68f1-64b8-4573-af3f-4a61d4f4a198.jpg",
+            "url": "https://www.prusa3d.com/product/prusa-core-one/",
+            "credit": "Prusa Research 공식 스토어"
+        },
+        {
+            "brand": "Prusa Research",
+            "model": "CORE One L",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 300,
+                "build_y_mm": 300,
+                "build_z_mm": 331,
+                "structure": "CoreXY",
+                "nozzle_sizes": [
+                    "0.4;0.5;0.6;0.8 mm"
+                ],
+                "enclosed": true,
+                "multicolor": false
+            },
+            "image": "https://www.prusa3d.com/content/images/product/9c1f2bd3-bde9-41fa-b93f-c12dde25f99d.jpg",
+            "url": "https://www.prusa3d.com/product/prusa-core-one-l-2/",
+            "credit": "Prusa Research 공식 스토어"
+        },
+        {
+            "brand": "Prusa Research",
+            "model": "MINI+",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 180,
+                "build_y_mm": 180,
+                "build_z_mm": 180,
+                "nozzle_sizes": [
+                    "0.25;0.4;0.6;0.8 mm"
+                ],
+                "enclosed": false,
+                "multicolor": false
+            },
+            "image": "https://www.prusa3d.com/content/images/product/6916ad61-f335-4915-8d15-ac607484347f.jpg",
+            "url": "https://www.prusa3d.com/product/original-prusa-mini-semi-assembled-3d-printer-enclosure-bundle-5/",
+            "credit": "Prusa Research 공식 스토어"
+        },
+        {
+            "brand": "Prusa Research",
+            "model": "MK3.5",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 250,
+                "build_y_mm": 210,
+                "build_z_mm": 210,
+                "nozzle_sizes": [
+                    "0.25;0.4;0.6;0.8 mm"
+                ],
+                "enclosed": false,
+                "multicolor": true,
+                "ams": "MMU3",
+                "colors_max": 5
+            }
+        },
+        {
+            "brand": "Prusa Research",
+            "model": "MK3.9",
+            "kind": "fdm",
+            "values": {
+                "enclosed": false,
+                "multicolor": true,
+                "ams": "MMU3",
+                "colors_max": 5
+            }
+        },
+        {
+            "brand": "Prusa Research",
+            "model": "MK3S+",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 250,
+                "build_y_mm": 210,
+                "build_z_mm": 210,
+                "nozzle_sizes": [
+                    "0.25;0.4;0.6;0.8 mm"
+                ],
+                "enclosed": false,
+                "multicolor": true,
+                "ams": "MMU3",
+                "colors_max": 5
+            },
+            "image": "https://www.prusa3d.com/content/images/product/226b1536-4128-44d9-9c7c-50c4a8697957.jpg",
+            "url": "https://www.prusa3d.com/product/original-prusa-i3-mk3s-3d-printer-3/",
+            "credit": "Prusa Research 공식 스토어"
+        },
+        {
+            "brand": "Prusa Research",
+            "model": "MK4",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 250,
+                "build_y_mm": 210,
+                "build_z_mm": 220,
+                "nozzle_sizes": [
+                    "0.25;0.4;0.6;0.8 mm"
+                ],
+                "enclosed": false,
+                "multicolor": true,
+                "ams": "MMU3",
+                "colors_max": 5
+            }
+        },
+        {
+            "brand": "Prusa Research",
+            "model": "MK4S",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 250,
+                "build_y_mm": 210,
+                "build_z_mm": 220,
+                "nozzle_sizes": [
+                    "0.25;0.3;0.4;0.5;0.6;0.8 mm"
+                ],
+                "enclosed": false,
+                "multicolor": true,
+                "ams": "MMU3",
+                "colors_max": 5
+            },
+            "image": "https://www.prusa3d.com/content/images/product/7ee2b138-29c0-4ab4-94d1-7bac57740356.jpg",
+            "url": "https://www.prusa3d.com/product/original-prusa-mk4s-3d-printer/",
+            "credit": "Prusa Research 공식 스토어"
+        },
+        {
+            "brand": "Prusa Research",
+            "model": "SL1S Speed",
+            "kind": "sla",
+            "values": [],
+            "image": "https://www.prusa3d.com/content/images/product/2609db0b-925b-4b71-a494-11b462cc8119.jpg",
+            "url": "https://www.prusa3d.com/product/original-prusa-sl1s-speed-3d-printer/",
+            "credit": "Prusa Research 공식 스토어"
+        },
+        {
+            "brand": "Prusa Research",
+            "model": "XL",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 360,
+                "build_y_mm": 360,
+                "build_z_mm": 360,
+                "nozzle_sizes": [
+                    "0.25;0.3;0.4;0.5;0.6;0.8 mm"
+                ],
+                "enclosed": false,
+                "multicolor": true,
+                "ams": "툴체인저 (최대 5헤드)",
+                "colors_max": 5
+            },
+            "image": "https://www.prusa3d.com/content/images/product/c94764f4-c6bf-4083-a1c7-b39cff06a971.jpg",
+            "url": "https://www.prusa3d.com/product/original-prusa-xl-single-toolhead-3d-printer/",
+            "credit": "Prusa Research 공식 스토어"
+        },
+        {
+            "brand": "QIDI Tech",
+            "model": "Max4",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 390,
+                "build_y_mm": 390,
+                "build_z_mm": 340,
+                "structure": "CoreXY",
+                "nozzle_sizes": [
+                    "0.4;0.2;0.6;0.8 mm"
+                ],
+                "enclosed": true,
+                "multicolor": true,
+                "ams": "QIDI BOX",
+                "colors_max": 16
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0587/5282/7532/files/MAX4.png?v=1773470411",
+            "url": "https://qidi3d.com/products/max4",
+            "credit": "QIDI 공식 스토어"
+        },
+        {
+            "brand": "QIDI Tech",
+            "model": "Plus4",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 305,
+                "build_y_mm": 305,
+                "build_z_mm": 280,
+                "nozzle_sizes": [
+                    "0.4;0.2;0.6;0.8 mm"
+                ],
+                "enclosed": true,
+                "multicolor": true,
+                "ams": "QIDI BOX",
+                "colors_max": 16
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0587/5282/7532/files/PLUS4_a838191a-7fc5-49d6-a245-4fb88c793490.png?v=1773372605",
+            "url": "https://qidi3d.com/products/plus4-3d-printer",
+            "credit": "QIDI 공식 스토어"
+        },
+        {
+            "brand": "QIDI Tech",
+            "model": "Plus5",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 320,
+                "build_y_mm": 320,
+                "build_z_mm": 300,
+                "structure": "CoreXY",
+                "nozzle_sizes": [
+                    "0.4;0.2;0.6;0.8 mm"
+                ],
+                "enclosed": true,
+                "multicolor": true,
+                "ams": "QIDI BOX",
+                "colors_max": 16
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0587/5282/7532/files/qidi-Plus5-main-image2.png?v=1788503416",
+            "url": "https://qidi3d.com/products/plus5",
+            "credit": "QIDI 공식 스토어"
+        },
+        {
+            "brand": "QIDI Tech",
+            "model": "Q1 Pro",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 245,
+                "build_y_mm": 245,
+                "build_z_mm": 240,
+                "nozzle_sizes": [
+                    "0.4;0.2;0.6;0.8 mm"
+                ],
+                "enclosed": true,
+                "multicolor": false
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0587/5282/7532/files/Q1_Pro_591c966d-92ef-4d39-83b6-c810ecdb5ed2.png?v=1773372433",
+            "url": "https://qidi3d.com/products/q1-pro-3d-printer",
+            "credit": "QIDI 공식 스토어"
+        },
+        {
+            "brand": "QIDI Tech",
+            "model": "Q2",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 270,
+                "build_y_mm": 270,
+                "build_z_mm": 256,
+                "structure": "CoreXY",
+                "nozzle_sizes": [
+                    "0.4;0.2;0.6;0.8 mm"
+                ],
+                "enclosed": true,
+                "multicolor": true,
+                "ams": "QIDI BOX",
+                "colors_max": 16
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0587/5282/7532/files/Q2_67e31d12-f228-4823-bfd7-1eb54ff4c8e2.png?v=1773378656",
+            "url": "https://qidi3d.com/products/qidi-q2",
+            "credit": "QIDI 공식 스토어"
+        },
+        {
+            "brand": "QIDI Tech",
+            "model": "Q2C",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 270,
+                "build_y_mm": 270,
+                "build_z_mm": 256,
+                "structure": "CoreXY",
+                "nozzle_sizes": [
+                    "0.4;0.2;0.6;0.8 mm"
+                ],
+                "enclosed": true,
+                "multicolor": true,
+                "ams": "QIDI BOX",
+                "colors_max": 16
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0587/5282/7532/files/Q2C_9e2d067b-a5bc-4883-a8d9-b246ad6d55ba.png?v=1773369153",
+            "url": "https://qidi3d.com/products/q2c",
+            "credit": "QIDI 공식 스토어"
+        },
+        {
+            "brand": "QIDI Tech",
+            "model": "X-CF Pro",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 300,
+                "build_y_mm": 250,
+                "build_z_mm": 300,
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ]
+            }
+        },
+        {
+            "brand": "QIDI Tech",
+            "model": "X-Max",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 300,
+                "build_y_mm": 250,
+                "build_z_mm": 300,
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ]
+            }
+        },
+        {
+            "brand": "QIDI Tech",
+            "model": "X-Max 3",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 325,
+                "build_y_mm": 325,
+                "build_z_mm": 315,
+                "nozzle_sizes": [
+                    "0.4;0.2;0.6;0.8 mm"
+                ],
+                "enclosed": true,
+                "multicolor": false
+            },
+            "image": "https://cdn.shopify.com/s/files/1/0587/5282/7532/files/X-MAX-3.png?v=1773372503",
+            "url": "https://qidi3d.com/products/qidi-x-max-3",
+            "credit": "QIDI 공식 스토어"
+        },
+        {
+            "brand": "QIDI Tech",
+            "model": "X-Plus",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 270,
+                "build_y_mm": 200,
+                "build_z_mm": 200,
+                "nozzle_sizes": [
+                    "0.4 mm"
+                ]
+            }
+        },
+        {
+            "brand": "QIDI Tech",
+            "model": "X-Plus 3",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 280,
+                "build_y_mm": 280,
+                "build_z_mm": 270,
+                "nozzle_sizes": [
+                    "0.4;0.2;0.6;0.8 mm"
+                ],
+                "enclosed": true,
+                "multicolor": false
+            }
+        },
+        {
+            "brand": "QIDI Tech",
+            "model": "X-Smart 3",
+            "kind": "fdm",
+            "values": {
+                "build_x_mm": 175,
+                "build_y_mm": 180,
+                "build_z_mm": 170,
+                "nozzle_sizes": [
+                    "0.4;0.2;0.6;0.8 mm"
+                ],
+                "enclosed": true,
+                "multicolor": false
+            }
+        }
+    ]
+}

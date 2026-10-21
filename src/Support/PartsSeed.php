@@ -57,7 +57,7 @@ final class PartsSeed
                 $pk = self::printer($eq, (string) $b, (string) $m);
                 if ($pk === null && ! preg_match('/combo|^x1$/i', (string) $m)) {
                     try {
-                        $pk = $svc->save('equipment', ['kind' => 'fdm', 'brand' => $b, 'title' => $m], false, 'seed')['key'];
+                        $pk = $svc->save('equipment', ['kind' => in_array($f[4] ?? 'fdm', ['fdm', 'sla', 'dlp'], true) ? ($f[4] ?? 'fdm') : 'fdm', 'brand' => $b, 'title' => $m], false, 'seed')['key'];   // 0.3.4 [제조사, 모델, 상태, 메모, 프린터 종류]
                         $eq->push((object) ['key' => $pk, 'brand' => $b, 'model' => $m]);
                     } catch (\Throwable) {
                         $pk = null;
