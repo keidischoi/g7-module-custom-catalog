@@ -77,7 +77,7 @@ class CatalogController extends Controller
         // 0.3.0 🔩 부품: 맞는 프린터 · 후기 · 구매처 / 프린터: 맞는 부품
         $P = app(\Modules\Custom\Catalog\Services\PartsService::class);
         $uid = self::uid($r);
-        if ($hit[0] === 'parts') {
+        if ($hit[0] === 'parts' || ($hit[0] === 'equipment' && in_array($hit[1]->kind ?? '', \Modules\Custom\Catalog\Services\PartsService::LINKED_KINDS, true))) {   // 0.3.6 🌈 다색 장치도
             $out['fits'] = $P->fitsOf($key, $uid, $edit);
             $out['reviews'] = $P->reviews($key, $uid, $edit);
             $out['links'] = $P->links($key, $uid, $edit);

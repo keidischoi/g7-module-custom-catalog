@@ -18,7 +18,7 @@ final class Fields
         'fdm' => ['FDM 프린터', '🖨️'], 'sla' => ['SLA 레진 프린터', '🧪'], 'dlp' => ['DLP · LCD 레진 프린터', '💡'],
         'sls' => ['SLS (분말)', '⚗️'], 'mjf' => ['MJF', '🏭'], 'metal' => ['금속 3D 프린터', '🔩'],
         'cnc' => ['CNC 가공기', '⚙️'], 'laser' => ['레이저 커팅 · 각인기', '🔦'], 'scanner' => ['3D 스캐너', '📡'],
-        'wash_cure' => ['세척 · 경화기', '🫧'], 'dryer' => ['필라멘트 건조기', '♨️'], 'post' => ['후가공 · 도색 장비', '🎨'],
+        'wash_cure' => ['세척 · 경화기', '🫧'], 'dryer' => ['필라멘트 건조기', '♨️'], 'multicolor' => ['다색 장치', '🌈'], 'post' => ['후가공 · 도색 장비', '🎨'],
         'vacuum' => ['진공 성형기', '🌀'], 'injection' => ['사출기', '💉'], 'uv_print' => ['UV 평판 프린터', '🖼️'],
         'plotter' => ['커팅 플로터', '✂️'], 'measure' => ['측정 · 검사 장비', '📏'], 'other' => ['기타 장비', '🧰'],
     ];
@@ -46,7 +46,7 @@ final class Fields
         ['resin_printer', '레진 프린터', '💡', 'equipment', ['sla', 'dlp']],
         ['industrial', '산업용 프린터', '🏭', 'equipment', ['sls', 'mjf', 'metal']],
         ['maker', '가공 장비', '⚙️', 'equipment', ['cnc', 'laser', 'plotter', 'uv_print', 'vacuum', 'injection']],
-        ['tools', '주변 장비', '🧰', 'equipment', ['scanner', 'wash_cure', 'dryer', 'post', 'measure', 'other']],
+        ['tools', '주변 장비', '🧰', 'equipment', ['multicolor', 'scanner', 'wash_cure', 'dryer', 'post', 'measure', 'other']],   // 0.3.6 🌈 다색 장치
         ['filament', '필라멘트', '🧵', 'materials', ['fdm']],
         ['resin', '레진', '🧪', 'materials', ['resin']],
         ['powder', '분말 · 금속', '⚗️', 'materials', ['powder']],
@@ -123,6 +123,13 @@ final class Fields
                 ['scan_speed', '스캔 속도', 'text', '', ['scanner'], null, 'spec', '예: 초당 150만 점'],
                 ['scan_range', '스캔 범위', 'text', '', ['scanner']],
                 ['capacity', '용량', 'text', '', ['wash_cure', 'dryer', 'vacuum', 'injection', 'post'], null, 'spec', '예: 스풀 2개 · 8 L'],
+                ['slots', '칸 · 색 수', 'num', '개', ['multicolor']],   // 0.3.6 🌈 다색 장치
+                ['max_colors', '최대 색 수', 'num', '색', ['multicolor']],
+                ['max_units', '최대 연결 대수', 'num', '대', ['multicolor']],
+                ['drying', '건조 기능', 'bool', '', ['multicolor']],
+                ['drying_temp', '건조 최고 온도', 'num', '°C', ['multicolor', 'dryer']],
+                ['rfid', 'RFID 인식', 'bool', '', ['multicolor']],
+                ['auto_refill', '다 쓰면 이어 쓰기', 'bool', '', ['multicolor']],
             ]],
             ['재료', [
                 ['materials', '쓸 수 있는 재료', 'tags', '', [], null, 'col', '쉼표로 — 예: PLA, PETG, ABS, PA-CF'],

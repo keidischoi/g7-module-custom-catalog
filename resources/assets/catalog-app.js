@@ -2,7 +2,7 @@
 (function () {
   'use strict';
   if (window.CCT) { try { window.CCT.tick(); } catch (e) {} return; }
-  var VERSION = '0.3.5', API = '/api/modules/custom-catalog', BASE = '/catalog';
+  var VERSION = '0.3.6', API = '/api/modules/custom-catalog', BASE = '/catalog';
 
   /* ───────── 도구 ───────── */
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
@@ -269,15 +269,16 @@
       if (d.issues.length) h += '<div class="cct-sec"><h2>⚠️ 알려진 문제 · 고질병</h2><ul class="cct-issues">' + d.issues.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' +
         '<p class="cct-note" style="margin-top:8px">쓰는 사람들 사이에 알려진 내용을 정리한 것이에요. 제품 개선판 · 펌웨어에 따라 달라졌을 수 있어요.</p></div>';
       if (d.memo) h += '<div class="cct-sec"><h2>📝 메모</h2><div class="cct-text cct-text--memo">' + esc(d.memo) + '</div></div>';
-      if (d.type === 'parts') h += partsHtml(d, can);   // 0.3.0 🔩 관련 프린터 · 후기 · 구매처
+      var linked = d.type === 'parts' || d.kind === 'multicolor';   // 0.3.6 🌈 다색 장치(주변 장비)도 관련 프린터 · 후기 · 구매처
+      if (linked) h += partsHtml(d, can);   // 0.3.0 🔩 관련 프린터 · 후기 · 구매처
       if (d.related.length) h += '<div class="cct-sec"><h2>🏷️ ' + esc(d.brand) + '의 다른 제품</h2><div class="cct-grid">' + d.related.map(function (c) { return cardHtml(c, false); }).join('') + '</div></div>';
-      if (d.type === 'equipment') h += printerPartsHtml(d);   // 0.3.2 🔩 관련 부품 — 프린터 상세 맨 아래
+      if (d.type === 'equipment' && !linked) h += printerPartsHtml(d);   // 0.3.2 🔩 관련 부품 — 프린터 상세 맨 아래
       root.innerHTML = h + '</div>';
       var box = root.querySelector('.cct'), cur = 0, q = function (s) { return box.querySelector(s); };
       bindCards(box, reload);
       try { document.title = d.brand + ' ' + d.title + ' — 3D 카탈로그'; } catch (e) {}
       q('[data-print]').onclick = function () { window.print(); };
-      if (d.type === 'parts') partsBind(box, d, reload, can);   // 0.3.0
+      if (d.type === 'parts' || d.kind === 'multicolor') partsBind(box, d, reload, can);   // 0.3.0 · 0.3.6
       makerOf(d.brand).then(function (mk) {
         var el = q('[data-maker]'); if (!mk || !el) return;
         el.hidden = false;

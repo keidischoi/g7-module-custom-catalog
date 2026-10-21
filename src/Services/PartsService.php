@@ -65,9 +65,13 @@ final class PartsService
         }
     }
 
+    /** 0.3.6 부품처럼 「관련 프린터 · 후기 · 구매처」를 쓰는 장비 종류 (주변 장비) */
+    public const LINKED_KINDS = ['multicolor'];
+
     private static function part(string $key): object
     {
-        $p = DB::table(Schema::PARTS)->where('key', $key)->where('status', 'active')->first();
+        $p = DB::table(Schema::PARTS)->where('key', $key)->where('status', 'active')->first()
+            ?? DB::table(Schema::EQUIPMENT)->where('key', $key)->whereIn('kind', self::LINKED_KINDS)->where('status', 'active')->first();
         if (! $p) {
             throw new \InvalidArgumentException('없는 부품이에요.');
         }
@@ -186,7 +190,24 @@ final class PartsService
             }
             $by[$p->kind][] = $this->catalog->card('parts', $p) + ['fit' => $st, 'fit_label' => self::VOTES_OK[$st] ?? '', 'score' => $avg[$p->key] ?? null];
         }
-        $out = [];
+        // 0.3.6 🌈 다색 장치 (주변 장비) — 맨 앞에
+        foreach (DB::table(Schema::EQUIPMENT)->whereIn('key', array_keys($fits->all()))->whereIn('kind', self::LINKED_KINDS)->where('status', 'active')->get() as $e) {
+            $f = $fits[$e->key];
+            $w = ['fit' => 0, 'mod' => 0, 'no' => 0];
+            $nfit = 0;
+            foreach ($votes[$e->key] ?? [] as $v) {
+                if (isset($w[$v->vote])) {
+                    $w[$v->vote] += $v->real_use ? 2 : 1;
+                    $nfit++;
+                }
+            }
+            $st = self::decide($f->status, $w, (bool) $f->approved);
+            if ($st === 'no' || (! $f->approved && ! $f->status && $nfit < $auto)) {
+                continue;
+            }
+            $by['_unit'][] = $this->catalog->card('equipment', $e) + ['fit' => $st, 'fit_label' => self::VOTES_OK[$st] ?? '', 'score' => $avg[$e->key] ?? null];
+        }
+        $out = empty($by['_unit']) ? [] : [['kind' => 'multicolor', 'label' => Fields::EQUIPMENT_KINDS['multicolor'][0], 'icon' => Fields::EQUIPMENT_KINDS['multicolor'][1], 'items' => $by['_unit']]];
         foreach (Fields::PART_KINDS as $k => [$label, $icon]) {
             if (! empty($by[$k])) {
                 $out[] = ['kind' => $k, 'label' => $label, 'icon' => $icon, 'items' => $by[$k]];

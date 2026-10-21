@@ -824,6 +824,22 @@ namespace {
     $ams = $DBf::table('cat_parts')->where('name', 'AMS 2 Pro')->first();
     $av = json_decode((string) $ams->specs, true);
     t(($av['drying_temp'] ?? 0) == 65 && ($av['drying'] ?? false) === true && $DBf::table('cat_equipment')->count() === $neq, '건조 65 °C 같은 다색 장치 제원 · 없는 프린터는 만들지 않음');
+    echo "■ 🌈 다색 장치 → 주변 장비 (0.3.6)\n";
+    $al = $DBf::table('cat_parts')->where('name', 'AMS lite')->first();
+    $DBf::table('cat_part_reviews')->insert(['part_key' => $al->key, 'user_id' => 7, 'score' => 5, 'body' => '좋아요', 'created_at' => now(), 'updated_at' => now()]);
+    $nfit = $DBf::table('cat_part_fits')->where('part_key', $al->key)->count();
+    $mig5 = require dirname(__DIR__).'/database/migrations/2026_10_21_000027_multicolor_to_tools.php';
+    $mig5->up();
+    $ue = $DBf::table('cat_equipment')->where('kind', 'multicolor')->where('model', 'AMS lite')->first();
+    t($ue && ! $DBf::table('cat_parts')->where('name', 'AMS lite')->exists() && $DBf::table('cat_equipment')->where('kind', 'multicolor')->count() === 18
+        && $DBf::table('cat_parts')->where('name', 'like', '%ACE PRO / ACE 2 PRO signal%')->exists(), '다색 장치 18가지 → 주변 장비 (부속품은 부품에 그대로)');
+    t($DBf::table('cat_part_fits')->where('part_key', $ue->key)->count() === $nfit && $DBf::table('cat_part_reviews')->where('part_key', $ue->key)->count() === 1
+        && $DBf::table('cat_photos')->where('item_type', 'equipment')->where('item_key', $ue->key)->exists() && (int) json_decode((string) $ue->specs, true)['slots'] === 4, '관련 프린터 · 후기 · 사진 · 제원이 따라감');
+    $g = $PS->forPrinter('bambu-lab-a1-fdm');
+    t($g[0]['kind'] === 'multicolor' && in_array('AMS lite', array_column($g[0]['items'], 'title'), true), 'A1 상세 「관련 부품」 맨 앞에 🌈 다색 장치 · AMS lite');
+    $fo = $PS->fitsOf($ue->key);
+    t(in_array('A2L', array_map(static fn ($x) => $x['printer']['title'], $fo['items']), true) && count($PS->vote(7, $ue->key, 'bambu-lab-a1-fdm', 'fit')['items']) >= 3, '다색 장치 상세: 관련 프린터 · 표 남기기');
+    t($svc->list(['type' => 'equipment', 'kinds' => ['multicolor']])['total'] === 18 && $svc->list(['type' => 'equipment', 'q' => 'AMS'])['total'] >= 5, '주변 장비 → 🌈 다색 장치 목록');
     \Modules\Custom\Catalog\Services\PhotoService::$fetcher = null;
     array_map('unlink', glob($tmp.'/img/*') ?: []);
     array_map('unlink', glob($tmp.'/*.*') ?: []);
