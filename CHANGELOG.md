@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.3.5 — 2026-10-21
+
+- 🌈 **다색 장치 18가지** — 부품의 「다색 장치 · 스풀」 종류로, 각 공식 스토어의 호환 프린터에 이음 (프린터 상세 「🔩 관련 부품」에 보임):
+  - **Bambu Lab** — AMS (X1 · P1 · H2D · H2S · P2S), **AMS lite (A1 · A1 mini · A2L)**, AMS 2 Pro (건조 65 °C), AMS HT (건조 85 °C), AMS Hub · A1 시리즈 Hub
+  - **Creality** — CFS (K2 · K2 Plus · K2 Pro · Hi, K1 시리즈는 CFS-C 로), CFS-C Multicolor Kit (K1 시리즈), SPARKX i7 CFS Nano Kit, Co Print 다색 업그레이드 키트 (Ender-3 V3 · V3 Plus)
+  - **Anycubic** — ACE Pro, ACE 2 Pro · **Elegoo** — CANVAS (Centauri Carbon · Carbon 2 · Centauri 2) · **QIDI** — QIDI BOX · **Flashforge** — IFS 부품 (AD5X) · **Prusa** — MMU3, INDX 8-Tool 키트
+- 다색 장치 제원 칸: **최대 색 수 · 최대 연결 대수 · 건조 기능 · 건조 최고 온도 · RFID 인식 · 다 쓰면 이어 쓰기**.
+
+배포: 마이그레이션 000026.
 ## 0.3.4 — 2026-10-21
 
 - 🔩 **부품 357가지 더함** — 이제까지 노즐 하나뿐이던 제조사:

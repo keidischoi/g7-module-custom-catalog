@@ -1,0 +1,725 @@
+{
+    "_comment": "0.3.5 다색 장치 — 각 공식 스토어(호환성 · Compatible models) 2026-10 확인. fits: [제조사, 모델, 상태, 메모].",
+    "items": [
+        {
+            "brand": "Bambu Lab",
+            "name": "AMS (자동 소재 시스템)",
+            "url": "https://kr.store.bambulab.com/products/ams-multicolor-printing",
+            "image": "https://store.bblcdn.com/07f78e1bed0e4f3f958d78efed689dcd.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "필라멘트 4개를 자동으로 바꿔 끼우는 Bambu Lab 다색 장치. AMS Hub 로 4대까지 이어 최대 16색. RFID 로 Bambu 필라멘트를 알아봄.",
+            "values": {
+                "genuine": "정품",
+                "install": "그대로 끼움",
+                "slots": 4,
+                "max_colors": 16,
+                "max_units": 4,
+                "rfid": true,
+                "auto_refill": true,
+                "drying": false,
+                "price_krw": 349000
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "X1 Carbon"
+                ],
+                [
+                    "Bambu Lab",
+                    "X1E"
+                ],
+                [
+                    "Bambu Lab",
+                    "P1S"
+                ],
+                [
+                    "Bambu Lab",
+                    "P1P"
+                ],
+                [
+                    "Bambu Lab",
+                    "H2D"
+                ],
+                [
+                    "Bambu Lab",
+                    "H2S"
+                ],
+                [
+                    "Bambu Lab",
+                    "P2S"
+                ]
+            ],
+            "kind": "multi"
+        },
+        {
+            "brand": "Bambu Lab",
+            "name": "AMS lite",
+            "url": "https://kr.store.bambulab.com/products/ams-lite",
+            "image": "https://store.bblcdn.com/d9efb75c71184416bd055cbbe61597e9.jpg",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "A 시리즈용 4색 다색 장치 (프린터 옆에 세우는 열린 구조). A1 · A1 mini · A2L 에 이어 다색 출력.",
+            "values": {
+                "genuine": "정품",
+                "install": "그대로 끼움",
+                "slots": 4,
+                "max_colors": 4,
+                "max_units": 1,
+                "rfid": true,
+                "auto_refill": true,
+                "drying": false,
+                "price_krw": 309000
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "A1"
+                ],
+                [
+                    "Bambu Lab",
+                    "A1 mini"
+                ],
+                [
+                    "Bambu Lab",
+                    "A2L"
+                ]
+            ],
+            "kind": "multi"
+        },
+        {
+            "brand": "Bambu Lab",
+            "name": "AMS 2 Pro",
+            "url": "https://kr.store.bambulab.com/products/ams-2-pro",
+            "image": "https://store.bblcdn.com/s3/default/dda0c7dbd1d24e499c2150a292de5788/ams_(10).jpg",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "건조 기능이 들어간 2세대 AMS (4색). 출력하면서 필라멘트를 말림. X1 · P1 은 펌웨어 업데이트 후 사용.",
+            "values": {
+                "genuine": "정품",
+                "install": "그대로 끼움",
+                "slots": 4,
+                "rfid": true,
+                "auto_refill": true,
+                "drying": true,
+                "drying_temp": 65,
+                "price_krw": 399000
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "H2D"
+                ],
+                [
+                    "Bambu Lab",
+                    "H2S"
+                ],
+                [
+                    "Bambu Lab",
+                    "H2C"
+                ],
+                [
+                    "Bambu Lab",
+                    "P2S"
+                ],
+                [
+                    "Bambu Lab",
+                    "X2D"
+                ],
+                [
+                    "Bambu Lab",
+                    "X1 Carbon",
+                    "fit",
+                    "펌웨어 업데이트 필요"
+                ],
+                [
+                    "Bambu Lab",
+                    "X1E",
+                    "fit",
+                    "펌웨어 업데이트 필요"
+                ],
+                [
+                    "Bambu Lab",
+                    "P1S",
+                    "fit",
+                    "펌웨어 업데이트 필요"
+                ],
+                [
+                    "Bambu Lab",
+                    "P1P",
+                    "fit",
+                    "펌웨어 업데이트 필요"
+                ]
+            ],
+            "kind": "multi"
+        },
+        {
+            "brand": "Bambu Lab",
+            "name": "AMS HT",
+            "url": "https://kr.store.bambulab.com/products/ams-ht",
+            "image": "https://store.bblcdn.com/s3/default/6ef4d51b9e9d430cb2a746bb648e5477/ams_(4).jpg",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "고온 건조(최고 85 °C) 1칸 장치. PA · PC 같은 엔지니어링 필라멘트를 말리며 출력. 다른 AMS 와 함께 쓰면 색을 더함.",
+            "values": {
+                "genuine": "정품",
+                "install": "그대로 끼움",
+                "slots": 1,
+                "rfid": true,
+                "auto_refill": true,
+                "drying": true,
+                "drying_temp": 85,
+                "price_krw": 248000
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "H2D"
+                ],
+                [
+                    "Bambu Lab",
+                    "H2S"
+                ],
+                [
+                    "Bambu Lab",
+                    "H2C"
+                ],
+                [
+                    "Bambu Lab",
+                    "P2S"
+                ],
+                [
+                    "Bambu Lab",
+                    "X2D"
+                ],
+                [
+                    "Bambu Lab",
+                    "X1 Carbon"
+                ],
+                [
+                    "Bambu Lab",
+                    "X1E"
+                ],
+                [
+                    "Bambu Lab",
+                    "P1S"
+                ],
+                [
+                    "Bambu Lab",
+                    "P1P"
+                ],
+                [
+                    "Bambu Lab",
+                    "A1",
+                    "fit",
+                    "펌웨어 업데이트 필요"
+                ],
+                [
+                    "Bambu Lab",
+                    "A1 mini",
+                    "fit",
+                    "펌웨어 업데이트 필요"
+                ]
+            ],
+            "kind": "multi"
+        },
+        {
+            "brand": "Bambu Lab",
+            "name": "AMS Hub",
+            "url": "https://kr.store.bambulab.com/products/ams-hub",
+            "image": "https://store.bblcdn.com/1c0cf3ea624e4fe79c0c3f4e5957885d.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "AMS 를 여러 대(최대 4대) 이어 16색까지 쓰게 하는 연결 허브.",
+            "values": {
+                "genuine": "정품",
+                "install": "그대로 끼움",
+                "max_units": 4,
+                "price_krw": 83000
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "X1 Carbon"
+                ],
+                [
+                    "Bambu Lab",
+                    "X1E"
+                ],
+                [
+                    "Bambu Lab",
+                    "P1S"
+                ],
+                [
+                    "Bambu Lab",
+                    "P1P"
+                ]
+            ],
+            "kind": "multi"
+        },
+        {
+            "brand": "Bambu Lab",
+            "name": "AMS Hub - A1 시리즈",
+            "url": "https://kr.store.bambulab.com/products/ams-hub-a1-series",
+            "image": "https://store.bblcdn.com/s3/default/87dca744d993409e9e5eeed7a7e825f4/AMS_Hub.png",
+            "credit": "Bambu Lab 공식 스토어",
+            "summary": "A1 시리즈용 AMS 연결 허브.",
+            "values": {
+                "genuine": "정품",
+                "install": "그대로 끼움",
+                "price_krw": 33900
+            },
+            "fits": [
+                [
+                    "Bambu Lab",
+                    "A1"
+                ],
+                [
+                    "Bambu Lab",
+                    "A1 mini"
+                ]
+            ],
+            "kind": "multi"
+        },
+        {
+            "brand": "Creality",
+            "name": "CFS (Creality Filament System)",
+            "url": "https://store.creality.com/products/cfs-creality-filament-system",
+            "image": "https://cdn.shopify.com/s/files/1/0893/0603/8637/files/1.png?v=1767862098",
+            "credit": "Creality 공식 스토어",
+            "summary": "Creality 4색 다색 장치. 4대까지 이어 최대 16색 · 다 쓴 필라멘트 이어 쓰기 · RFID.",
+            "values": {
+                "genuine": "정품",
+                "install": "그대로 끼움",
+                "slots": 4,
+                "max_colors": 16,
+                "max_units": 4,
+                "rfid": true,
+                "auto_refill": true,
+                "drying": false
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "K2"
+                ],
+                [
+                    "Creality",
+                    "K2 Plus"
+                ],
+                [
+                    "Creality",
+                    "K2 Pro"
+                ],
+                [
+                    "Creality",
+                    "Hi"
+                ],
+                [
+                    "Creality",
+                    "K1",
+                    "mod",
+                    "CFS-C 키트(업그레이드)로 연결"
+                ],
+                [
+                    "Creality",
+                    "K1C",
+                    "mod",
+                    "CFS-C 키트(업그레이드)로 연결"
+                ],
+                [
+                    "Creality",
+                    "K1 Max",
+                    "mod",
+                    "CFS-C 키트(업그레이드)로 연결"
+                ],
+                [
+                    "Creality",
+                    "K1 SE",
+                    "mod",
+                    "CFS-C 키트(업그레이드)로 연결"
+                ]
+            ],
+            "kind": "multi"
+        },
+        {
+            "brand": "Creality",
+            "name": "CFS-C Multicolor Kit",
+            "url": "https://ca.store.creality.com/products/creality-cfs-c",
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/1.DTC_-1600X1600.jpg?v=1771918133",
+            "credit": "Creality 공식 스토어",
+            "summary": "K1 시리즈를 4색 다색으로 바꾸는 키트 (CFS 1대 · TPU 는 안 됨).",
+            "values": {
+                "genuine": "정품",
+                "slots": 4,
+                "max_colors": 4,
+                "max_units": 1,
+                "auto_refill": true,
+                "install": "공구 필요"
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "K1"
+                ],
+                [
+                    "Creality",
+                    "K1C"
+                ],
+                [
+                    "Creality",
+                    "K1 Max"
+                ],
+                [
+                    "Creality",
+                    "K1 SE"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$449.00"
+            },
+            "kind": "multi"
+        },
+        {
+            "brand": "Creality",
+            "name": "SPARKX i7 CFS Nano Kit",
+            "url": "https://ca.store.creality.com/products/sparkx-i7-cfs-nano-kit",
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/20260729-112814.png?v=1785303848",
+            "credit": "Creality 공식 스토어",
+            "summary": "SparkX i7 용 소형 다색 장치 (CFS Nano).",
+            "values": {
+                "genuine": "정품",
+                "install": "그대로 끼움",
+                "auto_refill": true
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "SparkX i7"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$99.00"
+            },
+            "kind": "multi"
+        },
+        {
+            "brand": "Creality",
+            "name": "Creality & Co Print 다색 업그레이드 키트 (Ender-3 V3 · V3 Plus)",
+            "url": "https://ca.store.creality.com/products/creality-co-print-multicolour-upgrade-kit-for-ender-3-v3-v3-plus",
+            "image": "https://cdn.shopify.com/s/files/1/0911/3233/0284/files/052bfe8ce34286801a5fd0cdf644cf01.png?v=1742550889",
+            "credit": "Creality 공식 스토어",
+            "summary": "Co Print KCM — Ender-3 V3 · V3 Plus 를 4색 · 8색 다색으로 바꾸는 개조 키트.",
+            "values": {
+                "genuine": "정품",
+                "max_colors": 8,
+                "install": "개조 필요"
+            },
+            "fits": [
+                [
+                    "Creality",
+                    "Ender-3 V3",
+                    "mod",
+                    "툴헤드 개조 · 펌웨어 바꿈"
+                ],
+                [
+                    "Creality",
+                    "Ender-3 V3 Plus",
+                    "mod",
+                    "툴헤드 개조 · 펌웨어 바꿈"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$259.00",
+                "구성": "4색 팩 · 8색 팩"
+            },
+            "kind": "multi"
+        },
+        {
+            "brand": "Anycubic",
+            "name": "ACE Pro",
+            "url": "https://store.anycubic.com/products/anycubic-ace-pro",
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/files/ACEPro-S1.jpg?v=1753865999",
+            "credit": "Anycubic 공식 스토어",
+            "summary": "Anycubic 4색 다색 장치 (건조 기능). 2대를 이어 8색.",
+            "values": {
+                "genuine": "정품",
+                "install": "그대로 끼움",
+                "slots": 4,
+                "max_colors": 8,
+                "max_units": 2,
+                "auto_refill": true,
+                "drying": true,
+                "drying_temp": 55
+            },
+            "fits": [
+                [
+                    "Anycubic",
+                    "Kobra 3"
+                ],
+                [
+                    "Anycubic",
+                    "Kobra 3 Max"
+                ],
+                [
+                    "Anycubic",
+                    "Kobra S1"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$249.00"
+            },
+            "kind": "multi"
+        },
+        {
+            "brand": "Anycubic",
+            "name": "ACE 2 Pro",
+            "url": "https://store.anycubic.com/products/ace-2-pro",
+            "image": "https://cdn.shopify.com/s/files/1/0245/5519/2380/files/ACE_2_Pro_0e2061cb-791b-4d79-b372-019fcf37387f.jpg?v=1776047805",
+            "credit": "Anycubic 공식 스토어",
+            "summary": "2세대 ACE — 4색 다색 · 건조. 프린터에 맞는 판(Kobra 3 · 4 계열 / Kobra X · S1 계열)으로 고름.",
+            "values": {
+                "genuine": "정품",
+                "install": "그대로 끼움",
+                "slots": 4,
+                "auto_refill": true,
+                "drying": true
+            },
+            "fits": [
+                [
+                    "Anycubic",
+                    "Kobra 3"
+                ],
+                [
+                    "Anycubic",
+                    "Kobra 3 V2"
+                ],
+                [
+                    "Anycubic",
+                    "Kobra 3 Max"
+                ],
+                [
+                    "Anycubic",
+                    "Kobra 3 Max V2"
+                ],
+                [
+                    "Anycubic",
+                    "Kobra 4"
+                ],
+                [
+                    "Anycubic",
+                    "Kobra X"
+                ],
+                [
+                    "Anycubic",
+                    "Kobra S1"
+                ],
+                [
+                    "Anycubic",
+                    "Kobra S1 Max"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$249.00"
+            },
+            "kind": "multi"
+        },
+        {
+            "brand": "Elegoo",
+            "name": "CANVAS for Centauri Carbon",
+            "url": "https://us.elegoo.com/products/canvas-for-centauri-carbon",
+            "image": "https://cdn.shopify.com/s/files/1/0684/4792/8423/files/CANVAS-for-Centauri-Carbon-CANVAS-01.jpg?v=1787636610",
+            "credit": "Elegoo 공식 스토어",
+            "summary": "Centauri Carbon 을 4색 다색으로 — Elegoo 다색 장치 CANVAS.",
+            "values": {
+                "genuine": "정품",
+                "install": "그대로 끼움",
+                "slots": 4,
+                "max_colors": 4
+            },
+            "fits": [
+                [
+                    "Elegoo",
+                    "Centauri Carbon"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$65.00"
+            },
+            "kind": "multi"
+        },
+        {
+            "brand": "Elegoo",
+            "name": "CANVAS for Centauri Carbon 2 · Centauri 2",
+            "url": "https://us.elegoo.com/products/canvas-for-centauri-carbon-2-centauri-2-series",
+            "image": "https://cdn.shopify.com/s/files/1/0684/4792/8423/files/CANVAS02-01.jpg?v=1787637086",
+            "credit": "Elegoo 공식 스토어",
+            "summary": "Centauri Carbon 2 · Centauri 2 용 4색 다색 장치 (덮개 있음 · 없음).",
+            "values": {
+                "genuine": "정품",
+                "install": "그대로 끼움",
+                "slots": 4,
+                "max_colors": 4
+            },
+            "fits": [
+                [
+                    "Elegoo",
+                    "Centauri Carbon 2"
+                ],
+                [
+                    "Elegoo",
+                    "Centauri 2"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$150.00",
+                "구성": "덮개 있음 · 덮개 없음"
+            },
+            "kind": "multi"
+        },
+        {
+            "brand": "QIDI Tech",
+            "name": "QIDI BOX",
+            "url": "https://qidi3d.com/products/qidi-box",
+            "image": "https://cdn.shopify.com/s/files/1/0587/5282/7532/files/box1.jpg?v=1765609778",
+            "credit": "QIDI 공식 스토어",
+            "summary": "QIDI 4색 다색 장치 (가열 건조 · RFID). 4대까지 이어 최대 16색. 종이 스풀은 어댑터 필요.",
+            "values": {
+                "genuine": "정품",
+                "install": "그대로 끼움",
+                "slots": 4,
+                "max_colors": 16,
+                "max_units": 4,
+                "rfid": true,
+                "auto_refill": true,
+                "drying": true
+            },
+            "fits": [
+                [
+                    "QIDI Tech",
+                    "Plus5"
+                ],
+                [
+                    "QIDI Tech",
+                    "Max4"
+                ],
+                [
+                    "QIDI Tech",
+                    "Q2"
+                ],
+                [
+                    "QIDI Tech",
+                    "Q2C"
+                ],
+                [
+                    "QIDI Tech",
+                    "Plus4"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$228.00"
+            },
+            "kind": "multi"
+        },
+        {
+            "brand": "Flashforge",
+            "name": "IFS (지능형 필라멘트 시스템) 부품",
+            "url": "https://www.flashforge.com/products/ifs-system-parts-for-ad5x",
+            "image": "https://cdn.shopify.com/s/files/1/0591/8641/3646/files/3_447f749d-0041-4286-a595-62e1edda1977.webp?v=1778225031",
+            "credit": "Flashforge 공식 스토어",
+            "summary": "AD5X 에 들어 있는 4색 장치 IFS 의 본체 · 판 · 케이블 · 한 칸 부품.",
+            "values": {
+                "genuine": "정품",
+                "install": "그대로 끼움",
+                "slots": 4,
+                "max_colors": 4
+            },
+            "fits": [
+                [
+                    "Flashforge",
+                    "AD5X"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "$99.00",
+                "구성": "IFS 본체 · 설치판 · 케이블 · 한 칸 부품"
+            },
+            "kind": "multi"
+        },
+        {
+            "brand": "Prusa Research",
+            "name": "Original Prusa MMU3",
+            "url": "https://www.prusa3d.com/product/original-prusa-mmu3-for-mk4s-mk3-9s-assembled-unit-2/",
+            "image": "https://www.prusa3d.com/content/images/product/dfc7ed8c-5428-4082-a955-30df4ee21382.png",
+            "credit": "Prusa Research 공식 스토어",
+            "summary": "Prusa 5색 다색 장치 (Multi-Material Unit 3). 조립품 · 키트.",
+            "values": {
+                "genuine": "정품",
+                "install": "그대로 끼움",
+                "slots": 5,
+                "max_colors": 5,
+                "max_units": 1,
+                "filament_dia": "1.75"
+            },
+            "fits": [
+                [
+                    "Prusa Research",
+                    "MK4S"
+                ],
+                [
+                    "Prusa Research",
+                    "MK4"
+                ],
+                [
+                    "Prusa Research",
+                    "MK3.9"
+                ],
+                [
+                    "Prusa Research",
+                    "MK3.5"
+                ],
+                [
+                    "Prusa Research",
+                    "MK3S+"
+                ],
+                [
+                    "Prusa Research",
+                    "CORE One",
+                    "mod",
+                    "커뮤니티 버전 케이블로 연결"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "€359 (조립품)"
+            },
+            "kind": "multi"
+        },
+        {
+            "brand": "Prusa Research",
+            "name": "INDX 8-Tool Conversion Kit",
+            "url": "https://www.prusa3d.com/product/indx-8-tool-conversion-kit-for-core-one-gen2/",
+            "image": "https://www.prusa3d.com/content/images/product/5703e31a-d124-4fa6-8912-c569f4e8ba14.jpg",
+            "credit": "Prusa Research 공식 스토어",
+            "summary": "CORE One 을 8 노즐 툴체인저(INDX)로 바꾸는 키트 — 색을 바꿀 때 버리는 필라멘트가 거의 없음.",
+            "values": {
+                "genuine": "정품",
+                "slots": 8,
+                "max_colors": 8,
+                "install": "개조 필요"
+            },
+            "fits": [
+                [
+                    "Prusa Research",
+                    "CORE One",
+                    "mod",
+                    "CORE One · CORE One L 용 키트가 따로 있음"
+                ],
+                [
+                    "Prusa Research",
+                    "CORE One L",
+                    "mod",
+                    "CORE One · CORE One L 용 키트가 따로 있음"
+                ]
+            ],
+            "facts": {
+                "공식 스토어 가격": "€869"
+            },
+            "kind": "multi"
+        }
+    ]
+}
