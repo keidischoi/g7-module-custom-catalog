@@ -784,6 +784,13 @@ namespace {
     t($svc->list(['type' => 'parts', 'q' => '메인보드'])['total'] >= 20 && $svc->list(['type' => 'parts', 'q' => '히트베드'])['total'] >= 10, '「메인보드」 · 「히트베드」로 찾기');
     $cr = $DBf::table('cat_parts')->where('brand', 'Creality')->where('name', 'like', 'K1 Mainboard Kit%')->first();
     t($cr && str_contains((string) $cr->facts, '공식 스토어 가격'), 'Creality: 미국 스토어 가격은 기타 제원으로');
+    echo "■ 🔩 같은 프린터의 다른 항목 (0.3.3)\n";
+    $combo = $svc->save('equipment', ['kind' => 'fdm', 'brand' => 'Bambu Lab', 'title' => 'A1 Combo'])['key'];
+    $a1n = count($PS->forPrinter('bambu-lab-a1-fdm'));
+    t($a1n > 0 && count($PS->forPrinter($combo)) === $a1n, '「A1 Combo」 항목에도 A1 의 관련 부품');
+    $dupA = $svc->save('equipment', ['kind' => 'fdm', 'brand' => 'Bambu', 'title' => 'A1 mini '])['key'];
+    t($dupA === 'bambu-lab-a1-mini-fdm' || count($PS->forPrinter($dupA)) > 0, '이름이 조금 다른 중복 항목에도');
+    t(! in_array('bambu-lab-a1-mini-fdm', \Modules\Custom\Catalog\Services\PartsService::sameKeys('bambu-lab-a1-fdm'), true), 'A1 과 A1 mini 는 다른 프린터');
     \Modules\Custom\Catalog\Services\PhotoService::$fetcher = null;
     array_map('unlink', glob($tmp.'/img/*') ?: []);
     array_map('unlink', glob($tmp.'/*.*') ?: []);

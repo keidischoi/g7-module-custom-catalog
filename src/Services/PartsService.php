@@ -160,11 +160,14 @@ final class PartsService
     {
         Schema::ensure();
         $auto = max(1, (int) Settings::get('parts_auto_votes'));
-        $fits = DB::table(Schema::FITS)->where('printer_key', $printerKey)->get()->keyBy('part_key');
+        // 0.3.3 같은 프린터의 다른 항목(「A1 Combo」 · 숨김/중복 항목)에 이어진 부품도 — 이 항목 것이 먼저
+        $keys = self::sameKeys($printerKey);
+        $fits = DB::table(Schema::FITS)->whereIn('printer_key', $keys)->get()
+            ->sortBy(static fn ($f) => $f->printer_key === $printerKey ? 0 : 1)->unique('part_key')->keyBy('part_key');
         if ($fits->isEmpty()) {
             return [];
         }
-        $votes = DB::table(Schema::VOTES)->where('printer_key', $printerKey)->get()->groupBy('part_key');
+        $votes = DB::table(Schema::VOTES)->whereIn('printer_key', $keys)->get()->groupBy('part_key');
         $avg = self::avgScores(array_keys($fits->all()));
         $by = [];
         foreach (DB::table(Schema::PARTS)->whereIn('key', array_keys($fits->all()))->where('status', 'active')->limit($limit)->get() as $p) {
@@ -191,6 +194,34 @@ final class PartsService
         }
 
         return $out;
+    }
+
+    /** 0.3.3 같은 프린터로 보는 항목들 — 제조사가 같고 모델 이름이 같음 (「Combo」 · 「콤보」 · 「with AMS」 는 빼고 비교) @return list<string> */
+    public static function sameKeys(string $printerKey): array
+    {
+        $me = DB::table(Schema::EQUIPMENT)->where('key', $printerKey)->first(['brand', 'model']);
+        if (! $me) {
+            return [$printerKey];
+        }
+        $nb = CatalogService::norm($me->brand);
+        $nm = self::baseModel((string) $me->model);
+        $out = [$printerKey];
+        if ($nb === '' || $nm === '') {
+            return $out;
+        }
+        foreach (DB::table(Schema::EQUIPMENT)->where('key', '!=', $printerKey)->whereIn('kind', ['fdm', 'sla', 'dlp'])->get(['key', 'brand', 'model']) as $e) {
+            $eb = CatalogService::norm($e->brand);
+            if (($eb === $nb || str_starts_with($eb, $nb) || str_starts_with($nb, $eb)) && self::baseModel((string) $e->model) === $nm) {
+                $out[] = (string) $e->key;
+            }
+        }
+
+        return $out;
+    }
+
+    public static function baseModel(string $model): string
+    {
+        return (string) preg_replace('/(combo|콤보|withams(lite)?|ams(lite)?combo)$/u', '', CatalogService::norm($model));
     }
 
     /** @param list<string> $keys @return array<string, array{avg: float, n: int}> */
