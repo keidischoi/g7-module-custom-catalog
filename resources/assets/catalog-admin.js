@@ -192,7 +192,7 @@
           '<div class="cct-bar">' + [['pending', '기다리는 것 ' + r.pending], ['applied', '반영한 것'], ['rejected', '버린 것']].map(function (x) { return '<button type="button" class="cct-chip' + (st === x[0] ? ' on' : '') + '" data-st="' + x[0] + '">' + x[1] + '</button>'; }).join('') +
           '<span style="flex:1"></span>' + (st === 'pending' && r.items.length > 1 ? '<button type="button" class="cct-btn cct-btn--s" data-all>보이는 것 모두 반영</button>' : '') + '</div>' +
           // 0.3.11 탭별 (FDM · 레진 프린터 · … · 필라멘트 · 레진 · 분말 · 부품)
-          ((r.tabs || []).length ? '<div class="cct-bar cct-sgtabs">' + [{ key: '', icon: '📋', label: '전체', n: r.total }].concat(r.tabs).concat(tb && !r.tabs.some(function (t) { return t.key === tb; }) ? [{ key: tb, icon: '', label: tb, n: 0 }] : []).map(function (t) { return '<button type="button" class="cct-chip' + (tb === t.key ? ' on' : '') + '" data-tb="' + esc(t.key) + '">' + t.icon + ' ' + esc(t.label) + ' ' + t.n + '</button>'; }).join('') + '</div>' : '') + '</div>' +
+          ((r.tabs || []).length ? '<div class="cct-bar cct-sgtabs">' + [{ key: '', icon: '📋', label: '전체', n: r.total }].concat(r.tabs).map(function (t) { return '<button type="button" class="cct-chip' + (tb === t.key ? ' on' : '') + '" data-tb="' + esc(t.key) + '"' + (t.n || tb === t.key ? '' : ' style="opacity:.55"') + '>' + t.icon + ' ' + esc(t.label) + ' ' + t.n + '</button>'; }).join('') + '</div>' : '') + '</div>' +
           (r.items.length ? '<div class="cct-sg">' + r.items.map(function (s) {
             return '<div class="cct-sgc" data-sg="' + s.id + '"><div class="cct-sgc__t"><em class="' + s.task + '">' + NAME[s.task] + '</em><span>' + esc(s.title) + '</span></div>' +
               (s.kind_label ? '<small>' + esc(s.kind_label) + '</small>' : '') +
@@ -207,7 +207,7 @@
                 // 0.2.28 반영한 것도 그 자리에서 바로 고치기 (편집 창 · AI 로 정리해 넣기 그대로)
                 (s.key && s.status === 'applied' ? '<div class="cct-bar" style="margin:4px 0 0"><button type="button" class="cct-btn cct-btn--p cct-btn--s" data-edit-now>✏️ 바로 고치기</button><a class="cct-btn cct-btn--s" target="_blank" rel="noopener" href="/catalog/' + esc(s.key) + '">항목 보기</a></div>'
                   : s.key ? '<a class="cct-btn cct-btn--s" target="_blank" rel="noopener" href="/catalog/' + esc(s.key) + '">항목 보기</a>' : '')) + '</div>';
-          }).join('') + '</div>' : '<div class="cct-empty"><b>🌙</b>' + (st === 'pending' ? '기다리는 제안이 없어요. 「🌙 자동 수집」에서 켜거나 「지금 한 번 돌리기」를 눌러 보세요.' : '없어요.') + '</div>');
+          }).join('') + '</div>' : '<div class="cct-empty"><b>🌙</b>' + (tb ? '이 탭에는 ' + (st === 'pending' ? '기다리는 제안이 없어요.' : '없어요.') : st === 'pending' ? '기다리는 제안이 없어요. 「🌙 자동 수집」에서 켜거나 「지금 한 번 돌리기」를 눌러 보세요.' : '없어요.') + '</div>');
         Array.prototype.forEach.call(body.querySelectorAll('[data-st]'), function (b) { b.onclick = function () { st = b.getAttribute('data-st'); draw(); }; });
         Array.prototype.forEach.call(body.querySelectorAll('[data-tb]'), function (b) { b.onclick = function () { tb = b.getAttribute('data-tb'); draw(); }; });
         var act = function (card, what) { return api('POST', '/admin/suggestions/' + card.getAttribute('data-sg') + '/' + what).then(function () { card.remove(); }); };

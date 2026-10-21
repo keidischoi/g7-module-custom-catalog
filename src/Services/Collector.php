@@ -1117,10 +1117,8 @@ final class Collector
             }
         }
         $tabs = [];
-        foreach (Fields::TABS as $t) {
-            if (! empty($count[$t[0]])) {
-                $tabs[] = ['key' => $t[0], 'label' => $t[1], 'icon' => $t[2], 'n' => $count[$t[0]]];
-            }
+        foreach (Fields::TABS as $t) {   // 0.3.12 제안이 없어도 탭은 늘 (0 개)
+            $tabs[] = ['key' => $t[0], 'label' => $t[1], 'icon' => $t[2], 'n' => (int) ($count[$t[0]] ?? 0)];
         }
         $items = [];
         foreach ($rows as [$r, $kind]) {

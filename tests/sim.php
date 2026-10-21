@@ -904,10 +904,13 @@ namespace {
     $line11 = $col->taskFill();
     $sg11 = $col->suggestions('pending', 60, 'parts');
     t(str_contains($line11, (string) $pt11->name) && $sg11['items'] && $sg11['items'][0]['type'] === 'parts' && $sg11['items'][0]['tab'] === 'parts', '제원 채우기: 부품도 ('.$line11.')');
-    t(array_column($sg11['tabs'], 'n', 'key') === ['parts' => 1] && $sg11['total'] === 1 && $col->suggestions('pending', 60, 'fdm')['items'] === [] && count($col->suggestions()['items']) === 1, '제안함: 탭별 개수 · 걸러 보기');
+    t(array_filter(array_column($sg11['tabs'], 'n', 'key')) === ['parts' => 1] && count($sg11['tabs']) === count(Fields::TABS) && $sg11['total'] === 1 && $col->suggestions('pending', 60, 'fdm')['items'] === [] && count($col->suggestions()['items']) === 1, '제안함: 탭별 개수 · 걸러 보기');
     Collector::$pager = fn () => null;
     $line11p = $col->taskPhoto();
     t(str_contains($line11p, (string) $pt11->name), '사진 찾기: 부품도 ('.$line11p.')');
+    DB::table('cat_suggestions')->delete();
+    $e12 = $col->suggestions();
+    t($e12['items'] === [] && count($e12['tabs']) === count(Fields::TABS) && array_sum(array_column($e12['tabs'], 'n')) === 0, '제안이 없어도 탭 단추는 늘 (0.3.12)');
     $js11 = (string) file_get_contents(dirname(__DIR__).'/resources/assets/catalog-admin.js');
     t(str_contains($js11, "'&tab=' + encodeURIComponent(tb)") && str_contains($js11, 'data-tb'), '제안함 화면: 탭 단추');
     echo "\n통과 {$pass} · 실패 {$fail}\n";
