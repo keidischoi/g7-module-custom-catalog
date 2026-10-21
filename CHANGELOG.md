@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.8 — 2026-10-21
+
+- 🔩 **부속품 · 업그레이드 키트는 다시 부품으로** — AMS Hub · AMS Hub(A1 시리즈) · SPARKX i7 CFS Nano Kit · IFS 부품 · Creality & Co Print 다색 업그레이드 키트 · CANVAS for Centauri Carbon 6가지를 주변 장비 → 부품(🌈 다색 장치 · 스풀)으로. 관련 프린터 · 표 · 후기 · 구매처 · 사진은 그대로 따라감.
+- 주변 장비의 🌈 다색 장치는 본체 12가지: AMS · AMS lite · AMS 2 Pro · AMS HT · CFS · CFS-C · ACE Pro · ACE 2 Pro · CANVAS(Centauri Carbon 2 · Centauri 2) · QIDI BOX · MMU3 · INDX.
+
+배포: 마이그레이션 000029.
 ## 0.3.7 — 2026-10-21
 
 - 🌈 **다색 장치 다시 맞추기** — AMS lite · CFS-C 처럼 주변 장비에 빠진 것이 있던 문제:

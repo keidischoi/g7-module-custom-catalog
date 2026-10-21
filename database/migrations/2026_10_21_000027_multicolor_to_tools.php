@@ -18,6 +18,9 @@ return new class extends Migration
         $j = is_file($file) ? json_decode((string) file_get_contents($file), true) : null;
         $names = [];
         foreach ($j['items'] ?? [] as $it) {
+            if (($it['unit'] ?? true) === false) {
+                continue;   // 0.3.8 부속품(허브 · 키트 · 부품)은 부품에 남음
+            }
             $names[CatalogService::norm($it['brand']).'|'.CatalogService::norm($it['name'])] = true;
         }
         $svc = new CatalogService();
