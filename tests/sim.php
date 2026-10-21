@@ -876,6 +876,10 @@ namespace {
     \Modules\Custom\Catalog\Services\PhotoService::$fetcher = null;
     array_map('unlink', glob($tmp.'/img/*') ?: []);
     array_map('unlink', glob($tmp.'/*.*') ?: []);
+    echo "■ 🌙 자동 수집 탭이 열림 — 🎨 실제 정리 시험 단추는 AI 연결 탭에서만 (0.3.9)\n";
+    $js39 = (string) file_get_contents(dirname(__DIR__).'/resources/assets/catalog-admin.js');
+    $at39 = strpos($js39, "querySelector('[data-sample]').onclick");
+    t($at39 > strpos($js39, "querySelector('[data-sadd]').onclick") && $at39 > strpos($js39, "'/admin/collect/run'"), '단추 연결이 단추가 있는 탭에');
     echo "\n통과 {$pass} · 실패 {$fail}\n";
     exit($fail ? 1 : 0);
 }
