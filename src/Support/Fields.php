@@ -242,6 +242,12 @@ final class Fields
                 ['magnetic', '자석식', 'bool', '', ['bed']],
                 ['double_sided', '양면', 'bool', '', ['bed']],
                 ['slots', '칸 · 색 수', 'num', '개', ['multi']],
+                ['max_colors', '최대 색 수', 'num', '색', ['multi']],   // 0.3.5 다색 장치
+                ['max_units', '최대 연결 대수', 'num', '대', ['multi']],
+                ['drying', '건조 기능', 'bool', '', ['multi']],
+                ['drying_temp', '건조 최고 온도', 'num', '°C', ['multi']],
+                ['rfid', 'RFID 인식', 'bool', '', ['multi']],
+                ['auto_refill', '다 쓰면 이어 쓰기', 'bool', '', ['multi']],
                 ['voltage', '전압', 'text', '', ['cooling', 'electronics', 'enclosure', 'hotend', 'heater', 'board', 'display', 'motor'], null, 'spec', '예: 24 V'],
                 ['screen_size', '화면 크기', 'text', '', ['display'], null, 'spec', '예: 5인치 터치'],
                 ['motor_spec', '모터 규격', 'text', '', ['motor'], null, 'spec', '예: NEMA17 · 1.8° · 0.9°'],
