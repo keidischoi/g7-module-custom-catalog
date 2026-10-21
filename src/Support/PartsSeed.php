@@ -34,7 +34,7 @@ final class PartsSeed
         }
         $svc = new CatalogService();
         $ph = new PhotoService();
-        $eq = DB::table(Schema::EQUIPMENT)->get(['key', 'brand', 'model']);
+        $eq = DB::table(Schema::EQUIPMENT)->orderByRaw("case when status = 'active' then 0 else 1 end")->get(['key', 'brand', 'model']);   // 0.3.3 보이는 항목 먼저
         $have = DB::table(Schema::PARTS)->get(['brand', 'name'])->map(static fn ($p) => CatalogService::norm($p->brand).'|'.CatalogService::norm($p->name))->flip();
         $budget = microtime(true) + $seconds;
         $added = 0;
