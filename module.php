@@ -69,7 +69,7 @@ class Module extends AbstractModule
 
     public function getHookListeners(): array
     {
-        return [CatalogListener::class];
+        return [CatalogListener::class, \Modules\Custom\Catalog\Listeners\OpsListener::class];   // 0.3.13 🖥️ 3DS 관리 프로그램
     }
 
     public function getDynamicTables(): array
