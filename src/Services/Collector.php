@@ -265,7 +265,16 @@ final class Collector
     {
         $off = (array) (Settings::get('tabs_off') ?? []);
 
-        return array_values(array_filter(Fields::TABS, static fn ($t) => ! in_array($t[0], $off, true)));
+        $off = array_merge($off, (array) (Settings::get('collect_off') ?? []));   // 0.3.19 자동 수집에서 뺀 탭
+        $by = array_column(Fields::TABS, null, 0);
+        $out = [];
+        foreach ((array) (Settings::get('collect_order') ?? Settings::COLLECT_ORDER) as $k) {   // 0.3.19 🗂 정한 순서대로
+            if (isset($by[$k]) && ! in_array($k, $off, true)) {
+                $out[] = $by[$k];
+            }
+        }
+
+        return $out;
     }
 
     /** 0.3.11 제원 채우기 · 사진 찾기도 탭을 번갈아 — 부를 때마다 다음 탭이 맨 앞 @return list<array<int, mixed>> */
