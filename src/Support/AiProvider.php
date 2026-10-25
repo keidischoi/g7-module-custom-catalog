@@ -101,7 +101,7 @@ final class AiProvider
             $chars += mb_strlen((string) ($m['content'] ?? ''));
         }
         $need = (int) ceil($chars * 1.1) + min($maxTokens, 4096) + 256;
-        foreach ([4096, 8192, 16384] as $c) {
+        foreach ([8192, 16384] as $c) {   // 0.3.14 4096 없앰 — 늘 8192 로 (크기가 바뀌면 Ollama 가 모델을 다시 올림 · 느린 서버에서 3~4분)
             if ($need <= $c) {
                 return $c;
             }
