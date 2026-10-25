@@ -452,19 +452,30 @@
     api('GET', '/admin/settings').then(draw).catch(function (e) { fail(body, e); });
   }
 
+  /* 0.3.16 한 번만 그리기 — 첫 그림이 끝나기 전(틀이 빈 동안)에 DOM 이 바뀔 때마다 · 0.9초마다 다시 불러 여러 번 그려지던 것.
+     그리는 중이면 기다리고, 사이트가 틀(cct_admin_root)을 새로 갈아 끼우면 그려 둔 화면을 그대로 옮겨 붙임 (다시 불러오지 않음) */
+  var drawn = null, busy = '';   // { sig, el } 마지막으로 그린 화면 · 지금 그리는 화면 sig
   function tick() {
     var root = document.getElementById('cct_admin_root');
     if (!root) return;
     var sig = location.pathname + '|' + page();
     if (root.__cctA === sig && root.firstChild) return;
+    if (busy === sig) return;   // 그리는 중 (틀이 바뀌어도 한 번만)
+    if (!root.firstChild && drawn && drawn.sig === sig && drawn.el && drawn.el !== root.firstChild) {   // 틀만 바뀜 → 옮겨 붙임
+      root.appendChild(drawn.el); root.__cctA = sig; return;
+    }
     root.__cctA = sig;
+    busy = sig;
     need(function () {
       C().css();
       C().meta(true).then(function (m) {
+        busy = '';
+        root = document.getElementById('cct_admin_root') || root; root.__cctA = sig;   // 그사이 틀이 바뀌었으면 새 틀에
         if (!m.can_edit) { root.innerHTML = '<div class="cct cct-adm"><div class="cct-empty"><b>🔒</b>카탈로그를 고칠 권한이 없어요.</div></div>'; return; }
         ({ items: itemsPage, suggest: suggestPage, parts: partsPage, auto: autoPage, ai: aiPage, settings: settingsPage })[page()](root);
+        drawn = { sig: sig, el: root.firstChild };
         if (page() !== 'suggest' && page() !== 'auto') C().api('GET', '/admin/suggestions?status=pending').then(function (r) { pending = r.pending; var nb = root.querySelector('[data-p="suggest"]'); if (nb && pending) nb.innerHTML = '💡 제안함<b>' + pending + '</b>'; }).catch(function () {});
-      }).catch(function (e) { root.innerHTML = '<div class="cct cct-adm"><div class="cct-empty"><b>⚠️</b>' + String(e.message).replace(/</g, '&lt;') + '</div></div>'; });
+      }).catch(function (e) { busy = ''; root.innerHTML = '<div class="cct cct-adm"><div class="cct-empty"><b>⚠️</b>' + String(e.message).replace(/</g, '&lt;') + '</div></div>'; });
     });
   }
   window.__cctAdmin = tick;
