@@ -450,6 +450,20 @@ class AdminController extends Controller
         return self::ok($this->ai->test($sv, $model, min(25, $wait)));
     }
 
+    /** 0.3.15 🔌 서버가 살아 있나 (서버마다) */
+    public function aiPing(Request $r): JsonResponse
+    {
+        if ($g = $this->guard($r)) {
+            return $g;
+        }
+        $sv = is_array($r->input('server')) ? AiSettings::formServer((array) $r->input('server'), AiSettings::load()) : null;
+        if (! $sv) {
+            return self::fail('서버가 없어요.');
+        }
+
+        return self::ok($this->ai->ping($sv));
+    }
+
     public function aiModels(Request $r): JsonResponse
     {
         if ($g = $this->guard($r)) {

@@ -914,6 +914,16 @@ namespace {
     t($e12['items'] === [] && count($e12['tabs']) === count(Fields::TABS) && array_sum(array_column($e12['tabs'], 'n')) === 0, '제안이 없어도 탭 단추는 늘 (0.3.12)');
     $js11 = (string) file_get_contents(dirname(__DIR__).'/resources/assets/catalog-admin.js');
     t(str_contains($js11, "'&tab=' + encodeURIComponent(tb)") && str_contains($js11, 'data-tb'), '제안함 화면: 탭 단추');
+    // 0.3.15 🔌 서버 연결 확인
+    $g0 = \Modules\Custom\Catalog\Services\AiClient::$getter;
+    \Modules\Custom\Catalog\Services\AiClient::$getter = static fn ($u, $h) => ['models' => [['name' => 'qwen2.5:3b'], ['name' => 'llama3:8b']]];
+    $pg = app(\Modules\Custom\Catalog\Services\AiClient::class)->ping(['provider' => 'ollama', 'url' => 'http://x:11434', 'api_key' => '', 'name' => 'O', 'models' => []]);
+    \Modules\Custom\Catalog\Services\AiClient::$getter = static fn ($u, $h) => throw new \RuntimeException('Connection refused');
+    $pb = app(\Modules\Custom\Catalog\Services\AiClient::class)->ping(['provider' => 'ollama', 'url' => 'http://x:11434', 'api_key' => '', 'name' => 'O', 'models' => []]);
+    \Modules\Custom\Catalog\Services\AiClient::$getter = $g0;
+    t($pg['ok'] && str_contains($pg['message'], '모델 2개') && ! $pb['ok'] && str_contains($pb['message'], '연결 안 됨'), '🔌 서버 연결 확인: 살아 있음 / 안 됨 (0.3.15)');
+    $js15 = (string) file_get_contents(dirname(__DIR__).'/resources/assets/catalog-admin.js');
+    t(str_contains($js15, 'data-sping') && str_contains($js15, "'/admin/ai/ping'"), '🔌 서버 카드마다 연결 확인 단추 (0.3.15)');
     echo "\n통과 {$pass} · 실패 {$fail}\n";
     exit($fail ? 1 : 0);
 }
