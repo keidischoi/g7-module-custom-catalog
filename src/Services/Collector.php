@@ -577,10 +577,19 @@ final class Collector
     public function taskSds(): string
     {
         $table = Schema::table('materials');
-        $r = DB::table($table)->where('status', 'active')->whereNotIn('brand', ['종류', '기타'])
-            ->where(static fn ($w) => $w->whereNull('sds_url')->orWhere('sds_url', ''))
-            ->where(static fn ($w) => $w->whereNull('ai_sds_at')->orWhere('ai_sds_at', '<', now()->subDays(30)))
-            ->orderByRaw('case when ai_sds_at is null then 0 else 1 end')->orderBy('ai_sds_at')->orderByDesc('id')->first();
+        $r = null;
+        foreach (self::tabs() as $tb) {   // 0.3.22 🗂 수집 순서대로 재료 탭 (필라멘트 → 레진 → 분말) · 수집 끈 탭은 뺌
+            if ($tb[3] !== 'materials') {
+                continue;
+            }
+            $r = DB::table($table)->where('status', 'active')->whereIn('kind', $tb[4])->whereNotIn('brand', ['종류', '기타'])
+                ->where(static fn ($w) => $w->whereNull('sds_url')->orWhere('sds_url', ''))
+                ->where(static fn ($w) => $w->whereNull('ai_sds_at')->orWhere('ai_sds_at', '<', now()->subDays(30)))
+                ->orderByRaw('case when ai_sds_at is null then 0 else 1 end')->orderBy('ai_sds_at')->orderByDesc('id')->first();
+            if ($r) {
+                break;
+            }
+        }
         if (! $r) {
             return '안전 자료 찾기: MSDS 가 빈 재료가 없어요.';
         }
