@@ -10,6 +10,9 @@ final class Settings
 {
     public static ?string $dirOverride = null;
 
+    /** 0.3.19 자동 수집 기본 순서 — 필라멘트 · 레진 먼저 */
+    public const COLLECT_ORDER = ['filament', 'resin', 'fdm', 'resin_printer', 'industrial', 'maker', 'tools', 'powder', 'parts'];
+
     /** @return array<string, mixed> */
     public static function defaults(): array
     {
@@ -34,6 +37,8 @@ final class Settings
             'task_fill' => true,              // 빈 제원 채우기
             'task_photo' => true,             // 사진 찾기
             'task_sds' => true,               // 안전 자료(MSDS) 찾기 — 재료
+            'collect_order' => self::COLLECT_ORDER,   // 0.3.19 🗂 자동 수집 탭 순서 (▲▼)
+            'collect_off' => [],              // 0.3.19 자동 수집에서 뺀 탭 (사이트에는 그대로 보임)
             'apply' => 'review',              // review = 제안함에 쌓고 관리자가 확인 · auto = 바로 반영
             'new_values' => false,            // 0.2.11 새 항목 제안에 AI 가 기억으로 적은 제원 · 소개 · 주소도 넣기 (끄면 이름 · 종류만 — 틀린 값이 많아서)
             'ai_paste' => true,               // 0.2.11 편집 창 「🤖 AI 로 정리해 넣기」 — 붙여 넣은(끌어 놓은) 글 · 주소에서 칸을 채움
@@ -124,6 +129,8 @@ final class Settings
             'task_fill' => $bool('task_fill'),
             'task_photo' => $bool('task_photo'),
             'task_sds' => $bool('task_sds'),
+            'collect_order' => self::order($raw['collect_order'] ?? null, $tabs),
+            'collect_off' => array_values(array_intersect($tabs, is_array($raw['collect_off'] ?? null) ? $raw['collect_off'] : [])),
             'apply' => ($raw['apply'] ?? '') === 'auto' ? 'auto' : 'review',
             'new_values' => $bool('new_values'),
             'ai_paste' => $bool('ai_paste'),
@@ -132,6 +139,24 @@ final class Settings
             'parts_member' => $bool('parts_member'),
             'parts_auto_votes' => $int('parts_auto_votes', 1, 50),
         ];
+    }
+
+    /** 0.3.19 수집 순서 — 아는 탭만 · 겹침 없이 · 빠진 탭은 기본 순서대로 뒤에 @return list<string> */
+    private static function order(mixed $raw, array $tabs): array
+    {
+        $out = [];
+        foreach (is_array($raw) ? $raw : [] as $k) {
+            if (is_string($k) && in_array($k, $tabs, true) && ! in_array($k, $out, true)) {
+                $out[] = $k;
+            }
+        }
+        foreach (array_merge(self::COLLECT_ORDER, $tabs) as $k) {
+            if (in_array($k, $tabs, true) && ! in_array($k, $out, true)) {
+                $out[] = $k;
+            }
+        }
+
+        return $out;
     }
 
     /** 화면에서 온 값 저장 — 키는 비워 보내면 그대로, clear_brave_key 면 지움 @param array<string, mixed> $in */
@@ -158,6 +183,7 @@ final class Settings
         $s['brave_key'] = '';
         $s['brave_key_set'] = $k !== '';
         $s['brave_key_hint'] = $k !== '' ? mb_substr($k, 0, 4).'…'.mb_substr($k, -4) : '';
+        $s['collect_tabs'] = array_map(static fn ($t) => ['key' => $t[0], 'label' => $t[1], 'icon' => $t[2]], Fields::TABS);   // 0.3.19 🗂 수집 순서 화면
 
         return $s;
     }

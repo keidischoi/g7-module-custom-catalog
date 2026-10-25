@@ -259,12 +259,19 @@
         row('하루 최대', '', num('auto_per_day', '개', 1, 500)) + '</div>' +
         '<div class="cct-panel"><h3>🧩 할 일</h3><p>켠 것을 차례로 돌아가며 해요.</p>' +
         row('🏢 회원이 등록한 것 가져오기', '재고 관리에서 회원이 적어 넣은 장비 모델 · 재료 — 재고 관리 규칙 그대로 (관리자가 승인했거나 서로 다른 업체 여러 곳이 쓴 것만 · 숨김/합침은 빼고). AI 를 쓰지 않아요', sw(S.task_members, 'data-b="task_members"')) +
-        row('🆕 새 모델 · 재료 찾기', '탭(FDM · 레진 프린터 · … · 필라멘트 · 레진 · 부품)을 번갈아, 탭 안에서는 제조사를 돌아가며 「목록에 없는 제품」을 AI 에게 물어요', sw(S.task_new, 'data-b="task_new"') ) +
+        row('🆕 새 모델 · 재료 찾기', '아래 🗂 수집 순서대로 탭을 번갈아, 탭 안에서는 제조사를 돌아가며 「목록에 없는 제품」을 AI 에게 물어요', sw(S.task_new, 'data-b="task_new"') ) +
         row('📝 빈 제원 채우기', '제원이 덜 찬 항목의 빈 칸만 물어요 (적혀 있는 값은 건드리지 않아요) · 탭을 번갈아 (부품 포함)', sw(S.task_fill, 'data-b="task_fill"')) +
         row('🖼️ 사진 찾기', '사진 없는 항목 — 탭을 번갈아 (부품 포함) · 제품 공식 페이지의 대표 사진 → 위키미디어 공용 순서로 (검색 키가 있으면 검색 먼저)', sw(S.task_photo, 'data-b="task_photo"')) +
         row('🧾 안전 자료(MSDS) 찾기', 'MSDS 가 빈 필라멘트 · 레진 · 분말 — 제품 공식 페이지의 SDS 링크 → 검색(키가 있으면) → AI 순서로. 주소를 열어 SDS 가 맞는지 확인한 것만 올려요', sw(S.task_sds, 'data-b="task_sds"')) +
         row('🆕 새 항목에 제원도 넣기', '끄면(권장) 새 항목 제안은 <b>이름 · 종류만</b> — AI 가 기억으로 적는 제원 · 소개 · 주소는 틀린 것이 많아요. 「✏️ 고쳐서 반영」 창의 「🤖 AI 로 정리해 넣기」로 진짜 자료를 붙여 넣어 채우세요', sw(S.new_values, 'data-b="new_values"')) +
         row('🤖 AI 로 정리해 넣기', '항목 편집 창 위에 상자 — 제품 페이지 글 · 주소를 붙여 넣거나 끌어 놓으면 AI 가 칸에 맞게 정리해 채워요 (글에 없는 값은 안 넣음)', sw(S.ai_paste, 'data-b="ai_paste"')) +
+        '</div><div class="cct-panel"><h3>🗂 수집 순서</h3><p>새 항목 · 제원 · 사진을 이 순서로 탭을 번갈아 찾아요. 끈 탭은 자동 수집에서만 빠져요 (사이트에는 그대로 보여요).</p>' +
+        S.collect_order.map(function (k, i) {   // 0.3.19
+          var t = (S.collect_tabs || []).filter(function (x) { return x.key === k; })[0] || { label: k, icon: '' }, hid = (S.tabs_off || []).indexOf(k) >= 0;
+          return '<div class="cct-row cct-ord"><div><b>' + (i + 1) + '. ' + t.icon + ' ' + esc(t.label) + '</b>' + (hid ? '<small>⚙️ 설정에서 숨긴 탭이라 수집하지 않아요</small>' : '') + '</div><span class="cct-num">' +
+            '<button type="button" class="cct-btn cct-btn--s" data-ord="' + i + '" data-d="-1"' + (i ? '' : ' disabled') + ' title="앞으로">▲</button><button type="button" class="cct-btn cct-btn--s" data-ord="' + i + '" data-d="1"' + (i < S.collect_order.length - 1 ? '' : ' disabled') + ' title="뒤로">▼</button>' +
+            sw(S.collect_off.indexOf(k) < 0, 'data-coff="' + k + '" title="자동 수집 켜기 · 끄기"') + '</span></div>'; }).join('') +
+        '</div><div class="cct-panel"><h3>✅ 찾은 것</h3>' +
         row('찾은 것을', '「확인 후 반영」을 권해요 — AI 는 없는 모델이나 틀린 숫자를 지어낼 수 있어요', '<select class="cct-sel" data-s="apply"><option value="review"' + (S.apply === 'review' ? ' selected' : '') + '>💡 제안함에 쌓기 (확인 후 반영)</option><option value="auto"' + (S.apply === 'auto' ? ' selected' : '') + '>⚡ 바로 반영</option></select>') +
         '</div><div class="cct-panel"><h3>🔎 사진 검색 (선택)</h3><p>검색 키가 없어도 돌아요 (공식 페이지 · 위키미디어 공용). Brave Search API 키를 넣으면 사진을 훨씬 잘 찾아요 — 키는 api.search.brave.com 에서 받아요. 제품 사진은 제조사에 저작권이 있으니, 출처가 같이 저장돼요.</p>' +
         row('검색', '', '<select class="cct-sel" data-s="search"><option value="none"' + (S.search === 'none' ? ' selected' : '') + '>쓰지 않음</option><option value="brave"' + (S.search === 'brave' ? ' selected' : '') + '>Brave Search</option></select>') +
@@ -278,6 +285,11 @@
       all('[data-b]', function (b) { b.onclick = function () { var k = b.getAttribute('data-b'); S[k] = !S[k]; b.classList.toggle('on', S[k]); }; });
       all('[data-n]', function (i) { i.onchange = function () { S[i.getAttribute('data-n')] = Number(i.value); }; });
       all('[data-s]', function (i) { i.onchange = function () { S[i.getAttribute('data-s')] = i.value; }; });
+      all('[data-ord]', function (b) { b.onclick = function () {   // 0.3.19 ▲▼ — 저장을 눌러야 남아요
+        var i = Number(b.getAttribute('data-ord')), j = i + Number(b.getAttribute('data-d')), o = S.collect_order; if (j < 0 || j >= o.length) return;
+        o.splice(j, 0, o.splice(i, 1)[0]); draw(d);
+      }; });
+      all('[data-coff]', function (b) { b.onclick = function () { var k = b.getAttribute('data-coff'), i = S.collect_off.indexOf(k); if (i >= 0) S.collect_off.splice(i, 1); else S.collect_off.push(k); b.classList.toggle('on', i >= 0); }; });
       var sg = body.querySelector('[data-to-sg]'); if (sg) sg.onclick = function (e) { e.preventDefault(); root.querySelector('[data-p="suggest"]').click(); };
       var save = function () {
         var out = JSON.parse(JSON.stringify(S)); out.brave_key = body.querySelector('[data-key]').value.trim();

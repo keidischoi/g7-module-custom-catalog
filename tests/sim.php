@@ -115,6 +115,8 @@ namespace {
     $tmp = sys_get_temp_dir().'/cct-sim-'.getmypid();
     @mkdir($tmp, 0777, true);
     Settings::$dirOverride = $tmp;
+    $defOrder19 = Settings::defaults()['collect_order'];
+    Settings::save(['collect_order' => array_column(\Modules\Custom\Catalog\Support\Fields::TABS, 0)]);   // 0.3.19 아래 옛 시험은 FDM 부터 도는 순서를 기대함
     PhotoService::$dirOverride = $tmp.'/img';
 
     $pass = $fail = 0;
@@ -931,6 +933,14 @@ namespace {
     t(\Modules\Custom\Catalog\Services\Collector::FILL_MAX === 4 && str_contains($src17, 'array_slice($empty, 0, self::FILL_MAX)'), '제원 채우기 한 번에 4칸 · 남으면 하루 뒤 다시 (0.3.18)');
     $f18 = \Modules\Custom\Catalog\Support\Fields::forKind('equipment', 'fdm');
     t(count(array_intersect(\Modules\Custom\Catalog\Services\Collector::SAMPLE_KEYS, array_column($f18, 'key'))) === 12 && str_contains($src17, 'self::SAMPLE_KEYS, 500'), '실제 정리 시험: 견본 글에 있는 12칸만 · 답 500 (0.3.18)');
+    // 0.3.19 🗂 수집 순서 · 수집 끈 탭
+    t(array_slice($defOrder19, 0, 2) === ['filament', 'resin'] && count($defOrder19) === count(\Modules\Custom\Catalog\Support\Fields::TABS), '수집 순서 기본: 필라멘트 · 레진 먼저 (0.3.19)');
+    Settings::save(['collect_order' => ['parts', 'parts', 'nope', 'resin'], 'collect_off' => ['fdm', 'nope']]);
+    $o19 = array_column(\Modules\Custom\Catalog\Services\Collector::tabs(), 0);
+    t($o19[0] === 'parts' && $o19[1] === 'resin' && $o19[2] === 'filament' && ! in_array('fdm', $o19, true) && Settings::get('collect_off') === ['fdm'], '수집 순서 바꾸기 · 끈 탭 빠짐 · 모르는 탭 · 겹침 버림 (0.3.19)');
+    Settings::save(['collect_order' => Settings::COLLECT_ORDER, 'collect_off' => []]);
+    $js19 = (string) file_get_contents(dirname(__DIR__).'/resources/assets/catalog-admin.js');
+    t(str_contains($js19, 'data-ord') && str_contains($js19, 'data-coff') && isset(Settings::forAdmin()['collect_tabs']), '자동 수집 탭: 🗂 수집 순서 ▲▼ · 켜기/끄기 (0.3.19)');
     echo "\n통과 {$pass} · 실패 {$fail}\n";
     exit($fail ? 1 : 0);
 }
