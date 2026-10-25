@@ -57,4 +57,5 @@ Route::middleware(['auth:sanctum', 'throttle:120,1'])->prefix('admin')->group(fu
     Route::get('ai/result/{id}', [AdminController::class, 'aiResult'])->where('id', '[a-f0-9]{20}');   // 0.2.22 뒤에서 하는 시험 결과
     Route::post('ai/test', [AdminController::class, 'aiTest'])->middleware('throttle:20,1');
     Route::post('ai/models', [AdminController::class, 'aiModels'])->middleware('throttle:20,1');
+    Route::post('ai/ping', [AdminController::class, 'aiPing'])->middleware('throttle:30,1');   // 0.3.15 🔌 서버가 살아 있나
 });

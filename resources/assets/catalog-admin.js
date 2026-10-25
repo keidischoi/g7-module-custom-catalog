@@ -313,6 +313,7 @@
         S.servers.map(function (sv, i) {
           var pv = provOf(sv.provider);
           return '<div class="cct-sv" data-sv="' + i + '"><div class="cct-sv__h"><b>' + (i + 1) + '순위</b><input class="cct-in" style="max-width:200px;height:34px" data-f="name" value="' + esc(sv.name) + '"><label style="font-size:13px;font-weight:700"><input type="checkbox" data-f="enabled"' + (sv.enabled ? ' checked' : '') + '> 켜기</label>' +
+            '<button type="button" class="cct-btn cct-btn--s" data-sping title="서버가 살아 있나만 봐요 (몇 초 · AI 에게 묻지 않음)">🔌 연결 확인</button><span class="cct-sv__st" data-sst></span>' +
             '<span style="flex:1"></span><button type="button" class="cct-btn cct-btn--s" data-sup>▲</button><button type="button" class="cct-btn cct-btn--s" data-sdown>▼</button><button type="button" class="cct-btn cct-btn--s cct-btn--d" data-srm>지우기</button></div><div class="cct-sv__g">' +
             '<label>종류</label><select class="cct-in" style="max-width:240px" data-f="provider">' + PROV.map(function (p) { return '<option value="' + p.value + '"' + (p.value === sv.provider ? ' selected' : '') + '>' + esc(p.name) + '</option>'; }).join('') + '</select>' +
             '<label>주소<small>비우면 ' + esc(pv.url) + '</small></label><input class="cct-in" data-f="url" value="' + esc(sv.url) + '" placeholder="' + esc(pv.url) + '">' +
@@ -336,6 +337,11 @@
         var i = Number(card.getAttribute('data-sv')), sv = S.servers[i];
         all('[data-f]', function (el) { el.onchange = el.oninput = function () { var k = el.getAttribute('data-f'); sv[k] = el.type === 'checkbox' ? el.checked : (el.type === 'number' ? Number(el.value) : el.value); if (k === 'provider' && el.tagName === 'SELECT') draw(status); }; }, card);
         var mv = function (arr, a, b) { if (b < 0 || b >= arr.length) return; arr.splice(b, 0, arr.splice(a, 1)[0]); draw(status); };
+        card.querySelector('[data-sping]').onclick = function () {   // 0.3.15 🔌 서버가 살아 있나
+          var b = this, st = card.querySelector('[data-sst]'); b.disabled = true; st.className = 'cct-sv__st'; st.textContent = '⏳ 확인 중…';
+          api('POST', '/admin/ai/ping', { server: serverFrom(i) }).then(function (x) { st.className = 'cct-sv__st ' + (x.ok ? 'is-ok' : 'is-bad'); st.textContent = x.message; })
+            .catch(function (e) { st.className = 'cct-sv__st is-bad'; st.textContent = '🔴 ' + e.message; }).then(function () { b.disabled = false; });
+        };
         card.querySelector('[data-sup]').onclick = function () { mv(S.servers, i, i - 1); };
         card.querySelector('[data-sdown]').onclick = function () { mv(S.servers, i, i + 1); };
         card.querySelector('[data-srm]').onclick = function () { if (confirm('이 서버를 지울까요?')) { S.servers.splice(i, 1); draw(status); } };

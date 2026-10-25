@@ -152,6 +152,26 @@ final class AiClient
         return $base + ['ok' => true, 'message' => '✅ '.$model.' — 서버에 있어요 ('.$sec.'초)'.$mem, 'sec' => $sec];
     }
 
+    /**
+     * 0.3.15 🔌 서버가 살아 있나 — 모델 목록을 한 번 받아 봄 (몇 초 · AI 에게 묻지 않음)
+     *
+     * @return array{ok: bool, message: string, sec: float}
+     */
+    public function ping(array $server): array
+    {
+        if ($server['provider'] !== 'ollama' && $server['api_key'] === '') {
+            return ['ok' => false, 'message' => '🔴 API 키가 없어요.', 'sec' => 0.0];
+        }
+        $t0 = microtime(true);
+        $r = $this->models($server);
+        $sec = round(microtime(true) - $t0, 1);
+        if (! $r['models']) {
+            return ['ok' => false, 'message' => '🔴 연결 안 됨 ('.$sec.'초) — '.$r['message'], 'sec' => $sec];
+        }
+
+        return ['ok' => true, 'message' => '🟢 연결됨 ('.$sec.'초 · 모델 '.count($r['models']).'개)', 'sec' => $sec];
+    }
+
     public function models(array $server): array
     {
         $req = AiProvider::modelsRequest($server['provider'], AiSettings::url($server), (string) $server['api_key']);
