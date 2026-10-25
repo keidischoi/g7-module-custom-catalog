@@ -79,7 +79,8 @@ final class AiProvider
 
             return ['url' => $base.'/chat/completions', 'headers' => $headers, 'body' => $body, 'family' => $family];
         }
-        $body = ['model' => $model, 'stream' => false, 'messages' => array_values($messages), 'keep_alive' => '30m',
+        // 0.3.20 think:false — 생각하는 모델(qwen3 · qwen3.5 · deepseek-r1 …)이 답 길이를 생각에 다 써 답이 비던 것
+        $body = ['model' => $model, 'stream' => false, 'think' => false, 'messages' => array_values($messages), 'keep_alive' => '30m',
             'options' => ['temperature' => $temp, 'num_predict' => $maxTokens, 'num_ctx' => self::ctxFor($messages, $maxTokens)]];
         if ($json) {
             $body['format'] = 'json';
@@ -155,7 +156,7 @@ final class AiProvider
         $msgs = $system ? [['role' => 'system', 'content' => implode("\n\n", $system)]] : [];
         $msgs[] = ['role' => 'user', 'content' => $text, 'images' => array_map(static fn ($i) => $i['data'], $images)];
 
-        return ['url' => $base.'/api/chat', 'headers' => $headers, 'body' => ['model' => $model, 'stream' => false, 'messages' => $msgs, 'format' => 'json', 'keep_alive' => '30m',
+        return ['url' => $base.'/api/chat', 'headers' => $headers, 'body' => ['model' => $model, 'stream' => false, 'think' => false, 'messages' => $msgs, 'format' => 'json', 'keep_alive' => '30m',
             // 0.9.37 사진 요청은 문맥 크기를 8192 로 — 32768 이면 그림 모델(llava · qwen2.5vl …)이 메모리를 너무 많이 잡아 Ollama 가 연결을 끊었음 (cURL 52 · 56)
             'options' => ['temperature' => 0.2, 'num_predict' => $maxTokens, 'num_ctx' => 8192]], 'family' => $family];
     }
