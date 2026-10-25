@@ -942,6 +942,7 @@ namespace {
     Settings::save(['collect_order' => Settings::COLLECT_ORDER, 'collect_off' => []]);
     $js19 = (string) file_get_contents(dirname(__DIR__).'/resources/assets/catalog-admin.js');
     t(str_contains($js19, 'data-ord') && str_contains($js19, 'data-coff') && isset(Settings::forAdmin()['collect_tabs']), '자동 수집 탭: 🗂 수집 순서 ▲▼ · 켜기/끄기 (0.3.19)');
+    t(substr_count((string) file_get_contents(dirname(__DIR__).'/resources/assets/catalog-admin.js'), 'data-run=""') === 2, '자동 수집 탭: ▶ 지금 한 번 돌리기 단추 (위 · 아래) (0.3.21)');
     echo "\n통과 {$pass} · 실패 {$fail}\n";
     exit($fail ? 1 : 0);
 }
