@@ -585,6 +585,7 @@ namespace {
     (new AiClient())->json('x');
     $b1 = end($bodies);
     t($b1['options']['temperature'] === 0.4 && $b1['options']['num_predict'] === 4000 && $b1['options']['num_ctx'] === 8192, '다른 물음은 설정 그대로 (온도 0.4) · 문맥만 맞춤');
+    t(($b0['think'] ?? null) === false && ($b1['think'] ?? null) === false, 'Ollama 물음은 think:false — 생각하는 모델도 답이 비지 않게 (0.3.20)');
     echo "■ 0.2.22 로컬 300초 · 한국어로만 · keep_alive 30분 · 🎨 실제 정리 시험\n";
     $seen22 = [];
     AiClient::$sender = function (string $url, array $h, array $body, int $timeout) use (&$seen22) {
