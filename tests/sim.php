@@ -322,8 +322,8 @@ namespace {
     $col->apply($sg['items'][0]['id']);
     $pd = $svc->detail(...array_merge($svc->find('bambu-lab-p1s-fdm'), [true]));
     $fillAt = (string) DB::table('cat_equipment')->where('key', 'bambu-lab-p1s-fdm')->value('ai_fill_at');
-    t(strtotime($fillAt) < time() - 58 * 86400, '제원 채우기: 칸이 6개보다 많으면 하루 뒤 다시 고름 (0.3.17)');
-    t($pd['values']['build_x_mm'] === 256 && count(array_intersect_key($pd['values'], array_flip(['speed_max', 'nozzle_temp_max', 'structure', 'camera', 'noise_db', 'weight_kg', 'power_w', 'size_w']))) <= 6 + 2 && $pd['values']['extruder'] === '다이렉트' && $pd['summary'] !== '' && $pd['homepage_url'] === 'https://bambulab.com/en/p1s', '빈 칸만 채움 (적혀 있던 256 은 그대로) · 목록에 없는 값(모름)은 버림');
+    t(strtotime($fillAt) < time() - 58 * 86400, '제원 채우기: 칸이 4개보다 많으면 하루 뒤 다시 고름 (0.3.18)');
+    t($pd['values']['build_x_mm'] === 256 && count(array_intersect_key($pd['values'], array_flip(['speed_max', 'nozzle_temp_max', 'structure', 'camera', 'noise_db', 'weight_kg', 'power_w', 'size_w']))) <= 4 + 2 && $pd['values']['extruder'] === '다이렉트' && $pd['summary'] !== '' && $pd['homepage_url'] === 'https://bambulab.com/en/p1s', '빈 칸만 채움 (적혀 있던 256 은 그대로) · 목록에 없는 값(모름)은 버림');
     t($pd['issues'] === ['보조 팬 소음이 큰 편', '고온 재료는 챔버 온도가 아쉬움'], 'AI 가 알려 준 알려진 문제도 (너무 짧은 것은 버림)');
 
     echo "■ 사진 찾기\n";
@@ -928,7 +928,9 @@ namespace {
     t(str_contains($js15, 'data-sping') && str_contains($js15, "'/admin/ai/ping'"), '🔌 서버 카드마다 연결 확인 단추 (0.3.15)');
     t(str_contains($js15, 'if (busy === sig) return;') && str_contains($js15, 'drawn = { sig: sig, el: root.firstChild }'), '설정 화면 한 번만 그리기 · 틀이 바뀌면 옮겨 붙임 (0.3.16)');
     $src17 = (string) file_get_contents(dirname(__DIR__).'/src/Services/Collector.php');
-    t(\Modules\Custom\Catalog\Services\Collector::FILL_MAX === 6 && str_contains($src17, 'array_slice($empty, 0, self::FILL_MAX)'), '제원 채우기 한 번에 6칸 · 남으면 하루 뒤 다시 (0.3.17)');
+    t(\Modules\Custom\Catalog\Services\Collector::FILL_MAX === 4 && str_contains($src17, 'array_slice($empty, 0, self::FILL_MAX)'), '제원 채우기 한 번에 4칸 · 남으면 하루 뒤 다시 (0.3.18)');
+    $f18 = \Modules\Custom\Catalog\Support\Fields::forKind('equipment', 'fdm');
+    t(count(array_intersect(\Modules\Custom\Catalog\Services\Collector::SAMPLE_KEYS, array_column($f18, 'key'))) === 12 && str_contains($src17, 'self::SAMPLE_KEYS, 500'), '실제 정리 시험: 견본 글에 있는 12칸만 · 답 500 (0.3.18)');
     echo "\n통과 {$pass} · 실패 {$fail}\n";
     exit($fail ? 1 : 0);
 }

@@ -17,7 +17,7 @@ use Modules\Custom\Catalog\Support\Schema;
  */
 final class Catalog
 {
-    public const VERSION = '0.3.17';
+    public const VERSION = '0.3.18';
 
     /** @return array<string, list<array<string, mixed>>> */
     public static function equipmentBook(): array
