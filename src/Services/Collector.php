@@ -306,8 +306,8 @@ final class Collector
     /** 0.3.14 새 항목 찾기 — 한 번에 묻는 개수 (6 → 3) */
     public const NEW_MAX = 3;
 
-    /** 0.3.17 제원 채우기 — 한 번에 묻는 빈 칸 수 (남은 칸은 다음 날 다시) */
-    public const FILL_MAX = 6;
+    /** 0.3.17 제원 채우기 — 한 번에 묻는 빈 칸 수 (남은 칸은 다음 날 다시) · 0.3.18 6 → 4 (216 에서 582초로 아슬아슬) */
+    public const FILL_MAX = 4;
 
     public function taskNew(): string
     {
@@ -408,7 +408,7 @@ final class Collector
                 if (count($empty) < 4 || DB::table(Schema::SUGGEST)->where('task', 'fill')->where('item_key', $r->key)->where('status', 'pending')->exists()) {
                     continue;
                 }
-                $more = count($empty) > self::FILL_MAX;   // 0.3.17 한 번에 6칸만 — 남으면 하루 뒤 다시 고름 (60일 아님)
+                $more = count($empty) > self::FILL_MAX;   // 0.3.17 한 번에 FILL_MAX 칸만 — 남으면 하루 뒤 다시 고름 (60일 아님)
                 $empty = array_slice($empty, 0, self::FILL_MAX);
                 if ($more) {
                     DB::table($table)->where('id', $r->id)->update(['ai_fill_at' => now()->subDays(59)]);
@@ -736,7 +736,8 @@ final class Collector
      *
      * @throws \InvalidArgumentException|\RuntimeException
      */
-    public function extract(string $type, string $kind, string $text, string $brand = '', string $title = ''): array
+    /** @param  list<string>  $only  0.3.18 이 칸만 물음 (비우면 모든 칸) · $maxTokens 답 길이 한도 */
+    public function extract(string $type, string $kind, string $text, string $brand = '', string $title = '', array $only = [], int $maxTokens = 1500): array
     {
         $type = in_array($type, ['materials', 'parts'], true) ? $type : 'equipment';
         $text = trim($text);
@@ -761,10 +762,13 @@ final class Collector
         $kindList = implode(', ', array_map(static fn ($k) => $k.'('.Fields::kindLabel($type, $k).')', $kinds));
         $keys = [];
         foreach (Fields::forKind($type, $kind) as $d) {
+            if ($only && ! in_array($d['key'], $only, true)) {
+                continue;
+            }
             $keys[] = $d['key'].': '.$d['label'].($d['unit'] ? ' ('.$d['unit'].', 숫자만)' : '').($d['options'] && $d['type'] === 'sel' ? ' ['.implode('|', $d['options']).']' : '')
                 .($d['type'] === 'bool' ? ' [true|false]' : '').($d['type'] === 'tags' ? ' [배열]' : '');
         }
-        $this->ai->opt = ['temperature' => 0, 'max_tokens' => 1500];   // 0.2.17 정리하기: 지어내지 않게 · 답은 짧게
+        $this->ai->opt = ['temperature' => 0, 'max_tokens' => $maxTokens];   // 0.2.17 정리하기: 지어내지 않게 · 답은 짧게
         try {
             $j = $this->ai->json("아래 [글]은 관리자가 붙여 넣은 제품 자료다. 이 글에 **적혀 있는 것만** 골라 칸에 맞게 정리해 줘.\n"
             ."- 글에 없는 값은 넣지 않는다 (기억 · 추측 금지). 단위는 [칸]의 괄호 단위로 바꿔 숫자만 (예: mm/s 칸에 0.25 m/s → 250 · kg 칸에 26 kg → 26 · g 칸에 1 kg → 1000).\n"
@@ -992,6 +996,9 @@ final class Collector
     }
 
     /** 0.2.22 🎨 실제 정리 시험 — 견본 제원 글 (Bambu Lab A1) */
+    /** 0.3.18 견본 글에 적힌 칸 — 실제 정리 시험은 이 칸만 물음 */
+    public const SAMPLE_KEYS = ['structure', 'build_x_mm', 'build_y_mm', 'build_z_mm', 'speed_max', 'accel_max', 'nozzle_temp_max', 'bed_temp_max', 'leveling', 'materials', 'connect', 'weight_kg'];
+
     public const SAMPLE_TEXT = "Bambu Lab A1 — 제원\n출력 크기 : 256 × 256 × 256 mm\n최대 출력 속도 : 500 mm/s\n최대 가속도 : 10000 mm/s²\n노즐 최고 온도 : 300 °C\n베드 최고 온도 : 100 °C\n"
         ."자동 레벨링 : 지원\n구조 : 베드 슬링어\n지원 필라멘트 : PLA, PETG, TPU, PVA\n무게 : 8.3 kg\nWi-Fi : 지원\n";
 
@@ -1012,7 +1019,7 @@ final class Collector
         AiClient::$settingsOverride = array_merge($s, ['enabled' => true]);
         $t0 = microtime(true);
         try {
-            $x = $this->extract('equipment', 'fdm', self::SAMPLE_TEXT, 'Bambu Lab', 'A1');
+            $x = $this->extract('equipment', 'fdm', self::SAMPLE_TEXT, 'Bambu Lab', 'A1', self::SAMPLE_KEYS, 500);   // 0.3.18 견본 글에 있는 12칸만 · 답 500 — 45칸 다 물으면 느린 서버에서 600초 초과
         } catch (\Throwable $e) {
             $m = '❌ 실제 정리 시험에 모두 답하지 못했어요 ('.round(microtime(true) - $t0, 1).'초) — '.mb_substr($e->getMessage(), 0, 300);
 
