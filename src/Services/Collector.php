@@ -130,6 +130,7 @@ final class Collector
                 $st['turn']++;
                 $st['count']++;
                 Settings::saveState($st);
+                $this->ai->opt = ['max_tokens' => self::TOKENS[$task] ?? 800];   // 0.3.14 답 길이를 줄여 느린 로컬 서버에서도 시간 안에
                 try {
                     $line = match ($task) {
                         'members' => $this->taskMembers(),
@@ -141,6 +142,7 @@ final class Collector
                 } catch (\Throwable $e) {
                     $line = '⚠ '.['members' => '회원 등록 가져오기', 'new' => '새 항목 찾기', 'fill' => '제원 채우기', 'photo' => '사진 찾기', 'sds' => '안전 자료 찾기'][$task].': '.mb_substr($e->getMessage(), 0, 200);
                 }
+                $this->ai->opt = [];
                 Settings::log($line);
                 $ran[] = $line;
             }
@@ -298,6 +300,12 @@ final class Collector
         return $first;
     }
 
+    /** 0.3.14 자동 수집 할 일마다 답 길이 한도 (토큰) — 설정의 max_tokens 보다 크면 설정 쪽 */
+    public const TOKENS = ['members' => 400, 'new' => 900, 'fill' => 700, 'photo' => 400, 'sds' => 300];
+
+    /** 0.3.14 새 항목 찾기 — 한 번에 묻는 개수 (6 → 3) */
+    public const NEW_MAX = 3;
+
     public function taskNew(): string
     {
         // 0.3.11 탭을 번갈아 (FDM → 레진 프린터 → … → 필라멘트 → 레진 → 분말 → 부품) · 탭 안에서는 제조사를 돌아가며
@@ -332,11 +340,11 @@ final class Collector
             $keys[] = $d['key'].': '.$d['label'].($d['unit'] ? ' ('.$d['unit'].')' : '').($d['options'] && $d['type'] === 'sel' ? ' ['.implode('|', $d['options']).']' : '').($d['type'] === 'bool' ? ' [true|false]' : '');
         }
         $what = match ($type) { 'materials' => '재료 제품(필라멘트 · 레진 등)', 'parts' => '부품 · 업그레이드 제품', default => '장비' };
-        $j = $this->ai->json("제조사 「{$brand}」의 {$tab[1]} {$what} 중에서, 아래 「이미 있는 목록」에 없는 실제 제품을 최대 6개 알려 줘.\n"
+        $j = $this->ai->json("제조사 「{$brand}」의 {$tab[1]} {$what} 중에서, 아래 「이미 있는 목록」에 없는 실제 제품을 최대 ".self::NEW_MAX."개 알려 줘.\n"
             ."- 확실히 아는 실제 제품만. 없거나 잘 모르면 items 를 빈 배열로.\n- 같은 제품을 다른 표기로 다시 적지 않는다.\n"
             ."- kind 는 다음 중 하나: {$kinds}\n- values 는 아래 칸 중 확실한 것만 (모르면 넣지 않음).\n"
             ."- sources 에는 이 제품 · 값을 확인할 수 있는 실제 페이지 주소(제조사 공식 페이지 우선)를 최대 3개. 모르면 빈 배열 — 주소를 지어내지 않는다.\n"
-            .'- summary 는 한국어 한두 문장.'."\n\n[이미 있는 목록]\n".($have ? implode(', ', array_slice($have, 0, 150)) : '(없음)')
+            .'- summary 는 한국어 한두 문장.'."\n\n[이미 있는 목록]\n".($have ? implode(', ', array_slice($have, 0, 80)) : '(없음)')
             ."\n\n[칸]\n".implode("\n", $keys)
             ."\n\n[답 모양]\n".'{"items":[{"'.($type === 'materials' ? 'name' : 'model').'":"","kind":"'.$tab[4][0].'","homepage_url":"","summary":"","values":{},"sources":[]}]}');
         $items = is_array($j['items'] ?? null) ? $j['items'] : (array_is_list($j) ? $j : []);
@@ -348,7 +356,7 @@ final class Collector
             $known[CatalogService::norm(preg_replace('/^'.preg_quote($brand, '/').'\s+/iu', '', (string) $t))] = true;
         }
         $added = [];
-        foreach (array_slice($items, 0, 8) as $it) {
+        foreach (array_slice($items, 0, self::NEW_MAX + 1) as $it) {
             if (! is_array($it)) {
                 continue;
             }

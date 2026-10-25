@@ -569,8 +569,9 @@ namespace {
     t($seen === ['PC/bad', 'PC/qwen2.5:14b'], 'AI 물어보기 직전마다 알림 (진행 상태)');
     echo "■ Ollama 문맥 크기 · 정리하기 온도 (0.2.17)\n";
     $msg = fn (int $n) => [['role' => 'user', 'content' => str_repeat('가', $n)]];
-    t(\Modules\Custom\Catalog\Support\AiProvider::ctxFor($msg(1000), 1500) === 4096 && \Modules\Custom\Catalog\Support\AiProvider::ctxFor($msg(5000), 1500) === 8192
-        && \Modules\Custom\Catalog\Support\AiProvider::ctxFor($msg(12000), 1500) === 16384 && \Modules\Custom\Catalog\Support\AiProvider::ctxFor($msg(40000), 1500) === 32768, '문맥 크기를 물음 길이에 맞춤 (늘 32K 아님)');
+    t(\Modules\Custom\Catalog\Support\AiProvider::ctxFor($msg(1000), 1500) === 8192 && \Modules\Custom\Catalog\Support\AiProvider::ctxFor($msg(10), 100) === 8192 && \Modules\Custom\Catalog\Support\AiProvider::ctxFor($msg(5000), 1500) === 8192
+        && \Modules\Custom\Catalog\Support\AiProvider::ctxFor($msg(12000), 1500) === 16384 && \Modules\Custom\Catalog\Support\AiProvider::ctxFor($msg(40000), 1500) === 32768, '문맥 크기 8192 고정 · 넘칠 때만 16K · 32K (0.3.14)');
+    t(\Modules\Custom\Catalog\Services\Collector::TOKENS['new'] <= 900 && \Modules\Custom\Catalog\Services\Collector::TOKENS['fill'] <= 700 && \Modules\Custom\Catalog\Services\Collector::NEW_MAX === 3, '자동 수집 답 길이 한도 · 새 항목 한 번에 3개 (0.3.14)');
     $bodies = [];
     AiClient::$sender = function (string $url, array $h, array $body) use (&$bodies) { $bodies[] = $body; return ['message' => ['content' => '{"values":{"build_x_mm":192}}']]; };
     AiClient::$settingsOverride = ['enabled' => true, 'max_tokens' => 4000, 'servers' => [['id' => 's1', 'name' => 'Ollama', 'enabled' => true, 'provider' => 'ollama', 'url' => 'http://127.0.0.1:11434', 'models' => ['qwen2.5:0.5b']]]];
