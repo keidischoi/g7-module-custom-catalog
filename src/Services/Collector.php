@@ -306,6 +306,9 @@ final class Collector
     /** 0.3.14 새 항목 찾기 — 한 번에 묻는 개수 (6 → 3) */
     public const NEW_MAX = 3;
 
+    /** 0.3.17 제원 채우기 — 한 번에 묻는 빈 칸 수 (남은 칸은 다음 날 다시) */
+    public const FILL_MAX = 6;
+
     public function taskNew(): string
     {
         // 0.3.11 탭을 번갈아 (FDM → 레진 프린터 → … → 필라멘트 → 레진 → 분말 → 부품) · 탭 안에서는 제조사를 돌아가며
@@ -405,14 +408,19 @@ final class Collector
                 if (count($empty) < 4 || DB::table(Schema::SUGGEST)->where('task', 'fill')->where('item_key', $r->key)->where('status', 'pending')->exists()) {
                     continue;
                 }
+                $more = count($empty) > self::FILL_MAX;   // 0.3.17 한 번에 6칸만 — 남으면 하루 뒤 다시 고름 (60일 아님)
+                $empty = array_slice($empty, 0, self::FILL_MAX);
+                if ($more) {
+                    DB::table($table)->where('id', $r->id)->update(['ai_fill_at' => now()->subDays(59)]);
+                }
                 $title = $r->brand.' '.$r->{CatalogService::titleCol($type)};
                 $keys = array_map(static fn ($d) => $d['key'].': '.$d['label'].($d['unit'] ? ' ('.$d['unit'].', 숫자만)' : '').($d['options'] && $d['type'] === 'sel' ? ' ['.implode('|', $d['options']).']' : '')
                     .($d['type'] === 'bool' ? ' [true|false]' : '').($d['type'] === 'tags' ? ' [배열]' : ''), $empty);
                 $j = $this->ai->json("제품 「{$title}」 (".Fields::kindLabel($type, (string) $r->kind).")의 공개 제원을 아래 칸에 채워 줘.\n"
                     ."- 제조사가 공개한 값 중 확실히 아는 것만. 모르는 칸은 null (추측 금지).\n- 숫자 칸은 단위 없이 숫자만.\n"
-                    .(trim((string) ($r->summary ?? '')) === '' ? "- summary: 이 제품을 소개하는 한국어 두세 문장 (사실만).\n" : '')
+                    .(trim((string) ($r->summary ?? '')) === '' ? "- summary: 이 제품을 소개하는 한국어 한두 문장 (사실만).\n" : '')
                     .(trim((string) ($r->homepage_url ?? '')) === '' ? "- homepage_url: 이 제품의 제조사 공식 페이지 주소 (확실할 때만).\n" : '')
-                    .(trim((string) ($r->issues ?? '')) === '' ? "- issues: 이 제품을 쓰는 사람들 사이에 널리 알려진 문제 · 고질병 · 주의할 점 (한국어 짧은 문장 2~5개의 배열 · 확실한 것만 · 모르면 빈 배열).\n" : '')
+                    .(trim((string) ($r->issues ?? '')) === '' ? "- issues: 이 제품을 쓰는 사람들 사이에 널리 알려진 문제 · 고질병 · 주의할 점 (한국어 짧은 문장 3개까지의 배열 · 확실한 것만 · 모르면 빈 배열).\n" : '')
                     ."- sources: 이 값들을 확인할 수 있는 실제 페이지 주소(제조사 공식 제원 페이지 우선) 최대 3개. 모르면 빈 배열 — 주소를 지어내지 않는다.\n"
                     ."\n[칸]\n".implode("\n", $keys)."\n\n[답 모양]\n".'{"values":{"칸 키":값},"summary":"","homepage_url":"","issues":[],"sources":[]}');
                 $in = is_array($j['values'] ?? null) ? $j['values'] : $j;
@@ -431,7 +439,7 @@ final class Collector
                     $payload['homepage_url'] = trim($j['homepage_url']);
                 }
                 if (trim((string) ($r->issues ?? '')) === '' && is_array($j['issues'] ?? null)) {
-                    $iss = array_slice(array_values(array_filter(array_map(static fn ($x) => is_string($x) ? mb_substr(trim(strip_tags($x)), 0, 200) : '', $j['issues']), static fn ($x) => mb_strlen($x) >= 6)), 0, 6);
+                    $iss = array_slice(array_values(array_filter(array_map(static fn ($x) => is_string($x) ? mb_substr(trim(strip_tags($x)), 0, 200) : '', $j['issues']), static fn ($x) => mb_strlen($x) >= 6)), 0, 3);
                     if ($iss) {
                         $payload['issues'] = implode("\n", $iss);
                     }
