@@ -250,7 +250,8 @@
         '<div class="cct-bar"><span class="cct-state ' + (c.quiet.ok ? 'ok' : 'no') + '">' + (c.quiet.ok ? '🟢 지금 돌 수 있어요' : '⏸ ' + esc(c.quiet.reason)) + '</span>' +
         '<span class="cct-state ' + (c.ai.enabled ? 'ok' : 'no') + '">' + (c.ai.enabled ? '🤖 AI 연결됨' : '🤖 ' + esc(c.ai.reason)) + '</span>' +
         (c.load !== null ? '<span class="cct-chip">서버 부하 ' + c.load + '%</span>' : '') + '<span class="cct-chip">오늘 ' + c.today + '개</span>' + (c.last ? '<span class="cct-chip">마지막 ' + esc(c.last) + '</span>' : '') +
-        (c.pending ? '<a class="cct-chip on" href="?p=suggest" data-to-sg>💡 기다리는 제안 ' + c.pending + '</a>' : '') + '</div>' +
+        (c.pending ? '<a class="cct-chip on" href="?p=suggest" data-to-sg>💡 기다리는 제안 ' + c.pending + '</a>' : '') +
+        '<span style="flex:1"></span><button type="button" class="cct-btn cct-btn--p" data-run="" title="켠 할 일을 수집 순서대로 「한 번에 하는 일」 수만큼 — 시간 · 부하 조건은 보지 않아요">▶ 지금 한 번 돌리기</button></div>' +   // 0.3.21
         row('자동 수집 켜기', '끄면 아래 「지금 한 번 돌리기」로만 돌아요', sw(S.auto, 'data-b="auto"')) +
         row('도는 시간', '이 시간대에만 (시작과 끝이 같으면 하루 종일) · 자정을 넘겨도 돼요 (예: 22시 ~ 6시)', '<span class="cct-num"><input class="cct-in" type="number" min="0" max="23" data-n="auto_from" value="' + S.auto_from + '"> 시 ~ <input class="cct-in" type="number" min="0" max="23" data-n="auto_to" value="' + S.auto_to + '"> 시</span>') +
         row('서버 부하 기준', '이 서버(웹 서버)의 CPU 부하가 이보다 낮을 때만 돌아요', num('auto_load', '% 아래', 5, 100)) +
@@ -277,7 +278,7 @@
         row('검색', '', '<select class="cct-sel" data-s="search"><option value="none"' + (S.search === 'none' ? ' selected' : '') + '>쓰지 않음</option><option value="brave"' + (S.search === 'brave' ? ' selected' : '') + '>Brave Search</option></select>') +
         row('Brave API 키', S.brave_key_set ? '저장됨 · ' + esc(S.brave_key_hint) + ' (비워 두면 그대로)' : '없음', '<span class="cct-num"><input class="cct-in" style="width:220px;text-align:left" type="password" autocomplete="new-password" data-key placeholder="' + (S.brave_key_set ? '바꿀 때만 입력' : '키 입력') + '">' + (S.brave_key_set ? '<label style="font-size:12.5px"><input type="checkbox" data-key-clear> 지우기</label>' : '') + '</span>') +
         '</div><div class="cct-bar" style="margin-bottom:16px"><button type="button" class="cct-btn cct-btn--p" data-save>저장</button><span style="flex:1"></span>' +
-        '<button type="button" class="cct-btn" data-run="members">🏢 회원 등록 가져오기</button><button type="button" class="cct-btn" data-run="new">🆕 새 항목 찾기 한 번</button><button type="button" class="cct-btn" data-run="fill">📝 제원 채우기 한 번</button><button type="button" class="cct-btn" data-run="photo">🖼️ 사진 찾기 한 번</button><button type="button" class="cct-btn" data-run="sds">🧾 안전 자료 찾기 한 번</button></div>' +
+        '<button type="button" class="cct-btn cct-btn--p" data-run="">▶ 지금 한 번 돌리기</button><button type="button" class="cct-btn" data-run="members">🏢 회원 등록 가져오기</button><button type="button" class="cct-btn" data-run="new">🆕 새 항목 찾기 한 번</button><button type="button" class="cct-btn" data-run="fill">📝 제원 채우기 한 번</button><button type="button" class="cct-btn" data-run="photo">🖼️ 사진 찾기 한 번</button><button type="button" class="cct-btn" data-run="sds">🧾 안전 자료 찾기 한 번</button></div>' +
         '<div class="cct-out" data-run-out></div>' +
         '<div class="cct-panel"><h3>📜 한 일</h3>' + (c.log.length ? '<div class="cct-log">' + c.log.map(function (l) { return '<div><time>' + esc(l.at) + '</time>' + esc(l.text) + '</div>'; }).join('') + '</div>' : '<p>아직 없어요.</p>') + '</div>' +
         '<p class="cct-note">서버 스케줄(크론)이 돌고 있으면 10분마다 알아서 살펴봐요. 스케줄이 없는 서버에서는 누가 카탈로그 화면을 열 때 살펴봐요. 직접 돌리려면: <code>php artisan catalog:collect --force</code></p>';
@@ -299,8 +300,8 @@
       body.querySelector('[data-save]').onclick = function () { var b = this; b.disabled = true; save().then(function (r) { C().toast('저장했어요.'); draw(r); }).catch(function (e) { b.disabled = false; C().toast(e.message); }); };
       all('[data-run]', function (b) { b.onclick = function () {
         var out = body.querySelector('[data-run-out]'); all('[data-run]', function (x) { x.disabled = true; });
-        out.textContent = '⏳ AI 에게 묻는 중… (모델에 따라 몇 분 걸릴 수 있어요)';
-        save().then(function () { return api('POST', '/admin/collect/run', { task: b.getAttribute('data-run') }); }).then(function (r) { draw({ settings: S_after(r), collect: r.collect }); var o = body.querySelector('[data-run-out]'); o.textContent = (r.ran || []).join('\n') || api.last || ''; })
+        out.textContent = '⏳ AI 에게 묻는 중… (모델에 따라 몇 분 걸릴 수 있어요)'; try { out.scrollIntoView({ block: 'center', behavior: 'smooth' }); } catch (e) {}   // 0.3.21 위 단추로 눌러도 결과가 보이게
+        save().then(function () { return api('POST', '/admin/collect/run', { task: b.getAttribute('data-run') }); }).then(function (r) { draw({ settings: S_after(r), collect: r.collect }); var o = body.querySelector('[data-run-out]'); o.textContent = (r.ran || []).join('\n') || api.last || ''; try { o.scrollIntoView({ block: 'center' }); } catch (e) {} })
           .catch(function (e) { out.textContent = '❌ ' + e.message; all('[data-run]', function (x) { x.disabled = false; }); });
       }; });
     };
