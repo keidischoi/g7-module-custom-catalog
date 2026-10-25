@@ -924,6 +924,7 @@ namespace {
     t($pg['ok'] && str_contains($pg['message'], '모델 2개') && ! $pb['ok'] && str_contains($pb['message'], '연결 안 됨'), '🔌 서버 연결 확인: 살아 있음 / 안 됨 (0.3.15)');
     $js15 = (string) file_get_contents(dirname(__DIR__).'/resources/assets/catalog-admin.js');
     t(str_contains($js15, 'data-sping') && str_contains($js15, "'/admin/ai/ping'"), '🔌 서버 카드마다 연결 확인 단추 (0.3.15)');
+    t(str_contains($js15, 'if (busy === sig) return;') && str_contains($js15, 'drawn = { sig: sig, el: root.firstChild }'), '설정 화면 한 번만 그리기 · 틀이 바뀌면 옮겨 붙임 (0.3.16)');
     echo "\n통과 {$pass} · 실패 {$fail}\n";
     exit($fail ? 1 : 0);
 }
