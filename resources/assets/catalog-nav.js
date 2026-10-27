@@ -1,4 +1,5 @@
-/*! custom-catalog 0.2.10 — 헤더 메인 메뉴 「3D 카탈로그」 */
+/*! custom-catalog 0.3.23 — 헤더 메인 메뉴 「3D 카탈로그」
+ * 0.3.23 G7Core.router 는 없음 → 늘 location.href 로 빠져 페이지 전체가 다시 그려졌음(번쩍). 코어 navigate 로 */
 (function () {
   "use strict";
   if (window.__cctNav) { try { window.__cctNav(); } catch (e) {} return; }
@@ -34,7 +35,7 @@
     el.addEventListener("click", function (e) {
       if (e.metaKey || e.ctrlKey || e.shiftKey) return;
       e.preventDefault();
-      try { if (window.G7Core && G7Core.router && G7Core.router.push) { G7Core.router.push(PATH); return; } } catch (err) {}
+      try { if (window.G7Core && typeof G7Core.dispatch === "function") { G7Core.dispatch({ handler: "navigate", params: { path: PATH } }); return; } } catch (err) {}
       location.href = PATH;
     });
     return el;
