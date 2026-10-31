@@ -3,11 +3,13 @@
 namespace Modules\Custom\Catalog\Support;
 
 use Illuminate\Support\Facades\DB;
+use Modules\Custom\Catalog\Services\CatalogService;
 
 /**
  * 0.3.24 레진 공식 제원 — resources/assets/resin-specs.json (제조사 페이지 원문과 대조한 값).
  *  빈 칸만 채움 · 이미 있는 값은 그대로 두고 다르면 conflicts 에 적음 · 범위 값은 ranges 에 원문, 칸에는 가운데 값.
  *  노출은 레진 + 프린터 + 층 높이 조합이라 print_profiles 로 — exposure_s 한 칸에 넣지 않음.
+ *  0.3.25 카탈로그에 없는 제품은 create 로 새로 만듦 · grade slicer = 제조사 슬라이서 내장 값 (주소 없음)
  */
 final class ResinSpecs
 {
@@ -59,7 +61,7 @@ final class ResinSpecs
         if (! empty($item['profiles'])) {
             $specs['print_profiles'] = $item['profiles'];
         }
-        $specs['resin_src'] = array_filter(['grade' => $grade, 'url' => $item['url'], 'at' => $at, 'note' => $item['note'] ?? null, 'conflicts' => $conflicts ?: null]);
+        $specs['resin_src'] = array_filter(['grade' => $item['grade'] ?? $grade, 'url' => $item['url'] ?? null, 'at' => $at, 'note' => $item['note'] ?? null, 'conflicts' => $conflicts ?: null]);
 
         return $specs;
     }
@@ -70,9 +72,13 @@ final class ResinSpecs
         $data = self::data();
         $n = 0;
         foreach ($data['items'] as $item) {
-            foreach (DB::table(Schema::MATERIALS)->whereIn('key', $item['keys'])->where('kind', 'resin')->get() as $r) {
+            $keys = $item['keys'];
+            if (! empty($item['create'])) {
+                $keys[] = self::ensure($item['create']);
+            }
+            foreach (DB::table(Schema::MATERIALS)->whereIn('key', $keys)->where('kind', 'resin')->get() as $r) {
                 $up = ['specs' => json_encode(self::merge(Schema::json($r->specs ?? null), $item, $data['checked_at'], $data['grade']), JSON_UNESCAPED_UNICODE)];
-                if (trim((string) ($r->homepage_url ?? '')) === '') {
+                if (trim((string) ($r->homepage_url ?? '')) === '' && ! empty($item['url'])) {
                     $up['homepage_url'] = $item['url'];
                 }
                 DB::table(Schema::MATERIALS)->where('id', $r->id)->update($up);
@@ -81,6 +87,19 @@ final class ResinSpecs
         }
 
         return $n;
+    }
+
+    /** 없으면 새로 만듦 — 같은 제조사 · 이름이 있으면 그것 (재료 칸은 비었을 때만) */
+    private static function ensure(array $c): string
+    {
+        foreach (DB::table(Schema::MATERIALS)->where('kind', 'resin')->where('brand', $c['brand'])->get() as $x) {
+            if (CatalogService::norm($x->name) === CatalogService::norm($c['title'])) {
+                return (string) $x->key;
+            }
+        }
+        $key = (new CatalogService())->save('materials', ['kind' => 'resin', 'brand' => $c['brand'], 'title' => $c['title'], 'values' => ['material' => $c['material']]], false, 'official')['key'];
+
+        return (string) $key;
     }
 
     /** 상세 화면 · 검사기로 보낼 모양 @return array<string, mixed>|null */

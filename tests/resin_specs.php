@@ -24,9 +24,9 @@ namespace {
     $d = R::data();
     $keys = [];
     foreach ($d['items'] as $it) {
-        $n = implode(',', $it['keys']);
+        $n = implode(',', $it['keys']).($it['create']['title'] ?? '');
         $keys = array_merge($keys, $it['keys']);
-        $ok(str_starts_with($it['url'], 'https://'), "출처 주소 {$n}");
+        $ok(str_starts_with($it['url'] ?? '', 'https://') || ($it['grade'] ?? '') === 'slicer', "출처 주소 {$n}");
         foreach ($it['ranges'] ?? [] as $k => $r) {
             if ($r[0] >= $r[1]) {
                 $ok(false, "범위 {$n} {$k}");
@@ -51,6 +51,8 @@ namespace {
     $ok(($s['viscosity'] ?? 0) == 350, '범위의 가운데 값');
     $ok(! isset($s['exposure_s']), '노출은 가운데 값을 만들지 않음');
     $ok($s['memo'] === 'x' && $s['wash'] === 'IPA' && count($s['print_profiles']) === 1, '다른 칸 유지 · 프로필 저장');
+    $sl = R::merge([], ['grade' => 'slicer', 'values' => []], '2026-11-01', 'official');
+    $ok($sl['resin_src']['grade'] === 'slicer' && ! isset($sl['resin_src']['url']), '슬라이서 자료는 주소 없이');
     $ok(R::view([]) === null && R::view($s)['src']['url'] === 'https://x.test', '자료 없으면 null');
 
     echo $bad ? "실패 {$bad}\n" : "모두 통과\n";
