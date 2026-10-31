@@ -315,12 +315,17 @@ final class CatalogService
     public function detail(string $type, object $r, bool $edit = false): array
     {
         $vals = self::values($type, $r);
+        $resin = $type === 'materials' ? \Modules\Custom\Catalog\Support\ResinSpecs::view(Schema::json($r->specs ?? null)) : null;
+        $ranges = $resin['ranges'] ?? [];
         $groups = [];
         foreach (Fields::forKind($type, (string) $r->kind) as $d) {
             if (! isset($vals[$d['key']])) {
                 continue;
             }
             $shown = Fields::show($d, $vals[$d['key']]);
+            if (isset($ranges[$d['key']])) {   // 0.3.24 범위로 나온 값은 원문 범위로 보여 줌
+                $shown = implode('–', $ranges[$d['key']]).($d['unit'] ? ' '.$d['unit'] : '');
+            }
             if ($shown === '' || ($d['type'] === 'bool' && $vals[$d['key']] === false && ! $d['col'])) {
                 continue;
             }
@@ -356,7 +361,7 @@ final class CatalogService
             'issues' => array_values(array_filter(array_map(static fn ($l) => trim(ltrim(trim($l), '-•·*')), preg_split('/\R/u', (string) ($r->issues ?? '')) ?: []), static fn ($l) => $l !== '')),
             'homepage_url' => (string) ($r->homepage_url ?? ''), 'wiki_url' => (string) ($r->wiki_url ?? ''),
             'groups' => array_map(static fn ($g, $items) => ['group' => $g, 'items' => $items], array_keys($groups), $groups),
-            'facts' => $facts, 'photos' => $photos, 'filled' => $n, 'fields' => $all,
+            'facts' => $facts, 'photos' => $photos, 'filled' => $n, 'fields' => $all, 'resin' => $resin,
             'updated_at' => substr((string) $r->updated_at, 0, 10),
             'related' => $this->related($type, $r),
         ];

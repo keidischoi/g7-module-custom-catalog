@@ -1,0 +1,1497 @@
+{
+ "checked_at": "2026-11-01",
+ "grade": "official",
+ "items": [
+  {
+   "keys": [
+    "anycubic-standard-resin",
+    "anycubic-resin"
+   ],
+   "url": "https://store.anycubic.com/products/standard-resin-v2",
+   "note": "Standard Resin V2 기준",
+   "wash": "IPA",
+   "cure_min": 3,
+   "ranges": {
+    "wavelength_nm": [
+     365,
+     405
+    ],
+    "viscosity": [
+     250,
+     350
+    ],
+    "density": [
+     1.05,
+     1.25
+    ],
+    "tensile_mpa": [
+     35,
+     45
+    ],
+    "modulus_mpa": [
+     1200,
+     1400
+    ],
+    "elong": [
+     25,
+     30
+    ],
+    "shrink": [
+     4.3,
+     5.6
+    ],
+    "exposure_s": [
+     2.5,
+     3
+    ],
+    "bottom_exposure_s": [
+     20,
+     40
+    ]
+   },
+   "values": {
+    "impact": "192 J/m",
+    "shore": "80–83D"
+   },
+   "profiles": [
+    {
+     "printer": "Photon P1",
+     "layer_mm": 0.05,
+     "exposure_s": 2,
+     "light_off_s": 2,
+     "bottom_exposure_s": 20,
+     "bottom_layers": 1,
+     "lift_mm": 5,
+     "lift_speed": 3,
+     "retract_speed": 3
+    },
+    {
+     "printer": "Photon Mono M7",
+     "layer_mm": 0.05,
+     "exposure_s": 2.2,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 25,
+     "bottom_layers": 4,
+     "lift_mm": 8,
+     "lift_speed": 6,
+     "retract_speed": 6
+    },
+    {
+     "printer": "Photon Mono M7 Pro",
+     "layer_mm": 0.05,
+     "exposure_s": 1.8,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 25,
+     "bottom_layers": 3,
+     "lift_mm": 8,
+     "lift_speed": 6,
+     "retract_speed": 6
+    },
+    {
+     "printer": "Photon Mono M7 Max",
+     "layer_mm": 0.05,
+     "exposure_s": 2,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 30,
+     "bottom_layers": 5,
+     "lift_mm": 8,
+     "lift_speed": 6,
+     "retract_speed": 6
+    },
+    {
+     "printer": "Photon Mono M5",
+     "layer_mm": 0.05,
+     "exposure_s": 2.8,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 25,
+     "bottom_layers": 5,
+     "lift_mm": 8,
+     "lift_speed": 5,
+     "retract_speed": 6
+    },
+    {
+     "printer": "Photon Mono M5s",
+     "layer_mm": 0.05,
+     "exposure_s": 2.8,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 25,
+     "bottom_layers": 5,
+     "lift_mm": 8,
+     "lift_speed": 5,
+     "retract_speed": 6
+    },
+    {
+     "printer": "Photon Mono M5s Pro",
+     "layer_mm": 0.05,
+     "exposure_s": 3.6,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 30,
+     "bottom_layers": 5,
+     "lift_mm": 8,
+     "lift_speed": 6,
+     "retract_speed": 6
+    },
+    {
+     "printer": "Photon Mono 4",
+     "layer_mm": 0.05,
+     "exposure_s": 2.8,
+     "light_off_s": 1,
+     "bottom_exposure_s": 30,
+     "bottom_layers": 5,
+     "lift_mm": 6,
+     "lift_speed": 4,
+     "retract_speed": 6
+    },
+    {
+     "printer": "Photon Mono 4K",
+     "layer_mm": 0.05,
+     "exposure_s": 2,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 40,
+     "bottom_layers": 6,
+     "lift_mm": 6,
+     "lift_speed": 4,
+     "retract_speed": 6
+    },
+    {
+     "printer": "Photon Mono 4 Ultra",
+     "layer_mm": 0.05,
+     "exposure_s": 2.6,
+     "light_off_s": 1,
+     "bottom_exposure_s": 30,
+     "bottom_layers": 5,
+     "lift_mm": 5,
+     "lift_speed": 8,
+     "retract_speed": 8
+    },
+    {
+     "printer": "Photon Mono 2",
+     "layer_mm": 0.05,
+     "exposure_s": 2.5,
+     "light_off_s": 1,
+     "bottom_exposure_s": 25,
+     "bottom_layers": 5,
+     "lift_mm": 6,
+     "lift_speed": 4,
+     "retract_speed": 6
+    },
+    {
+     "printer": "Photon Mono X2",
+     "layer_mm": 0.05,
+     "exposure_s": 2.5,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 20,
+     "bottom_layers": 5,
+     "lift_mm": 8,
+     "lift_speed": 2,
+     "retract_speed": 3
+    },
+    {
+     "printer": "Photon Mono X 6K",
+     "layer_mm": 0.05,
+     "exposure_s": 2,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 25,
+     "bottom_layers": 6,
+     "lift_mm": 8,
+     "lift_speed": 2,
+     "retract_speed": 3
+    },
+    {
+     "printer": "Photon Mono X6Ks",
+     "layer_mm": 0.05,
+     "exposure_s": 2.5,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 20,
+     "bottom_layers": 5,
+     "lift_mm": 8,
+     "lift_speed": 3,
+     "retract_speed": 4
+    },
+    {
+     "printer": "Photon M3 Max",
+     "layer_mm": 0.05,
+     "exposure_s": 3,
+     "light_off_s": 2.5,
+     "bottom_exposure_s": 35,
+     "bottom_layers": 6,
+     "lift_mm": 10,
+     "lift_speed": 2,
+     "retract_speed": 3
+    },
+    {
+     "printer": "Photon M3 Premium",
+     "layer_mm": 0.05,
+     "exposure_s": 2.5,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 25,
+     "bottom_layers": 2,
+     "lift_mm": 8,
+     "lift_speed": 6,
+     "retract_speed": 6
+    }
+   ]
+  },
+  {
+   "keys": [
+    "anycubic-abs-like-resin-pro-2-resin"
+   ],
+   "url": "https://store.anycubic.com/products/abs-like-resin-pro-2",
+   "wash": "IPA",
+   "cure_min": 3,
+   "ranges": {
+    "wavelength_nm": [
+     365,
+     405
+    ],
+    "viscosity": [
+     300,
+     400
+    ],
+    "density": [
+     1.05,
+     1.25
+    ],
+    "tensile_mpa": [
+     35,
+     45
+    ],
+    "modulus_mpa": [
+     1600,
+     1800
+    ],
+    "elong": [
+     35,
+     40
+    ],
+    "shrink": [
+     4.3,
+     5.6
+    ],
+    "exposure_s": [
+     1.5,
+     3
+    ],
+    "bottom_exposure_s": [
+     20,
+     40
+    ]
+   },
+   "values": {
+    "impact": "212 J/m",
+    "shore": "82–84D"
+   },
+   "profiles": [
+    {
+     "printer": "Photon P1",
+     "layer_mm": 0.05,
+     "exposure_s": 2,
+     "light_off_s": 2,
+     "bottom_exposure_s": 25,
+     "bottom_layers": 1,
+     "lift_mm": 5,
+     "lift_speed": 3,
+     "retract_speed": 3
+    },
+    {
+     "printer": "Photon Mono M7",
+     "layer_mm": 0.05,
+     "exposure_s": 2.2,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 35,
+     "bottom_layers": 4,
+     "lift_mm": 8,
+     "lift_speed": 6,
+     "retract_speed": 6
+    },
+    {
+     "printer": "Photon Mono M7 Pro",
+     "layer_mm": 0.05,
+     "exposure_s": 2,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 25,
+     "bottom_layers": 4,
+     "lift_mm": 8,
+     "lift_speed": 6,
+     "retract_speed": 6
+    },
+    {
+     "printer": "Photon Mono M7 Max",
+     "layer_mm": 0.05,
+     "exposure_s": 2,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 30,
+     "bottom_layers": 5,
+     "lift_mm": 8,
+     "lift_speed": 6,
+     "retract_speed": 6
+    },
+    {
+     "printer": "Photon Mono M5",
+     "layer_mm": 0.05,
+     "exposure_s": 2.8,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 25,
+     "bottom_layers": 5,
+     "lift_mm": 8,
+     "lift_speed": 5,
+     "retract_speed": 6
+    },
+    {
+     "printer": "Photon Mono M5s",
+     "layer_mm": 0.05,
+     "exposure_s": 2.8,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 25,
+     "bottom_layers": 5,
+     "lift_mm": 8,
+     "lift_speed": 5,
+     "retract_speed": 6
+    },
+    {
+     "printer": "Photon Mono M5s Pro",
+     "layer_mm": 0.05,
+     "exposure_s": 3.6,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 30,
+     "bottom_layers": 5,
+     "lift_mm": 8,
+     "lift_speed": 6,
+     "retract_speed": 6
+    },
+    {
+     "printer": "Photon Mono 4",
+     "layer_mm": 0.05,
+     "exposure_s": 2.8,
+     "light_off_s": 1,
+     "bottom_exposure_s": 30,
+     "bottom_layers": 5,
+     "lift_mm": 6,
+     "lift_speed": 4,
+     "retract_speed": 6
+    },
+    {
+     "printer": "Photon Mono 4K",
+     "layer_mm": 0.05,
+     "exposure_s": 2,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 40,
+     "bottom_layers": 6,
+     "lift_mm": 6,
+     "lift_speed": 4,
+     "retract_speed": 6
+    },
+    {
+     "printer": "Photon Mono 4 Ultra",
+     "layer_mm": 0.05,
+     "exposure_s": 2.6,
+     "light_off_s": 1,
+     "bottom_exposure_s": 30,
+     "bottom_layers": 5,
+     "lift_mm": 5,
+     "lift_speed": 8,
+     "retract_speed": 8
+    },
+    {
+     "printer": "Photon Mono 2",
+     "layer_mm": 0.05,
+     "exposure_s": 2.5,
+     "light_off_s": 1,
+     "bottom_exposure_s": 25,
+     "bottom_layers": 5,
+     "lift_mm": 6,
+     "lift_speed": 4,
+     "retract_speed": 6
+    },
+    {
+     "printer": "Photon Mono X2",
+     "layer_mm": 0.05,
+     "exposure_s": 2.5,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 20,
+     "bottom_layers": 5,
+     "lift_mm": 8,
+     "lift_speed": 2,
+     "retract_speed": 3
+    },
+    {
+     "printer": "Photon Mono X 6K",
+     "layer_mm": 0.05,
+     "exposure_s": 2,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 23,
+     "bottom_layers": 6,
+     "lift_mm": 8,
+     "lift_speed": 2,
+     "retract_speed": 3
+    },
+    {
+     "printer": "Photon Mono X6Ks",
+     "layer_mm": 0.05,
+     "exposure_s": 2.5,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 20,
+     "bottom_layers": 5,
+     "lift_mm": 8,
+     "lift_speed": 3,
+     "retract_speed": 4
+    },
+    {
+     "printer": "Photon M3 Max",
+     "layer_mm": 0.05,
+     "exposure_s": 3,
+     "light_off_s": 2.5,
+     "bottom_exposure_s": 35,
+     "bottom_layers": 6,
+     "lift_mm": 10,
+     "lift_speed": 2,
+     "retract_speed": 3
+    },
+    {
+     "printer": "Photon M3 Premium",
+     "layer_mm": 0.05,
+     "exposure_s": 2.5,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 25,
+     "bottom_layers": 4,
+     "lift_mm": 8,
+     "lift_speed": 6,
+     "retract_speed": 6
+    }
+   ]
+  },
+  {
+   "keys": [
+    "anycubic-water-wash-resin-resin"
+   ],
+   "url": "https://store.anycubic.com/products/water-wash-resin",
+   "wash": "물",
+   "cure_min": 3,
+   "ranges": {
+    "wavelength_nm": [
+     365,
+     405
+    ],
+    "viscosity": [
+     190,
+     230
+    ],
+    "density": [
+     1.07,
+     1.09
+    ],
+    "tensile_mpa": [
+     38,
+     43
+    ],
+    "modulus_mpa": [
+     1100,
+     1300
+    ],
+    "elong": [
+     16,
+     22
+    ],
+    "shrink": [
+     2.2,
+     5.5
+    ],
+    "exposure_s": [
+     2,
+     2.5
+    ],
+    "bottom_exposure_s": [
+     25,
+     40
+    ]
+   },
+   "values": {
+    "impact": "133 J/m",
+    "shore": "82–85D"
+   },
+   "profiles": [
+    {
+     "printer": "Photon P1",
+     "layer_mm": 0.05,
+     "exposure_s": 2,
+     "light_off_s": 2,
+     "bottom_exposure_s": 30,
+     "bottom_layers": 1,
+     "lift_mm": 5,
+     "lift_speed": 3,
+     "retract_speed": 3
+    },
+    {
+     "printer": "Photon Mono M7",
+     "layer_mm": 0.05,
+     "exposure_s": 2.5,
+     "light_off_s": 1,
+     "bottom_exposure_s": 35,
+     "bottom_layers": 4,
+     "lift_mm": 8,
+     "lift_speed": 6,
+     "retract_speed": 6
+    },
+    {
+     "printer": "Photon Mono M7 Pro",
+     "layer_mm": 0.05,
+     "exposure_s": 2,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 25,
+     "bottom_layers": 4,
+     "lift_mm": 8,
+     "lift_speed": 6,
+     "retract_speed": 6
+    },
+    {
+     "printer": "Photon Mono M7 Max",
+     "layer_mm": 0.05,
+     "exposure_s": 2,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 30,
+     "bottom_layers": 5,
+     "lift_mm": 8,
+     "lift_speed": 6,
+     "retract_speed": 6
+    },
+    {
+     "printer": "Photon Mono M5",
+     "layer_mm": 0.05,
+     "exposure_s": 2.8,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 25,
+     "bottom_layers": 5,
+     "lift_mm": 8,
+     "lift_speed": 5,
+     "retract_speed": 6
+    },
+    {
+     "printer": "Photon Mono M5s",
+     "layer_mm": 0.05,
+     "exposure_s": 2.8,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 25,
+     "bottom_layers": 5,
+     "lift_mm": 8,
+     "lift_speed": 5,
+     "retract_speed": 6
+    },
+    {
+     "printer": "Photon Mono M5s Pro",
+     "layer_mm": 0.05,
+     "exposure_s": 3.6,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 30,
+     "bottom_layers": 5,
+     "lift_mm": 8,
+     "lift_speed": 6,
+     "retract_speed": 6
+    },
+    {
+     "printer": "Photon Mono 4",
+     "layer_mm": 0.05,
+     "exposure_s": 2.4,
+     "light_off_s": 1,
+     "bottom_exposure_s": 30,
+     "bottom_layers": 5,
+     "lift_mm": 5,
+     "lift_speed": 8,
+     "retract_speed": 8
+    },
+    {
+     "printer": "Photon Mono 4K",
+     "layer_mm": 0.05,
+     "exposure_s": 2,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 40,
+     "bottom_layers": 6,
+     "lift_mm": 6,
+     "lift_speed": 4,
+     "retract_speed": 6
+    },
+    {
+     "printer": "Photon Mono 4 Ultra",
+     "layer_mm": 0.05,
+     "exposure_s": 3,
+     "light_off_s": 1,
+     "bottom_exposure_s": 35,
+     "bottom_layers": 5,
+     "lift_mm": 6,
+     "lift_speed": 4,
+     "retract_speed": 6
+    },
+    {
+     "printer": "Photon Mono 2",
+     "layer_mm": 0.05,
+     "exposure_s": 2.5,
+     "light_off_s": 1,
+     "bottom_exposure_s": 25,
+     "bottom_layers": 5,
+     "lift_mm": 6,
+     "lift_speed": 4,
+     "retract_speed": 6
+    },
+    {
+     "printer": "Photon Mono X2",
+     "layer_mm": 0.05,
+     "exposure_s": 2.5,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 20,
+     "bottom_layers": 5,
+     "lift_mm": 8,
+     "lift_speed": 2,
+     "retract_speed": 3
+    },
+    {
+     "printer": "Photon Mono X 6K",
+     "layer_mm": 0.05,
+     "exposure_s": 2,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 23,
+     "bottom_layers": 6,
+     "lift_mm": 8,
+     "lift_speed": 2,
+     "retract_speed": 3
+    },
+    {
+     "printer": "Photon Mono X6Ks",
+     "layer_mm": 0.05,
+     "exposure_s": 2.5,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 20,
+     "bottom_layers": 5,
+     "lift_mm": 8,
+     "lift_speed": 3,
+     "retract_speed": 4
+    },
+    {
+     "printer": "Photon M3 Max",
+     "layer_mm": 0.05,
+     "exposure_s": 3,
+     "light_off_s": 2,
+     "bottom_exposure_s": 35,
+     "bottom_layers": 6,
+     "lift_mm": 10,
+     "lift_speed": 2,
+     "retract_speed": 3
+    },
+    {
+     "printer": "Photon M3 Premium",
+     "layer_mm": 0.05,
+     "exposure_s": 2.5,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 25,
+     "bottom_layers": 4,
+     "lift_mm": 8,
+     "lift_speed": 6,
+     "retract_speed": 6
+    }
+   ]
+  },
+  {
+   "keys": [
+    "anycubic-plant-based-uv-resin-resin"
+   ],
+   "url": "https://store.anycubic.com/products/plant-based-uv-resin",
+   "wash": "IPA",
+   "cure_min": 3,
+   "ranges": {
+    "wavelength_nm": [
+     365,
+     405
+    ],
+    "viscosity": [
+     300,
+     350
+    ],
+    "density": [
+     1.09,
+     1.1
+    ],
+    "tensile_mpa": [
+     35,
+     40
+    ],
+    "modulus_mpa": [
+     1300,
+     1500
+    ],
+    "elong": [
+     18,
+     20
+    ],
+    "shrink": [
+     3.8,
+     4.5
+    ],
+    "exposure_s": [
+     2,
+     2.5
+    ],
+    "bottom_exposure_s": [
+     25,
+     40
+    ]
+   },
+   "values": {
+    "impact": "70 J/m",
+    "shore": "81–83D"
+   },
+   "profiles": [
+    {
+     "printer": "Photon P1",
+     "layer_mm": 0.05,
+     "exposure_s": 2,
+     "light_off_s": 2,
+     "bottom_exposure_s": 20,
+     "bottom_layers": 1,
+     "lift_mm": 5,
+     "lift_speed": 3,
+     "retract_speed": 3
+    },
+    {
+     "printer": "Photon Mono M7",
+     "layer_mm": 0.05,
+     "exposure_s": 2.5,
+     "light_off_s": 1,
+     "bottom_exposure_s": 35,
+     "bottom_layers": 4,
+     "lift_mm": 8,
+     "lift_speed": 6,
+     "retract_speed": 6
+    },
+    {
+     "printer": "Photon Mono M7 Pro",
+     "layer_mm": 0.05,
+     "exposure_s": 2,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 25,
+     "bottom_layers": 4,
+     "lift_mm": 8,
+     "lift_speed": 6,
+     "retract_speed": 6
+    },
+    {
+     "printer": "Photon Mono M7 Max",
+     "layer_mm": 0.05,
+     "exposure_s": 2,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 30,
+     "bottom_layers": 5,
+     "lift_mm": 8,
+     "lift_speed": 6,
+     "retract_speed": 6
+    },
+    {
+     "printer": "Photon Mono M5",
+     "layer_mm": 0.05,
+     "exposure_s": 2.8,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 25,
+     "bottom_layers": 5,
+     "lift_mm": 8,
+     "lift_speed": 6,
+     "retract_speed": 6
+    },
+    {
+     "printer": "Photon Mono M5s",
+     "layer_mm": 0.05,
+     "exposure_s": 2.8,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 25,
+     "bottom_layers": 5,
+     "lift_mm": 8,
+     "lift_speed": 5,
+     "retract_speed": 6
+    },
+    {
+     "printer": "Photon Mono M5s Pro",
+     "layer_mm": 0.05,
+     "exposure_s": 3.6,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 30,
+     "bottom_layers": 5,
+     "lift_mm": 8,
+     "lift_speed": 6,
+     "retract_speed": 6
+    },
+    {
+     "printer": "Photon Mono 4",
+     "layer_mm": 0.05,
+     "exposure_s": 2.4,
+     "light_off_s": 1,
+     "bottom_exposure_s": 30,
+     "bottom_layers": 5,
+     "lift_mm": 6,
+     "lift_speed": 4,
+     "retract_speed": 6
+    },
+    {
+     "printer": "Photon Mono 4K",
+     "layer_mm": 0.05,
+     "exposure_s": 2,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 40,
+     "bottom_layers": 6,
+     "lift_mm": 6,
+     "lift_speed": 4,
+     "retract_speed": 6
+    },
+    {
+     "printer": "Photon Mono 4 Ultra",
+     "layer_mm": 0.05,
+     "exposure_s": 2,
+     "light_off_s": 1,
+     "bottom_exposure_s": 30,
+     "bottom_layers": 5,
+     "lift_mm": 5,
+     "lift_speed": 8,
+     "retract_speed": 8
+    },
+    {
+     "printer": "Photon Mono 2",
+     "layer_mm": 0.05,
+     "exposure_s": 2.5,
+     "light_off_s": 1,
+     "bottom_exposure_s": 25,
+     "bottom_layers": 5,
+     "lift_mm": 6,
+     "lift_speed": 4,
+     "retract_speed": 6
+    },
+    {
+     "printer": "Photon Mono X2",
+     "layer_mm": 0.05,
+     "exposure_s": 2.5,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 20,
+     "bottom_layers": 5,
+     "lift_mm": 8,
+     "lift_speed": 2,
+     "retract_speed": 3
+    },
+    {
+     "printer": "Photon Mono X 6K",
+     "layer_mm": 0.05,
+     "exposure_s": 2,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 23,
+     "bottom_layers": 6,
+     "lift_mm": 8,
+     "lift_speed": 2,
+     "retract_speed": 3
+    },
+    {
+     "printer": "Photon Mono X6Ks",
+     "layer_mm": 0.05,
+     "exposure_s": 2.5,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 20,
+     "bottom_layers": 5,
+     "lift_mm": 8,
+     "lift_speed": 3,
+     "retract_speed": 4
+    },
+    {
+     "printer": "Photon Mono M3 Max",
+     "layer_mm": 0.05,
+     "exposure_s": 3,
+     "light_off_s": 2.5,
+     "bottom_exposure_s": 35,
+     "bottom_layers": 6,
+     "lift_mm": 10,
+     "lift_speed": 2,
+     "retract_speed": 3
+    },
+    {
+     "printer": "Photon Mono M3 Premium",
+     "layer_mm": 0.05,
+     "exposure_s": 2.5,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 25,
+     "bottom_layers": 4,
+     "lift_mm": 8,
+     "lift_speed": 6,
+     "retract_speed": 6
+    }
+   ]
+  },
+  {
+   "keys": [
+    "anycubic-tough-resin-2-0-resin"
+   ],
+   "url": "https://store.anycubic.com/products/tough-resin-2",
+   "wash": "IPA",
+   "cure_min": 3,
+   "ranges": {
+    "wavelength_nm": [
+     365,
+     405
+    ],
+    "viscosity": [
+     450,
+     500
+    ],
+    "density": [
+     1.1,
+     1.15
+    ],
+    "tensile_mpa": [
+     30,
+     42
+    ],
+    "modulus_mpa": [
+     900,
+     1100
+    ],
+    "elong": [
+     60,
+     72
+    ],
+    "shrink": [
+     5.1,
+     6.2
+    ],
+    "exposure_s": [
+     1.5,
+     3
+    ],
+    "bottom_exposure_s": [
+     20,
+     40
+    ]
+   },
+   "values": {
+    "impact": "245 J/m",
+    "shore": "82–84D"
+   },
+   "profiles": [
+    {
+     "printer": "Photon P1",
+     "layer_mm": 0.05,
+     "exposure_s": 2.1,
+     "light_off_s": 2,
+     "bottom_exposure_s": 15,
+     "bottom_layers": 1,
+     "lift_mm": 5,
+     "lift_speed": 3,
+     "retract_speed": 3
+    },
+    {
+     "printer": "Photon Mono M7",
+     "layer_mm": 0.05,
+     "exposure_s": 2.2,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 25,
+     "bottom_layers": 4,
+     "lift_mm": 8,
+     "lift_speed": 6,
+     "retract_speed": 6
+    },
+    {
+     "printer": "Photon Mono M7 Pro",
+     "layer_mm": 0.05,
+     "exposure_s": 1.8,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 25,
+     "bottom_layers": 3,
+     "lift_mm": 8,
+     "lift_speed": 6,
+     "retract_speed": 6
+    },
+    {
+     "printer": "Photon Mono M7 Max",
+     "layer_mm": 0.05,
+     "exposure_s": 2,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 30,
+     "bottom_layers": 5,
+     "lift_mm": 8,
+     "lift_speed": 6,
+     "retract_speed": 6
+    },
+    {
+     "printer": "Photon Mono M5",
+     "layer_mm": 0.05,
+     "exposure_s": 2.8,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 25,
+     "bottom_layers": 5,
+     "lift_mm": 8,
+     "lift_speed": 5,
+     "retract_speed": 6
+    },
+    {
+     "printer": "Photon Mono M5s",
+     "layer_mm": 0.05,
+     "exposure_s": 2.8,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 25,
+     "bottom_layers": 5,
+     "lift_mm": 8,
+     "lift_speed": 5,
+     "retract_speed": 6
+    },
+    {
+     "printer": "Photon Mono M5s Pro",
+     "layer_mm": 0.05,
+     "exposure_s": 3.6,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 30,
+     "bottom_layers": 5,
+     "lift_mm": 8,
+     "lift_speed": 6,
+     "retract_speed": 6
+    },
+    {
+     "printer": "Photon Mono 4",
+     "layer_mm": 0.05,
+     "exposure_s": 2.8,
+     "light_off_s": 1,
+     "bottom_exposure_s": 30,
+     "bottom_layers": 5,
+     "lift_mm": 6,
+     "lift_speed": 4,
+     "retract_speed": 6
+    },
+    {
+     "printer": "Photon Mono 4K",
+     "layer_mm": 0.05,
+     "exposure_s": 2,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 40,
+     "bottom_layers": 6,
+     "lift_mm": 6,
+     "lift_speed": 4,
+     "retract_speed": 6
+    },
+    {
+     "printer": "Photon Mono 4 Ultra",
+     "layer_mm": 0.05,
+     "exposure_s": 2.6,
+     "light_off_s": 1,
+     "bottom_exposure_s": 30,
+     "bottom_layers": 5,
+     "lift_mm": 5,
+     "lift_speed": 8,
+     "retract_speed": 8
+    },
+    {
+     "printer": "Photon Mono 2",
+     "layer_mm": 0.05,
+     "exposure_s": 2.5,
+     "light_off_s": 1,
+     "bottom_exposure_s": 25,
+     "bottom_layers": 5,
+     "lift_mm": 6,
+     "lift_speed": 4,
+     "retract_speed": 6
+    },
+    {
+     "printer": "Photon Mono X2",
+     "layer_mm": 0.05,
+     "exposure_s": 2.5,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 20,
+     "bottom_layers": 5,
+     "lift_mm": 8,
+     "lift_speed": 2,
+     "retract_speed": 3
+    },
+    {
+     "printer": "Photon Mono X 6K",
+     "layer_mm": 0.05,
+     "exposure_s": 2,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 25,
+     "bottom_layers": 6,
+     "lift_mm": 8,
+     "lift_speed": 2,
+     "retract_speed": 3
+    },
+    {
+     "printer": "Photon Mono X6Ks",
+     "layer_mm": 0.05,
+     "exposure_s": 2.5,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 20,
+     "bottom_layers": 5,
+     "lift_mm": 8,
+     "lift_speed": 3,
+     "retract_speed": 4
+    },
+    {
+     "printer": "Photon M3 Max",
+     "layer_mm": 0.05,
+     "exposure_s": 3,
+     "light_off_s": 2.5,
+     "bottom_exposure_s": 35,
+     "bottom_layers": 6,
+     "lift_mm": 10,
+     "lift_speed": 2,
+     "retract_speed": 3
+    },
+    {
+     "printer": "Photon M3 Premium",
+     "layer_mm": 0.05,
+     "exposure_s": 2.5,
+     "light_off_s": 0.5,
+     "bottom_exposure_s": 25,
+     "bottom_layers": 2,
+     "lift_mm": 8,
+     "lift_speed": 6,
+     "retract_speed": 6
+    }
+   ]
+  },
+  {
+   "keys": [
+    "formlabs-clear",
+    "formlabs-clear-resin-resin"
+   ],
+   "url": "https://formlabs.com/store/materials/clear-resin/",
+   "note": "Formlabs 전용 프린터(Form 4 등)는 노출을 슬라이서가 정해요. 값은 Form 4 계열 표 기준.",
+   "values": {
+    "tensile_mpa": 60,
+    "modulus_mpa": 2750,
+    "flex_mpa": 105,
+    "elong": 8,
+    "hdt_c": 74,
+    "impact": "29 J/m"
+   }
+  },
+  {
+   "keys": [
+    "formlabs-grey-resin-resin"
+   ],
+   "url": "https://formlabs.com/store/materials/grey-resin/",
+   "note": "Formlabs 전용 프린터(Form 4 등)는 노출을 슬라이서가 정해요. 값은 Form 4 계열 표 기준.",
+   "values": {
+    "tensile_mpa": 62,
+    "modulus_mpa": 2675,
+    "flex_mpa": 103,
+    "elong": 13,
+    "hdt_c": 71,
+    "impact": "32 J/m"
+   }
+  },
+  {
+   "keys": [
+    "formlabs-tough-2000-resin-resin"
+   ],
+   "url": "https://formlabs.com/store/materials/tough-2000-resin/",
+   "note": "Tough 2000 V2 기준 · Formlabs 전용 프린터(Form 4 등)는 노출을 슬라이서가 정해요. 값은 Form 4 계열 표 기준.",
+   "values": {
+    "tensile_mpa": 40.4,
+    "modulus_mpa": 1800,
+    "flex_mpa": 67,
+    "elong": 79,
+    "hdt_c": 70,
+    "impact": "25 J/m"
+   }
+  },
+  {
+   "keys": [
+    "formlabs-tough-1500-resin-resin"
+   ],
+   "url": "https://formlabs.com/store/materials/tough-1500-resin/",
+   "note": "Formlabs 전용 프린터(Form 4 등)는 노출을 슬라이서가 정해요. 값은 Form 4 계열 표 기준.",
+   "values": {
+    "tensile_mpa": 34,
+    "modulus_mpa": 1460,
+    "flex_mpa": 41,
+    "elong": 155,
+    "hdt_c": 66,
+    "impact": "42 J/m"
+   }
+  },
+  {
+   "keys": [
+    "formlabs-durable-resin-resin"
+   ],
+   "url": "https://formlabs.com/store/materials/durable-resin/",
+   "note": "Formlabs 전용 프린터(Form 4 등)는 노출을 슬라이서가 정해요. 값은 Form 4 계열 표 기준.",
+   "values": {
+    "tensile_mpa": 28,
+    "modulus_mpa": 1000,
+    "flex_mpa": 24,
+    "elong": 55,
+    "hdt_c": 41,
+    "impact": "114 J/m"
+   }
+  },
+  {
+   "keys": [
+    "formlabs-flexible-80a-resin-resin"
+   ],
+   "url": "https://formlabs.com/store/materials/flexible-80a-resin/",
+   "note": "Formlabs 전용 프린터(Form 4 등)는 노출을 슬라이서가 정해요. 값은 Form 4 계열 표 기준.",
+   "values": {
+    "tensile_mpa": 10,
+    "elong": 230
+   }
+  },
+  {
+   "keys": [
+    "formlabs-high-temp-resin-resin"
+   ],
+   "url": "https://formlabs.com/store/materials/high-temp-resin/",
+   "note": "Formlabs 전용 프린터(Form 4 등)는 노출을 슬라이서가 정해요. 값은 Form 4 계열 표 기준.",
+   "values": {
+    "tensile_mpa": 49,
+    "modulus_mpa": 2800,
+    "flex_mpa": 97,
+    "elong": 2.3,
+    "hdt_c": 238,
+    "impact": "17 J/m"
+   }
+  },
+  {
+   "keys": [
+    "formlabs-rigid-10k-resin-resin"
+   ],
+   "url": "https://formlabs.com/store/materials/rigid-10k-resin/",
+   "note": "Formlabs 전용 프린터(Form 4 등)는 노출을 슬라이서가 정해요. 값은 Form 4 계열 표 기준.",
+   "values": {
+    "tensile_mpa": 88,
+    "modulus_mpa": 11000,
+    "flex_mpa": 158,
+    "elong": 0.7,
+    "hdt_c": 238,
+    "impact": "20 J/m"
+   }
+  },
+  {
+   "keys": [
+    "formlabs-castable-wax-resin-resin"
+   ],
+   "url": "https://formlabs.com/store/materials/castable-wax-resin/",
+   "note": "Formlabs 전용 프린터(Form 4 등)는 노출을 슬라이서가 정해요. 값은 Form 4 계열 표 기준.",
+   "values": {
+    "tensile_mpa": 12,
+    "modulus_mpa": 220
+   }
+  },
+  {
+   "keys": [
+    "formlabs-biomed-clear-resin-resin"
+   ],
+   "url": "https://formlabs.com/store/materials/biomed-clear-resin/",
+   "note": "Formlabs 전용 프린터(Form 4 등)는 노출을 슬라이서가 정해요. 값은 Form 4 계열 표 기준.",
+   "values": {
+    "tensile_mpa": 52,
+    "modulus_mpa": 2080,
+    "flex_mpa": 84,
+    "elong": 12,
+    "hdt_c": 67,
+    "impact": "35 J/m",
+    "shore": "78D"
+   }
+  },
+  {
+   "keys": [
+    "phrozen-resin"
+   ],
+   "url": "https://phrozen3d.com/en/materials/materials-comparison",
+   "note": "Aqua 8K 시리즈 표 기준",
+   "ranges": {
+    "viscosity": [
+     200,
+     350
+    ],
+    "density": [
+     1.1,
+     1.11
+    ],
+    "tensile_mpa": [
+     35,
+     46
+    ],
+    "modulus_mpa": [
+     2433,
+     2848
+    ],
+    "elong": [
+     4.8,
+     7.6
+    ],
+    "hdt_c": [
+     60.3,
+     62.7
+    ]
+   },
+   "values": {
+    "impact": "28–48 J/m",
+    "shore": "80–86D"
+   }
+  },
+  {
+   "keys": [
+    "phrozen-aqua-4k-resin"
+   ],
+   "url": "https://phrozen3d.com/en/materials/materials-comparison",
+   "ranges": {
+    "viscosity": [
+     230,
+     330
+    ],
+    "density": [
+     1.1,
+     1.11
+    ],
+    "tensile_mpa": [
+     26,
+     28
+    ],
+    "modulus_mpa": [
+     1260,
+     1520
+    ],
+    "elong": [
+     15.6,
+     18.3
+    ],
+    "hdt_c": [
+     49,
+     54
+    ]
+   },
+   "values": {
+    "impact": "47.9–49.4 J/m",
+    "shore": "75–80D"
+   }
+  },
+  {
+   "keys": [
+    "siraya-blu"
+   ],
+   "url": "https://siraya.tech/pages/blu-tough-resin-tds-for-regular-blu",
+   "ranges": {
+    "wavelength_nm": [
+     385,
+     405
+    ]
+   },
+   "values": {
+    "viscosity": 800,
+    "density": 1.1,
+    "tensile_mpa": 51,
+    "modulus_mpa": 1800,
+    "elong": 32,
+    "hdt_c": 70,
+    "shore": "80D"
+   }
+  },
+  {
+   "keys": [
+    "siraya-tech-fast-abs-like-resin"
+   ],
+   "url": "https://siraya.tech/pages/abs-like-fast-resin-tds-for-basic-fast",
+   "note": "노출 시간은 공식 표에 없고 슬라이서 프로필로 안내",
+   "ranges": {
+    "cure_min": [
+     1,
+     2
+    ]
+   },
+   "wash": "IPA",
+   "values": {
+    "viscosity": 110,
+    "density": 1.1,
+    "tensile_mpa": 64,
+    "modulus_mpa": 1700,
+    "elong": 18,
+    "hdt_c": 65,
+    "shore": "75D"
+   }
+  },
+  {
+   "keys": [
+    "siraya-tech-tenacious-resin"
+   ],
+   "url": "https://siraya.tech/pages/65d-flexible-resin-tenacious-clear-and-obsidian-black-tds",
+   "note": "Tenacious 65D 기준",
+   "ranges": {
+    "wavelength_nm": [
+     385,
+     405
+    ]
+   },
+   "values": {
+    "viscosity": 560,
+    "density": 1.1,
+    "tensile_mpa": 30,
+    "modulus_mpa": 800,
+    "elong": 70,
+    "hdt_c": 55,
+    "shore": "65D"
+   }
+  },
+  {
+   "keys": [
+    "siraya-tech-sculpt-resin"
+   ],
+   "url": "https://siraya.tech/pages/high-temperature-resistant-sculpt-grey-and-clear-tds",
+   "wash": "IPA",
+   "values": {
+    "viscosity": 650,
+    "density": 1.13,
+    "tensile_mpa": 39,
+    "modulus_mpa": 3500,
+    "elong": 5,
+    "hdt_c": 180,
+    "shore": "90D"
+   }
+  },
+  {
+   "keys": [
+    "siraya-tech-build-resin"
+   ],
+   "url": "https://siraya.tech/pages/build-resin-tds",
+   "ranges": {
+    "wavelength_nm": [
+     385,
+     405
+    ]
+   },
+   "values": {
+    "viscosity": 110,
+    "density": 1.1,
+    "tensile_mpa": 35,
+    "modulus_mpa": 850,
+    "elong": 8,
+    "hdt_c": 68,
+    "shore": "77D"
+   }
+  },
+  {
+   "keys": [
+    "sunlu-abs-like-resin-resin"
+   ],
+   "url": "https://www.sunlu.com/products/abs-like-resin",
+   "note": "노출은 모노 LCD 기준",
+   "ranges": {
+    "viscosity": [
+     300,
+     700
+    ],
+    "exposure_s": [
+     1.5,
+     3.5
+    ],
+    "bottom_exposure_s": [
+     10,
+     60
+    ]
+   },
+   "values": {
+    "tensile_mpa": 28,
+    "flex_mpa": 36,
+    "elong": 25,
+    "shrink": 8,
+    "hdt_c": 50,
+    "impact": "70 J/m"
+   }
+  }
+ ]
+}
