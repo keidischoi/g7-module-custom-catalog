@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.27 — 2026-11-01 🧪 레진 더 넣음
+
+- Phrozen 31종 · Siraya Tech 16종 · Formlabs 31종 · SUNLU 1종 새로 추가 — 공식 표의 수치만.
+- SUNLU Standard · Water Washable 제원 채움, Phrozen TR300 · TR250LV 밀도 · 경도 채움.
+
 ## 0.3.26 — 2026-11-01 🧪 Elegoo 레진
 
 - Elegoo 공식 설정표(2026-10-15판) 프로필 — 기존 8개 + 새 제품 18종. 노출은 색마다 범위.

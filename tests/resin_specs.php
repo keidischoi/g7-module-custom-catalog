@@ -38,7 +38,7 @@ namespace {
             }
         }
         $v = R::values($it);
-        if (isset($v['density']) && ($v['density'] < 0.9 || $v['density'] > 1.6)) {
+        if (isset($v['density']) && ($v['density'] < 0.9 || $v['density'] > 1.7)) {
             $ok(false, "밀도 범위 밖 {$n}");
         }
     }
