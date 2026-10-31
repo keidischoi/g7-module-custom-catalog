@@ -9,11 +9,11 @@
   function resinSpec(r) {
     var q = r.ranges || {}, rows = [], one = function (k, l) { if (q[k]) rows.push('<div><dt>' + l + '</dt><dd>' + esc(q[k].join('–')) + ' 초</dd></div>'); };
     one('exposure_s', '일반 노출 범위'); one('bottom_exposure_s', '바닥 노출 범위');
-    var p = (r.profiles || []).map(function (x) { return '<tr><td>' + esc(x.printer) + '</td><td>' + x.layer_mm + '</td><td>' + x.exposure_s + '</td><td>' + x.bottom_exposure_s + ' × ' + x.bottom_layers + '</td><td>' + x.lift_mm + ' / ' + x.lift_speed + '</td></tr>'; }).join('');
+    var p = (r.profiles || []).map(function (x) { return '<tr><td>' + esc(x.printer) + '</td><td>' + x.layer_mm + '</td><td>' + x.exposure_s + '</td><td>' + x.bottom_exposure_s + ' × ' + x.bottom_layers + '</td><td>' + x.lift_mm + ' / ' + x.lift_speed + '</td><td>' + esc(x.film || '') + '</td></tr>'; }).join('');
     var s = r.src || {}, c = s.conflicts ? Object.keys(s.conflicts).length : 0;
     return '<div class="cct-spec"><h3>출력 설정 · 출처</h3>' + (rows.length ? '<dl>' + rows.join('') + '</dl>' : '') +
-      (p ? '<div style="overflow-x:auto"><table style="width:100%;font-size:13px"><thead><tr><th align="left">프린터</th><th align="left">층 mm</th><th align="left">노출 초</th><th align="left">바닥 초 × 층</th><th align="left">올림 mm / 속도</th></tr></thead><tbody>' + p + '</tbody></table></div>' : '') +
-      '<p style="font-size:12px;opacity:.75;margin:8px 0 0">🏭 제조사 자료 · ' + esc(s.at || '') + ' 확인' + (s.note ? ' · ' + esc(s.note) : '') + (c ? ' · 공식 값과 다른 칸 ' + c + '개' : '') + (/^https:/.test(s.url || '') ? ' · <a target="_blank" rel="noopener" href="' + esc(s.url) + '">원문 ↗</a>' : '') + '</p></div>';
+      (p ? '<div style="overflow-x:auto"><table style="width:100%;font-size:13px"><thead><tr><th align="left">프린터</th><th align="left">층 mm</th><th align="left">노출 초</th><th align="left">바닥 초 × 층</th><th align="left">올림 mm / 속도</th><th align="left">필름</th></tr></thead><tbody>' + p + '</tbody></table></div>' : '') +
+      '<p style="font-size:12px;opacity:.75;margin:8px 0 0">' + (s.grade === 'slicer' ? '🧩 제조사 슬라이서 내장 값' : '🏭 제조사 자료') + ' · ' + esc(s.at || '') + ' 확인' + (s.note ? ' · ' + esc(s.note) : '') + (c ? ' · 공식 값과 다른 칸 ' + c + '개' : '') + (/^https:/.test(s.url || '') ? ' · <a target="_blank" rel="noopener" href="' + esc(s.url) + '">원문 ↗</a>' : '') + '</p></div>';
   }
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   function token() {
