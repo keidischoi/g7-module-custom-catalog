@@ -11185,7 +11185,9 @@
     "modulus_mpa": 4883.3,
     "elong": 2.2,
     "hdt_c": 160,
-    "impact": "31.8 J/m"
+    "impact": "31.8 J/m",
+    "density": 1.17,
+    "shore": "80–85D"
    }
   },
   {
@@ -11207,7 +11209,9 @@
     "modulus_mpa": 2784.5,
     "elong": 7.4,
     "hdt_c": 62.8,
-    "impact": "38.7 J/m"
+    "impact": "38.7 J/m",
+    "density": 1.1,
+    "shore": "75–80D"
    }
   },
   {
@@ -17918,6 +17922,1784 @@
      "hint": "속 빈 모델 · 벽 2mm 초과 · 구멍 있을 때"
     }
    ]
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Phrozen",
+    "title": "Aqua Hyperfine",
+    "material": "8K 고해상 레진"
+   },
+   "url": "https://phrozen3d.com/en/materials/materials-comparison",
+   "ranges": {
+    "viscosity": [
+     300,
+     350
+    ],
+    "density": [
+     1.13,
+     1.15
+    ],
+    "tensile_mpa": [
+     32.3,
+     38.7
+    ],
+    "modulus_mpa": [
+     1614,
+     2104
+    ],
+    "elong": [
+     2.9,
+     6.6
+    ],
+    "hdt_c": [
+     57.7,
+     61.7
+    ]
+   },
+   "values": {
+    "shore": "75–86D",
+    "impact": "36.5–45.9 J/m"
+   },
+   "note": "Phrozen 공식 비교표"
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Phrozen",
+    "title": "Aqua Series",
+    "material": "ABS-Like 레진"
+   },
+   "url": "https://phrozen3d.com/en/materials/materials-comparison",
+   "ranges": {
+    "viscosity": [
+     50,
+     250
+    ],
+    "density": [
+     1.1,
+     1.3
+    ],
+    "tensile_mpa": [
+     27.9,
+     41.8
+    ],
+    "modulus_mpa": [
+     588,
+     2295
+    ],
+    "elong": [
+     4.2,
+     21
+    ],
+    "hdt_c": [
+     53.6,
+     60
+    ]
+   },
+   "values": {
+    "shore": "75–80D",
+    "impact": "19.5–43.9 J/m"
+   },
+   "note": "Phrozen 공식 비교표"
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Phrozen",
+    "title": "Aqua-Clear Plus",
+    "material": "클리어 레진"
+   },
+   "url": "https://phrozen3d.com/en/materials/materials-comparison",
+   "ranges": {
+    "viscosity": [
+     50,
+     150
+    ]
+   },
+   "values": {
+    "density": 1.09,
+    "tensile_mpa": 34,
+    "modulus_mpa": 2277,
+    "elong": 13.6,
+    "hdt_c": 47.9,
+    "shore": "75–80D",
+    "impact": "42.9 J/m"
+   },
+   "note": "Phrozen 공식 비교표"
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Phrozen",
+    "title": "ABS-Like",
+    "material": "ABS-Like 레진"
+   },
+   "url": "https://phrozen3d.com/en/materials/materials-comparison",
+   "ranges": {
+    "viscosity": [
+     50,
+     100
+    ],
+    "tensile_mpa": [
+     29.6,
+     33.3
+    ],
+    "modulus_mpa": [
+     1644.2,
+     1742
+    ],
+    "elong": [
+     5.6,
+     5.8
+    ],
+    "hdt_c": [
+     55,
+     60
+    ]
+   },
+   "values": {
+    "density": 1.1,
+    "shore": "75–80D",
+    "impact": "42.3–46.5 J/m"
+   },
+   "note": "Phrozen 공식 비교표"
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Phrozen",
+    "title": "BJD",
+    "material": "터프 레진"
+   },
+   "url": "https://phrozen3d.com/en/materials/materials-comparison",
+   "ranges": {
+    "viscosity": [
+     210,
+     280
+    ],
+    "density": [
+     1.1,
+     1.15
+    ]
+   },
+   "values": {
+    "tensile_mpa": 28.7,
+    "modulus_mpa": 1583.3,
+    "elong": 11.5,
+    "hdt_c": 55.5,
+    "shore": "75–81D",
+    "impact": "35.3 J/m"
+   },
+   "note": "Phrozen 공식 비교표"
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Phrozen",
+    "title": "Castable Resin AnyCast",
+    "material": "캐스팅 · 왁스 레진"
+   },
+   "url": "https://phrozen3d.com/en/materials/materials-comparison",
+   "ranges": {
+    "viscosity": [
+     150,
+     250
+    ],
+    "density": [
+     1.05,
+     1.25
+    ]
+   },
+   "values": {
+    "shore": "70–73D",
+    "impact": "26.7 J/m"
+   },
+   "note": "Phrozen 공식 비교표"
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Phrozen",
+    "title": "Castable Resin W20 Green",
+    "material": "캐스팅 · 왁스 레진"
+   },
+   "url": "https://phrozen3d.com/en/materials/materials-comparison",
+   "ranges": {},
+   "values": {},
+   "note": "Phrozen 공식 비교표 · 표에 수치 없음"
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Phrozen",
+    "title": "Castable Resin W40 Orange",
+    "material": "캐스팅 · 왁스 레진"
+   },
+   "url": "https://phrozen3d.com/en/materials/materials-comparison",
+   "ranges": {},
+   "values": {
+    "viscosity": 582,
+    "density": 1.05,
+    "shore": "55–60D",
+    "impact": "14.3 J/m"
+   },
+   "note": "Phrozen 공식 비교표"
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Phrozen",
+    "title": "Castable Resin Violet",
+    "material": "캐스팅 · 왁스 레진"
+   },
+   "url": "https://phrozen3d.com/en/materials/materials-comparison",
+   "ranges": {},
+   "values": {
+    "viscosity": 144,
+    "density": 1.12,
+    "shore": "65–70D",
+    "impact": "40 J/m"
+   },
+   "note": "Phrozen 공식 비교표"
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Phrozen",
+    "title": "Ceramic Pro",
+    "material": "세라믹 레진"
+   },
+   "url": "https://phrozen3d.com/en/materials/materials-comparison",
+   "ranges": {
+    "viscosity": [
+     230,
+     300
+    ]
+   },
+   "values": {
+    "density": 1.65,
+    "tensile_mpa": 83.8,
+    "modulus_mpa": 8380,
+    "elong": 1,
+    "hdt_c": 230,
+    "shore": ">90D",
+    "impact": "18.1 J/m"
+   },
+   "note": "Phrozen 공식 비교표 · 열변형 온도는 표에 >230℃"
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Phrozen",
+    "title": "Ceramic White",
+    "material": "세라믹 레진"
+   },
+   "url": "https://phrozen3d.com/en/materials/materials-comparison",
+   "ranges": {
+    "viscosity": [
+     45,
+     120
+    ]
+   },
+   "values": {
+    "density": 1.45,
+    "tensile_mpa": 49.6,
+    "modulus_mpa": 4320,
+    "elong": 2,
+    "hdt_c": 90,
+    "shore": ">90D",
+    "impact": "26 J/m"
+   },
+   "note": "Phrozen 공식 비교표"
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Phrozen",
+    "title": "EL400",
+    "material": "플렉서블 레진"
+   },
+   "url": "https://phrozen3d.com/en/materials/materials-comparison",
+   "ranges": {
+    "viscosity": [
+     2300,
+     3000
+    ]
+   },
+   "values": {
+    "density": 1.04,
+    "tensile_mpa": 6.3,
+    "elong": 391,
+    "shore": "70–75A"
+   },
+   "note": "Phrozen 공식 비교표"
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Phrozen",
+    "title": "FR940",
+    "material": "스탠다드 레진"
+   },
+   "url": "https://phrozen3d.com/en/materials/materials-comparison",
+   "ranges": {
+    "viscosity": [
+     180,
+     285
+    ]
+   },
+   "values": {
+    "density": 1.14,
+    "tensile_mpa": 38.1,
+    "modulus_mpa": 1537.7,
+    "elong": 4.9,
+    "hdt_c": 82.8,
+    "shore": "80–82D",
+    "impact": "17.5 J/m"
+   },
+   "note": "Phrozen 공식 비교표"
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Phrozen",
+    "title": "Neon Resin",
+    "material": "스탠다드 레진"
+   },
+   "url": "https://phrozen3d.com/en/materials/materials-comparison",
+   "ranges": {
+    "viscosity": [
+     200,
+     350
+    ],
+    "density": [
+     1.1,
+     1.15
+    ],
+    "tensile_mpa": [
+     19,
+     23
+    ],
+    "modulus_mpa": [
+     800,
+     1150
+    ],
+    "elong": [
+     3,
+     12
+    ],
+    "hdt_c": [
+     65,
+     70
+    ]
+   },
+   "values": {
+    "shore": "72–82D",
+    "impact": "40.51–47.98 J/m"
+   },
+   "note": "Phrozen 공식 비교표"
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Phrozen",
+    "title": "Nylon-Green Tough",
+    "material": "터프 레진"
+   },
+   "url": "https://phrozen3d.com/en/materials/materials-comparison",
+   "ranges": {
+    "viscosity": [
+     650,
+     800
+    ]
+   },
+   "values": {
+    "density": 1.1,
+    "tensile_mpa": 21.2,
+    "modulus_mpa": 836.2,
+    "elong": 83.3,
+    "hdt_c": 42.6,
+    "shore": "65–70D",
+    "impact": "261.5 J/m"
+   },
+   "note": "Phrozen 공식 비교표"
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Phrozen",
+    "title": "ONYX Impact Plus",
+    "material": "터프 레진"
+   },
+   "url": "https://phrozen3d.com/en/materials/materials-comparison",
+   "ranges": {
+    "viscosity": [
+     1600,
+     2000
+    ]
+   },
+   "values": {
+    "density": 1.05,
+    "tensile_mpa": 30.6,
+    "modulus_mpa": 943.1,
+    "elong": 90.9,
+    "hdt_c": 57.2,
+    "shore": "72–75D",
+    "impact": "169.5 J/m"
+   },
+   "note": "Phrozen 공식 비교표"
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Phrozen",
+    "title": "Onyx Rigid Pro410",
+    "material": "터프 레진"
+   },
+   "url": "https://phrozen3d.com/en/materials/materials-comparison",
+   "ranges": {
+    "viscosity": [
+     300,
+     400
+    ]
+   },
+   "values": {
+    "density": 1.1,
+    "tensile_mpa": 36.4,
+    "modulus_mpa": 1882.8,
+    "elong": 9.3,
+    "hdt_c": 54.4,
+    "shore": "78–80D",
+    "impact": "30 J/m"
+   },
+   "note": "Phrozen 공식 비교표"
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Phrozen",
+    "title": "PC/GF Like",
+    "material": "터프 레진"
+   },
+   "url": "https://phrozen3d.com/en/materials/materials-comparison",
+   "ranges": {
+    "viscosity": [
+     220,
+     300
+    ]
+   },
+   "values": {
+    "density": 1.12,
+    "tensile_mpa": 63.6,
+    "modulus_mpa": 3330.7,
+    "elong": 5.5,
+    "hdt_c": 95.6,
+    "shore": "80–85D",
+    "impact": "35.5 J/m"
+   },
+   "note": "Phrozen 공식 비교표"
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Phrozen",
+    "title": "Protowhite Tough",
+    "material": "터프 레진"
+   },
+   "url": "https://phrozen3d.com/en/materials/materials-comparison",
+   "ranges": {
+    "viscosity": [
+     200,
+     250
+    ]
+   },
+   "values": {
+    "density": 1.1,
+    "tensile_mpa": 57,
+    "modulus_mpa": 2300,
+    "elong": 15,
+    "hdt_c": 55,
+    "shore": "75–77D",
+    "impact": "28 J/m"
+   },
+   "note": "Phrozen 공식 비교표"
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Phrozen",
+    "title": "RPG",
+    "material": "터프 레진"
+   },
+   "url": "https://phrozen3d.com/en/materials/materials-comparison",
+   "ranges": {
+    "viscosity": [
+     230,
+     350
+    ],
+    "density": [
+     1.13,
+     1.14
+    ],
+    "tensile_mpa": [
+     21.7,
+     24.2
+    ],
+    "modulus_mpa": [
+     959.8,
+     1152.3
+    ],
+    "elong": [
+     25.3,
+     30.6
+    ],
+    "hdt_c": [
+     48.9,
+     56.6
+    ]
+   },
+   "values": {
+    "shore": "75–80D",
+    "impact": "66.5–80.8 J/m"
+   },
+   "note": "Phrozen 공식 비교표"
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Phrozen",
+    "title": "Rock-Black Stiff",
+    "material": "터프 레진"
+   },
+   "url": "https://phrozen3d.com/en/materials/materials-comparison",
+   "ranges": {
+    "viscosity": [
+     100,
+     150
+    ]
+   },
+   "values": {
+    "density": 1.1,
+    "tensile_mpa": 46.3,
+    "modulus_mpa": 3105,
+    "elong": 16.7,
+    "hdt_c": 56.1,
+    "shore": "75–78D",
+    "impact": "40.9 J/m"
+   },
+   "note": "Phrozen 공식 비교표"
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Phrozen",
+    "title": "Speed",
+    "material": "스탠다드 레진"
+   },
+   "url": "https://phrozen3d.com/en/materials/materials-comparison",
+   "ranges": {
+    "viscosity": [
+     165,
+     250
+    ]
+   },
+   "values": {
+    "density": 1.13,
+    "tensile_mpa": 45.5,
+    "modulus_mpa": 3019.7,
+    "elong": 12.9,
+    "hdt_c": 59.3,
+    "shore": "75–80D",
+    "impact": "34.1 J/m"
+   },
+   "note": "Phrozen 공식 비교표"
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Phrozen",
+    "title": "Speed Plus",
+    "material": "스탠다드 레진"
+   },
+   "url": "https://phrozen3d.com/en/materials/materials-comparison",
+   "ranges": {
+    "viscosity": [
+     150,
+     250
+    ]
+   },
+   "values": {
+    "density": 1.14,
+    "tensile_mpa": 43.6,
+    "modulus_mpa": 2414,
+    "elong": 5.7,
+    "hdt_c": 64.8,
+    "shore": "85–88D",
+    "impact": "39.2 J/m"
+   },
+   "note": "Phrozen 공식 비교표"
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Phrozen",
+    "title": "Tough 100E",
+    "material": "터프 레진"
+   },
+   "url": "https://phrozen3d.com/en/materials/materials-comparison",
+   "ranges": {
+    "viscosity": [
+     1900,
+     2500
+    ],
+    "tensile_mpa": [
+     24.6,
+     29.9
+    ],
+    "modulus_mpa": [
+     925.4,
+     1058.8
+    ],
+    "elong": [
+     93.5,
+     100.5
+    ],
+    "hdt_c": [
+     51.5,
+     52.7
+    ]
+   },
+   "values": {
+    "density": 1.1,
+    "shore": "69–76D",
+    "impact": "69.1–77.3 J/m"
+   },
+   "note": "Phrozen 공식 비교표"
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Phrozen",
+    "title": "Tough: ABS Like",
+    "material": "ABS-Like 레진"
+   },
+   "url": "https://phrozen3d.com/en/materials/materials-comparison",
+   "ranges": {
+    "viscosity": [
+     130,
+     180
+    ]
+   },
+   "values": {
+    "density": 1.11,
+    "tensile_mpa": 35.8,
+    "modulus_mpa": 2490.6,
+    "elong": 17.7,
+    "hdt_c": 57,
+    "shore": "75–80D",
+    "impact": "66.4 J/m"
+   },
+   "note": "Phrozen 공식 비교표"
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Phrozen",
+    "title": "Water-Washable Tough",
+    "material": "수세 레진"
+   },
+   "url": "https://phrozen3d.com/en/materials/materials-comparison",
+   "ranges": {
+    "viscosity": [
+     250,
+     500
+    ],
+    "density": [
+     1.1,
+     1.12
+    ],
+    "tensile_mpa": [
+     22.4,
+     22.9
+    ],
+    "modulus_mpa": [
+     863.4,
+     993
+    ],
+    "elong": [
+     16.3,
+     23.1
+    ],
+    "hdt_c": [
+     43.9,
+     46.1
+    ]
+   },
+   "values": {
+    "shore": "75–80D",
+    "impact": "50.3–59.8 J/m"
+   },
+   "note": "Phrozen 공식 비교표",
+   "wash": "물"
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Phrozen",
+    "title": "Water-Washable",
+    "material": "수세 레진"
+   },
+   "url": "https://phrozen3d.com/en/materials/materials-comparison",
+   "ranges": {
+    "viscosity": [
+     70,
+     145
+    ],
+    "density": [
+     1.1,
+     1.11
+    ],
+    "tensile_mpa": [
+     11,
+     25.5
+    ],
+    "modulus_mpa": [
+     486,
+     1383
+    ],
+    "elong": [
+     3.5,
+     8.3
+    ],
+    "hdt_c": [
+     48.9,
+     53.2
+    ]
+   },
+   "values": {
+    "shore": "72–75D",
+    "impact": "30.7–41 J/m"
+   },
+   "note": "Phrozen 공식 비교표",
+   "wash": "물"
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Phrozen",
+    "title": "Dental Ortho Model",
+    "material": "덴탈 · 의료 레진"
+   },
+   "url": "https://phrozen3d.com/en/materials/materials-comparison",
+   "ranges": {
+    "viscosity": [
+     180,
+     240
+    ]
+   },
+   "values": {
+    "density": 1.17,
+    "tensile_mpa": 32,
+    "modulus_mpa": 1890,
+    "hdt_c": 200,
+    "shore": "82",
+    "impact": "10 J/m"
+   },
+   "note": "Phrozen 공식 비교표 · 경도 눈금(A/D) 표기 없음"
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Phrozen",
+    "title": "Dental Study Model",
+    "material": "덴탈 · 의료 레진"
+   },
+   "url": "https://phrozen3d.com/en/materials/materials-comparison",
+   "ranges": {
+    "viscosity": [
+     150,
+     230
+    ]
+   },
+   "values": {
+    "density": 1.4,
+    "tensile_mpa": 28,
+    "modulus_mpa": 920,
+    "elong": 7,
+    "shore": "90",
+    "impact": "24 J/m"
+   },
+   "note": "Phrozen 공식 비교표 · 경도 눈금(A/D) 표기 없음"
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Phrozen",
+    "title": "Gingiva Mask",
+    "material": "덴탈 · 의료 레진"
+   },
+   "url": "https://phrozen3d.com/en/materials/materials-comparison",
+   "ranges": {
+    "viscosity": [
+     1900,
+     2000
+    ],
+    "elong": [
+     42,
+     46
+    ]
+   },
+   "values": {
+    "density": 1.18,
+    "tensile_mpa": 1.4,
+    "shore": "35"
+   },
+   "note": "Phrozen 공식 비교표 · 경도 눈금(A/D) 표기 없음"
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Phrozen",
+    "title": "Water-Washable Dental Model",
+    "material": "덴탈 · 의료 레진"
+   },
+   "url": "https://phrozen3d.com/en/materials/materials-comparison",
+   "ranges": {
+    "viscosity": [
+     60,
+     100
+    ]
+   },
+   "values": {
+    "density": 1.1,
+    "shore": "76"
+   },
+   "note": "Phrozen 공식 비교표 · 경도 눈금(A/D) 표기 없음",
+   "wash": "물"
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Siraya Tech",
+    "title": "Blu Nylon",
+    "material": "터프 레진"
+   },
+   "url": "https://siraya.tech/pages/blu-tough-nylon-black-tds",
+   "values": {
+    "tensile_mpa": 47,
+    "modulus_mpa": 1750,
+    "elong": 50,
+    "shore": "78D",
+    "viscosity": 750,
+    "density": 1.1,
+    "hdt_c": 63,
+    "impact": "53 J/m"
+   },
+   "note": "Siraya Tech 공식 TDS · 인장은 항복 강도 · 밀도는 액체 값"
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Siraya Tech",
+    "title": "Blu Nylon Mecha",
+    "material": "터프 레진"
+   },
+   "url": "https://siraya.tech/pages/wear-resistant-blu-nylon-mecha-tds",
+   "values": {
+    "tensile_mpa": 63,
+    "modulus_mpa": 1900,
+    "elong": 45,
+    "shore": "73D",
+    "viscosity": 1000,
+    "density": 1.15,
+    "hdt_c": 65,
+    "impact": "50 J"
+   },
+   "note": "Siraya Tech 공식 TDS · 인장은 항복 강도 · 밀도는 액체 값"
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Siraya Tech",
+    "title": "Blu Easy",
+    "material": "터프 레진"
+   },
+   "url": "https://siraya.tech/pages/blu-tough-blu-easy-grey-tds",
+   "values": {
+    "tensile_mpa": 33,
+    "modulus_mpa": 1000,
+    "elong": 43,
+    "shore": "75D",
+    "viscosity": 150,
+    "density": 1.1,
+    "hdt_c": 62,
+    "impact": "42 J/m"
+   },
+   "note": "Siraya Tech 공식 TDS · 인장은 항복 강도 · 밀도는 액체 값"
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Siraya Tech",
+    "title": "Blu Lava",
+    "material": "터프 레진"
+   },
+   "url": "https://siraya.tech/pages/blu-tough-blu-lava-black-tds",
+   "values": {
+    "tensile_mpa": 65,
+    "modulus_mpa": 2500,
+    "elong": 12,
+    "shore": "87D",
+    "viscosity": 1600,
+    "density": 1.1,
+    "hdt_c": 75,
+    "impact": "47 J/m"
+   },
+   "note": "Siraya Tech 공식 TDS · 인장은 항복 강도 · 밀도는 액체 값"
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Siraya Tech",
+    "title": "Craft Ultra Clear",
+    "material": "클리어 레진"
+   },
+   "url": "https://siraya.tech/pages/creative-resin-craft-ultra-clear-tds",
+   "values": {
+    "tensile_mpa": 39,
+    "modulus_mpa": 1200,
+    "elong": 6,
+    "shore": "82D",
+    "viscosity": 300,
+    "density": 1.1,
+    "hdt_c": 75,
+    "impact": "25 J",
+    "flex_mpa": 35
+   },
+   "note": "Siraya Tech 공식 TDS · 인장은 항복 강도 · 밀도는 액체 값"
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Siraya Tech",
+    "title": "Fast Mecha",
+    "material": "ABS-Like 레진"
+   },
+   "url": "https://siraya.tech/pages/fast-mecha-white-tds-abs-like-scratch-resistant-resin",
+   "values": {
+    "tensile_mpa": 32,
+    "modulus_mpa": 1050,
+    "elong": 23,
+    "shore": "70",
+    "viscosity": 140,
+    "density": 1.15,
+    "hdt_c": 70,
+    "impact": "29 J"
+   },
+   "note": "Siraya Tech 공식 TDS · 인장은 항복 강도 · 밀도는 액체 값"
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Siraya Tech",
+    "title": "Fast Tough",
+    "material": "ABS-Like 레진"
+   },
+   "url": "https://siraya.tech/pages/abs-like-fast-tough-tds-abslike-upgrade",
+   "values": {
+    "tensile_mpa": 34,
+    "modulus_mpa": 1050,
+    "elong": 40,
+    "shore": "77D",
+    "viscosity": 130,
+    "density": 1.1,
+    "hdt_c": 63,
+    "impact": "39 J"
+   },
+   "note": "Siraya Tech 공식 TDS · 인장은 항복 강도 · 밀도는 액체 값"
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Siraya Tech",
+    "title": "Sculpt Ultra",
+    "material": "고온 레진"
+   },
+   "url": "https://siraya.tech/pages/high-temperature-resistant-sculpt-ultra-white-tds",
+   "values": {
+    "tensile_mpa": 33,
+    "modulus_mpa": 8000,
+    "elong": 1,
+    "shore": "99D",
+    "viscosity": 650,
+    "density": 1.22,
+    "hdt_c": 250,
+    "impact": "22 J",
+    "flex_mpa": 120
+   },
+   "note": "Siraya Tech 공식 TDS · 인장은 항복 강도 · 밀도는 액체 값"
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Siraya Tech",
+    "title": "Simple",
+    "material": "수세 레진"
+   },
+   "url": "https://siraya.tech/pages/simple-water-washable-resin-tds",
+   "values": {
+    "tensile_mpa": 27,
+    "modulus_mpa": 650,
+    "elong": 4,
+    "shore": "75D",
+    "viscosity": 60,
+    "density": 1.1,
+    "hdt_c": 60,
+    "impact": "18 J"
+   },
+   "note": "Siraya Tech 공식 TDS · 인장은 항복 강도 · 밀도는 액체 값",
+   "wash": "물"
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Siraya Tech",
+    "title": "Simple V2",
+    "material": "수세 레진"
+   },
+   "url": "https://siraya.tech/pages/simple-water-washable-v2-tds",
+   "values": {
+    "tensile_mpa": 29,
+    "modulus_mpa": 750,
+    "elong": 10,
+    "shore": "78D",
+    "viscosity": 170,
+    "density": 1.1,
+    "hdt_c": 60,
+    "impact": "18 J/m"
+   },
+   "note": "Siraya Tech 공식 TDS · 인장은 항복 강도 · 밀도는 액체 값",
+   "wash": "물"
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Siraya Tech",
+    "title": "Tenacious Flex 70A",
+    "material": "플렉서블 레진"
+   },
+   "url": "https://siraya.tech/pages/70a-flexible-resin-tenacious-flex-black-tds",
+   "values": {
+    "tensile_mpa": 5,
+    "modulus_mpa": 10,
+    "elong": 140,
+    "shore": "70A",
+    "viscosity": 400,
+    "density": 1.1
+   },
+   "note": "Siraya Tech 공식 TDS · 인장은 항복 강도 · 밀도는 액체 값"
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Siraya Tech",
+    "title": "Tenacious Easy",
+    "material": "터프 레진"
+   },
+   "url": "https://siraya.tech/pages/flexible-model-resin-tenacious-easy-grey-tds",
+   "values": {
+    "tensile_mpa": 32,
+    "modulus_mpa": 950,
+    "elong": 55,
+    "shore": "73D",
+    "viscosity": 250,
+    "density": 1.1,
+    "hdt_c": 60,
+    "impact": "46 J/m"
+   },
+   "note": "Siraya Tech 공식 TDS · 인장은 항복 강도 · 밀도는 액체 값"
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Siraya Tech",
+    "title": "Tenacious Lava",
+    "material": "터프 레진"
+   },
+   "url": "https://siraya.tech/pages/tenacious-lava-tds",
+   "values": {
+    "tensile_mpa": 45,
+    "modulus_mpa": 1800,
+    "elong": 75,
+    "shore": "73D",
+    "viscosity": 1600,
+    "density": 1.1,
+    "hdt_c": 55,
+    "impact": "65 J/m"
+   },
+   "note": "Siraya Tech 공식 TDS · 인장은 항복 강도 · 밀도는 액체 값"
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Siraya Tech",
+    "title": "Rebound 55A",
+    "material": "플렉서블 레진"
+   },
+   "url": "https://siraya.tech/pages/siraya-tech-rebound-55a-black-tds",
+   "values": {
+    "tensile_mpa": 6,
+    "modulus_mpa": 95,
+    "elong": 170,
+    "shore": "55A",
+    "viscosity": 8000,
+    "density": 1.11
+   },
+   "note": "Siraya Tech 공식 TDS · 인장은 항복 강도 · 밀도는 액체 값"
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Siraya Tech",
+    "title": "Magna Durable",
+    "material": "터프 레진"
+   },
+   "url": "https://siraya.tech/pages/siraya-tech-magna-durable-resin-tds",
+   "values": {
+    "tensile_mpa": 42,
+    "modulus_mpa": 1750,
+    "elong": 65,
+    "shore": "74D",
+    "viscosity": 1550,
+    "density": 1.1,
+    "hdt_c": 57,
+    "impact": "65 J"
+   },
+   "note": "Siraya Tech 공식 TDS · 인장은 항복 강도 · 밀도는 액체 값"
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Siraya Tech",
+    "title": "Cast",
+    "material": "캐스팅 · 왁스 레진"
+   },
+   "url": "https://siraya.tech/pages/cast-castable-resin-tds",
+   "note": "Siraya Tech 공식 TDS · Purple 기준 (파단 인장) · True Blue / Royal Blue 는 연신 4 · 65D",
+   "values": {
+    "tensile_mpa": 20,
+    "modulus_mpa": 600,
+    "elong": 5,
+    "hdt_c": 50,
+    "shore": "70D",
+    "viscosity": 300,
+    "shrink": 6
+   }
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Formlabs",
+    "title": "Alpha Black Resin",
+    "material": "스탠다드 레진"
+   },
+   "url": "https://formlabs.com/products/alpha-black-resin/",
+   "note": "Formlabs 전용 프린터 (Form Studio 1) — 노출은 슬라이서가 정해요.",
+   "values": {
+    "tensile_mpa": 42,
+    "modulus_mpa": 2020,
+    "flex_mpa": 65,
+    "hdt_c": 55,
+    "elong": 36,
+    "impact": "33 J/m"
+   }
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Formlabs",
+    "title": "Alpha Clear Resin",
+    "material": "클리어 레진"
+   },
+   "url": "https://formlabs.com/products/alpha-clear-resin/",
+   "note": "Formlabs 전용 프린터 (Form Studio 1) — 노출은 슬라이서가 정해요.",
+   "values": {
+    "tensile_mpa": 38,
+    "modulus_mpa": 1870,
+    "flex_mpa": 63,
+    "hdt_c": 57,
+    "elong": 32,
+    "impact": "39 J/m"
+   }
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Formlabs",
+    "title": "Alpha Fast Resin",
+    "material": "스탠다드 레진"
+   },
+   "url": "https://formlabs.com/products/alpha-fast-resin/",
+   "note": "Formlabs 전용 프린터 (Form Studio 1) — 노출은 슬라이서가 정해요.",
+   "values": {
+    "tensile_mpa": 46,
+    "modulus_mpa": 2230,
+    "flex_mpa": 78,
+    "hdt_c": 59,
+    "elong": 34,
+    "impact": "37 J/m"
+   }
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Formlabs",
+    "title": "Alpha Grey Resin",
+    "material": "스탠다드 레진"
+   },
+   "url": "https://formlabs.com/products/alpha-grey-resin/",
+   "note": "Formlabs 전용 프린터 (Form Studio 1) — 노출은 슬라이서가 정해요.",
+   "values": {
+    "tensile_mpa": 43,
+    "modulus_mpa": 2150,
+    "flex_mpa": 75,
+    "hdt_c": 55,
+    "elong": 34
+   }
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Formlabs",
+    "title": "Alpha Model Resin",
+    "material": "스탠다드 레진"
+   },
+   "url": "https://formlabs.com/products/alpha-model-resin/",
+   "note": "Formlabs 전용 프린터 (Form Studio 1) — 노출은 슬라이서가 정해요.",
+   "values": {
+    "tensile_mpa": 40,
+    "modulus_mpa": 1980,
+    "flex_mpa": 57,
+    "hdt_c": 49,
+    "elong": 24,
+    "impact": "35 J/m"
+   }
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Formlabs",
+    "title": "Alpha White Resin",
+    "material": "스탠다드 레진"
+   },
+   "url": "https://formlabs.com/products/alpha-white-resin/",
+   "note": "Formlabs 전용 프린터 (Form Studio 1) — 노출은 슬라이서가 정해요.",
+   "values": {
+    "tensile_mpa": 35,
+    "modulus_mpa": 1690,
+    "flex_mpa": 63,
+    "hdt_c": 51,
+    "elong": 26,
+    "impact": "34 J/m"
+   }
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Formlabs",
+    "title": "BioMed Amber Resin",
+    "material": "덴탈 · 의료 레진"
+   },
+   "url": "https://formlabs.com/products/biomed-amber-resin/",
+   "note": "Formlabs 전용 프린터 (Form 4B, Form 4BL, Form 3B, Form 3BL, Form 2) — 노출은 슬라이서가 정해요.",
+   "values": {
+    "tensile_mpa": 73,
+    "flex_mpa": 103,
+    "hdt_c": 78,
+    "elong": 12,
+    "impact": "28 J/m",
+    "shore": "67D"
+   }
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Formlabs",
+    "title": "BioMed Black Resin",
+    "material": "덴탈 · 의료 레진"
+   },
+   "url": "https://formlabs.com/products/biomed-black-resin/",
+   "note": "Formlabs 전용 프린터 (Form 4B, Form 4BL, Form 3B, Form 3BL, Form 2) — 노출은 슬라이서가 정해요.",
+   "values": {
+    "tensile_mpa": 36,
+    "modulus_mpa": 1523.74,
+    "flex_mpa": 57.16,
+    "hdt_c": 67.9,
+    "elong": 14,
+    "impact": "24.77 J/m",
+    "shore": "77D"
+   }
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Formlabs",
+    "title": "BioMed Durable Resin",
+    "material": "덴탈 · 의료 레진"
+   },
+   "url": "https://formlabs.com/products/biomed-durable-resin/",
+   "note": "Formlabs 전용 프린터 (Form 4B, Form 4BL, Form 3B, Form 3BL) — 노출은 슬라이서가 정해요.",
+   "values": {
+    "tensile_mpa": 29.1,
+    "modulus_mpa": 994,
+    "flex_mpa": 21,
+    "hdt_c": 46,
+    "elong": 33,
+    "impact": "98 J/m",
+    "shore": "75D"
+   }
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Formlabs",
+    "title": "BioMed Flex 50A Resin",
+    "material": "덴탈 · 의료 레진"
+   },
+   "url": "https://formlabs.com/products/biomed-flex-50a-resin/",
+   "note": "Formlabs 전용 프린터 (Form 4B, Form 4BL, Form 3B, Form 3BL, Form 2) — 노출은 슬라이서가 정해요.",
+   "values": {
+    "tensile_mpa": 2.3,
+    "elong": 150,
+    "shore": "50A"
+   }
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Formlabs",
+    "title": "BioMed Flex 80A Resin",
+    "material": "덴탈 · 의료 레진"
+   },
+   "url": "https://formlabs.com/products/biomed-flex-80a-resin/",
+   "note": "Formlabs 전용 프린터 (Form 4B, Form 4BL, Form 3B, Form 3BL) — 노출은 슬라이서가 정해요.",
+   "values": {
+    "tensile_mpa": 7.2,
+    "elong": 135,
+    "shore": "80A"
+   }
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Formlabs",
+    "title": "BioMed White Resin",
+    "material": "덴탈 · 의료 레진"
+   },
+   "url": "https://formlabs.com/products/biomed-white-resin/",
+   "note": "Formlabs 전용 프린터 (Form 4B, Form 4BL, Form 3B, Form 3BL, Form 2) — 노출은 슬라이서가 정해요.",
+   "values": {
+    "tensile_mpa": 45.78,
+    "modulus_mpa": 2020.16,
+    "flex_mpa": 74.46,
+    "hdt_c": 67,
+    "elong": 10,
+    "impact": "15.11 J/m",
+    "shore": "80D"
+   }
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Formlabs",
+    "title": "Black Resin V5",
+    "material": "스탠다드 레진"
+   },
+   "url": "https://formlabs.com/products/black-resin/",
+   "note": "Formlabs 전용 프린터 (Form 4, Form 4B, Form 4L, Form 4BL, Form Studio 1) — 노출은 슬라이서가 정해요.",
+   "values": {
+    "tensile_mpa": 61,
+    "modulus_mpa": 2700,
+    "flex_mpa": 103,
+    "hdt_c": 69,
+    "elong": 10,
+    "impact": "29 J/m"
+   }
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Formlabs",
+    "title": "Alumina 4N Resin",
+    "material": "세라믹 레진"
+   },
+   "url": "https://formlabs.com/products/ceramic-alumina-4n-resin/",
+   "note": "Formlabs 전용 프린터 (Form 4, Form 4B, Form 3, Form 3B, Form Studio 1) — 노출은 슬라이서가 정해요. 탄성·굴곡은 소결 뒤 값.",
+   "values": {
+    "modulus_mpa": 390000,
+    "flex_mpa": 400,
+    "shore": "70D"
+   }
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Formlabs",
+    "title": "Clear Cast Resin",
+    "material": "캐스팅 · 왁스 레진"
+   },
+   "url": "https://formlabs.com/products/clear-cast-resin/",
+   "note": "Formlabs 전용 프린터 (Form 4, Form 4B, Form 4L, Form 4BL, Form 3, Form 3L, Form 3B) — 노출은 슬라이서가 정해요.",
+   "values": {
+    "tensile_mpa": 65,
+    "modulus_mpa": 2800,
+    "hdt_c": 73,
+    "elong": 6,
+    "impact": "25 J/m"
+   }
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Formlabs",
+    "title": "Color Base Resin",
+    "material": "스탠다드 레진"
+   },
+   "url": "https://formlabs.com/products/color-base-resin/",
+   "note": "Formlabs 전용 프린터 (Form 4, Form 4B, Form 4L, Form 4BL, Form 3, Form 3L, Form 3B) — 노출은 슬라이서가 정해요.",
+   "values": {
+    "tensile_mpa": 65,
+    "modulus_mpa": 2600,
+    "elong": 6,
+    "impact": "25 J/m"
+   }
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Formlabs",
+    "title": "Color Resin V5",
+    "material": "스탠다드 레진"
+   },
+   "url": "https://formlabs.com/products/color-resin/",
+   "note": "Formlabs 전용 프린터 (Form 4, Form 4B, Form 4L, Form 4BL, Form Studio 1) — 노출은 슬라이서가 정해요.",
+   "values": {
+    "tensile_mpa": 54,
+    "modulus_mpa": 2500,
+    "flex_mpa": 91,
+    "hdt_c": 62,
+    "elong": 15,
+    "impact": "34 J/m"
+   }
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Formlabs",
+    "title": "Dental LT Clear Resin V2",
+    "material": "덴탈 · 의료 레진"
+   },
+   "url": "https://formlabs.com/products/dental-lt-clear-v2-resin/",
+   "note": "Formlabs 전용 프린터 (Form 4B, Form 4BL, Form 3B, Form 3BL) — 노출은 슬라이서가 정해요.",
+   "values": {
+    "tensile_mpa": 52,
+    "modulus_mpa": 2080,
+    "flex_mpa": 84,
+    "elong": 12,
+    "impact": "449 J/m",
+    "shore": "78D"
+   }
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Formlabs",
+    "title": "Draft Resin V2",
+    "material": "스탠다드 레진"
+   },
+   "url": "https://formlabs.com/products/draft-v2-resin/",
+   "note": "Formlabs 전용 프린터 (Form 3, Form 3L, Form 3B, Form 3BL, Form 2) — 노출은 슬라이서가 정해요.",
+   "values": {
+    "tensile_mpa": 52,
+    "modulus_mpa": 2300,
+    "hdt_c": 74,
+    "elong": 4,
+    "impact": "26 J/m"
+   }
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Formlabs",
+    "title": "ESD Resin",
+    "material": "터프 레진"
+   },
+   "url": "https://formlabs.com/products/esd-resin/",
+   "note": "Formlabs 전용 프린터 (Form 4, Form 4B, Form 4L, Form 4BL, Form 3, Form 3L, Form 3B) — 노출은 슬라이서가 정해요.",
+   "values": {
+    "tensile_mpa": 44.2,
+    "modulus_mpa": 1937,
+    "flex_mpa": 61,
+    "hdt_c": 62.2,
+    "elong": 12,
+    "impact": "26 J/m"
+   }
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Formlabs",
+    "title": "Fast Model Resin",
+    "material": "스탠다드 레진"
+   },
+   "url": "https://formlabs.com/products/fast-model-resin/",
+   "note": "Formlabs 전용 프린터 (Form 4, Form 4B, Form 4L, Form 4BL, Form Studio 1) — 노출은 슬라이서가 정해요.",
+   "values": {
+    "tensile_mpa": 62,
+    "modulus_mpa": 2670,
+    "flex_mpa": 106,
+    "hdt_c": 76,
+    "elong": 11,
+    "impact": "37 J/m"
+   }
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Formlabs",
+    "title": "Flame Retardant Resin",
+    "material": "터프 레진"
+   },
+   "url": "https://formlabs.com/products/flame-retardant-resin/",
+   "note": "Formlabs 전용 프린터 (Form 4, Form 4B, Form 4L, Form 4BL, Form 3, Form 3L, Form 3B) — 노출은 슬라이서가 정해요.",
+   "values": {
+    "tensile_mpa": 41,
+    "modulus_mpa": 3100,
+    "flex_mpa": 75,
+    "hdt_c": 111,
+    "elong": 7.1,
+    "impact": "22 J/m"
+   }
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Formlabs",
+    "title": "Flexible 50A Resin",
+    "material": "플렉서블 레진"
+   },
+   "url": "https://formlabs.com/products/flexible-50a-resin/",
+   "note": "Formlabs 전용 프린터 (Form 4, Form 4B, Form 4L, Form 4BL, Form 3, Form 3L, Form 3B) — 노출은 슬라이서가 정해요.",
+   "values": {
+    "tensile_mpa": 3.4,
+    "elong": 160,
+    "shore": "55A"
+   }
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Formlabs",
+    "title": "Grey Pro Resin",
+    "material": "스탠다드 레진"
+   },
+   "url": "https://formlabs.com/products/grey-pro-resin/",
+   "note": "Formlabs 전용 프린터 (Form 3, Form 3L, Form 3B, Form 3BL, Form 2) — 노출은 슬라이서가 정해요.",
+   "values": {
+    "tensile_mpa": 61,
+    "modulus_mpa": 2600,
+    "flex_mpa": 86,
+    "hdt_c": 78,
+    "elong": 13,
+    "impact": "19 J/m"
+   }
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Formlabs",
+    "title": "Model Resin V2",
+    "material": "스탠다드 레진"
+   },
+   "url": "https://formlabs.com/products/model-resin-v2/",
+   "note": "Formlabs 전용 프린터 (Form 3, Form 3L, Form 3B, Form 3BL, Form 2) — 노출은 슬라이서가 정해요.",
+   "values": {
+    "tensile_mpa": 61,
+    "modulus_mpa": 2700,
+    "hdt_c": 49,
+    "elong": 5,
+    "impact": "33 J/m"
+   }
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Formlabs",
+    "title": "Precision Model Resin",
+    "material": "덴탈 · 의료 레진"
+   },
+   "url": "https://formlabs.com/products/precision-model-resin/",
+   "note": "Formlabs 전용 프린터 (Form 4B, Form 4BL) — 노출은 슬라이서가 정해요.",
+   "values": {
+    "tensile_mpa": 50,
+    "modulus_mpa": 2200,
+    "flex_mpa": 87,
+    "hdt_c": 53.5,
+    "elong": 8.6,
+    "impact": "32 J/m"
+   }
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Formlabs",
+    "title": "Rigid 4000 Resin",
+    "material": "터프 레진"
+   },
+   "url": "https://formlabs.com/products/rigid-4000-resin/",
+   "note": "Formlabs 전용 프린터 (Form 4, Form 4B, Form 4L, Form 4BL, Form 3, Form 3L, Form 3B) — 노출은 슬라이서가 정해요.",
+   "values": {
+    "tensile_mpa": 69,
+    "modulus_mpa": 4100,
+    "flex_mpa": 105,
+    "hdt_c": 77,
+    "elong": 5.3,
+    "impact": "23 J/m"
+   }
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Formlabs",
+    "title": "Silicone 40A Resin",
+    "material": "플렉서블 레진"
+   },
+   "url": "https://formlabs.com/products/silicone-40a-resin/",
+   "note": "Formlabs 전용 프린터 (Form 4, Form 4B, Form 3, Form 3B, Form Studio 1) — 노출은 슬라이서가 정해요.",
+   "values": {
+    "tensile_mpa": 5,
+    "elong": 230,
+    "shore": "40A"
+   }
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Formlabs",
+    "title": "Tough 1000 Resin",
+    "material": "터프 레진"
+   },
+   "url": "https://formlabs.com/products/tough-1000-resin/",
+   "note": "Formlabs 전용 프린터 (Form 4, Form 4B, Form 4L, Form 4BL, Form Studio 1) — 노출은 슬라이서가 정해요.",
+   "values": {
+    "tensile_mpa": 26.3,
+    "modulus_mpa": 932,
+    "flex_mpa": 29,
+    "hdt_c": 55.3,
+    "elong": 180,
+    "impact": "72 J/m"
+   }
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Formlabs",
+    "title": "True Cast Resin",
+    "material": "캐스팅 · 왁스 레진"
+   },
+   "url": "https://formlabs.com/products/true-cast-resin/",
+   "note": "Formlabs 전용 프린터 (Form 4, Form 4B, Form Studio 1) — 노출은 슬라이서가 정해요. 페이지에 수치 없음.",
+   "values": {}
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "Formlabs",
+    "title": "White Resin V5",
+    "material": "스탠다드 레진"
+   },
+   "url": "https://formlabs.com/products/white-resin/",
+   "note": "Formlabs 전용 프린터 (Form 4, Form 4B, Form 4L, Form 4BL, Form Studio 1) — 노출은 슬라이서가 정해요.",
+   "values": {
+    "tensile_mpa": 61,
+    "modulus_mpa": 2650,
+    "flex_mpa": 103,
+    "hdt_c": 62,
+    "elong": 11,
+    "impact": "29 J/m"
+   }
+  },
+  {
+   "keys": [
+    "sunlu-standard-resin-resin"
+   ],
+   "url": "https://store.sunlu.com/products/10x1000g-of-sunlu-standard-3d-resin-lcd-uv-curing-405nm-standard-photopolymer-resin",
+   "note": "SUNLU 공식 페이지 · 경도 눈금(HA/HD) 표기 없음",
+   "ranges": {
+    "viscosity": [
+     300,
+     600
+    ]
+   },
+   "values": {
+    "tensile_mpa": 45,
+    "flex_mpa": 57,
+    "elong": 13.5,
+    "hdt_c": 55,
+    "shrink": 8.9,
+    "impact": "40 J/m",
+    "shore": "86"
+   }
+  },
+  {
+   "keys": [
+    "sunlu-water-washable-resin-resin"
+   ],
+   "url": "https://www.sunlu.com/products/water-wash-standard-resin",
+   "wash": "물",
+   "note": "SUNLU 공식 페이지 · 경도 눈금(HA/HD) 표기 없음 · Water Wash Standard 기준",
+   "ranges": {
+    "viscosity": [
+     200,
+     600
+    ]
+   },
+   "values": {
+    "tensile_mpa": 25,
+    "flex_mpa": 35,
+    "elong": 10,
+    "hdt_c": 50,
+    "shrink": 9,
+    "impact": "40 J/m",
+    "shore": "80"
+   }
+  },
+  {
+   "keys": [],
+   "create": {
+    "brand": "SUNLU",
+    "title": "Water Wash ABS-Like",
+    "material": "수세 레진"
+   },
+   "url": "https://www.sunlu.com/products/water-wash-abs-like-resin",
+   "wash": "물",
+   "note": "SUNLU 공식 페이지 · 경도 눈금(HA/HD) 표기 없음",
+   "ranges": {
+    "viscosity": [
+     400,
+     800
+    ]
+   },
+   "values": {
+    "tensile_mpa": 26,
+    "flex_mpa": 34,
+    "elong": 24,
+    "hdt_c": 47,
+    "shrink": 8.8,
+    "impact": "120 J/m",
+    "shore": "77"
+   }
   }
  ]
 }
