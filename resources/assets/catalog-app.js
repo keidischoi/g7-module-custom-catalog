@@ -5,6 +5,16 @@
   var VERSION = '0.3.23', API = '/api/modules/custom-catalog', BASE = '/catalog';
 
   /* ───────── 도구 ───────── */
+  /** 0.3.24 레진 — 노출 범위 · 프린터별 프로필 · 출처 (제조사 자료) */
+  function resinSpec(r) {
+    var q = r.ranges || {}, rows = [], one = function (k, l) { if (q[k]) rows.push('<div><dt>' + l + '</dt><dd>' + esc(q[k].join('–')) + ' 초</dd></div>'); };
+    one('exposure_s', '일반 노출 범위'); one('bottom_exposure_s', '바닥 노출 범위');
+    var p = (r.profiles || []).map(function (x) { return '<tr><td>' + esc(x.printer) + '</td><td>' + x.layer_mm + '</td><td>' + x.exposure_s + '</td><td>' + x.bottom_exposure_s + ' × ' + x.bottom_layers + '</td><td>' + x.lift_mm + ' / ' + x.lift_speed + '</td></tr>'; }).join('');
+    var s = r.src || {}, c = s.conflicts ? Object.keys(s.conflicts).length : 0;
+    return '<div class="cct-spec"><h3>출력 설정 · 출처</h3>' + (rows.length ? '<dl>' + rows.join('') + '</dl>' : '') +
+      (p ? '<div style="overflow-x:auto"><table style="width:100%;font-size:13px"><thead><tr><th align="left">프린터</th><th align="left">층 mm</th><th align="left">노출 초</th><th align="left">바닥 초 × 층</th><th align="left">올림 mm / 속도</th></tr></thead><tbody>' + p + '</tbody></table></div>' : '') +
+      '<p style="font-size:12px;opacity:.75;margin:8px 0 0">🏭 제조사 자료 · ' + esc(s.at || '') + ' 확인' + (s.note ? ' · ' + esc(s.note) : '') + (c ? ' · 공식 값과 다른 칸 ' + c + '개' : '') + (/^https:/.test(s.url || '') ? ' · <a target="_blank" rel="noopener" href="' + esc(s.url) + '">원문 ↗</a>' : '') + '</p></div>';
+  }
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   function token() {
     try { if (window.G7Core && G7Core.api && typeof G7Core.api.getToken === 'function') { var t = G7Core.api.getToken(); if (t) return String(t); } } catch (e) {}
@@ -263,6 +273,7 @@
         return '<div class="cct-spec"><h3>' + esc(g.group) + '</h3><dl>' + g.items.map(function (it) {
           return '<div><dt>' + esc(it.label) + '</dt><dd>' + (it.url ? '<a target="_blank" rel="noopener" href="' + esc(it.value) + '">열기 ↗</a>' : esc(it.value)) + '</dd></div>'; }).join('') + '</dl></div>';
       }).join('') + (d.facts.length ? '<div class="cct-spec"><h3>기타</h3><dl>' + d.facts.map(function (f) { return '<div><dt>' + esc(f.label) + '</dt><dd>' + esc(f.value) + '</dd></div>'; }).join('') + '</dl></div>' : '');
+      if (d.resin) specs += resinSpec(d.resin);   // 0.3.24 노출 프로필 · 출처
       h += '<div class="cct-sec"><h2>📋 제원</h2>' + (specs ? '<div class="cct-specs">' + specs + '</div>' : '<div class="cct-empty"><b>📝</b>아직 적힌 제원이 없어요.' + (can ? ' 「✏️ 수정」으로 채워 주세요.' : '') + '</div>') +
         '<p class="cct-note" style="margin-top:4px">제조사가 공개한 자료를 정리한 것으로, 실제 제품과 다를 수 있어요. 구매 · 사용 전에는 제조사 자료를 확인해 주세요.' + (d.updated_at ? ' (마지막 고침 ' + esc(d.updated_at) + ')' : '') + '</p></div>';
       if (d.detail) h += '<div class="cct-sec"><h2>📖 자세한 설명</h2><div class="cct-text">' + esc(d.detail) + '</div></div>';

@@ -88,6 +88,29 @@ final class Catalog
         return $out;
     }
 
+    /**
+     * 0.3.24 레진 — 출력 검사기용 { key, b, n, density, viscosity, src: {grade, url, at, note}, ranges, profiles }. 공식 자료가 있는 것만
+     *
+     * @return list<array<string, mixed>>
+     */
+    public static function resinBook(): array
+    {
+        $out = [];
+        try {
+            Schema::ensure();
+            foreach (DB::table(Schema::MATERIALS)->where('status', 'active')->where('kind', 'resin')->orderBy('brand')->orderBy('name')->get() as $r) {
+                $sp = Schema::json($r->specs ?? null);
+                $v = \Modules\Custom\Catalog\Support\ResinSpecs::view($sp);
+                if ($v !== null) {
+                    $out[] = ['key' => (string) $r->key, 'b' => (string) $r->brand, 'n' => (string) $r->name, 'density' => $sp['density'] ?? null, 'viscosity' => $sp['viscosity'] ?? null] + $v;
+                }
+            }
+        } catch (\Throwable) {
+        }
+
+        return $out;
+    }
+
     /** @var array<string, array<string, array<string, mixed>>>|null 찾기용 색인 (요청 한 번에 한 번만 읽음) */
     private static ?array $index = null;
 
