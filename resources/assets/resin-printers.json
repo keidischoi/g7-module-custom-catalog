@@ -1,0 +1,1402 @@
+[
+ {
+  "key": "anet-n4-sla",
+  "kind": "sla",
+  "brand": "Anet",
+  "model": "N4",
+  "build_x_mm": 68,
+  "build_y_mm": 121,
+  "build_z_mm": 135,
+  "note": "LCD 1440×2560"
+ },
+ {
+  "key": "anet-n7-sla",
+  "kind": "sla",
+  "brand": "Anet",
+  "model": "N7",
+  "build_x_mm": 192,
+  "build_y_mm": 120,
+  "build_z_mm": 300,
+  "note": "LCD 2560×1600"
+ },
+ {
+  "key": "anycubic-photon-sla",
+  "kind": "sla",
+  "brand": "Anycubic",
+  "model": "Photon",
+  "build_x_mm": 68,
+  "build_y_mm": 121,
+  "build_z_mm": 155,
+  "note": "LCD 1440×2560"
+ },
+ {
+  "key": "anycubic-photon-d2-sla",
+  "kind": "sla",
+  "brand": "Anycubic",
+  "model": "Photon D2",
+  "build_x_mm": 131,
+  "build_y_mm": 73,
+  "build_z_mm": 165,
+  "note": "LCD 2560×1440"
+ },
+ {
+  "key": "anycubic-photon-m3-sla",
+  "kind": "sla",
+  "brand": "Anycubic",
+  "model": "Photon M3",
+  "build_x_mm": 164,
+  "build_y_mm": 102,
+  "build_z_mm": 180,
+  "note": "LCD 4096×2560"
+ },
+ {
+  "key": "anycubic-photon-m3-max-sla",
+  "kind": "sla",
+  "brand": "Anycubic",
+  "model": "Photon M3 Max",
+  "build_x_mm": 298,
+  "build_y_mm": 166,
+  "build_z_mm": 300,
+  "note": "LCD 6480×3600"
+ },
+ {
+  "key": "anycubic-photon-m3-plus-sla",
+  "kind": "sla",
+  "brand": "Anycubic",
+  "model": "Photon M3 Plus",
+  "build_x_mm": 198,
+  "build_y_mm": 124,
+  "build_z_mm": 245,
+  "note": "LCD 5760×3600"
+ },
+ {
+  "key": "anycubic-photon-m3-premium-sla",
+  "kind": "sla",
+  "brand": "Anycubic",
+  "model": "Photon M3 Premium",
+  "build_x_mm": 219,
+  "build_y_mm": 123,
+  "build_z_mm": 250,
+  "note": "LCD 7680×4320"
+ },
+ {
+  "key": "anycubic-photon-mono-sla",
+  "kind": "sla",
+  "brand": "Anycubic",
+  "model": "Photon Mono",
+  "build_x_mm": 83,
+  "build_y_mm": 131,
+  "build_z_mm": 165,
+  "note": "LCD 1620×2560"
+ },
+ {
+  "key": "anycubic-photon-mono-2-sla",
+  "kind": "sla",
+  "brand": "Anycubic",
+  "model": "Photon Mono 2",
+  "build_x_mm": 143,
+  "build_y_mm": 90,
+  "build_z_mm": 165,
+  "note": "LCD 4096×2560"
+ },
+ {
+  "key": "anycubic-photon-mono-4-sla",
+  "kind": "sla",
+  "brand": "Anycubic",
+  "model": "Photon Mono 4",
+  "build_x_mm": 153,
+  "build_y_mm": 87,
+  "build_z_mm": 165,
+  "note": "LCD 9024×5120"
+ },
+ {
+  "key": "anycubic-photon-mono-4-ultra-sla",
+  "kind": "sla",
+  "brand": "Anycubic",
+  "model": "Photon Mono 4 Ultra",
+  "build_x_mm": 153,
+  "build_y_mm": 87,
+  "build_z_mm": 165,
+  "note": "LCD 9024×5120"
+ },
+ {
+  "key": "anycubic-photon-mono-4k-sla",
+  "kind": "sla",
+  "brand": "Anycubic",
+  "model": "Photon Mono 4K",
+  "build_x_mm": 134,
+  "build_y_mm": 84,
+  "build_z_mm": 165,
+  "note": "LCD 3840×2400"
+ },
+ {
+  "key": "anycubic-photon-mono-m5-sla",
+  "kind": "sla",
+  "brand": "Anycubic",
+  "model": "Photon Mono M5",
+  "build_x_mm": 219,
+  "build_y_mm": 123,
+  "build_z_mm": 200,
+  "note": "LCD 11520×5120"
+ },
+ {
+  "key": "anycubic-photon-mono-m5s-pro-sla",
+  "kind": "sla",
+  "brand": "Anycubic",
+  "model": "Photon Mono M5s Pro",
+  "build_x_mm": 224,
+  "build_y_mm": 127,
+  "build_z_mm": 200,
+  "note": "LCD 13312×5120"
+ },
+ {
+  "key": "anycubic-photon-mono-m7-sla",
+  "kind": "sla",
+  "brand": "Anycubic",
+  "model": "Photon Mono M7",
+  "build_x_mm": 224,
+  "build_y_mm": 127,
+  "build_z_mm": 230,
+  "note": "LCD 13312×5120"
+ },
+ {
+  "key": "anycubic-photon-mono-m7-max-sla",
+  "kind": "sla",
+  "brand": "Anycubic",
+  "model": "Photon Mono M7 Max",
+  "build_x_mm": 298,
+  "build_y_mm": 166,
+  "build_z_mm": 300,
+  "note": "LCD 6480×3600"
+ },
+ {
+  "key": "anycubic-photon-mono-se-sla",
+  "kind": "sla",
+  "brand": "Anycubic",
+  "model": "Photon Mono SE",
+  "build_x_mm": 83,
+  "build_y_mm": 131,
+  "build_z_mm": 160,
+  "note": "LCD 1620×2560"
+ },
+ {
+  "key": "anycubic-photon-mono-sq-sla",
+  "kind": "sla",
+  "brand": "Anycubic",
+  "model": "Photon Mono SQ",
+  "build_x_mm": 120,
+  "build_y_mm": 128,
+  "build_z_mm": 200,
+  "note": "LCD 2400×2560"
+ },
+ {
+  "key": "anycubic-photon-mono-x-sla",
+  "kind": "sla",
+  "brand": "Anycubic",
+  "model": "Photon Mono X",
+  "build_x_mm": 192,
+  "build_y_mm": 120,
+  "build_z_mm": 245,
+  "note": "LCD 3840×2400"
+ },
+ {
+  "key": "anycubic-photon-mono-x-6k-sla",
+  "kind": "sla",
+  "brand": "Anycubic",
+  "model": "Photon Mono X 6K",
+  "build_x_mm": 198,
+  "build_y_mm": 124,
+  "build_z_mm": 245,
+  "note": "LCD 5760×3600"
+ },
+ {
+  "key": "anycubic-photon-mono-x2-sla",
+  "kind": "sla",
+  "brand": "Anycubic",
+  "model": "Photon Mono X2",
+  "build_x_mm": 197,
+  "build_y_mm": 123,
+  "build_z_mm": 200,
+  "note": "LCD 4096×2560"
+ },
+ {
+  "key": "anycubic-photon-p1-sla",
+  "kind": "sla",
+  "brand": "Anycubic",
+  "model": "Photon P1",
+  "build_x_mm": 224,
+  "build_y_mm": 127,
+  "build_z_mm": 230,
+  "note": "LCD 13312×5120"
+ },
+ {
+  "key": "anycubic-photon-p1-max-sla",
+  "kind": "sla",
+  "brand": "Anycubic",
+  "model": "Photon P1 Max",
+  "build_x_mm": 286,
+  "build_y_mm": 214,
+  "build_z_mm": 300,
+  "note": "LCD 11520×8640"
+ },
+ {
+  "key": "anycubic-photon-s-sla",
+  "kind": "sla",
+  "brand": "Anycubic",
+  "model": "Photon S",
+  "build_x_mm": 68,
+  "build_y_mm": 121,
+  "build_z_mm": 165,
+  "note": "LCD 1440×2560"
+ },
+ {
+  "key": "anycubic-photon-ultra-sla",
+  "kind": "sla",
+  "brand": "Anycubic",
+  "model": "Photon Ultra",
+  "build_x_mm": 102,
+  "build_y_mm": 58,
+  "build_z_mm": 165,
+  "note": "LCD 1280×720"
+ },
+ {
+  "key": "anycubic-photon-x-sla",
+  "kind": "sla",
+  "brand": "Anycubic",
+  "model": "Photon X",
+  "build_x_mm": 192,
+  "build_y_mm": 120,
+  "build_z_mm": 245,
+  "note": "LCD 2560×1600"
+ },
+ {
+  "key": "anycubic-photon-zero-sla",
+  "kind": "sla",
+  "brand": "Anycubic",
+  "model": "Photon Zero",
+  "build_x_mm": 55,
+  "build_y_mm": 99,
+  "build_z_mm": 150,
+  "note": "LCD 480×854"
+ },
+ {
+  "key": "concepts3d-athena-12k-sla",
+  "kind": "sla",
+  "brand": "Concepts3D",
+  "model": "Athena 12K",
+  "build_x_mm": 219,
+  "build_y_mm": 123,
+  "build_z_mm": 245,
+  "note": "LCD 11520×5120"
+ },
+ {
+  "key": "concepts3d-athena-8k-sla",
+  "kind": "sla",
+  "brand": "Concepts3D",
+  "model": "Athena 8K",
+  "build_x_mm": 219,
+  "build_y_mm": 123,
+  "build_z_mm": 245,
+  "note": "LCD 7680×4320"
+ },
+ {
+  "key": "creality-ct-005-pro-sla",
+  "kind": "sla",
+  "brand": "Creality",
+  "model": "CT-005 Pro",
+  "build_x_mm": 192,
+  "build_y_mm": 120,
+  "build_z_mm": 250,
+  "note": "LCD 3840×2400"
+ },
+ {
+  "key": "creality-ct-133-pro-sla",
+  "kind": "sla",
+  "brand": "Creality",
+  "model": "CT-133 Pro",
+  "build_x_mm": 294,
+  "build_y_mm": 165,
+  "build_z_mm": 300,
+  "note": "LCD 3840×2160"
+ },
+ {
+  "key": "creality-halot-lite-sla",
+  "kind": "sla",
+  "brand": "Creality",
+  "model": "Halot Lite",
+  "build_x_mm": 192,
+  "build_y_mm": 120,
+  "build_z_mm": 200,
+  "note": "LCD 3840×2400"
+ },
+ {
+  "key": "creality-halot-mage-sla",
+  "kind": "sla",
+  "brand": "Creality",
+  "model": "Halot Mage",
+  "build_x_mm": 228,
+  "build_y_mm": 128,
+  "build_z_mm": 230,
+  "note": "LCD 7680×4320"
+ },
+ {
+  "key": "creality-halot-max-sla",
+  "kind": "sla",
+  "brand": "Creality",
+  "model": "Halot Max",
+  "build_x_mm": 294,
+  "build_y_mm": 165,
+  "build_z_mm": 300,
+  "note": "LCD 3840×2160"
+ },
+ {
+  "key": "creality-halot-one-sla",
+  "kind": "sla",
+  "brand": "Creality",
+  "model": "Halot One",
+  "build_x_mm": 81,
+  "build_y_mm": 128,
+  "build_z_mm": 160,
+  "note": "LCD 1620×2560"
+ },
+ {
+  "key": "creality-halot-one-plus-sla",
+  "kind": "sla",
+  "brand": "Creality",
+  "model": "Halot One Plus",
+  "build_x_mm": 173,
+  "build_y_mm": 102,
+  "build_z_mm": 160,
+  "note": "LCD 4320×2560"
+ },
+ {
+  "key": "creality-halot-one-pro-sla",
+  "kind": "sla",
+  "brand": "Creality",
+  "model": "Halot One Pro",
+  "build_x_mm": 131,
+  "build_y_mm": 122,
+  "build_z_mm": 160,
+  "note": "LCD 2560×2400"
+ },
+ {
+  "key": "creality-halot-ray-sla",
+  "kind": "sla",
+  "brand": "Creality",
+  "model": "Halot Ray",
+  "build_x_mm": 198,
+  "build_y_mm": 124,
+  "build_z_mm": 210,
+  "note": "LCD 5760×3600"
+ },
+ {
+  "key": "creality-halot-sky-sla",
+  "kind": "sla",
+  "brand": "Creality",
+  "model": "Halot Sky",
+  "build_x_mm": 192,
+  "build_y_mm": 120,
+  "build_z_mm": 200,
+  "note": "LCD 3840×2400"
+ },
+ {
+  "key": "creality-halot-sky-plus-sla",
+  "kind": "sla",
+  "brand": "Creality",
+  "model": "Halot Sky Plus",
+  "build_x_mm": 198,
+  "build_y_mm": 124,
+  "build_z_mm": 210,
+  "note": "LCD 5760×3600"
+ },
+ {
+  "key": "creality-halot-x1-sla",
+  "kind": "sla",
+  "brand": "Creality",
+  "model": "Halot X1",
+  "build_x_mm": 212,
+  "build_y_mm": 118,
+  "build_z_mm": 200,
+  "note": "LCD 15120×6230"
+ },
+ {
+  "key": "creality-ld-002h-sla",
+  "kind": "sla",
+  "brand": "Creality",
+  "model": "LD-002H",
+  "build_x_mm": 83,
+  "build_y_mm": 131,
+  "build_z_mm": 160,
+  "note": "LCD 1620×2560"
+ },
+ {
+  "key": "creality-ld-002r-sla",
+  "kind": "sla",
+  "brand": "Creality",
+  "model": "LD-002R",
+  "build_x_mm": 68,
+  "build_y_mm": 121,
+  "build_z_mm": 160,
+  "note": "LCD 1440×2560"
+ },
+ {
+  "key": "creality-ld-006-sla",
+  "kind": "sla",
+  "brand": "Creality",
+  "model": "LD-006",
+  "build_x_mm": 192,
+  "build_y_mm": 120,
+  "build_z_mm": 245,
+  "note": "LCD 3840×2400"
+ },
+ {
+  "key": "elegoo-jupiter-sla",
+  "kind": "sla",
+  "brand": "Elegoo",
+  "model": "Jupiter",
+  "build_x_mm": 278,
+  "build_y_mm": 156,
+  "build_z_mm": 300,
+  "note": "LCD 5448×3064"
+ },
+ {
+  "key": "elegoo-jupiter-2-sla",
+  "kind": "sla",
+  "brand": "Elegoo",
+  "model": "Jupiter 2",
+  "build_x_mm": 302,
+  "build_y_mm": 162,
+  "build_z_mm": 300,
+  "note": "LCD 15120×6230"
+ },
+ {
+  "key": "elegoo-mars-sla",
+  "kind": "sla",
+  "brand": "Elegoo",
+  "model": "Mars",
+  "build_x_mm": 68,
+  "build_y_mm": 121,
+  "build_z_mm": 150,
+  "note": "LCD 1440×2560"
+ },
+ {
+  "key": "elegoo-mars-2-sla",
+  "kind": "sla",
+  "brand": "Elegoo",
+  "model": "Mars 2",
+  "build_x_mm": 83,
+  "build_y_mm": 131,
+  "build_z_mm": 150,
+  "note": "LCD 1620×2560"
+ },
+ {
+  "key": "elegoo-mars-2-pro-sla",
+  "kind": "sla",
+  "brand": "Elegoo",
+  "model": "Mars 2 Pro",
+  "build_x_mm": 83,
+  "build_y_mm": 131,
+  "build_z_mm": 160,
+  "note": "LCD 1620×2560"
+ },
+ {
+  "key": "elegoo-mars-3-sla",
+  "kind": "sla",
+  "brand": "Elegoo",
+  "model": "Mars 3",
+  "build_x_mm": 143,
+  "build_y_mm": 90,
+  "build_z_mm": 175,
+  "note": "LCD 4098×2560"
+ },
+ {
+  "key": "elegoo-mars-4-sla",
+  "kind": "sla",
+  "brand": "Elegoo",
+  "model": "Mars 4",
+  "build_x_mm": 153,
+  "build_y_mm": 78,
+  "build_z_mm": 175,
+  "note": "LCD 8520×4320"
+ },
+ {
+  "key": "elegoo-mars-4-dlp-sla",
+  "kind": "sla",
+  "brand": "Elegoo",
+  "model": "Mars 4 DLP",
+  "build_x_mm": 133,
+  "build_y_mm": 75,
+  "build_z_mm": 150,
+  "note": "LCD 2560×1440"
+ },
+ {
+  "key": "elegoo-mars-4-max-sla",
+  "kind": "sla",
+  "brand": "Elegoo",
+  "model": "Mars 4 Max",
+  "build_x_mm": 196,
+  "build_y_mm": 122,
+  "build_z_mm": 150,
+  "note": "LCD 5760×3600"
+ },
+ {
+  "key": "elegoo-mars-5-sla",
+  "kind": "sla",
+  "brand": "Elegoo",
+  "model": "Mars 5",
+  "build_x_mm": 143,
+  "build_y_mm": 90,
+  "build_z_mm": 150,
+  "note": "LCD 4098×2560"
+ },
+ {
+  "key": "elegoo-mars-c-sla",
+  "kind": "sla",
+  "brand": "Elegoo",
+  "model": "Mars C",
+  "build_x_mm": 68,
+  "build_y_mm": 121,
+  "build_z_mm": 150,
+  "note": "LCD 1440×2560"
+ },
+ {
+  "key": "elegoo-saturn-sla",
+  "kind": "sla",
+  "brand": "Elegoo",
+  "model": "Saturn",
+  "build_x_mm": 192,
+  "build_y_mm": 120,
+  "build_z_mm": 200,
+  "note": "LCD 3840×2400"
+ },
+ {
+  "key": "elegoo-saturn-2-sla",
+  "kind": "sla",
+  "brand": "Elegoo",
+  "model": "Saturn 2",
+  "build_x_mm": 219,
+  "build_y_mm": 123,
+  "build_z_mm": 250,
+  "note": "LCD 7680×4320"
+ },
+ {
+  "key": "elegoo-saturn-3-sla",
+  "kind": "sla",
+  "brand": "Elegoo",
+  "model": "Saturn 3",
+  "build_x_mm": 219,
+  "build_y_mm": 123,
+  "build_z_mm": 250,
+  "note": "LCD 11520×5120"
+ },
+ {
+  "key": "elegoo-saturn-4-sla",
+  "kind": "sla",
+  "brand": "Elegoo",
+  "model": "Saturn 4",
+  "build_x_mm": 219,
+  "build_y_mm": 123,
+  "build_z_mm": 220,
+  "note": "LCD 11520×5120"
+ },
+ {
+  "key": "elegoo-saturn-4-ultra-16k-sla",
+  "kind": "sla",
+  "brand": "Elegoo",
+  "model": "Saturn 4 Ultra 16K",
+  "build_x_mm": 212,
+  "build_y_mm": 118,
+  "build_z_mm": 220,
+  "note": "LCD 15120×6230"
+ },
+ {
+  "key": "elegoo-saturn-8k-sla",
+  "kind": "sla",
+  "brand": "Elegoo",
+  "model": "Saturn 8K",
+  "build_x_mm": 219,
+  "build_y_mm": 123,
+  "build_z_mm": 210,
+  "note": "LCD 7680×4320"
+ },
+ {
+  "key": "elegoo-saturn-s-sla",
+  "kind": "sla",
+  "brand": "Elegoo",
+  "model": "Saturn S",
+  "build_x_mm": 197,
+  "build_y_mm": 123,
+  "build_z_mm": 210,
+  "note": "LCD 4098×2560"
+ },
+ {
+  "key": "emake3d-galaxy-1-sla",
+  "kind": "sla",
+  "brand": "Emake3D",
+  "model": "Galaxy 1",
+  "build_x_mm": 400,
+  "build_y_mm": 200,
+  "build_z_mm": 400,
+  "note": "LCD 8000×4000"
+ },
+ {
+  "key": "epax-dx1-pro-sla",
+  "kind": "sla",
+  "brand": "EPAX",
+  "model": "DX1 PRO",
+  "build_x_mm": 143,
+  "build_y_mm": 90,
+  "build_z_mm": 155,
+  "note": "LCD 4098×2560"
+ },
+ {
+  "key": "epax-dx10-pro-5k-sla",
+  "kind": "sla",
+  "brand": "EPAX",
+  "model": "DX10 Pro 5K",
+  "build_x_mm": 221,
+  "build_y_mm": 130,
+  "build_z_mm": 120,
+  "note": "LCD 4920×2880"
+ },
+ {
+  "key": "epax-dx10-pro-8k-sla",
+  "kind": "sla",
+  "brand": "EPAX",
+  "model": "DX10 Pro 8K",
+  "build_x_mm": 219,
+  "build_y_mm": 123,
+  "build_z_mm": 120,
+  "note": "LCD 7680×4320"
+ },
+ {
+  "key": "epax-e10-5k-sla",
+  "kind": "sla",
+  "brand": "EPAX",
+  "model": "E10 5K",
+  "build_x_mm": 221,
+  "build_y_mm": 130,
+  "build_z_mm": 250,
+  "note": "LCD 4920×2880"
+ },
+ {
+  "key": "epax-e10-8k-sla",
+  "kind": "sla",
+  "brand": "EPAX",
+  "model": "E10 8K",
+  "build_x_mm": 219,
+  "build_y_mm": 123,
+  "build_z_mm": 250,
+  "note": "LCD 7680×4320"
+ },
+ {
+  "key": "epax-e10-mono-sla",
+  "kind": "sla",
+  "brand": "EPAX",
+  "model": "E10 Mono",
+  "build_x_mm": 192,
+  "build_y_mm": 120,
+  "build_z_mm": 250,
+  "note": "LCD 3840×2400"
+ },
+ {
+  "key": "epax-e6-mono-sla",
+  "kind": "sla",
+  "brand": "EPAX",
+  "model": "E6 Mono",
+  "build_x_mm": 81,
+  "build_y_mm": 128,
+  "build_z_mm": 155,
+  "note": "LCD 1620×2560"
+ },
+ {
+  "key": "epax-x1-sla",
+  "kind": "sla",
+  "brand": "EPAX",
+  "model": "X1",
+  "build_x_mm": 68,
+  "build_y_mm": 121,
+  "build_z_mm": 155,
+  "note": "LCD 1440×2560"
+ },
+ {
+  "key": "epax-x1-4ks-sla",
+  "kind": "sla",
+  "brand": "EPAX",
+  "model": "X1 4KS",
+  "build_x_mm": 143,
+  "build_y_mm": 90,
+  "build_z_mm": 155,
+  "note": "LCD 4098×2560"
+ },
+ {
+  "key": "epax-x10-sla",
+  "kind": "sla",
+  "brand": "EPAX",
+  "model": "X10",
+  "build_x_mm": 135,
+  "build_y_mm": 217,
+  "build_z_mm": 250,
+  "note": "LCD 1600×2560"
+ },
+ {
+  "key": "epax-x10-4k-mono-sla",
+  "kind": "sla",
+  "brand": "EPAX",
+  "model": "X10 4K Mono",
+  "build_x_mm": 192,
+  "build_y_mm": 120,
+  "build_z_mm": 250,
+  "note": "LCD 3840×2400"
+ },
+ {
+  "key": "epax-x10-5k-sla",
+  "kind": "sla",
+  "brand": "EPAX",
+  "model": "X10 5K",
+  "build_x_mm": 221,
+  "build_y_mm": 130,
+  "build_z_mm": 250,
+  "note": "LCD 4920×2880"
+ },
+ {
+  "key": "epax-x133-4k-mono-sla",
+  "kind": "sla",
+  "brand": "EPAX",
+  "model": "X133 4K Mono",
+  "build_x_mm": 294,
+  "build_y_mm": 165,
+  "build_z_mm": 400,
+  "note": "LCD 3840×2160"
+ },
+ {
+  "key": "epax-x133-6k-sla",
+  "kind": "sla",
+  "brand": "EPAX",
+  "model": "X133 6K",
+  "build_x_mm": 288,
+  "build_y_mm": 162,
+  "build_z_mm": 400,
+  "note": "LCD 5760×3240"
+ },
+ {
+  "key": "epax-x156-4k-color-sla",
+  "kind": "sla",
+  "brand": "EPAX",
+  "model": "X156 4K Color",
+  "build_x_mm": 346,
+  "build_y_mm": 194,
+  "build_z_mm": 400,
+  "note": "LCD 3840×2160"
+ },
+ {
+  "key": "epax-x1k-2k-mono-sla",
+  "kind": "sla",
+  "brand": "EPAX",
+  "model": "X1K 2K Mono",
+  "build_x_mm": 83,
+  "build_y_mm": 131,
+  "build_z_mm": 155,
+  "note": "LCD 1620×2560"
+ },
+ {
+  "key": "flashforge-explorer-max-sla",
+  "kind": "sla",
+  "brand": "FlashForge",
+  "model": "Explorer MAX",
+  "build_x_mm": 192,
+  "build_y_mm": 120,
+  "build_z_mm": 200,
+  "note": "LCD 2560×1600"
+ },
+ {
+  "key": "flashforge-focus-13-3-sla",
+  "kind": "sla",
+  "brand": "FlashForge",
+  "model": "Focus 13.3",
+  "build_x_mm": 292,
+  "build_y_mm": 165,
+  "build_z_mm": 400,
+  "note": "LCD 3842×2171"
+ },
+ {
+  "key": "flashforge-focus-8-9-sla",
+  "kind": "sla",
+  "brand": "FlashForge",
+  "model": "Focus 8.9",
+  "build_x_mm": 192,
+  "build_y_mm": 120,
+  "build_z_mm": 200,
+  "note": "LCD 3840×2400"
+ },
+ {
+  "key": "flashforge-foto-13-3-sla",
+  "kind": "sla",
+  "brand": "FlashForge",
+  "model": "Foto 13.3",
+  "build_x_mm": 292,
+  "build_y_mm": 165,
+  "build_z_mm": 400,
+  "note": "LCD 3842×2171"
+ },
+ {
+  "key": "flashforge-foto-6-0-sla",
+  "kind": "sla",
+  "brand": "FlashForge",
+  "model": "Foto 6.0",
+  "build_x_mm": 130,
+  "build_y_mm": 78,
+  "build_z_mm": 155,
+  "note": "LCD 2600×1560"
+ },
+ {
+  "key": "flashforge-foto-8-9-sla",
+  "kind": "sla",
+  "brand": "FlashForge",
+  "model": "Foto 8.9",
+  "build_x_mm": 192,
+  "build_y_mm": 120,
+  "build_z_mm": 200,
+  "note": "LCD 3840×2400"
+ },
+ {
+  "key": "flashforge-foto-8-9s-sla",
+  "kind": "sla",
+  "brand": "FlashForge",
+  "model": "Foto 8.9S",
+  "build_x_mm": 192,
+  "build_y_mm": 120,
+  "build_z_mm": 200,
+  "note": "LCD 3840×2400"
+ },
+ {
+  "key": "flashforge-hunter-sla",
+  "kind": "sla",
+  "brand": "FlashForge",
+  "model": "Hunter",
+  "build_x_mm": 120,
+  "build_y_mm": 68,
+  "build_z_mm": 150,
+  "note": "LCD 1920×1080"
+ },
+ {
+  "key": "kelant-s400-sla",
+  "kind": "sla",
+  "brand": "Kelant",
+  "model": "S400",
+  "build_x_mm": 192,
+  "build_y_mm": 120,
+  "build_z_mm": 200,
+  "note": "LCD 2560×1600"
+ },
+ {
+  "key": "longer-orange-10-sla",
+  "kind": "sla",
+  "brand": "Longer",
+  "model": "Orange 10",
+  "build_x_mm": 55,
+  "build_y_mm": 99,
+  "build_z_mm": 140,
+  "note": "LCD 480×854"
+ },
+ {
+  "key": "longer-orange-120-sla",
+  "kind": "sla",
+  "brand": "Longer",
+  "model": "Orange 120",
+  "build_x_mm": 68,
+  "build_y_mm": 121,
+  "build_z_mm": 150,
+  "note": "LCD 1440×2560"
+ },
+ {
+  "key": "longer-orange-30-sla",
+  "kind": "sla",
+  "brand": "Longer",
+  "model": "Orange 30",
+  "build_x_mm": 68,
+  "build_y_mm": 121,
+  "build_z_mm": 170,
+  "note": "LCD 1440×2560"
+ },
+ {
+  "key": "longer-orange-4k-sla",
+  "kind": "sla",
+  "brand": "Longer",
+  "model": "Orange 4K",
+  "build_x_mm": 121,
+  "build_y_mm": 68,
+  "build_z_mm": 190,
+  "note": "LCD 3840×6480"
+ },
+ {
+  "key": "nova3d-bene4-sla",
+  "kind": "sla",
+  "brand": "Nova3D",
+  "model": "Bene4",
+  "build_x_mm": 70,
+  "build_y_mm": 130,
+  "build_z_mm": 150,
+  "note": "LCD 1352×2512"
+ },
+ {
+  "key": "nova3d-bene4-mono-sla",
+  "kind": "sla",
+  "brand": "Nova3D",
+  "model": "Bene4 Mono",
+  "build_x_mm": 80,
+  "build_y_mm": 130,
+  "build_z_mm": 150,
+  "note": "LCD 1566×2549"
+ },
+ {
+  "key": "nova3d-bene5-sla",
+  "kind": "sla",
+  "brand": "Nova3D",
+  "model": "Bene5",
+  "build_x_mm": 80,
+  "build_y_mm": 130,
+  "build_z_mm": 150,
+  "note": "LCD 1566×2549"
+ },
+ {
+  "key": "nova3d-bene6-sla",
+  "kind": "sla",
+  "brand": "Nova3D",
+  "model": "Bene6",
+  "build_x_mm": 143,
+  "build_y_mm": 90,
+  "build_z_mm": 180,
+  "note": "LCD 4098×2560"
+ },
+ {
+  "key": "nova3d-elfin-sla",
+  "kind": "sla",
+  "brand": "Nova3D",
+  "model": "Elfin",
+  "build_x_mm": 73,
+  "build_y_mm": 131,
+  "build_z_mm": 150,
+  "note": "LCD 1410×2531"
+ },
+ {
+  "key": "nova3d-elfin2-sla",
+  "kind": "sla",
+  "brand": "Nova3D",
+  "model": "Elfin2",
+  "build_x_mm": 70,
+  "build_y_mm": 130,
+  "build_z_mm": 150,
+  "note": "LCD 1352×2512"
+ },
+ {
+  "key": "nova3d-elfin2-mono-se-sla",
+  "kind": "sla",
+  "brand": "Nova3D",
+  "model": "Elfin2 Mono SE",
+  "build_x_mm": 75,
+  "build_y_mm": 130,
+  "build_z_mm": 150,
+  "note": "LCD 1470×2549"
+ },
+ {
+  "key": "nova3d-elfin3-mini-sla",
+  "kind": "sla",
+  "brand": "Nova3D",
+  "model": "Elfin3 Mini",
+  "build_x_mm": 68,
+  "build_y_mm": 120,
+  "build_z_mm": 150,
+  "note": "LCD 1079×1904"
+ },
+ {
+  "key": "nova3d-whale-sla",
+  "kind": "sla",
+  "brand": "Nova3D",
+  "model": "Whale",
+  "build_x_mm": 192,
+  "build_y_mm": 120,
+  "build_z_mm": 250,
+  "note": "LCD 3840×2400"
+ },
+ {
+  "key": "nova3d-whale2-sla",
+  "kind": "sla",
+  "brand": "Nova3D",
+  "model": "Whale2",
+  "build_x_mm": 192,
+  "build_y_mm": 120,
+  "build_z_mm": 250,
+  "note": "LCD 3840×2400"
+ },
+ {
+  "key": "nova3d-whale3-pro-sla",
+  "kind": "sla",
+  "brand": "Nova3D",
+  "model": "Whale3 Pro",
+  "build_x_mm": 228,
+  "build_y_mm": 128,
+  "build_z_mm": 260,
+  "note": "LCD 7680×4320"
+ },
+ {
+  "key": "peopoly-phenom-sla",
+  "kind": "sla",
+  "brand": "Peopoly",
+  "model": "Phenom",
+  "build_x_mm": 276,
+  "build_y_mm": 156,
+  "build_z_mm": 400,
+  "note": "LCD 3840×2160"
+ },
+ {
+  "key": "peopoly-phenom-forge-sla",
+  "kind": "sla",
+  "brand": "Peopoly",
+  "model": "Phenom Forge",
+  "build_x_mm": 288,
+  "build_y_mm": 162,
+  "build_z_mm": 350,
+  "note": "LCD 5760×3240"
+ },
+ {
+  "key": "peopoly-phenom-l-sla",
+  "kind": "sla",
+  "brand": "Peopoly",
+  "model": "Phenom L",
+  "build_x_mm": 346,
+  "build_y_mm": 194,
+  "build_z_mm": 400,
+  "note": "LCD 3840×2160"
+ },
+ {
+  "key": "peopoly-phenom-noir-sla",
+  "kind": "sla",
+  "brand": "Peopoly",
+  "model": "Phenom Noir",
+  "build_x_mm": 294,
+  "build_y_mm": 165,
+  "build_z_mm": 400,
+  "note": "LCD 3840×2160"
+ },
+ {
+  "key": "peopoly-phenom-xxl-sla",
+  "kind": "sla",
+  "brand": "Peopoly",
+  "model": "Phenom XXL",
+  "build_x_mm": 526,
+  "build_y_mm": 296,
+  "build_z_mm": 550,
+  "note": "LCD 3840×2160"
+ },
+ {
+  "key": "peopoly-phenom-xxl-v2-sla",
+  "kind": "sla",
+  "brand": "Peopoly",
+  "model": "Phenom XXL V2",
+  "build_x_mm": 526,
+  "build_y_mm": 296,
+  "build_z_mm": 550,
+  "note": "LCD 3840×2160"
+ },
+ {
+  "key": "phrozen-shuffle-sla",
+  "kind": "sla",
+  "brand": "Phrozen",
+  "model": "Shuffle",
+  "build_x_mm": 68,
+  "build_y_mm": 120,
+  "build_z_mm": 200,
+  "note": "LCD 1440×2560"
+ },
+ {
+  "key": "phrozen-shuffle-16-sla",
+  "kind": "sla",
+  "brand": "Phrozen",
+  "model": "Shuffle 16",
+  "build_x_mm": 338,
+  "build_y_mm": 190,
+  "build_z_mm": 400,
+  "note": "LCD 3840×2160"
+ },
+ {
+  "key": "phrozen-shuffle-4k-sla",
+  "kind": "sla",
+  "brand": "Phrozen",
+  "model": "Shuffle 4K",
+  "build_x_mm": 68,
+  "build_y_mm": 121,
+  "build_z_mm": 170,
+  "note": "LCD 2160×3840"
+ },
+ {
+  "key": "phrozen-shuffle-lite-sla",
+  "kind": "sla",
+  "brand": "Phrozen",
+  "model": "Shuffle Lite",
+  "build_x_mm": 68,
+  "build_y_mm": 121,
+  "build_z_mm": 170,
+  "note": "LCD 1440×2560"
+ },
+ {
+  "key": "phrozen-shuffle-xl-sla",
+  "kind": "sla",
+  "brand": "Phrozen",
+  "model": "Shuffle XL",
+  "build_x_mm": 192,
+  "build_y_mm": 120,
+  "build_z_mm": 200,
+  "note": "LCD 2560×1600"
+ },
+ {
+  "key": "phrozen-shuffle-xl-lite-sla",
+  "kind": "sla",
+  "brand": "Phrozen",
+  "model": "Shuffle XL Lite",
+  "build_x_mm": 192,
+  "build_y_mm": 120,
+  "build_z_mm": 200,
+  "note": "LCD 2560×1600"
+ },
+ {
+  "key": "phrozen-sonic-sla",
+  "kind": "sla",
+  "brand": "Phrozen",
+  "model": "Sonic",
+  "build_x_mm": 68,
+  "build_y_mm": 121,
+  "build_z_mm": 170,
+  "note": "LCD 1080×1920"
+ },
+ {
+  "key": "phrozen-sonic-4k-sla",
+  "kind": "sla",
+  "brand": "Phrozen",
+  "model": "Sonic 4K",
+  "build_x_mm": 134,
+  "build_y_mm": 76,
+  "build_z_mm": 200,
+  "note": "LCD 3840×2160"
+ },
+ {
+  "key": "phrozen-sonic-mega-8k-sla",
+  "kind": "sla",
+  "brand": "Phrozen",
+  "model": "Sonic Mega 8K",
+  "build_x_mm": 330,
+  "build_y_mm": 186,
+  "build_z_mm": 400,
+  "note": "LCD 7680×4320"
+ },
+ {
+  "key": "phrozen-sonic-mighty-4k-sla",
+  "kind": "sla",
+  "brand": "Phrozen",
+  "model": "Sonic Mighty 4K",
+  "build_x_mm": 200,
+  "build_y_mm": 125,
+  "build_z_mm": 220,
+  "note": "LCD 3840×2400"
+ },
+ {
+  "key": "phrozen-sonic-mini-sla",
+  "kind": "sla",
+  "brand": "Phrozen",
+  "model": "Sonic Mini",
+  "build_x_mm": 68,
+  "build_y_mm": 121,
+  "build_z_mm": 130,
+  "note": "LCD 1080×1920"
+ },
+ {
+  "key": "phrozen-sonic-mini-4k-sla",
+  "kind": "sla",
+  "brand": "Phrozen",
+  "model": "Sonic Mini 4K",
+  "build_x_mm": 134,
+  "build_y_mm": 76,
+  "build_z_mm": 130,
+  "note": "LCD 3840×2160"
+ },
+ {
+  "key": "phrozen-sonic-mini-8k-sla",
+  "kind": "sla",
+  "brand": "Phrozen",
+  "model": "Sonic Mini 8K",
+  "build_x_mm": 165,
+  "build_y_mm": 71,
+  "build_z_mm": 180,
+  "note": "LCD 7500×3240"
+ },
+ {
+  "key": "phrozen-transform-sla",
+  "kind": "sla",
+  "brand": "Phrozen",
+  "model": "Transform",
+  "build_x_mm": 292,
+  "build_y_mm": 164,
+  "build_z_mm": 400,
+  "note": "LCD 3840×2160"
+ },
+ {
+  "key": "qidi-i-box-mono-sla",
+  "kind": "sla",
+  "brand": "QIDI",
+  "model": "I-Box Mono",
+  "build_x_mm": 192,
+  "build_y_mm": 120,
+  "build_z_mm": 200,
+  "note": "LCD 3840×2400"
+ },
+ {
+  "key": "qidi-s-box-sla",
+  "kind": "sla",
+  "brand": "QIDI",
+  "model": "S-Box",
+  "build_x_mm": 135,
+  "build_y_mm": 217,
+  "build_z_mm": 200,
+  "note": "LCD 1600×2560"
+ },
+ {
+  "key": "qidi-shadow5-5-sla",
+  "kind": "sla",
+  "brand": "QIDI",
+  "model": "Shadow5.5",
+  "build_x_mm": 68,
+  "build_y_mm": 121,
+  "build_z_mm": 150,
+  "note": "LCD 1440×2560"
+ },
+ {
+  "key": "qidi-shadow6-0-pro-sla",
+  "kind": "sla",
+  "brand": "QIDI",
+  "model": "Shadow6.0 Pro",
+  "build_x_mm": 75,
+  "build_y_mm": 132,
+  "build_z_mm": 150,
+  "note": "LCD 1440×2560"
+ },
+ {
+  "key": "uniformation-gkone-sla",
+  "kind": "sla",
+  "brand": "Uniformation",
+  "model": "GKone",
+  "build_x_mm": 221,
+  "build_y_mm": 130,
+  "build_z_mm": 245,
+  "note": "LCD 4920×2880"
+ },
+ {
+  "key": "uniz-ibee-sla",
+  "kind": "sla",
+  "brand": "Uniz",
+  "model": "IBEE",
+  "build_x_mm": 192,
+  "build_y_mm": 120,
+  "build_z_mm": 220,
+  "note": "LCD 3840×2400"
+ },
+ {
+  "key": "prusa-sl1-sla",
+  "kind": "sla",
+  "brand": "Prusa",
+  "model": "SL1",
+  "build_x_mm": 68,
+  "build_y_mm": 121,
+  "build_z_mm": 150,
+  "note": "LCD 1440×2560"
+ },
+ {
+  "key": "prusa-sl1s-sla",
+  "kind": "sla",
+  "brand": "Prusa",
+  "model": "SL1S",
+  "build_x_mm": 81,
+  "build_y_mm": 128,
+  "build_z_mm": 150,
+  "note": "LCD 1620×2560"
+ },
+ {
+  "key": "voxelab-ceres-8-9-sla",
+  "kind": "sla",
+  "brand": "Voxelab",
+  "model": "Ceres 8.9",
+  "build_x_mm": 192,
+  "build_y_mm": 120,
+  "build_z_mm": 200,
+  "note": "LCD 3840×2400"
+ },
+ {
+  "key": "voxelab-polaris-5-5-sla",
+  "kind": "sla",
+  "brand": "Voxelab",
+  "model": "Polaris 5.5",
+  "build_x_mm": 68,
+  "build_y_mm": 121,
+  "build_z_mm": 155,
+  "note": "LCD 1440×2560"
+ },
+ {
+  "key": "voxelab-proxima-6-sla",
+  "kind": "sla",
+  "brand": "Voxelab",
+  "model": "Proxima 6",
+  "build_x_mm": 83,
+  "build_y_mm": 131,
+  "build_z_mm": 155,
+  "note": "LCD 1620×2560"
+ },
+ {
+  "key": "wanhao-cgr-mini-mono-sla",
+  "kind": "sla",
+  "brand": "Wanhao",
+  "model": "CGR Mini Mono",
+  "build_x_mm": 83,
+  "build_y_mm": 131,
+  "build_z_mm": 200,
+  "note": "LCD 1620×2560"
+ },
+ {
+  "key": "wanhao-cgr-mono-sla",
+  "kind": "sla",
+  "brand": "Wanhao",
+  "model": "CGR Mono",
+  "build_x_mm": 192,
+  "build_y_mm": 120,
+  "build_z_mm": 200,
+  "note": "LCD 1620×2560"
+ },
+ {
+  "key": "wanhao-d7-sla",
+  "kind": "sla",
+  "brand": "Wanhao",
+  "model": "D7",
+  "build_x_mm": 121,
+  "build_y_mm": 69,
+  "build_z_mm": 180,
+  "note": "LCD 2560×1440"
+ },
+ {
+  "key": "wanhao-d8-sla",
+  "kind": "sla",
+  "brand": "Wanhao",
+  "model": "D8",
+  "build_x_mm": 192,
+  "build_y_mm": 120,
+  "build_z_mm": 180,
+  "note": "LCD 2560×1600"
+ },
+ {
+  "key": "zortrax-inkspire-sla",
+  "kind": "sla",
+  "brand": "Zortrax",
+  "model": "Inkspire",
+  "build_x_mm": 75,
+  "build_y_mm": 133,
+  "build_z_mm": 175,
+  "note": "LCD 1440×2560"
+ }
+]
