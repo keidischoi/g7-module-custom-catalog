@@ -39,7 +39,7 @@ final class AiSettings
         'openai' => 'gpt-4.1',
         'gemini' => 'gemini-2.5-flash',
         'grok' => 'grok-3',
-        'ollama' => 'qwen2.5:14b',
+        'ollama' => 'gemma3:4b',   // 0.3.29 Qwen 대신 Gemma (2026-11 Qwen 이 외부 서버로 보내려 한 보고)
     ];
 
     public const NAMES = ['claude' => 'Claude', 'openai' => 'OpenAI', 'gemini' => 'Gemini', 'grok' => 'Grok', 'ollama' => 'Ollama'];
@@ -405,7 +405,7 @@ final class AiSettings
 
     /** 자동 고르기 순서 (앞이 먼저) */
     public const PREFER = [
-        'ollama' => ['qwen2.5:14b', 'qwen3', 'qwen2.5', 'llama3.1', 'llama3', 'gemma3', 'gemma2', 'mistral', 'phi4', 'deepseek'],
+        'ollama' => ['gemma4', 'gemma3', 'gemma2', 'llama3.1', 'llama3', 'mistral', 'phi4'],   // 0.3.29 중국 모델(qwen · deepseek)은 자동으로 고르지 않음
         'openai' => ['gpt-4.1', 'gpt-4o', 'gpt-4.1-mini', 'gpt-4o-mini', 'gpt-'],
         'claude' => ['sonnet', 'opus', 'haiku', 'claude'],
         'gemini' => ['gemini-2.5-flash', 'gemini-2.5-pro', 'gemini-2.0-flash', 'gemini'],
