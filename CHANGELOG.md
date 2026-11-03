@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.30
+
+- 🌐 영어(en) 화면
+
 ## 0.3.29 — 2026-11-03
 
 - 🤖 AI 기본 모델을 Gemma 로 (`gemma3:4b`) · 자동 고르기 순서에서 qwen · deepseek 뺌.

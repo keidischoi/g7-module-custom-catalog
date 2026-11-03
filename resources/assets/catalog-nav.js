@@ -2,12 +2,24 @@
  * 0.3.23 G7Core.router 는 없음 → 늘 location.href 로 빠져 페이지 전체가 다시 그려졌음(번쩍). 코어 navigate 로 */
 (function () {
   "use strict";
+  // 🌐 화면 글자 사전 — en 에 없으면 ko
+  var T = {
+   ko: {
+    s_3d_catalog: "3D 카탈로그"
+   },
+   en: {
+    s_3d_catalog: "3D Catalog"
+   }
+  };
+  function __loc() { try { return String(localStorage.getItem('g7_locale') || document.documentElement.lang || 'ko').slice(0, 2); } catch (e) { return 'ko'; } }
+  function tr(k, v) { var d = T[__loc()] || T.ko; var s = d[k] != null ? d[k] : (T.ko[k] != null ? T.ko[k] : k); return v ? s.replace(/\{(\w+)\}/g, function (m, x) { return v[x] != null ? String(v[x]) : m; }) : s; }
+
   if (window.__cctNav) { try { window.__cctNav(); } catch (e) {} return; }
   var PATH = "/catalog";
   var DESK = "cct-nav-catalog";
   var MOB = "cct-nav-catalog-mobile";
   // 0.2.10 메뉴 이름 — 이 스크립트 주소의 l= (모듈 설정 「메뉴 이름」), 없으면 기본 이름
-  var LABEL = "3D 카탈로그";
+  var LABEL = tr('s_3d_catalog');
   try { var cur = document.currentScript, ql = cur && cur.src ? new URL(cur.src, location.href).searchParams.get("l") : ""; if (ql) LABEL = ql; } catch (eL) {}
   function path() { return location.pathname || ""; }
   function here() { var p = path(); return p === PATH || p.indexOf(PATH + "/") === 0; }
