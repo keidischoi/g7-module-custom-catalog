@@ -1,6 +1,150 @@
 /*! custom-catalog 0.3.0 — 관리자 (항목 · 제안함 · 🔩 부품 확인 · 자동 수집 · AI 연결 · 설정) */
 (function () {
   'use strict';
+  // 🌐 화면 글자 사전 — en 에 없으면 ko
+  var T = {
+   ko: {
+    no_answer_for_over: "17분 넘게 답이 없어요 — 더 빠른 모델로 해 보세요.",
+    s: "초",
+    couldn_t_answer: "답하지 못했어요.",
+    stop: "⏹ 중지",
+    stopped_this_result_won: "⏹ 중지했어요 — 이 결과는 받지 않아요 (서버에서 묻던 한 번은 끝까지 돌 수 있어요)",
+    collapse: "접기",
+    expand: "펼치기",
+    model: "</span><span>모델 ",
+    key_set: "<span>🔑 키 있음</span>",
+    expand_all: "▾ 모두 펼치기",
+    collapse_all: "▸ 모두 접기",
+    items: "📦 항목",
+    suggestions: "💡 제안함",
+    part_checks: "🔩 부품 확인",
+    auto_collect: "🌙 자동 수집",
+    ai_connection: "🤖 AI 연결",
+    settings: "⚙️ 설정",
+    s_3d_catalog_view_on: '<div class="cct cct-adm"><div class="cct-adm__head"><h1>🧊 3D 카탈로그</h1><a class="cct-btn cct-btn--s" href="/catalog" target="_blank" rel="noopener">사이트에서 보기 ↗</a>',
+    a_place_to_collect: "<p>프린터 · 장비 · 필라멘트 · 레진 자료를 모아 두는 곳이에요. 재고 관리의 장비 · 재고 등록 화면이 여기 목록을 가져다 써요 (사진은 재고 관리 것을 그대로).</p></div>",
+    input_class_cct_in: '<form data-f style="display:flex;gap:6px;flex:1;min-width:180px"><input class="cct-in" style="height:36px" name="q" placeholder="제조사 · 모델 찾기" value="',
+    search: '"><button class="cct-btn cct-btn--s" style="height:36px">찾기</button></form>',
+    data_nophoto_no_photo: '" data-nophoto>🖼️ 사진 없는 것</button>',
+    data_arch_archived: '" data-arch>🗄️ 보관한 것</button>',
+    new_item: '<button type="button" class="cct-btn cct-btn--p cct-btn--s" style="height:36px" data-new>➕ 새 항목</button></div>',
+    items_2: "</b>개",
+    p: "쪽",
+    maker: '<div style="overflow-x:auto"><table class="cct-table"><thead><tr><th></th><th>제조사</th><th>',
+    product: "제품",
+    model_2: "모델",
+    type_summary: "</th><th>종류</th><th>요약</th><th></th></tr></thead><tbody>",
+    none: '<span class="cct-noimg">없음</span>',
+    view_button_type_button: '">보기</a> <button type="button" class="cct-btn cct-btn--s" data-ed="',
+    edit: '">✏️ 수정</button> ',
+    delete: '">지우기</button>',
+    restore_button_type_button: '">되살리기</button> <button type="button" class="cct-btn cct-btn--s cct-btn--d" data-hard="',
+    delete_permanently: '">아주 지우기</button>',
+    no_items: '<div class="cct-empty"><b>📭</b>항목이 없어요.</div>',
+    prev_nbsp_button_type: '>‹ 앞</button>&nbsp;<button type="button" class="cct-btn cct-btn--s" data-pg="',
+    next: ">뒤 ›</button></div>",
+    photos_can_be_uploaded: '<p class="cct-note" style="margin-top:12px">사진은 「보기」로 들어간 상세 화면에서 올리거나 주소로 넣을 수 있어요 (대표 사진 정하기 · 지우기도 거기서).</p></div>',
+    delete_it_it_will: "」 을(를) 지울까요? (보관함으로 옮겨져요)",
+    moved_to_the_archive: "보관함으로 옮겼어요.",
+    restored: "되살렸어요.",
+    permanently_deleted_items_can: "아주 지우면 되살릴 수 없어요. 지울까요?",
+    permanently_deleted: "아주 지웠어요.",
+    parts_upgrade_settings: '<div class="cct-panel"><h3>⚙️ 부품 · 업그레이드 설정</h3>',
+    accept_member_part_suggestions: '<label class="cct-row" style="cursor:pointer"><div><b>회원 부품 제안 받기</b><small>로그인한 회원이 「💡 부품 제안」으로 새 부품을 알려 줘요 — 💡 제안함에 쌓이고, 반영하면 고른 프린터가 맞는 프린터로 연결돼요</small></div><input type="checkbox" data-pm',
+    votes_needed_to_show: '<div class="cct-row"><div><b>회원이 알려 준 연결이 보이는 표 수</b><small>관리자가 확인하지 않아도 맞음 · 개조 · 안 맞음 표가 이만큼 쌓이면 보여요 (결과는 그 표대로 · ✔ 실사용 표는 두 배)</small></div><span class="cct-num"><input class="cct-in" type="number" min="1" max="50" data-pv value="',
+    votes: '"> 표</span></div>',
+    save: '<div style="margin-top:8px"><button type="button" class="cct-btn cct-btn--p cct-btn--s" data-psave>저장</button></div></div>',
+    compatible_printers_awaiting_review: '<div class="cct-panel"><h3>🕓 확인 기다리는 「맞는 프린터」 <small>',
+    members_reported_this_part: "</small></h3><p>회원이 「이 부품이 이 프린터에 맞아요」라고 알려 준 것이에요. ✔ 확인하면 바로 보이고, 상태를 직접 정할 수도 있어요.</p>",
+    fits: "</b><small>맞음 ",
+    modded: " · 개조 ",
+    doesn_t_fit: " · 안 맞음 ",
+    confirm_needs_mod_doesn: '<span style="display:flex;gap:6px;flex-wrap:wrap"><button type="button" class="cct-btn cct-btn--s cct-btn--p" data-a="approve">✔ 확인</button><button type="button" class="cct-btn cct-btn--s" data-a="mod">🛠️ 개조 필요</button><button type="button" class="cct-btn cct-btn--s" data-a="no">⛔ 안 맞음</button><button type="button" class="cct-btn cct-btn--s cct-btn--d" data-a="delete">✕ 지우기</button></span></div>',
+    nothing_waiting: "<p>기다리는 것이 없어요 👍</p>",
+    reported_shops: '<div class="cct-panel"><h3>🚩 신고된 구매처 <small>',
+    hidden_automatically_after_3: "</small></h3><p>3번 신고되면 저절로 숨겨져요. 괜찮으면 「보이기」(신고 수도 지움).</p>",
+    visible: "보임",
+    hidden: "🙈 숨김",
+    show_hide: '<span style="display:flex;gap:6px"><button type="button" class="cct-btn cct-btn--s" data-la="show">보이기</button><button type="button" class="cct-btn cct-btn--s" data-la="hide">숨기기</button><button type="button" class="cct-btn cct-btn--s cct-btn--d" data-la="delete">✕</button></span></div>',
+    no_reports: "<p>신고된 것이 없어요.</p>",
+    new_item_2: "새 항목",
+    fill_specs: "제원 채우기",
+    photos: "사진",
+    safety_data: "안전 자료"
+   },
+   en: {
+    no_answer_for_over: "No answer for over 17 minutes — try a faster model.",
+    s: "s",
+    couldn_t_answer: "Couldn't answer.",
+    stop: "⏹ Stop",
+    stopped_this_result_won: "⏹ Stopped — this result won't be used (the one request already on the server may still run to the end)",
+    collapse: "Collapse",
+    expand: "Expand",
+    model: "</span><span>Model ",
+    key_set: "<span>🔑 Key set</span>",
+    expand_all: "▾ Expand all",
+    collapse_all: "▸ Collapse all",
+    items: "📦 Items",
+    suggestions: "💡 Suggestions",
+    part_checks: "🔩 Part checks",
+    auto_collect: "🌙 Auto collect",
+    ai_connection: "🤖 AI connection",
+    settings: "⚙️ Settings",
+    s_3d_catalog_view_on: '<div class="cct cct-adm"><div class="cct-adm__head"><h1>🧊 3D Catalog</h1><a class="cct-btn cct-btn--s" href="/catalog" target="_blank" rel="noopener">View on site ↗</a>',
+    a_place_to_collect: "<p>A place to collect printer · equipment · filament · resin data. The inventory module's equipment · stock registration screens use this list (photos come from inventory as-is).</p></div>",
+    input_class_cct_in: '<form data-f style="display:flex;gap:6px;flex:1;min-width:180px"><input class="cct-in" style="height:36px" name="q" placeholder="Search maker · model" value="',
+    search: '"><button class="cct-btn cct-btn--s" style="height:36px">Search</button></form>',
+    data_nophoto_no_photo: '" data-nophoto>🖼️ No photo</button>',
+    data_arch_archived: '" data-arch>🗄️ Archived</button>',
+    new_item: '<button type="button" class="cct-btn cct-btn--p cct-btn--s" style="height:36px" data-new>➕ New item</button></div>',
+    items_2: "</b> items",
+    p: " p",
+    maker: '<div style="overflow-x:auto"><table class="cct-table"><thead><tr><th></th><th>Maker</th><th>',
+    product: "Product",
+    model_2: "Model",
+    type_summary: "</th><th>Type</th><th>Summary</th><th></th></tr></thead><tbody>",
+    none: '<span class="cct-noimg">None</span>',
+    view_button_type_button: '">View</a> <button type="button" class="cct-btn cct-btn--s" data-ed="',
+    edit: '">✏️ Edit</button> ',
+    delete: '">Delete</button>',
+    restore_button_type_button: '">Restore</button> <button type="button" class="cct-btn cct-btn--s cct-btn--d" data-hard="',
+    delete_permanently: '">Delete permanently</button>',
+    no_items: '<div class="cct-empty"><b>📭</b>No items.</div>',
+    prev_nbsp_button_type: '>‹ Prev</button>&nbsp;<button type="button" class="cct-btn cct-btn--s" data-pg="',
+    next: ">Next ›</button></div>",
+    photos_can_be_uploaded: '<p class="cct-note" style="margin-top:12px">Photos can be uploaded or added by URL on the detail screen opened with 「View」 (set main photo · delete there too).</p></div>',
+    delete_it_it_will: "」 — delete it? (it will be moved to the archive)",
+    moved_to_the_archive: "Moved to the archive.",
+    restored: "Restored.",
+    permanently_deleted_items_can: "Permanently deleted items can't be restored. Delete?",
+    permanently_deleted: "Permanently deleted.",
+    parts_upgrade_settings: '<div class="cct-panel"><h3>⚙️ Parts · upgrade settings</h3>',
+    accept_member_part_suggestions: '<label class="cct-row" style="cursor:pointer"><div><b>Accept member part suggestions</b><small>Signed-in members suggest new parts with 「💡 Suggest part」 — they collect in 💡 Suggestions, and when applied the chosen printers are linked as compatible printers</small></div><input type="checkbox" data-pm',
+    votes_needed_to_show: '<div class="cct-row"><div><b>Votes needed to show member-reported links</b><small>Once this many fits · modded · doesn\'t fit votes pile up, they show even without admin review (result follows the votes · ✔ real-use votes count double)</small></div><span class="cct-num"><input class="cct-in" type="number" min="1" max="50" data-pv value="',
+    votes: '"> votes</span></div>',
+    save: '<div style="margin-top:8px"><button type="button" class="cct-btn cct-btn--p cct-btn--s" data-psave>Save</button></div></div>',
+    compatible_printers_awaiting_review: '<div class="cct-panel"><h3>🕓 「Compatible printers」 awaiting review <small>',
+    members_reported_this_part: "</small></h3><p>Members reported 「this part fits this printer」. ✔ Confirm to show it right away, or set the status yourself.</p>",
+    fits: "</b><small>Fits ",
+    modded: " · Modded ",
+    doesn_t_fit: " · Doesn't fit ",
+    confirm_needs_mod_doesn: '<span style="display:flex;gap:6px;flex-wrap:wrap"><button type="button" class="cct-btn cct-btn--s cct-btn--p" data-a="approve">✔ Confirm</button><button type="button" class="cct-btn cct-btn--s" data-a="mod">🛠️ Needs mod</button><button type="button" class="cct-btn cct-btn--s" data-a="no">⛔ Doesn\'t fit</button><button type="button" class="cct-btn cct-btn--s cct-btn--d" data-a="delete">✕ Delete</button></span></div>',
+    nothing_waiting: "<p>Nothing waiting 👍</p>",
+    reported_shops: '<div class="cct-panel"><h3>🚩 Reported shops <small>',
+    hidden_automatically_after_3: "</small></h3><p>Hidden automatically after 3 reports. If it's fine, 「Show」 (also clears the report count).</p>",
+    visible: "Visible",
+    hidden: "🙈 Hidden",
+    show_hide: '<span style="display:flex;gap:6px"><button type="button" class="cct-btn cct-btn--s" data-la="show">Show</button><button type="button" class="cct-btn cct-btn--s" data-la="hide">Hide</button><button type="button" class="cct-btn cct-btn--s cct-btn--d" data-la="delete">✕</button></span></div>',
+    no_reports: "<p>No reports.</p>",
+    new_item_2: "New item",
+    fill_specs: "Fill specs",
+    photos: "Photos",
+    safety_data: "Safety data"
+   }
+  };
+  function __loc() { try { return String(localStorage.getItem('g7_locale') || document.documentElement.lang || 'ko').slice(0, 2); } catch (e) { return 'ko'; } }
+  function tr(k, v) { var d = T[__loc()] || T.ko; var s = d[k] != null ? d[k] : (T.ko[k] != null ? T.ko[k] : k); return v ? s.replace(/\{(\w+)\}/g, function (m, x) { return v[x] != null ? String(v[x]) : m; }) : s; }
+
 
   /* ⏹ AI 시험 중지 — 이 시험은 요청 한 번(서버가 순서대로 물음)이라 서버 쪽은 끝까지 돌 수 있지만, 화면은 그만 기다리고 결과를 받지 않아요 */
   /* 0.2.22 AI 시험을 뒤에서 — POST {…, async: 1} → {id} → 2초마다 GET /admin/ai/result/{id}
@@ -14,10 +158,10 @@
         function step() {
           if (st.off) return;
           var sec = Math.round((Date.now() - t0) / 1000);
-          if (sec > 17 * 60) { rej(new Error('17분 넘게 답이 없어요 — 더 빠른 모델로 해 보세요.')); return; }
-          out.textContent = '⏳ ' + label + ' ' + sec + '초';
+          if (sec > 17 * 60) { rej(new Error(tr('no_answer_for_over'))); return; }
+          out.textContent = '⏳ ' + label + ' ' + sec + tr('s');
           api('GET', '/admin/ai/result/' + d.id).then(function (r) {
-            if (r && r.state === 'done') { if (r.ok) res(r.data || {}); else rej(new Error(r.message || '답하지 못했어요.')); }
+            if (r && r.state === 'done') { if (r.ok) res(r.data || {}); else rej(new Error(r.message || tr('couldn_t_answer'))); }
             else setTimeout(step, 2000);
           }).catch(rej);
         }
@@ -27,8 +171,8 @@
   }
   function stopWait(out) {
     var st = { off: false }, b = document.createElement('button');
-    b.type = 'button'; b.className = 'cct-btn cct-btn--s cct-btn--d'; b.textContent = '⏹ 중지'; b.style.marginLeft = '6px';
-    b.onclick = function () { st.off = true; b.remove(); out.textContent = '⏹ 중지했어요 — 이 결과는 받지 않아요 (서버에서 묻던 한 번은 끝까지 돌 수 있어요)'; };
+    b.type = 'button'; b.className = 'cct-btn cct-btn--s cct-btn--d'; b.textContent = tr('stop'); b.style.marginLeft = '6px';
+    b.onclick = function () { st.off = true; b.remove(); out.textContent = tr('stopped_this_result_won'); };
     if (out.parentNode) out.parentNode.insertBefore(b, out.nextSibling);
     st.cut = function () { if (b.parentNode) b.remove(); return st.off; };
     return st;
@@ -45,24 +189,24 @@
       var fb = head.querySelector('[data-fold]');
       if (!fb) { fb = document.createElement('button'); fb.type = 'button'; fb.className = btnCls; fb.setAttribute('data-fold', ''); fb.style.minWidth = '30px'; head.insertBefore(fb, head.firstChild);
         fb.onclick = function (e) { e.preventDefault(); map[k] = !(map[k] !== undefined ? !!map[k] : servers.length <= 1); save(); apply(card, sv, i); }; }
-      fb.textContent = open ? '▾' : '▸'; fb.title = open ? '접기' : '펼치기'; fb.setAttribute('aria-expanded', open ? 'true' : 'false');
+      fb.textContent = open ? '▾' : '▸'; fb.title = open ? tr('collapse') : tr('expand'); fb.setAttribute('aria-expanded', open ? 'true' : 'false');
       var sum = card.querySelector('[data-fold-sum]');
       if (!sum) { sum = document.createElement('div'); sum.setAttribute('data-fold-sum', ''); sum.style.cssText = 'font-size:12.5px;opacity:.75;display:flex;flex-wrap:wrap;gap:4px 14px;margin:6px 0 0 38px'; head.parentNode.insertBefore(sum, head.nextSibling); }
       var on = (sv.models || []).filter(function (m) { return m.enabled; });
-      sum.innerHTML = '<span>' + String(sv.provider || '') + '</span><span>모델 ' + on.length + '/' + (sv.models || []).length + (on.length ? ' — ' + on.slice(0, 3).map(function (m) { return String(m.name).replace(/[<>&"]/g, ''); }).join(', ') + (on.length > 3 ? ' …' : '') : '') + '</span>' + (sv.key_set ? '<span>🔑 키 있음</span>' : (sv.url ? '<span>' + String(sv.url).replace(/[<>&"]/g, '') + '</span>' : ''));
+      sum.innerHTML = '<span>' + String(sv.provider || '') + tr('model') + on.length + '/' + (sv.models || []).length + (on.length ? ' — ' + on.slice(0, 3).map(function (m) { return String(m.name).replace(/[<>&"]/g, ''); }).join(', ') + (on.length > 3 ? ' …' : '') : '') + '</span>' + (sv.key_set ? tr('key_set') : (sv.url ? '<span>' + String(sv.url).replace(/[<>&"]/g, '') + '</span>' : ''));
       Array.prototype.forEach.call(card.children, function (c) { if (c !== head && c !== sum) c.style.display = open ? '' : 'none'; });
       sum.style.display = open ? 'none' : 'flex';
     };
     Array.prototype.forEach.call(cards, function (card) { var i = Number(card.getAttribute('data-sv')); if (servers[i]) apply(card, servers[i], i); });
     if (servers.length > 1 && !root.querySelector('[data-fold-all]')) {
       var bar = document.createElement('div'); bar.setAttribute('data-fold-all', ''); bar.style.cssText = 'display:flex;gap:6px;justify-content:flex-end;margin:10px 0 -4px';
-      [['▾ 모두 펼치기', true], ['▸ 모두 접기', false]].forEach(function (x) { var b = document.createElement('button'); b.type = 'button'; b.className = btnCls; b.textContent = x[0];
+      [[tr('expand_all'), true], [tr('collapse_all'), false]].forEach(function (x) { var b = document.createElement('button'); b.type = 'button'; b.className = btnCls; b.textContent = x[0];
         b.onclick = function () { servers.forEach(function (sv, i) { map[keyOf(sv, i)] = x[1]; }); save(); Array.prototype.forEach.call(cards, function (card) { var i = Number(card.getAttribute('data-sv')); if (servers[i]) apply(card, servers[i], i); }); }; bar.appendChild(b); });
       cards[0].parentNode.insertBefore(bar, cards[0]);
     }
   }
   if (window.__cctAdmin) { try { window.__cctAdmin(); } catch (e) {} return; }
-  var PAGES = [['items', '📦 항목'], ['suggest', '💡 제안함'], ['parts', '🔩 부품 확인'], ['auto', '🌙 자동 수집'], ['ai', '🤖 AI 연결'], ['settings', '⚙️ 설정']];
+  var PAGES = [['items', tr('items')], ['suggest', tr('suggestions')], ['parts', tr('part_checks')], ['auto', tr('auto_collect')], ['ai', tr('ai_connection')], ['settings', tr('settings')]];
   function C() { return window.CCT; }
   function need(cb) {
     if (window.CCT) return cb();
@@ -77,8 +221,8 @@
   function sw(on, attr) { return '<button type="button" class="cct-sw' + (on ? ' on' : '') + '" ' + attr + ' aria-pressed="' + !!on + '"></button>'; }
   var pending = 0;
   function frame(root, cur, body) {
-    root.innerHTML = '<div class="cct cct-adm"><div class="cct-adm__head"><h1>🧊 3D 카탈로그</h1><a class="cct-btn cct-btn--s" href="/catalog" target="_blank" rel="noopener">사이트에서 보기 ↗</a>' +
-      '<p>프린터 · 장비 · 필라멘트 · 레진 자료를 모아 두는 곳이에요. 재고 관리의 장비 · 재고 등록 화면이 여기 목록을 가져다 써요 (사진은 재고 관리 것을 그대로).</p></div>' +
+    root.innerHTML = tr('s_3d_catalog_view_on') +
+      tr('a_place_to_collect') +
       '<div class="cct-nav">' + PAGES.map(function (p) { return '<a href="?p=' + p[0] + '" data-p="' + p[0] + '" class="' + (p[0] === cur ? 'on' : '') + '">' + p[1] + (p[0] === 'suggest' && pending ? '<b>' + pending + '</b>' : '') + '</a>'; }).join('') + '</div>' +
       '<div data-body>' + (body || '<div class="cct-skel"></div>') + '</div></div>';
     Array.prototype.forEach.call(root.querySelectorAll('[data-p]'), function (a) { a.onclick = function (e) {
@@ -100,19 +244,19 @@
       api('GET', '/items?' + p.toString()).then(function (r) {
         var tab = M.tabs.filter(function (t) { return t.key === S.tab; })[0];
         body.innerHTML = '<div class="cct-panel"><div class="cct-bar"><select class="cct-sel" data-tab>' + M.tabs.map(function (t) { return '<option value="' + t.key + '"' + (t.key === S.tab ? ' selected' : '') + '>' + t.icon + ' ' + esc(t.label) + ' (' + (M.counts[t.key] || 0) + ')</option>'; }).join('') + '</select>' +
-          '<form data-f style="display:flex;gap:6px;flex:1;min-width:180px"><input class="cct-in" style="height:36px" name="q" placeholder="제조사 · 모델 찾기" value="' + esc(S.q) + '"><button class="cct-btn cct-btn--s" style="height:36px">찾기</button></form>' +
-          '<button type="button" class="cct-chip' + (S.flags === 'nophoto' ? ' on' : '') + '" data-nophoto>🖼️ 사진 없는 것</button>' +
-          '<button type="button" class="cct-chip' + (S.status === 'archived' ? ' on' : '') + '" data-arch>🗄️ 보관한 것</button>' +
-          '<button type="button" class="cct-btn cct-btn--p cct-btn--s" style="height:36px" data-new>➕ 새 항목</button></div>' +
-          '<div class="cct-count"><b>' + r.total.toLocaleString() + '</b>개' + (r.pages > 1 ? ' · ' + r.page + ' / ' + r.pages + '쪽' : '') + '</div>' +
-          (r.items.length ? '<div style="overflow-x:auto"><table class="cct-table"><thead><tr><th></th><th>제조사</th><th>' + (tab.type === 'materials' ? '제품' : '모델') + '</th><th>종류</th><th>요약</th><th></th></tr></thead><tbody>' +
+          tr('input_class_cct_in') + esc(S.q) + tr('search') +
+          '<button type="button" class="cct-chip' + (S.flags === 'nophoto' ? ' on' : '') + tr('data_nophoto_no_photo') +
+          '<button type="button" class="cct-chip' + (S.status === 'archived' ? ' on' : '') + tr('data_arch_archived') +
+          tr('new_item') +
+          '<div class="cct-count"><b>' + r.total.toLocaleString() + tr('items_2') + (r.pages > 1 ? ' · ' + r.page + ' / ' + r.pages + tr('p') : '') + '</div>' +
+          (r.items.length ? tr('maker') + (tab.type === 'materials' ? tr('product') : tr('model_2')) + tr('type_summary') +
             r.items.map(function (c) {
-              return '<tr><td>' + (c.image ? '<img alt="" loading="lazy" src="' + esc(c.image) + '">' : '<span class="cct-noimg">없음</span>') + '</td><td>' + esc(c.brand) + '</td><td><b>' + esc(c.title) + '</b></td><td>' + esc(c.kind_label) + '</td><td style="color:var(--mute);font-size:13px">' + esc(c.chips.join(' · ')) + '</td>' +
-                '<td style="white-space:nowrap;text-align:right"><a class="cct-btn cct-btn--s" target="_blank" rel="noopener" href="/catalog/' + esc(c.key) + '">보기</a> <button type="button" class="cct-btn cct-btn--s" data-ed="' + esc(c.key) + '">✏️ 수정</button> ' +
-                (c.status === 'active' ? '<button type="button" class="cct-btn cct-btn--s cct-btn--d" data-del="' + esc(c.key) + '" data-name="' + esc(c.brand + ' ' + c.title) + '">지우기</button>' : '<button type="button" class="cct-btn cct-btn--s" data-res="' + esc(c.key) + '">되살리기</button> <button type="button" class="cct-btn cct-btn--s cct-btn--d" data-hard="' + esc(c.key) + '">아주 지우기</button>') + '</td></tr>';
-            }).join('') + '</tbody></table></div>' : '<div class="cct-empty"><b>📭</b>항목이 없어요.</div>') +
-          (r.pages > 1 ? '<div class="cct-more"><button type="button" class="cct-btn cct-btn--s" data-pg="' + (r.page - 1) + '"' + (r.page <= 1 ? ' disabled' : '') + '>‹ 앞</button>&nbsp;<button type="button" class="cct-btn cct-btn--s" data-pg="' + (r.page + 1) + '"' + (r.page >= r.pages ? ' disabled' : '') + '>뒤 ›</button></div>' : '') +
-          '<p class="cct-note" style="margin-top:12px">사진은 「보기」로 들어간 상세 화면에서 올리거나 주소로 넣을 수 있어요 (대표 사진 정하기 · 지우기도 거기서).</p></div>';
+              return '<tr><td>' + (c.image ? '<img alt="" loading="lazy" src="' + esc(c.image) + '">' : tr('none')) + '</td><td>' + esc(c.brand) + '</td><td><b>' + esc(c.title) + '</b></td><td>' + esc(c.kind_label) + '</td><td style="color:var(--mute);font-size:13px">' + esc(c.chips.join(' · ')) + '</td>' +
+                '<td style="white-space:nowrap;text-align:right"><a class="cct-btn cct-btn--s" target="_blank" rel="noopener" href="/catalog/' + esc(c.key) + tr('view_button_type_button') + esc(c.key) + tr('edit') +
+                (c.status === 'active' ? '<button type="button" class="cct-btn cct-btn--s cct-btn--d" data-del="' + esc(c.key) + '" data-name="' + esc(c.brand + ' ' + c.title) + tr('delete') : '<button type="button" class="cct-btn cct-btn--s" data-res="' + esc(c.key) + tr('restore_button_type_button') + esc(c.key) + tr('delete_permanently')) + '</td></tr>';
+            }).join('') + '</tbody></table></div>' : tr('no_items')) +
+          (r.pages > 1 ? '<div class="cct-more"><button type="button" class="cct-btn cct-btn--s" data-pg="' + (r.page - 1) + '"' + (r.page <= 1 ? ' disabled' : '') + tr('prev_nbsp_button_type') + (r.page + 1) + '"' + (r.page >= r.pages ? ' disabled' : '') + tr('next') : '') +
+          tr('photos_can_be_uploaded');
         var q = function (s) { return body.querySelector(s); }, all = function (s, fn) { Array.prototype.forEach.call(body.querySelectorAll(s), fn); };
         var again = function () { C().meta(true).then(function (m) { M = m; draw(); }); };
         q('[data-tab]').onchange = function () { S.tab = this.value; S.page = 1; draw(); };
@@ -122,9 +266,9 @@
         q('[data-new]').onclick = function () { C().openEditor({ type: tab.type, kind: tab.kinds[0] }, again); };
         all('[data-pg]', function (b) { b.onclick = function () { S.page = +b.getAttribute('data-pg'); draw(); }; });
         all('[data-ed]', function (b) { b.onclick = function () { C().openEditor({ key: b.getAttribute('data-ed') }, again); }; });
-        all('[data-del]', function (b) { b.onclick = function () { if (confirm('「' + b.getAttribute('data-name') + '」 을(를) 지울까요? (보관함으로 옮겨져요)')) api('POST', '/admin/items/' + b.getAttribute('data-del') + '/delete').then(function () { C().toast('보관함으로 옮겼어요.'); again(); }).catch(function (e) { C().toast(e.message); }); }; });
-        all('[data-res]', function (b) { b.onclick = function () { api('POST', '/admin/items/' + b.getAttribute('data-res') + '/restore').then(function () { C().toast('되살렸어요.'); again(); }).catch(function (e) { C().toast(e.message); }); }; });
-        all('[data-hard]', function (b) { b.onclick = function () { if (confirm('아주 지우면 되살릴 수 없어요. 지울까요?')) api('POST', '/admin/items/' + b.getAttribute('data-hard') + '/delete', { hard: 1 }).then(function () { C().toast('아주 지웠어요.'); again(); }).catch(function (e) { C().toast(e.message); }); }; });
+        all('[data-del]', function (b) { b.onclick = function () { if (confirm('「' + b.getAttribute('data-name') + tr('delete_it_it_will'))) api('POST', '/admin/items/' + b.getAttribute('data-del') + '/delete').then(function () { C().toast(tr('moved_to_the_archive')); again(); }).catch(function (e) { C().toast(e.message); }); }; });
+        all('[data-res]', function (b) { b.onclick = function () { api('POST', '/admin/items/' + b.getAttribute('data-res') + '/restore').then(function () { C().toast(tr('restored')); again(); }).catch(function (e) { C().toast(e.message); }); }; });
+        all('[data-hard]', function (b) { b.onclick = function () { if (confirm(tr('permanently_deleted_items_can'))) api('POST', '/admin/items/' + b.getAttribute('data-hard') + '/delete', { hard: 1 }).then(function () { C().toast(tr('permanently_deleted')); again(); }).catch(function (e) { C().toast(e.message); }); }; });
       }).catch(function (e) { fail(body, e); });
     };
     draw();
@@ -137,20 +281,20 @@
     var draw = function () {
       Promise.all([api('GET', '/admin/parts/pending'), api('GET', '/admin/settings')]).then(function (rr) {
         var d = rr[0], S = (rr[1] && rr[1].settings) || {};
-        body.innerHTML = '<div class="cct-panel"><h3>⚙️ 부품 · 업그레이드 설정</h3>' +
-          '<label class="cct-row" style="cursor:pointer"><div><b>회원 부품 제안 받기</b><small>로그인한 회원이 「💡 부품 제안」으로 새 부품을 알려 줘요 — 💡 제안함에 쌓이고, 반영하면 고른 프린터가 맞는 프린터로 연결돼요</small></div><input type="checkbox" data-pm' + (S.parts_member !== false ? ' checked' : '') + '></label>' +
-          '<div class="cct-row"><div><b>회원이 알려 준 연결이 보이는 표 수</b><small>관리자가 확인하지 않아도 맞음 · 개조 · 안 맞음 표가 이만큼 쌓이면 보여요 (결과는 그 표대로 · ✔ 실사용 표는 두 배)</small></div><span class="cct-num"><input class="cct-in" type="number" min="1" max="50" data-pv value="' + (S.parts_auto_votes || 3) + '"> 표</span></div>' +
-          '<div style="margin-top:8px"><button type="button" class="cct-btn cct-btn--p cct-btn--s" data-psave>저장</button></div></div>' +
-          '<div class="cct-panel"><h3>🕓 확인 기다리는 「맞는 프린터」 <small>' + d.fits.length + '</small></h3><p>회원이 「이 부품이 이 프린터에 맞아요」라고 알려 준 것이에요. ✔ 확인하면 바로 보이고, 상태를 직접 정할 수도 있어요.</p>' +
+        body.innerHTML = tr('parts_upgrade_settings') +
+          tr('accept_member_part_suggestions') + (S.parts_member !== false ? ' checked' : '') + '></label>' +
+          tr('votes_needed_to_show') + (S.parts_auto_votes || 3) + tr('votes') +
+          tr('save') +
+          tr('compatible_printers_awaiting_review') + d.fits.length + tr('members_reported_this_part') +
           (d.fits.length ? d.fits.map(function (f) {
-            return '<div class="cct-row" data-f="' + f.id + '"><div><b><a href="/catalog/' + esc(f.part.key) + '" target="_blank" rel="noopener">' + esc(f.part.title) + '</a> → ' + esc(f.printer.title) + '</b><small>맞음 ' + f.votes.fit + ' · 개조 ' + f.votes.mod + ' · 안 맞음 ' + f.votes.no + ' · ' + esc(f.at) + '</small></div>' +
-              '<span style="display:flex;gap:6px;flex-wrap:wrap"><button type="button" class="cct-btn cct-btn--s cct-btn--p" data-a="approve">✔ 확인</button><button type="button" class="cct-btn cct-btn--s" data-a="mod">🛠️ 개조 필요</button><button type="button" class="cct-btn cct-btn--s" data-a="no">⛔ 안 맞음</button><button type="button" class="cct-btn cct-btn--s cct-btn--d" data-a="delete">✕ 지우기</button></span></div>';
-          }).join('') : '<p>기다리는 것이 없어요 👍</p>') + '</div>' +
-          '<div class="cct-panel"><h3>🚩 신고된 구매처 <small>' + d.links.length + '</small></h3><p>3번 신고되면 저절로 숨겨져요. 괜찮으면 「보이기」(신고 수도 지움).</p>' +
+            return '<div class="cct-row" data-f="' + f.id + '"><div><b><a href="/catalog/' + esc(f.part.key) + '" target="_blank" rel="noopener">' + esc(f.part.title) + '</a> → ' + esc(f.printer.title) + tr('fits') + f.votes.fit + tr('modded') + f.votes.mod + tr('doesn_t_fit') + f.votes.no + ' · ' + esc(f.at) + '</small></div>' +
+              tr('confirm_needs_mod_doesn');
+          }).join('') : tr('nothing_waiting')) + '</div>' +
+          tr('reported_shops') + d.links.length + tr('hidden_automatically_after_3') +
           (d.links.length ? d.links.map(function (l) {
-            return '<div class="cct-row" data-l="' + l.id + '"><div><b><a href="/catalog/' + esc(l.part_key) + '#buy" target="_blank" rel="noopener">' + esc(l.label || l.url) + '</a></b><small>🚩 ' + l.reports + ' · ' + (l.status === 'visible' ? '보임' : '🙈 숨김') + ' · <a href="' + esc(l.url) + '" target="_blank" rel="noopener nofollow">' + esc(l.url) + '</a></small></div>' +
-              '<span style="display:flex;gap:6px"><button type="button" class="cct-btn cct-btn--s" data-la="show">보이기</button><button type="button" class="cct-btn cct-btn--s" data-la="hide">숨기기</button><button type="button" class="cct-btn cct-btn--s cct-btn--d" data-la="delete">✕</button></span></div>';
-          }).join('') : '<p>신고된 것이 없어요.</p>') + '</div>';
+            return '<div class="cct-row" data-l="' + l.id + '"><div><b><a href="/catalog/' + esc(l.part_key) + '#buy" target="_blank" rel="noopener">' + esc(l.label || l.url) + '</a></b><small>🚩 ' + l.reports + ' · ' + (l.status === 'visible' ? tr('visible') : tr('hidden')) + ' · <a href="' + esc(l.url) + '" target="_blank" rel="noopener nofollow">' + esc(l.url) + '</a></small></div>' +
+              tr('show_hide');
+          }).join('') : tr('no_reports')) + '</div>';
         var t = function (m) { C().toast(m); };
         body.querySelector('[data-psave]').onclick = function () {
           api('POST', '/admin/settings', { settings: { parts_member: body.querySelector('[data-pm]').checked, parts_auto_votes: +body.querySelector('[data-pv]').value } }).then(function () { t('저장했어요.'); }).catch(function (e) { t(e.message); });
@@ -173,7 +317,7 @@
 
   function suggestPage(root) {
     var esc = C().esc, api = C().api, body = frame(root, 'suggest'), st = 'pending', tb = '';   // 0.3.11 탭별
-    var NAME = { 'new': '새 항목', fill: '제원 채우기', photo: '사진', sds: '안전 자료' };
+    var NAME = { 'new': tr('new_item_2'), fill: tr('fill_specs'), photo: tr('photos'), sds: tr('safety_data') };
     // 0.2.11 🔗 출처 — AI 가 댄 주소(✅ 열림 · ⚠️ 안 열림) · 없으면 「AI 기억」 경고 · 누가(서버 · 모델) 찾았는지
     var srcHtml = function (s) {
       if (s.task === 'photo') return '';
@@ -187,7 +331,7 @@
     var draw = function () {
       api('GET', '/admin/suggestions?status=' + st + (tb ? '&tab=' + encodeURIComponent(tb) : '')).then(function (r) {
         pending = r.pending;
-        var nb = root.querySelector('[data-p="suggest"]'); if (nb) nb.innerHTML = '💡 제안함' + (pending ? '<b>' + pending + '</b>' : '');
+        var nb = root.querySelector('[data-p="suggest"]'); if (nb) nb.innerHTML = tr('suggestions') + (pending ? '<b>' + pending + '</b>' : '');
         body.innerHTML = '<div class="cct-panel"><h3>💡 AI 가 찾아온 것</h3><p>자동 수집이 찾은 새 모델 · 제원 · 사진 · 안전 자료가 여기 쌓여요. 맞는지 보고 「반영」을 누르면 카탈로그에 들어가요. AI 는 틀릴 수 있으니 숫자는 한 번 확인해 주세요. 「제원 채우기」는 비어 있던 칸만 채워요.</p>' +
           '<div class="cct-bar">' + [['pending', '기다리는 것 ' + r.pending], ['applied', '반영한 것'], ['rejected', '버린 것']].map(function (x) { return '<button type="button" class="cct-chip' + (st === x[0] ? ' on' : '') + '" data-st="' + x[0] + '">' + x[1] + '</button>'; }).join('') +
           '<span style="flex:1"></span>' + (st === 'pending' && r.items.length > 1 ? '<button type="button" class="cct-btn cct-btn--s" data-all>보이는 것 모두 반영</button>' : '') + '</div>' +
@@ -380,7 +524,7 @@
       });
       body.querySelector('[data-sadd]').onclick = function () { var p = PROV.filter(function (x) { return x.value === 'ollama'; })[0] || PROV[0] || { value: 'ollama', name: 'Ollama' }; S.servers.push({ id: '', name: p.name + ' ' + (S.servers.length + 1), enabled: true, provider: p.value, url: '', api_key: '', models: [], timeout: 0 }); draw(status); };
       body.querySelector('[data-live]').onclick = function () { var out = body.querySelector('[data-live-out]'); out.textContent = '⏳ 순서대로 물어보는 중…';
-        var st = stopWait(out); aiRun(api, '/admin/ai/live', { ai: S }, out, st, '순서대로 물어보는 중…').then(function (x) { if (st.cut()) return; out.textContent = x.message + (x.tries || []).map(function (t) { return '\n· ' + t.server + ' · ' + t.model + ' — ' + (t.ok ? t.sec + '초' : String(t.message).replace(/^❌\s*/, '')); }).join(''); }).catch(function (e) { if (st.cut()) return; out.textContent = '❌ ' + e.message; }); };
+        var st = stopWait(out); aiRun(api, '/admin/ai/live', { ai: S }, out, st, '순서대로 물어보는 중…').then(function (x) { if (st.cut()) return; out.textContent = x.message + (x.tries || []).map(function (t) { return '\n· ' + t.server + ' · ' + t.model + ' — ' + (t.ok ? t.sec + tr('s') : String(t.message).replace(/^❌\s*/, '')); }).join(''); }).catch(function (e) { if (st.cut()) return; out.textContent = '❌ ' + e.message; }); };
       body.querySelector('[data-sample]').onclick = function () { var out = body.querySelector('[data-live-out]'); out.textContent = '⏳ 견본 제원 글 정리 중…';   // 0.2.22
         var st = stopWait(out); aiRun(api, '/admin/ai/sample', { ai: S }, out, st, '견본 제원 글 정리 중…').then(function (x) { if (st.cut()) return; out.textContent = x.text || x.message; }).catch(function (e) { if (st.cut()) return; out.textContent = '❌ ' + e.message; }); };
       body.querySelector('[data-save]').onclick = function () { var b = this; b.disabled = true;
